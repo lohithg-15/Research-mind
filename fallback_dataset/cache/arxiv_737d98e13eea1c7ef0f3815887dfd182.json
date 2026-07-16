@@ -1,0 +1,306 @@
+[
+  {
+    "id": "2204.07288",
+    "arxiv_id": "2204.07288",
+    "title": "Characterizing the Efficiency vs. Accuracy Trade-off for Long-Context NLP Models",
+    "abstract": "With many real-world applications of Natural Language Processing (NLP) comprising of long texts, there has been a rise in NLP benchmarks that measure the accuracy of models that can handle longer input sequences. However, these benchmarks do not consider the trade-offs between accuracy, speed, and power consumption as input sizes or model sizes are varied. In this work, we perform a systematic study of this accuracy vs. efficiency trade-off on two widely used long-sequence models - Longformer-Encoder-Decoder (LED) and Big Bird - during fine-tuning and inference on four datasets from the SCROLLS benchmark. To study how this trade-off differs across hyperparameter settings, we compare the models across four sequence lengths (1024, 2048, 3072, 4096) and two model sizes (base and large) under a fixed resource budget. We find that LED consistently achieves better accuracy at lower energy costs than Big Bird. For summarization, we find that increasing model size is more energy efficient than increasing sequence length for higher accuracy. However, this comes at the cost of a large drop in inference speed. For question answering, we find that smaller models are both more efficient and more accurate due to the larger training batch sizes possible under a fixed resource budget.",
+    "authors": [
+      "Phyllis Ang",
+      "Bhuwan Dhingra",
+      "Lisa Wu Wills"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2204.07288v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2104.12405",
+    "arxiv_id": "2104.12405",
+    "title": "A dissemination workshop for introducing young Italian students to NLP",
+    "abstract": "We describe and make available the game-based material developed for a laboratory run at several Italian science festivals to popularize NLP among young students.",
+    "authors": [
+      "Lucio Messina",
+      "Lucia Busso",
+      "Claudia Roberta Combei",
+      "Ludovica Pannitto",
+      "Alessio Miaschi",
+      "Gabriele Sarti",
+      "Malvina Nissim"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2104.12405v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2105.00813",
+    "arxiv_id": "2105.00813",
+    "title": "Transformers: \"The End of History\" for NLP?",
+    "abstract": "Recent advances in neural architectures, such as the Transformer, coupled with the emergence of large-scale pre-trained models such as BERT, have revolutionized the field of Natural Language Processing (NLP), pushing the state of the art for a number of NLP tasks. A rich family of variations of these models has been proposed, such as RoBERTa, ALBERT, and XLNet, but fundamentally, they all remain limited in their ability to model certain kinds of information, and they cannot cope with certain information sources, which was easy for pre-existing models. Thus, here we aim to shed light on some important theoretical limitations of pre-trained BERT-style models that are inherent in the general Transformer architecture. First, we demonstrate in practice on two general types of tasks -- segmentation and segment labeling -- and on four datasets that these limitations are indeed harmful and that addressing them, even in some very simple and naive ways, can yield sizable improvements over vanilla RoBERTa and XLNet models. Then, we offer a more general discussion on desiderata for future additions to the Transformer architecture that would increase its expressiveness, which we hope could help in the design of the next generation of deep NLP architectures.",
+    "authors": [
+      "Anton Chernyavskiy",
+      "Dmitry Ilvovsky",
+      "Preslav Nakov"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2105.00813v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2104.12422",
+    "arxiv_id": "2104.12422",
+    "title": "Teaching NLP with Bracelets and Restaurant Menus: An Interactive Workshop for Italian Students",
+    "abstract": "Although Natural Language Processing (NLP) is at the core of many tools young people use in their everyday life, high school curricula (in Italy) do not include any computational linguistics education. This lack of exposure makes the use of such tools less responsible than it could be and makes choosing computational linguistics as a university degree unlikely. To raise awareness, curiosity, and longer-term interest in young people, we have developed an interactive workshop designed to illustrate the basic principles of NLP and computational linguistics to high school Italian students aged between 13 and 18 years. The workshop takes the form of a game in which participants play the role of machines needing to solve some of the most common problems a computer faces in understanding language: from voice recognition to Markov chains to syntactic parsing. Participants are guided through the workshop with the help of instructors, who present the activities and explain core concepts from computational linguistics. The workshop was presented at numerous outlets in Italy between 2019 and 2021, both face-to-face and online.",
+    "authors": [
+      "Ludovica Pannitto",
+      "Lucia Busso",
+      "Claudia Roberta Combei",
+      "Lucio Messina",
+      "Alessio Miaschi",
+      "Gabriele Sarti",
+      "Malvina Nissim"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2104.12422v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2201.00978",
+    "arxiv_id": "2201.00978",
+    "title": "PyramidTNT: Improved Transformer-in-Transformer Baselines with Pyramid Architecture",
+    "abstract": "Transformer networks have achieved great progress for computer vision tasks. Transformer-in-Transformer (TNT) architecture utilizes inner transformer and outer transformer to extract both local and global representations. In this work, we present new TNT baselines by introducing two advanced designs: 1) pyramid architecture, and 2) convolutional stem. The new \"PyramidTNT\" significantly improves the original TNT by establishing hierarchical representations. PyramidTNT achieves better performances than the previous state-of-the-art vision transformers such as Swin Transformer. We hope this new baseline will be helpful to the further research and application of vision transformer. Code will be available at https://github.com/huawei-noah/CV-Backbones/tree/master/tnt_pytorch.",
+    "authors": [
+      "Kai Han",
+      "Jianyuan Guo",
+      "Yehui Tang",
+      "Yunhe Wang"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2201.00978v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2601.03290",
+    "arxiv_id": "2601.03290",
+    "title": "Lightweight Transformer Architectures for Edge Devices in Real-Time Applications",
+    "abstract": "The deployment of transformer-based models on resource-constrained edge devices represents a critical challenge in enabling real-time artificial intelligence applications. This comprehensive survey examines lightweight transformer architectures specifically designed for edge deployment, analyzing recent advances in model compression, quantization, pruning, and knowledge distillation techniques. We systematically review prominent lightweight variants including MobileBERT, TinyBERT, DistilBERT, EfficientFormer, EdgeFormer, and MobileViT, providing detailed performance benchmarks on standard datasets such as GLUE, SQuAD, ImageNet-1K, and COCO. Our analysis encompasses current industry adoption patterns across major hardware platforms (NVIDIA Jetson, Qualcomm Snapdragon, Apple Neural Engine, ARM architectures), deployment frameworks (TensorFlow Lite, ONNX Runtime, PyTorch Mobile, CoreML), and optimization strategies. Experimental results demonstrate that modern lightweight transformers can achieve 75-96% of full-model accuracy while reducing model size by 4-10x and inference latency by 3-9x, enabling deployment on devices with as little as 2-5W power consumption. We identify sparse attention mechanisms, mixed-precision quantization (INT8/FP16), and hardware-aware neural architecture search as the most effective optimization strategies. Novel findings include memory-bandwidth bottleneck analysis revealing 15-40M parameter models achieve optimal hardware utilization (60-75% efficiency), quantization sweet spots for different model types, and comprehensive energy efficiency profiling across edge platforms. We establish real-time performance boundaries and provide a practical 6-step deployment pipeline achieving 8-12x size reduction with less than 2% accuracy degradation.",
+    "authors": [
+      "Hema Hariharan Samson"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.03290v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2412.08520",
+    "arxiv_id": "2412.08520",
+    "title": "GR-NLP-TOOLKIT: An Open-Source NLP Toolkit for Modern Greek",
+    "abstract": "We present GR-NLP-TOOLKIT, an open-source natural language processing (NLP) toolkit developed specifically for modern Greek. The toolkit provides state-of-the-art performance in five core NLP tasks, namely part-of-speech tagging, morphological tagging, dependency parsing, named entity recognition, and Greeklishto-Greek transliteration. The toolkit is based on pre-trained Transformers, it is freely available, and can be easily installed in Python (pip install gr-nlp-toolkit). It is also accessible through a demonstration platform on HuggingFace, along with a publicly available API for non-commercial use. We discuss the functionality provided for each task, the underlying methods, experiments against comparable open-source toolkits, and future possible enhancements. The toolkit is available at: https://github.com/nlpaueb/gr-nlp-toolkit",
+    "authors": [
+      "Lefteris Loukas",
+      "Nikolaos Smyrnioudis",
+      "Chrysa Dikonomaki",
+      "Spyros Barbakos",
+      "Anastasios Toumazatos",
+      "John Koutsikakis",
+      "Manolis Kyriakakis",
+      "Mary Georgiou",
+      "Stavros Vassos",
+      "John Pavlopoulos",
+      "Ion Androutsopoulos"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.08520v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2204.07962",
+    "arxiv_id": "2204.07962",
+    "title": "An Extendable, Efficient and Effective Transformer-based Object Detector",
+    "abstract": "Transformers have been widely used in numerous vision problems especially for visual recognition and detection. Detection transformers are the first fully end-to-end learning systems for object detection, while vision transformers are the first fully transformer-based architecture for image classification. In this paper, we integrate Vision and Detection Transformers (ViDT) to construct an effective and efficient object detector. ViDT introduces a reconfigured attention module to extend the recent Swin Transformer to be a standalone object detector, followed by a computationally efficient transformer decoder that exploits multi-scale features and auxiliary techniques essential to boost the detection performance without much increase in computational load. In addition, we extend it to ViDT+ to support joint-task learning for object detection and instance segmentation. Specifically, we attach an efficient multi-scale feature fusion layer and utilize two more auxiliary training losses, IoU-aware loss and token labeling loss. Extensive evaluation results on the Microsoft COCO benchmark dataset demonstrate that ViDT obtains the best AP and latency trade-off among existing fully transformer-based object detectors, and its extended ViDT+ achieves 53.2AP owing to its high scalability for large models. The source code and trained models are available at https://github.com/naver-ai/vidt.",
+    "authors": [
+      "Hwanjun Song",
+      "Deqing Sun",
+      "Sanghyuk Chun",
+      "Varun Jampani",
+      "Dongyoon Han",
+      "Byeongho Heo",
+      "Wonjae Kim",
+      "Ming-Hsuan Yang"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2204.07962v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2104.10640",
+    "arxiv_id": "2104.10640",
+    "title": "The NLP Cookbook: Modern Recipes for Transformer based Deep Learning Architectures",
+    "abstract": "In recent years, Natural Language Processing (NLP) models have achieved phenomenal success in linguistic and semantic tasks like text classification, machine translation, cognitive dialogue systems, information retrieval via Natural Language Understanding (NLU), and Natural Language Generation (NLG). This feat is primarily attributed due to the seminal Transformer architecture, leading to designs such as BERT, GPT (I, II, III), etc. Although these large-size models have achieved unprecedented performances, they come at high computational costs. Consequently, some of the recent NLP architectures have utilized concepts of transfer learning, pruning, quantization, and knowledge distillation to achieve moderate model sizes while keeping nearly similar performances as achieved by their predecessors. Additionally, to mitigate the data size challenge raised by language models from a knowledge extraction perspective, Knowledge Retrievers have been built to extricate explicit data documents from a large corpus of databases with greater efficiency and accuracy. Recent research has also focused on superior inference by providing efficient attention to longer input sequences. In this paper, we summarize and examine the current state-of-the-art (SOTA) NLP models that have been employed for numerous NLP tasks for optimal performance and efficiency. We provide a detailed understanding and functioning of the different architectures, a taxonomy of NLP designs, comparative evaluations, and future directions in NLP.",
+    "authors": [
+      "Sushant Singh",
+      "Ausif Mahmood"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2104.10640v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2412.04784",
+    "arxiv_id": "2412.04784",
+    "title": "NLP-ADBench: NLP Anomaly Detection Benchmark",
+    "abstract": "Anomaly detection (AD) is an important machine learning task with applications in fraud detection, content moderation, and user behavior analysis. However, AD is relatively understudied in a natural language processing (NLP) context, limiting its effectiveness in detecting harmful content, phishing attempts, and spam reviews. We introduce NLP-ADBench, the most comprehensive NLP anomaly detection (NLP-AD) benchmark to date, which includes eight curated datasets and 19 state-of-the-art algorithms. These span 3 end-to-end methods and 16 two-step approaches that adapt classical, non-AD methods to language embeddings from BERT and OpenAI. Our empirical results show that no single model dominates across all datasets, indicating a need for automated model selection. Moreover, two-step methods with transformer-based embeddings consistently outperform specialized end-to-end approaches, with OpenAI embeddings outperforming those of BERT. We release NLP-ADBench at https://github.com/USC-FORTIS/NLP-ADBench, providing a unified framework for NLP-AD and supporting future investigations.",
+    "authors": [
+      "Yuangang Li",
+      "Jiaqi Li",
+      "Zhuo Xiao",
+      "Tiankai Yang",
+      "Yi Nian",
+      "Xiyang Hu",
+      "Yue Zhao"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.04784v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2105.13677",
+    "arxiv_id": "2105.13677",
+    "title": "ResT: An Efficient Transformer for Visual Recognition",
+    "abstract": "This paper presents an efficient multi-scale vision Transformer, called ResT, that capably served as a general-purpose backbone for image recognition. Unlike existing Transformer methods, which employ standard Transformer blocks to tackle raw images with a fixed resolution, our ResT have several advantages: (1) A memory-efficient multi-head self-attention is built, which compresses the memory by a simple depth-wise convolution, and projects the interaction across the attention-heads dimension while keeping the diversity ability of multi-heads; (2) Position encoding is constructed as spatial attention, which is more flexible and can tackle with input images of arbitrary size without interpolation or fine-tune; (3) Instead of the straightforward tokenization at the beginning of each stage, we design the patch embedding as a stack of overlapping convolution operation with stride on the 2D-reshaped token map. We comprehensively validate ResT on image classification and downstream tasks. Experimental results show that the proposed ResT can outperform the recently state-of-the-art backbones by a large margin, demonstrating the potential of ResT as strong backbones. The code and models will be made publicly available at https://github.com/wofmanaf/ResT.",
+    "authors": [
+      "Qinglong Zhang",
+      "Yubin Yang"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2105.13677v5",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2106.02359",
+    "arxiv_id": "2106.02359",
+    "title": "How Good Is NLP? A Sober Look at NLP Tasks through the Lens of Social Impact",
+    "abstract": "Recent years have seen many breakthroughs in natural language processing (NLP), transitioning it from a mostly theoretical field to one with many real-world applications. Noting the rising number of applications of other machine learning and AI techniques with pervasive societal impact, we anticipate the rising importance of developing NLP technologies for social good. Inspired by theories in moral philosophy and global priorities research, we aim to promote a guideline for social good in the context of NLP. We lay the foundations via the moral philosophy definition of social good, propose a framework to evaluate the direct and indirect real-world impact of NLP tasks, and adopt the methodology of global priorities research to identify priority causes for NLP research. Finally, we use our theoretical framework to provide some practical guidelines for future NLP research for social good. Our data and code are available at http://github.com/zhijing-jin/nlp4sg_acl2021. In addition, we curate a list of papers and resources on NLP for social good at https://github.com/zhijing-jin/NLP4SocialGood_Papers.",
+    "authors": [
+      "Zhijing Jin",
+      "Geeticka Chauhan",
+      "Brian Tse",
+      "Mrinmaya Sachan",
+      "Rada Mihalcea"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2106.02359v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2105.00895",
+    "arxiv_id": "2105.00895",
+    "title": "Teaching NLP outside Linguistics and Computer Science classrooms: Some challenges and some opportunities",
+    "abstract": "NLP's sphere of influence went much beyond computer science research and the development of software applications in the past decade. We see people using NLP methods in a range of academic disciplines from Asian Studies to Clinical Oncology. We also notice the presence of NLP as a module in most of the data science curricula within and outside of regular university setups. These courses are taken by students from very diverse backgrounds. This paper takes a closer look at some issues related to teaching NLP to these diverse audiences based on my classroom experiences, and identifies some challenges the instructors face, particularly when there is no ecosystem of related courses for the students. In this process, it also identifies a few challenge areas for both NLP researchers and tool developers.",
+    "authors": [
+      "Sowmya Vajjala"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2105.00895v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2010.03061",
+    "arxiv_id": "2010.03061",
+    "title": "A Survey on Recognizing Textual Entailment as an NLP Evaluation",
+    "abstract": "Recognizing Textual Entailment (RTE) was proposed as a unified evaluation framework to compare semantic understanding of different NLP systems. In this survey paper, we provide an overview of different approaches for evaluating and understanding the reasoning capabilities of NLP systems. We then focus our discussion on RTE by highlighting prominent RTE datasets as well as advances in RTE dataset that focus on specific linguistic phenomena that can be used to evaluate NLP systems on a fine-grained level. We conclude by arguing that when evaluating NLP systems, the community should utilize newly introduced RTE datasets that focus on specific linguistic phenomena.",
+    "authors": [
+      "Adam Poliak"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2010.03061v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2408.05664",
+    "arxiv_id": "2408.05664",
+    "title": "Training an NLP Scholar at a Small Liberal Arts College: A Backwards Designed Course Proposal",
+    "abstract": "The rapid growth in natural language processing (NLP) over the last couple years has generated student interest and excitement in learning more about the field. In this paper, we present two types of students that NLP courses might want to train. First, an \"NLP engineer\" who is able to flexibly design, build and apply new technologies in NLP for a wide range of tasks. Second, an \"NLP scholar\" who is able to pose, refine and answer questions in NLP and how it relates to the society, while also learning to effectively communicate these answers to a broader audience. While these two types of skills are not mutually exclusive -- NLP engineers should be able to think critically, and NLP scholars should be able to build systems -- we think that courses can differ in the balance of these skills. As educators at Small Liberal Arts Colleges, the strengths of our students and our institution favors an approach that is better suited to train NLP scholars. In this paper we articulate what kinds of skills an NLP scholar should have, and then adopt a backwards design to propose course components that can aid the acquisition of these skills.",
+    "authors": [
+      "Grusha Prasad",
+      "Forrest Davis"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2408.05664v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

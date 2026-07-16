@@ -78,24 +78,19 @@ export default function App() {
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '30px 20px', display: 'flex', flexDirection: 'column', gap: '30px' }}>
       
       {/* Header Banner */}
-      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', padding: '10px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#000000', padding: '10px', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BookOpen size={24} color="white" />
           </div>
           <div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: '800', tracking: '-0.02em', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: '700', color: '#000000' }}>
               ResearchMind
             </h1>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
               Literature Review & Gap Discovery Agent
             </p>
           </div>
-        </div>
-        <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: 'var(--text-muted)' }}>
-          <span>CS605 Major Project</span>
-          <span>•</span>
-          <span>Malnad College of Engineering</span>
         </div>
       </header>
 
@@ -124,7 +119,7 @@ export default function App() {
         <section style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
           {/* Tabs header */}
-          <div style={{ display: 'flex', gap: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '8px' }}>
+          <div style={{ display: 'flex', gap: '12px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
             <button
               className={`premium-btn ${activeTab === 'table' ? '' : 'premium-btn-secondary'}`}
               style={{ padding: '8px 20px', fontSize: '13px' }}

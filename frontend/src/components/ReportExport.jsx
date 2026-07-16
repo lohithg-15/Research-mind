@@ -65,9 +65,9 @@ export default function ReportExport({ jobId, reportDraft }) {
 
       <div
         style={{
-          background: 'rgba(0, 0, 0, 0.25)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
-          borderRadius: '10px',
+          background: '#fafafa',
+          border: '1px solid var(--border-color)',
+          borderRadius: '4px',
           padding: '20px',
           maxHeight: '400px',
           overflowY: 'auto',

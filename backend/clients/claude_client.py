@@ -133,6 +133,17 @@ class ClaudeClient:
             # Synthesis Agent response: return source-grounded summaries
             return "This work introduces the self-attention based Transformer model [Source: Method]. The architecture removes recurrent layers entirely to allow massive parallelization [Source: Method]. Evaluation on translation datasets demonstrates superior BLEU scores [Source: Key Metric]."
             
+        elif "thematic synthesis" in prompt_lower or "academic literature review" in prompt_lower:
+            # Thematic Synthesis mock response
+            return """### 3.1 Methodological Paradigms
+Current research in self-attention mechanisms heavily centers on optimizing the quadratic computational complexity of the standard Transformer model. Multiple paradigms have emerged, including sparse attention masks, low-rank approximations, and recurrent state transitions. These methods trade off modeling capacity for computational speedups, demonstrating varying levels of success across domains.
+
+### 3.2 Empirical Evaluation & Benchmarks
+Validation methodologies typically leverage standard benchmark corpora such as WikiText-103, GLUE, and WMT translation tasks. While performance metrics (like perplexity and BLEU scores) show theoretical improvements, actual runtime speedups are highly dependent on specific hardware architectures and kernel implementation.
+
+### 3.3 Identified Limitations and Research Gaps
+A critical synthesis of the literature reveals a significant disconnect between theoretical complexity reduction and practical latency. Most current literature fails to address memory efficiency constraints in edge devices, presenting a candidate research gap for future investigations."""
+
         elif "compile report" in prompt_lower or "literature review report" in prompt_lower:
             # Report Agent response: return markdown document content
             return "# Research Report\n\n## Introduction\nThis report analyzes literature on attention models.\n\n## Gaps\nAn identified gap is efficient attention for long contexts.\n"

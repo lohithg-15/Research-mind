@@ -64,12 +64,12 @@ export default function GraphViewer({ gapClaims }) {
           selector: 'node',
           style: {
             'label': 'data(label)',
-            'color': '#cbd5e1',
+            'color': '#333333',
             'font-family': 'var(--font-family)',
             'font-size': '9px',
             'text-valign': 'bottom',
             'text-margin-y': 4,
-            'background-color': '#475569',
+            'background-color': '#777777',
             'width': 16,
             'height': 16,
             'text-wrap': 'wrap',
@@ -111,13 +111,13 @@ export default function GraphViewer({ gapClaims }) {
           selector: 'edge',
           style: {
             'width': 1.5,
-            'line-color': 'rgba(255, 255, 255, 0.1)',
-            'target-arrow-color': 'rgba(255, 255, 255, 0.2)',
+            'line-color': 'rgba(0, 0, 0, 0.15)',
+            'target-arrow-color': 'rgba(0, 0, 0, 0.3)',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(label)',
             'font-size': '7px',
-            'color': '#64748b',
+            'color': '#666666',
             'text-rotation': 'autorotate',
             'text-margin-y': -6,
           },
@@ -177,16 +177,16 @@ export default function GraphViewer({ gapClaims }) {
           style={{
             flex: '1 1 360px',
             height: '380px',
-            background: 'rgba(0, 0, 0, 0.25)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
-            borderRadius: '10px',
+            background: '#fafafa',
+            border: '1px solid var(--border-color)',
+            borderRadius: '4px',
             position: 'relative',
           }}
         />
 
         {/* Gap Metadata Panel */}
         <div style={{ flex: '0 0 280px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ padding: '12px', background: 'rgba(59, 130, 246, 0.04)', borderRadius: '8px', border: '1px solid var(--border-glow)' }}>
+          <div style={{ padding: '12px', background: '#fbfbfb', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
             <span style={{ fontSize: '11px', color: 'var(--color-primary)', fontWeight: '600', textTransform: 'uppercase' }}>
               Gap Reference ID: {currentGap.gap_id}
             </span>

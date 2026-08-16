@@ -76,10 +76,33 @@ def get_results(job_id: str):
         }
         
     state = job["state"]
-    # Extract results matching PRD specification
+
+    # Serialize PaperMeta objects to plain dicts for the API response
+    raw_papers = state.get("papers", [])
+    papers_list = []
+    for p in raw_papers:
+        if hasattr(p, "model_dump"):
+            papers_list.append(p.model_dump())
+        elif isinstance(p, dict):
+            papers_list.append(p)
+
+    # Serialize summaries
+    raw_summaries = state.get("summaries", [])
+    summaries_list = []
+    for s in raw_summaries:
+        if hasattr(s, "model_dump"):
+            summaries_list.append(s.model_dump())
+        elif isinstance(s, dict):
+            summaries_list.append(s)
+
+    # Extract results
     return {
         "status": "done",
+        "papers": papers_list,
         "comparison_table": state.get("comparison_table", []),
         "gap_claims": [g.model_dump() for g in state.get("gap_claims", [])],
-        "graph_ref": state.get("graph_ref")
+        "graph_ref": state.get("graph_ref"),
+        "summaries": summaries_list,
+        "sub_queries": state.get("sub_queries", []),
+        "report_draft": state.get("report_draft", {}),
     }

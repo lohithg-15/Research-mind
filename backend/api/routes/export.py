@@ -8,7 +8,7 @@ logger = logging.getLogger("researchmind.api.export")
 router = APIRouter()
 
 @router.get("/export/{job_id}")
-def export_report(job_id: str, format: str = Query("pdf", regex="^(pdf|docx)$")):
+def export_report(job_id: str, format: str = Query("pdf", pattern="^(pdf|docx)$")):
     """
     Downloads the compiled literature review report as a PDF or DOCX file.
     """

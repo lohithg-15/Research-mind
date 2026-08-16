@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from 'cytoscape';
-import { Network, HelpCircle } from 'lucide-react';
+import { Network } from 'lucide-react';
 
-export default function GraphViewer({ gapClaims }) {
+export default function GraphViewer({ gapClaims, onHighlightPapers }) {
   const containerRef = useRef(null);
   const [selectedGapIndex, setSelectedGapIndex] = useState(0);
   const cyRef = useRef(null);
@@ -11,32 +11,21 @@ export default function GraphViewer({ gapClaims }) {
     if (!containerRef.current || !gapClaims || gapClaims.length === 0) return;
 
     const currentGap = gapClaims[selectedGapIndex];
-    const snapshot = currentGap.subgraph_snapshot;
-
+    const snapshot = currentGap?.subgraph_snapshot;
     if (!snapshot) return;
 
-    // Map networkx node_link_data to Cytoscape elements
     const elements = [];
-
     const nodes = snapshot.nodes || [];
     const edges = snapshot.edges || snapshot.links || [];
 
-    // Add nodes
     nodes.forEach((node) => {
       let label = node.title || node.name || node.label || node.id;
-      if (node.type === 'Paper' && label.length > 30) {
-        label = label.slice(0, 27) + '...';
+      if (node.type === 'Paper' && label && label.length > 28) {
+        label = label.slice(0, 25) + '…';
       }
-      elements.push({
-        data: {
-          id: node.id,
-          label: label,
-          type: node.type || 'Paper',
-        },
-      });
+      elements.push({ data: { id: node.id, label, type: node.type || 'Paper' } });
     });
 
-    // Add edges
     edges.forEach((edge, idx) => {
       elements.push({
         data: {
@@ -48,76 +37,72 @@ export default function GraphViewer({ gapClaims }) {
       });
     });
 
-    // Destroy previous instance
-    if (cyRef.current) {
-      cyRef.current.destroy();
-    }
+    if (cyRef.current) cyRef.current.destroy();
 
-    // Initialize Cytoscape
     cyRef.current = cytoscape({
       container: containerRef.current,
-      elements: elements,
+      elements,
       boxSelectionEnabled: false,
       autounselectify: true,
       style: [
         {
           selector: 'node',
           style: {
-            'label': 'data(label)',
-            'color': '#333333',
-            'font-family': 'var(--font-family)',
-            'font-size': '9px',
+            label: 'data(label)',
+            color: 'rgba(240,242,247,0.7)',
+            'font-family': 'Inter, sans-serif',
+            'font-size': '8px',
             'text-valign': 'bottom',
-            'text-margin-y': 4,
-            'background-color': '#777777',
-            'width': 16,
-            'height': 16,
+            'text-margin-y': 5,
+            'background-color': '#3a3f54',
+            width: 18,
+            height: 18,
             'text-wrap': 'wrap',
             'text-max-width': 80,
+            'border-width': 1.5,
+            'border-color': 'rgba(255,255,255,0.08)',
           },
         },
         {
           selector: 'node[type="Paper"]',
           style: {
-            'background-color': '#3b82f6',
-            'width': 22,
-            'height': 22,
-            'border-width': 2,
-            'border-color': 'rgba(59, 130, 246, 0.4)',
+            'background-color': '#6c8aff',
+            'border-color': 'rgba(108,138,255,0.5)',
+            width: 24,
+            height: 24,
+            'box-shadow': '0 0 8px rgba(108,138,255,0.5)',
           },
         },
         {
           selector: 'node[type="Author"]',
           style: {
-            'background-color': '#10b981',
-            'width': 16,
-            'height': 16,
-            'border-width': 1.5,
-            'border-color': 'rgba(16, 185, 129, 0.4)',
+            'background-color': '#2dd4bf',
+            'border-color': 'rgba(45,212,191,0.4)',
+            width: 16,
+            height: 16,
           },
         },
         {
           selector: 'node[type="Topic"]',
           style: {
-            'background-color': '#8b5cf6',
-            'width': 26,
-            'height': 26,
-            'shape': 'hexagon',
-            'border-width': 2,
-            'border-color': 'rgba(139, 92, 246, 0.4)',
+            'background-color': '#a78bfa',
+            'border-color': 'rgba(167,139,250,0.5)',
+            shape: 'hexagon',
+            width: 28,
+            height: 28,
           },
         },
         {
           selector: 'edge',
           style: {
-            'width': 1.5,
-            'line-color': 'rgba(0, 0, 0, 0.15)',
-            'target-arrow-color': 'rgba(0, 0, 0, 0.3)',
+            width: 1.2,
+            'line-color': 'rgba(255,255,255,0.08)',
+            'target-arrow-color': 'rgba(108,138,255,0.4)',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
-            'label': 'data(label)',
+            label: 'data(label)',
             'font-size': '7px',
-            'color': '#666666',
+            color: 'rgba(155,163,184,0.7)',
             'text-rotation': 'autorotate',
             'text-margin-y': -6,
           },
@@ -126,24 +111,31 @@ export default function GraphViewer({ gapClaims }) {
       layout: {
         name: 'cose',
         animate: true,
-        animationDuration: 500,
+        animationDuration: 600,
         padding: 30,
-        nodeRepulsion: () => 4500,
+        nodeRepulsion: () => 5500,
       },
     });
 
+    // Highlight related paper IDs in sources sidebar
+    if (onHighlightPapers) {
+      const paperIds = nodes.filter(n => n.type === 'Paper').map(n => n.id);
+      onHighlightPapers(paperIds);
+    }
+
     return () => {
-      if (cyRef.current) {
-        cyRef.current.destroy();
-        cyRef.current = null;
-      }
+      if (cyRef.current) { cyRef.current.destroy(); cyRef.current = null; }
     };
   }, [gapClaims, selectedGapIndex]);
 
   if (!gapClaims || gapClaims.length === 0) {
     return (
-      <div className="glass-card" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
-        No gaps or subgraphs available. Run analysis on a topic with at least 15 papers.
+      <div className="panel-empty">
+        <div className="panel-empty-icon">
+          <Network size={22} color="var(--text-muted)" />
+        </div>
+        <p className="panel-empty-title">No gap subgraphs available</p>
+        <p className="panel-empty-desc">Run analysis on a topic with at least 15 papers to generate gap evidence.</p>
       </div>
     );
   }
@@ -151,73 +143,57 @@ export default function GraphViewer({ gapClaims }) {
   const currentGap = gapClaims[selectedGapIndex];
 
   return (
-    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px', minHeight: '520px' }}>
-      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Network size={18} style={{ color: 'var(--color-primary)' }} />
-        Research Gap Citation Subgraph
-      </h3>
-
-      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px' }}>
+    <div className="fade-in">
+      {/* Gap selector chips */}
+      <div className="gap-selector">
         {gapClaims.map((gap, index) => (
           <button
-            key={gap.gap_id}
-            className={`premium-btn ${selectedGapIndex === index ? '' : 'premium-btn-secondary'}`}
-            style={{ padding: '6px 12px', fontSize: '12px' }}
+            key={gap.gap_id || index}
+            className={`gap-chip ${selectedGapIndex === index ? 'active' : ''}`}
             onClick={() => setSelectedGapIndex(index)}
           >
+            <Network size={12} />
             {gap.topic_label}
           </button>
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', flex: 1 }}>
-        {/* Cytoscape Canvas */}
-        <div
-          ref={containerRef}
-          style={{
-            flex: '1 1 360px',
-            height: '380px',
-            background: '#fafafa',
-            border: '1px solid var(--border-color)',
-            borderRadius: '4px',
-            position: 'relative',
-          }}
-        />
+      {/* Graph + meta layout */}
+      <div className="gap-layout">
+        {/* Cytoscape canvas */}
+        <div ref={containerRef} className="gap-canvas" />
 
-        {/* Gap Metadata Panel */}
-        <div style={{ flex: '0 0 280px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ padding: '12px', background: '#fbfbfb', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
-            <span style={{ fontSize: '11px', color: 'var(--color-primary)', fontWeight: '600', textTransform: 'uppercase' }}>
-              Gap Reference ID: {currentGap.gap_id}
-            </span>
-            <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '16px', margin: '4px 0 8px 0' }}>
-              {currentGap.topic_label}
-            </h4>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              {currentGap.description}
+        {/* Meta panel */}
+        <div className="gap-meta-panel">
+          <div className="meta-card">
+            <span className="meta-card-tag">Gap ID: {currentGap.gap_id}</span>
+            <h3 className="meta-card-title">{currentGap.topic_label}</h3>
+            <p className="meta-card-desc">{currentGap.description}</p>
+          </div>
+
+          <div className="meta-card">
+            <span className="meta-card-tag">Citation Density</span>
+            <div className="meta-card-stat">
+              {currentGap.citation_density != null
+                ? currentGap.citation_density.toFixed(2)
+                : '—'}
+            </div>
+            <span className="meta-card-stat-label">citations / paper</span>
+            <p className="meta-card-desc" style={{ marginTop: '6px' }}>
+              Identified due to below-median citation activity.
             </p>
           </div>
 
-          <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}>CITATION DENSITY</span>
-            <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--color-secondary)', margin: '2px 0' }}>
-              {currentGap.citation_density.toFixed(2)} <span style={{ fontSize: '12px', fontWeight: 'normal', color: 'var(--text-muted)' }}>citations/paper</span>
+          {currentGap.suggested_directions && currentGap.suggested_directions.length > 0 && (
+            <div className="meta-card">
+              <span className="meta-card-tag">Future Directions</span>
+              <ul className="future-list">
+                {currentGap.suggested_directions.map((dir, idx) => (
+                  <li key={idx}>{dir}</li>
+                ))}
+              </ul>
             </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-              Identified due to below-median citation activity.
-            </span>
-          </div>
-
-          <div style={{ padding: '12px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', display: 'block', marginBottom: '6px' }}>
-              FUTURE DIRECTIONS
-            </span>
-            <ul style={{ paddingLeft: '16px', fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {currentGap.suggested_directions.map((dir, idx) => (
-                <li key={idx}>{dir}</li>
-              ))}
-            </ul>
-          </div>
+          )}
         </div>
       </div>
     </div>

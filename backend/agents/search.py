@@ -46,19 +46,26 @@ def run_search(state: dict) -> dict:
         
     state["agent_status"]["search"] = "running"
     logger.info(f"Search Agent: Retrieving papers for sub-queries: {sub_queries}")
+
+    # Extract year range filters from pipeline state
+    filters = state.get("filters", {}) or {}
+    year_range = filters.get("year_range", [None, None]) or [None, None]
+    year_from = year_range[0] if len(year_range) > 0 else None
+    year_to   = year_range[1] if len(year_range) > 1 else None
+    logger.info(f"Search Agent: Applying year filter {year_from}–{year_to}")
     
     raw_results = []
     
     # 1. Fetch papers from both sources
     for query in sub_queries:
         try:
-            arxiv_results = search_arxiv(query, limit=15)
+            arxiv_results = search_arxiv(query, limit=15, year_from=year_from, year_to=year_to)
             raw_results.extend(arxiv_results)
         except Exception as e:
             logger.error(f"Search Agent arXiv sub-query fail: {e}")
             
         try:
-            s2_results = search_semantic_scholar(query, limit=15)
+            s2_results = search_semantic_scholar(query, limit=15, year_from=year_from, year_to=year_to)
             raw_results.extend(s2_results)
         except Exception as e:
             logger.error(f"Search Agent Semantic Scholar sub-query fail: {e}")
@@ -113,6 +120,7 @@ def run_search(state: dict) -> dict:
                 venue=raw["venue"],
                 abstract=raw["abstract"],
                 pdf_url=raw.get("pdf_url"),
+                url=raw.get("url"),
                 full_text_available=raw.get("full_text_available", False),
                 citation_count=raw.get("citation_count", 0),
                 citations=raw.get("citations", []),

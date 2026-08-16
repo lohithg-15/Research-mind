@@ -99,6 +99,13 @@ Return ONLY the summary text with attributions. Do not add intro, markdown forma
             "authors": paper.authors,
             "year": paper.year,
             "venue": paper.venue,
+            "arxiv_id": paper.arxiv_id,
+            "doi": paper.doi,
+            "pdf_url": paper.pdf_url,
+            "url": paper.url or (
+                f"https://arxiv.org/abs/{paper.arxiv_id}" if paper.arxiv_id
+                else (f"https://doi.org/{paper.doi}" if paper.doi else None)
+            ),
             "method": record.method if record else "Not specified",
             "dataset": record.dataset if record else "Not specified",
             "key_metric": record.key_metric if record else "Not specified",

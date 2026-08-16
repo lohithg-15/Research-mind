@@ -18,14 +18,14 @@ class ClaudeClient:
 
         if self.gemini_key and self.gemini_key != "your-gemini-api-key-here" and len(self.gemini_key) > 5:
             try:
-                import google.generativeai as genai
-                genai.configure(api_key=self.gemini_key)
-                # Use gemini-1.5-flash as the fast, high-quality, default model
-                self.client = genai.GenerativeModel("gemini-1.5-flash")
+                from google import genai
+                self.genai_client = genai.Client(api_key=self.gemini_key)
                 self.provider = "gemini"
-                logger.info("ClaudeClient: Initialized successfully using Google Gemini API (gemini-1.5-flash).")
+                self._gemini_model = "gemini-2.5-flash"
+                logger.info("ClaudeClient: Initialized successfully using Google Gemini API (gemini-2.5-flash).")
             except Exception as e:
                 logger.error(f"ClaudeClient: Failed to initialize Google Gemini client: {e}")
+                self.genai_client = None
                 self.client = None
                 self.provider = "mock"
                 
@@ -44,31 +44,35 @@ class ClaudeClient:
             self.client = None
             self.provider = "mock"
 
-    def complete(self, prompt: str, system: str = "You are an AI research assistant.", max_tokens: int = 1500, temperature: float = 0.0) -> str:
+    def complete(self, prompt: str, system: str = "You are an AI research assistant.", max_tokens: int = 2000, temperature: float = 0.0) -> str:
         """
         Sends prompt to configured LLM (Gemini or Anthropic) and returns the text response. 
         Falls back to mock responses if in mock mode or on request failure.
         """
-        if self.provider == "mock" or not self.client:
+        client_ready = getattr(self, "client", None) or getattr(self, "genai_client", None)
+        if self.provider == "mock" or not client_ready:
             logger.info("Mock Mode: Generating simulated response.")
             return self._mock_response(prompt)
             
         if self.provider == "gemini":
             try:
-                # Combine system prompt and user prompt
+                from google import genai
+                from google.genai import types as genai_types
+                
+                # Build contents combining system + user prompt
                 contents = []
                 if system:
-                    contents.append(f"System instructions: {system}")
+                    contents.append(f"System instructions: {system}\n\n")
                 contents.append(prompt)
+                combined_prompt = "".join(contents)
                 
-                generation_config = {
-                    "temperature": temperature,
-                    "max_output_tokens": max_tokens
-                }
-                
-                response = self.client.generate_content(
-                    contents,
-                    generation_config=generation_config
+                response = self.genai_client.models.generate_content(
+                    model=self._gemini_model,
+                    contents=combined_prompt,
+                    config=genai_types.GenerateContentConfig(
+                        temperature=temperature,
+                        max_output_tokens=max_tokens,
+                    )
                 )
                 
                 res_text = response.text

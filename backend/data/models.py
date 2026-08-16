@@ -9,6 +9,7 @@ class PaperMeta(BaseModel):
     venue: str = "Unknown"
     abstract: str
     pdf_url: Optional[str] = None
+    url: Optional[str] = None  # Human-readable paper page (arXiv abs, Semantic Scholar, DOI)
     full_text_available: bool = False
     citation_count: int = 0
     citations: List[str] = Field(default_factory=list)  # IDs of papers cited by this paper

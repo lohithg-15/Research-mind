@@ -1,9 +1,13 @@
 import os
 import logging
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.api.routes import query, export
 from backend.api.jobs import jobs
+
+# Load environment variables from backend/.env before anything else
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
 
 # Set up logging configuration
 logging.basicConfig(

@@ -371,7 +371,8 @@ def run_report(state: dict) -> dict:
     
     # Compile markdown draft for state reference
     state["report_draft"] = {
-        "text": compile_markdown_draft(query, summaries, comparison_table, gap_claims, synthesis_text)
+        "text": compile_markdown_draft(query, summaries, comparison_table, gap_claims, synthesis_text),
+        "synthesis_text": synthesis_text,   # ← stored separately so frontend can use it directly
     }
     
     # Create base output directories

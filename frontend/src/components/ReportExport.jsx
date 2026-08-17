@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   FileText, Download, Check, Loader2, BookOpen, Users,
   Calendar, Database, BarChart2, AlertTriangle, ExternalLink,
-  ChevronDown, ChevronUp, Hash, Lightbulb, Layers
+  ChevronDown, ChevronUp, Hash, Lightbulb, Layers, Info, CheckCircle2, XCircle
 } from 'lucide-react';
 
 /* ── helpers ─────────────────────────────────────────── */
@@ -260,19 +260,76 @@ function ReferencesSection({ papers = [] }) {
   );
 }
 
+/* ── Summary renderer with source attribution badges ── */
+const SOURCE_COLORS = {
+  'Abstract':    { bg: 'rgba(108,138,255,0.15)', color: '#6c8aff',  border: 'rgba(108,138,255,0.35)' },
+  'Method':      { bg: 'rgba(45,212,191,0.12)',  color: '#2dd4bf',  border: 'rgba(45,212,191,0.3)'  },
+  'Dataset':     { bg: 'rgba(167,139,250,0.12)', color: '#a78bfa',  border: 'rgba(167,139,250,0.3)' },
+  'Key Metric':  { bg: 'rgba(251,146,60,0.12)',  color: '#fb923c',  border: 'rgba(251,146,60,0.3)'  },
+  'Limitation':  { bg: 'rgba(248,113,113,0.12)', color: '#f87171',  border: 'rgba(248,113,113,0.3)' },
+};
+
+function SummaryWithAttributions({ summary }) {
+  const attributions = summary?.attributions;
+
+  // If we have structured attributions, render them with badges
+  if (attributions && attributions.length > 0) {
+    return (
+      <div className="rp-attr-list">
+        {attributions.map((attr, i) => {
+          const sourceKey = Object.keys(SOURCE_COLORS).find(k =>
+            (attr.source || '').toLowerCase().includes(k.toLowerCase())
+          );
+          const style = sourceKey ? SOURCE_COLORS[sourceKey] : SOURCE_COLORS['Abstract'];
+          // Strip the [Source: X] tag from the sentence text for cleaner display
+          const cleanSentence = (attr.sentence || '').replace(/\[Source:[^\]]+\]/g, '').trim();
+          return (
+            <div key={i} className="rp-attr-row">
+              <span
+                className="rp-attr-badge"
+                style={{ background: style.bg, color: style.color, borderColor: style.border }}
+              >
+                {attr.source || 'General'}
+              </span>
+              <p className="rp-p rp-attr-text">{cleanSentence}</p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // Fallback: plain text, strip [Source: X] tags
+  const cleanText = (summary?.summary_text || '').replace(/\[Source:[^\]]+\]/g, '').trim();
+  return <p className="rp-p">{cleanText}</p>;
+}
+
 /* ── main component ───────────────────────────────────── */
+/* Extract only the synthesis section from the full markdown dump (fallback) */
+function extractSynthesisFromMarkdown(fullText = '') {
+  // The full text has sections 1–4. We want only section 3.
+  const m3 = fullText.match(/## 3\..*?\n([\s\S]*?)(?=\n## 4\.|$)/);
+  if (m3) return m3[1].trim();
+  return '';
+}
+
 export default function ReportExport({ jobId, results }) {
   const [downloading, setDownloading] = useState({ pdf: false, docx: false });
   const [completed,   setCompleted]   = useState({ pdf: false, docx: false });
 
-  const query          = results?.query         || '';
-  const papers         = results?.papers        || [];
+  const query          = results?.query            || '';
+  const papers         = results?.papers           || [];
   const compTable      = results?.comparison_table || [];
-  const gapClaims      = results?.gap_claims    || [];
-  const summaries      = results?.summaries     || [];
-  const subQueries     = results?.sub_queries   || [];
-  const reportDraft    = results?.report_draft  || {};
-  const synthesisText  = reportDraft?.synthesis_text || reportDraft?.text || '';
+  const gapClaims      = results?.gap_claims       || [];
+  const summaries      = results?.summaries        || [];
+  const subQueries     = results?.sub_queries      || [];
+  const reportDraft    = results?.report_draft     || {};
+
+  // Prefer the dedicated key; fall back to extracting just section 3 from the full dump.
+  // Never use the entire dump (it contains all sections which would duplicate content).
+  const synthesisText  = reportDraft?.synthesis_text
+    || extractSynthesisFromMarkdown(reportDraft?.text || '')
+    || '';
 
   if (!results) return (
     <div className="panel-empty">
@@ -393,22 +450,38 @@ export default function ReportExport({ jobId, results }) {
         {/* Section 3: Thematic Synthesis */}
         <section className="rp-section">
           <SectionHeader number="3" title="Thematic Literature Survey & Synthesis" icon={Layers} />
+
           {synthesisText ? (
-            <div className="rp-synthesis">{renderMarkdown(synthesisText)}</div>
-          ) : summaries.length > 0 ? (
+            /* ── LLM-generated academic synthesis ── */
             <div className="rp-synthesis">
+              <div className="rp-synthesis-badge">
+                <CheckCircle2 size={11} />
+                AI-synthesized academic survey across {summaries.length} papers
+              </div>
+              {renderMarkdown(synthesisText)}
+            </div>
+          ) : summaries.length > 0 ? (
+            /* ── Fallback: per-paper summaries with attribution ── */
+            <div className="rp-synthesis">
+              <div className="rp-synthesis-badge rp-synthesis-badge--fallback">
+                <Info size={11} />
+                Showing individual paper summaries (thematic synthesis unavailable)
+              </div>
               {summaries.map((s, i) => (
                 <div key={s.paper_id || i} className="rp-summary-item">
                   <p className="rp-summary-title">
-                    <Hash size={11} style={{ color: 'var(--accent-purple)' }} />
+                    <Hash size={11} style={{ color: 'var(--accent-purple)', flexShrink: 0 }} />
                     {s.title}
                   </p>
-                  <p className="rp-p">{s.summary_text}</p>
+                  <SummaryWithAttributions summary={s} />
                 </div>
               ))}
             </div>
           ) : (
-            <p className="rp-p">Synthesis not yet available. Run a full review to generate it.</p>
+            <div className="rp-empty-section">
+              <XCircle size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              <span>Synthesis not available. Ensure the pipeline completed successfully and includes at least one paper.</span>
+            </div>
           )}
         </section>
 

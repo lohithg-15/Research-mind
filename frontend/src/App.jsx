@@ -186,6 +186,16 @@ export default function App() {
             onChange={e => setQuery(e.target.value)}
             disabled={isRunning}
           />
+          <input
+            id="keywords-topbar-input"
+            type="text"
+            className="topbar-search-input"
+            style={{ flex: '0 1 200px', minWidth: '120px' }}
+            placeholder="Keywords (e.g. meta-learning)"
+            value={keywords}
+            onChange={e => setKeywords(e.target.value)}
+            disabled={isRunning}
+          />
         </form>
 
         {/* Right cluster */}
@@ -241,10 +251,10 @@ export default function App() {
               />
             </div>
 
-            <label className="filter-label">Venue type</label>
+            <label className="filter-label">Publication type</label>
             <div style={{ marginBottom: '12px' }}>
               <select
-                id="venue-type"
+                id="publication-type"
                 className="filter-select"
                 value={venueType}
                 onChange={e => setVenueType(e.target.value)}
@@ -257,18 +267,6 @@ export default function App() {
                 <option value="workshop">Workshop</option>
               </select>
             </div>
-
-            <label className="filter-label">Keywords</label>
-            <input
-              id="keywords-input"
-              type="text"
-              className="filter-input"
-              style={{ marginBottom: 0 }}
-              placeholder="e.g. meta-learning"
-              value={keywords}
-              onChange={e => setKeywords(e.target.value)}
-              disabled={isRunning}
-            />
           </div>
 
           {/* Pipeline */}

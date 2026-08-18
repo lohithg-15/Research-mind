@@ -95,23 +95,25 @@ def verify_grounding(extracted: Dict[str, str], text: str, abstract_only: bool) 
 # LLM Extraction Prompts
 # ---------------------------------------------------------------------------
 
-FULL_TEXT_PROMPT = """You are a precise academic extraction assistant. Analyze the paper text below and extract structured research details.
+FULL_TEXT_PROMPT = """You are an expert academic research analyst. Extract structured information from the paper text below.
 
-CRITICAL RULES:
-- Extract ONLY from the paper text provided below. Do NOT use any prior knowledge or training data.
-- If a field is not explicitly stated in the text, set its value to "Not specified".
-- Provide exact quotes from the paper text as evidence.
+INSTRUCTIONS:
+- Read the full text carefully. Extract the BEST answer for each field using evidence from the text.
+- Be SPECIFIC and CONCISE. Use actual names, numbers, and terms from the paper.
+- If a field is not explicitly named but can be reasonably inferred from context, infer it.
+- Do NOT write vague answers like "various datasets" or "standard benchmarks" — be specific.
+- Only write "Not available" if there is absolutely zero evidence in the text.
 
 Paper text:
 {paper_text}
 
 Extract these fields:
-- method: The main algorithm, model, or technique proposed in THIS paper (e.g., "BERT", "ResNet-50", "Proximal Policy Optimization")
-- dataset: The specific training or evaluation dataset used (e.g., "ImageNet-1K", "SQuAD 2.0", "COCO 2017")
-- key_metric: The main quantitative result reported (e.g., "92.4% accuracy on GLUE", "BLEU score of 41.8")
-- limitation: The main limitation, constraint, or future work admitted by the authors
+- method: The specific algorithm, model architecture, or technique proposed (e.g., "BERT fine-tuned with contrastive loss", "ResNet-50 with attention gates")
+- dataset: The specific dataset(s) used for training or evaluation (e.g., "ImageNet-1K", "SQuAD 2.0 + TriviaQA", "COCO 2017 val set")
+- key_metric: The main quantitative result with the number (e.g., "92.4% accuracy on GLUE", "BLEU 41.8 on WMT14 En-De", "mAP 58.7 on COCO")
+- limitation: The main limitation or acknowledged weakness (e.g., "High computational cost — requires 8 A100 GPUs", "Degrades on out-of-domain text", "Limited to English only")
 
-For each field, provide a short exact quote from the paper supporting it.
+For each field, provide a short supporting quote.
 
 Return ONLY a valid JSON object:
 {{
@@ -125,23 +127,25 @@ Return ONLY a valid JSON object:
   "limitation_quote": "exact sentence from paper"
 }}"""
 
-ABSTRACT_ONLY_PROMPT = """You are a precise academic extraction assistant. Analyze ONLY the abstract/metadata below.
+ABSTRACT_ONLY_PROMPT = """You are an expert academic research analyst. Based on the paper title and abstract below, extract structured research information.
 
-CRITICAL RULES:
-- Extract ONLY from the text provided. Do NOT use any prior knowledge or training data.
-- Many abstracts don't mention specific datasets or metrics — if something is not stated, write "Not specified".
-- Be specific: use the actual name of any model/method mentioned in the abstract (e.g. "BERT", "GPT-4", "contrastive learning").
-- Do NOT invent values, do NOT use generic defaults like "Multi-Head Self-Attention" or "Wikitext-103" unless those exact words appear in the text.
+You MUST provide a real, useful answer for every field. Think like an expert reading this abstract.
+
+METHOD — Identify the core technical contribution. The title usually names it. Be specific (e.g., "sparse attention transformer", "graph neural network for drug discovery", "contrastive self-supervised learning framework").
+
+DATASET — Identify what data or task domain the paper works with:
+  - If a named dataset appears → use that name exactly.
+  - If a task is mentioned (e.g., "image classification", "machine translation", "sentiment analysis") → state the task + likely benchmark type.
+  - If a domain is mentioned (e.g., "medical imaging", "social media text", "financial data") → state that domain.
+  - Only write "Not available" if there is truly zero mention of data, task, or application domain.
+
+KEY METRIC — Look for numbers: accuracy, F1, BLEU, AUC, RMSE, mAP, perplexity, etc. Include the number and context. If only relative improvement is mentioned, state that. If none, write "Performance improvement demonstrated".
+
+LIMITATION — Look for: "however", "although", "limited to", "future work", "cannot", "fails on", "restricted to", computational cost, generalization concerns, scope restrictions. Even if not explicit, infer a likely limitation from the method's scope or domain.
 
 Paper:
 Title: {title}
 Abstract: {abstract}
-
-Extract:
-- method: What specific technique, model, or approach does this paper propose? (from the title/abstract only)
-- dataset: What specific dataset(s) are mentioned? (write "Not specified" if none mentioned)
-- key_metric: What specific performance result is mentioned? (write "Not specified" if none mentioned)
-- limitation: What limitation, challenge, or future direction does the abstract mention? (write "Not specified" if none)
 
 Return ONLY a valid JSON object:
 {{
@@ -149,6 +153,35 @@ Return ONLY a valid JSON object:
   "dataset": "...",
   "key_metric": "...",
   "limitation": "..."
+}}"""
+
+# Canonical blank/useless values to detect
+_BLANK_VALUES = {
+    "not specified", "not available", "n/a", "none", "unknown",
+    "not mentioned", "not stated", "not provided", "not given",
+    "not reported", "not applicable", "no limitation mentioned",
+    "not explicitly mentioned", "not explicitly stated",
+    "performance improvement demonstrated",
+}
+
+def _is_blank(val: str) -> bool:
+    """Returns True if an extracted value is effectively empty/useless."""
+    if not val:
+        return True
+    return val.strip().lower() in _BLANK_VALUES or len(val.strip()) < 5
+
+
+INFERENCE_PROMPT = """You are an expert academic researcher. Based on the paper title and abstract below, answer the following questions as clearly and specifically as possible.
+
+Title: {title}
+Abstract: {abstract}
+
+Answer each question with a short, direct, specific phrase (not a full sentence):
+{questions}
+
+Return ONLY a valid JSON object with exactly these keys:
+{{
+{json_fields}
 }}"""
 
 
@@ -212,9 +245,9 @@ def run_extraction(state: dict) -> dict:
             response_text = claude.complete(
                 prompt=prompt,
                 system=(
-                    "You are a precise academic extraction assistant. "
-                    "You extract ONLY what is written in the provided text. "
-                    "You NEVER use prior knowledge or training data to fill in missing information."
+                    "You are an expert academic research analyst. "
+                    "Extract specific, clear, informative answers from academic papers. "
+                    "Use expert knowledge to interpret and infer where needed — do not refuse to answer."
                 ),
                 temperature=0.0
             )
@@ -231,7 +264,50 @@ def run_extraction(state: dict) -> dict:
 
             extracted = json.loads(clean_text)
 
-            # 4. Verify Grounding
+            # 4. Second-pass inference for any blank fields
+            blank_fields = {
+                f: extracted.get(f, "")
+                for f in ["method", "dataset", "key_metric", "limitation"]
+                if _is_blank(extracted.get(f, ""))
+            }
+            if blank_fields and (paper.title or paper.abstract):
+                FIELD_QUESTIONS = {
+                    "method":     'What is the main technique, model, or approach proposed by this paper?',
+                    "dataset":    'What dataset, benchmark, or data domain does this paper use or evaluate on?',
+                    "key_metric": 'What performance metric or result is reported or implied?',
+                    "limitation": 'What is the most likely limitation or constraint of this approach?',
+                }
+                questions_text = "\n".join(
+                    f'- {k.upper()}: {FIELD_QUESTIONS[k]}' for k in blank_fields
+                )
+                json_fields_text = "\n".join(
+                    f'  "{k}": "..."' for k in blank_fields
+                )
+                inf_prompt = INFERENCE_PROMPT.format(
+                    title=paper.title or "",
+                    abstract=paper.abstract or "",
+                    questions=questions_text,
+                    json_fields=json_fields_text,
+                )
+                try:
+                    inf_resp = claude.complete(
+                        prompt=inf_prompt,
+                        system="You are an expert academic researcher. Give specific, direct answers.",
+                        temperature=0.1
+                    )
+                    inf_clean = inf_resp.strip()
+                    if inf_clean.startswith("```json"): inf_clean = inf_clean[7:]
+                    elif inf_clean.startswith("```"): inf_clean = inf_clean[3:]
+                    if inf_clean.endswith("```"): inf_clean = inf_clean[:-3]
+                    inf_extracted = json.loads(inf_clean.strip())
+                    for f in blank_fields:
+                        if f in inf_extracted and not _is_blank(inf_extracted[f]):
+                            extracted[f] = inf_extracted[f]
+                            logger.info(f"Second-pass filled '{f}' for '{paper.title}'")
+                except Exception as ie:
+                    logger.warning(f"Second-pass inference failed for '{paper.title}': {ie}")
+
+            # 5. Verify Grounding
             text_for_verify = paper_text if not abstract_only else f"{paper.title}\n{paper.abstract}"
             status, notes = verify_grounding(extracted, text_for_verify, abstract_only)
 
@@ -251,14 +327,15 @@ def run_extraction(state: dict) -> dict:
 
         except Exception as e:
             logger.error(f"Failed LLM extraction for paper '{paper.title}': {e}")
-            # Fallback — derive method hint from title
-            title_hint = paper.title[:80] if paper.title else "Not specified"
+            # Fallback — derive fields from title
+            words = (paper.title or "").split()
+            method_hint = " ".join(words[:6]) if words else "See title"
             record = FieldRecord(
                 paper_id=paper.id,
-                method=f"See title: {title_hint}",
-                dataset="Not specified",
-                key_metric="Not specified",
-                limitation="Not specified",
+                method=method_hint,
+                dataset="See abstract",
+                key_metric="Not available",
+                limitation="Not available",
                 year=paper.year,
                 verification_status="failed",
                 verification_notes=f"Extraction error: {str(e)}",

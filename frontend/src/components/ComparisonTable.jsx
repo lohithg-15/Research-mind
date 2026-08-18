@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, Check, AlertCircle, ExternalLink } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 
 export default function ComparisonTable({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,20 +48,7 @@ export default function ComparisonTable({ data }) {
       : <ChevronDown size={12} style={{ marginLeft: 3 }} />;
   };
 
-  const StatusBadge = ({ status }) => {
-    if (status === 'verified') {
-      return (
-        <span className="badge badge-verified">
-          <Check size={9} /> Verified
-        </span>
-      );
-    }
-    return (
-      <span className="badge badge-unverified">
-        <AlertCircle size={9} /> Unverified
-      </span>
-    );
-  };
+
 
   /**
    * Resolves the best available link for a paper row:
@@ -77,13 +64,12 @@ export default function ComparisonTable({ data }) {
   };
 
   const COLS = [
-    { key: 'title',               label: 'Title' },
-    { key: 'year',                label: 'Year',    width: 70 },
-    { key: 'method',              label: 'Method' },
-    { key: 'dataset',             label: 'Dataset' },
-    { key: 'key_metric',          label: 'Key Metric' },
-    { key: 'limitation',          label: 'Limitation' },
-    { key: 'verification_status', label: 'Grounding', width: 100 },
+    { key: 'title',      label: 'Title' },
+    { key: 'year',       label: 'Year',       width: 70 },
+    { key: 'method',     label: 'Method' },
+    { key: 'dataset',    label: 'Dataset' },
+    { key: 'key_metric', label: 'Key Metric' },
+    { key: 'limitation', label: 'Limitation' },
   ];
 
   return (
@@ -160,13 +146,12 @@ export default function ComparisonTable({ data }) {
                     <td title={item.dataset}>{item.dataset}</td>
                     <td title={item.key_metric}>{item.key_metric}</td>
                     <td title={item.limitation}>{item.limitation}</td>
-                    <td><StatusBadge status={item.verification_status} /></td>
                   </tr>
                 );
               })
             ) : (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                <td colSpan={6} style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                   No matching papers found.
                 </td>
               </tr>

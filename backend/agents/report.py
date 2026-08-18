@@ -114,11 +114,11 @@ def compile_markdown_draft(query: str, summaries: List[Summary], comparison_tabl
     )
     
     table_section = "\n## 2. Comparison Matrix\n\n"
-    table_section += "| Title | Year | Method | Dataset | Key Metric | Limitation | Status |\n"
-    table_section += "|---|---|---|---|---|---|---|\n"
+    table_section += "| Title | Year | Method | Dataset | Key Metric | Limitation |\n"
+    table_section += "|---|---|---|---|---|---|\n"
     for row in comparison_table:
         title_trunc = row['title'][:40] + "..." if len(row['title']) > 40 else row['title']
-        table_section += f"| {title_trunc} | {row['year']} | {row['method']} | {row['dataset']} | {row['key_metric']} | {row['limitation']} | {row['verification_status']} |\n"
+        table_section += f"| {title_trunc} | {row['year']} | {row['method']} | {row['dataset']} | {row['key_metric']} | {row['limitation']} |\n"
         
     summary_section = f"\n## 3. Thematic Literature Survey & Synthesis\n\n{synthesis_text}\n"
         
@@ -157,7 +157,7 @@ def generate_docx(output_path: str, query: str, summaries: List[Summary], compar
     
     # Comparison Table
     doc.add_heading("2. Comparison Matrix", level=1)
-    table = doc.add_table(rows=1, cols=7)
+    table = doc.add_table(rows=1, cols=6)
     table.style = 'Light Shading Accent 1'
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = 'Title'
@@ -166,7 +166,6 @@ def generate_docx(output_path: str, query: str, summaries: List[Summary], compar
     hdr_cells[3].text = 'Dataset'
     hdr_cells[4].text = 'Key Metric'
     hdr_cells[5].text = 'Limitation'
-    hdr_cells[6].text = 'Status'
     
     for row in comparison_table:
         row_cells = table.add_row().cells
@@ -176,7 +175,6 @@ def generate_docx(output_path: str, query: str, summaries: List[Summary], compar
         row_cells[3].text = row['dataset']
         row_cells[4].text = row['key_metric']
         row_cells[5].text = row['limitation']
-        row_cells[6].text = row['verification_status']
         
     # Thematic Synthesis
     doc.add_heading("3. Thematic Literature Survey & Synthesis", level=1)
@@ -297,7 +295,6 @@ def generate_pdf(output_path: str, query: str, summaries: List[Summary], compari
         Paragraph("Dataset", table_hdr_style),
         Paragraph("Metric", table_hdr_style),
         Paragraph("Limitation", table_hdr_style),
-        Paragraph("Status", table_hdr_style)
     ]]
     
     # Table rows
@@ -310,10 +307,9 @@ def generate_pdf(output_path: str, query: str, summaries: List[Summary], compari
             Paragraph(row['dataset'], table_cell_style),
             Paragraph(row['key_metric'], table_cell_style),
             Paragraph(row['limitation'], table_cell_style),
-            Paragraph(row['verification_status'], table_cell_style)
         ])
         
-    t = Table(data, colWidths=[120, 35, 80, 80, 80, 80, 50])
+    t = Table(data, colWidths=[140, 35, 95, 95, 95, 95])
     t.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#1E293B')),
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),

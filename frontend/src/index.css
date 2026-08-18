@@ -124,7 +124,8 @@ body {
 
 .topbar-logo-icon {
   width: 32px; height: 32px;
-  border: 1px solid var(--border-strong);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;

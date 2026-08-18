@@ -25,9 +25,8 @@ export default function OverviewPanel({ results, onTabChange }) {
   const arxivCount  = papers.filter(p => p.source === 'arxiv').length;
   const s2Count     = papers.filter(p => p.source === 'semantic_scholar' || p.source === 'merged').length;
   const withPdf     = papers.filter(p => p.full_text_available).length;
-  const verifiedCount = compTable.filter(r => r.verification_status === 'verified').length;
 
-  const accuracy = paperCount > 0 ? Math.round((verifiedCount / paperCount) * 100) : null;
+  const pdfCoverage = paperCount > 0 ? Math.round((withPdf / paperCount) * 100) : null;
 
   const displayedPapers = showAllPapers ? papers : papers.slice(0, 8);
 
@@ -48,12 +47,12 @@ export default function OverviewPanel({ results, onTabChange }) {
           <div className="stat-label">Research gaps</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{verifiedCount}</div>
-          <div className="stat-label">Verified extractions</div>
+          <div className="stat-value">{withPdf}</div>
+          <div className="stat-label">Full-text PDFs</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{accuracy != null ? `${accuracy}%` : '—'}</div>
-          <div className="stat-label">Extraction accuracy</div>
+          <div className="stat-value">{pdfCoverage != null ? `${pdfCoverage}%` : '—'}</div>
+          <div className="stat-label">PDF coverage</div>
         </div>
       </div>
 

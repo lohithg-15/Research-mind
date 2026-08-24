@@ -35,14 +35,17 @@ function AuthorsCell({ authors = [] }) {
 /** Coloured verification badge + optional "Abstract only" sub-badge */
 function VerificationBadge({ status, abstractOnly }) {
   const label =
-    status === 'verified' ? 'Verified' :
-    status === 'failed'   ? 'Failed'   : 'Unverified';
+    status === 'verified'  ? 'Verified'   :
+    status === 'failed'    ? 'Failed'     :
+    status === 'heuristic' ? 'Heuristic'  : 'Unverified';
 
   const badgeStyle =
     status === 'verified'
       ? { background: 'rgba(52,211,153,0.12)', color: '#34d399', borderColor: 'rgba(52,211,153,0.3)' }
       : status === 'failed'
       ? { background: 'rgba(239,68,68,0.10)', color: '#f87171', borderColor: 'rgba(239,68,68,0.25)' }
+      : status === 'heuristic'
+      ? { background: 'rgba(251,191,36,0.10)', color: '#fbbf24', borderColor: 'rgba(251,191,36,0.25)' }
       : { background: 'transparent',           color: 'var(--gray-500)', borderColor: 'var(--border)' };
 
   return (
@@ -233,7 +236,7 @@ export default function ComparisonTable({ data }) {
                     <td title={item.key_metric}><CellValue value={item.key_metric} /></td>
 
                     {/* Limitation */}
-                    <td title={item.limitation}><CellValue value={item.limitation} /></td>
+                    <td title={item.limitation} style={{ whiteSpace: 'normal', lineHeight: 1.4 }}><CellValue value={item.limitation} /></td>
 
                     {/* Verification Status */}
                     <td>

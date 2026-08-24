@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   BookOpen, Play, Loader2, LayoutDashboard,
   Table2, GitFork, FileText, AlertCircle,
-  Sparkles
+  Sparkles, Trash2
 } from 'lucide-react';
 
 import ProgressTracker  from './components/ProgressTracker';
@@ -14,26 +14,72 @@ import SourcesSidebar   from './components/SourcesSidebar';
 
 /* ─── Tabs config ─── */
 const TABS = [
-  { key: 'overview',    label: 'Overview',         Icon: LayoutDashboard },
-  { key: 'comparison',  label: 'Comparison Table',  Icon: Table2 },
-  { key: 'gap',         label: 'Gap Evidence',      Icon: GitFork },
-  { key: 'report',      label: 'Report',            Icon: FileText },
+  { key: 'overview',   label: 'Overview',        Icon: LayoutDashboard },
+  { key: 'comparison', label: 'Comparison Table', Icon: Table2 },
+  { key: 'gap',        label: 'Gap Evidence',     Icon: GitFork },
+  { key: 'report',     label: 'Report',           Icon: FileText },
 ];
 
-export default function App() {
-  const [query,       setQuery]       = useState('');
-  const [yearMin,     setYearMin]     = useState(2015);
-  const [yearMax,     setYearMax]     = useState(new Date().getFullYear());
-  const [venueType,   setVenueType]   = useState('any');
-  const [keywords,    setKeywords]    = useState('');
+/* ─── localStorage helpers ─── */
+const LS_KEY = 'researchmind_session';
 
-  const [jobId,       setJobId]       = useState(null);
-  const [jobStatus,   setJobStatus]   = useState(null);
-  const [agentStatus, setAgentStatus] = useState({});
-  const [results,     setResults]     = useState(null);
-  const [error,       setError]       = useState(null);
-  const [activeTab,   setActiveTab]   = useState('overview');
+function saveSession(data) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)); }
+  catch { /* quota exceeded — silently ignore */ }
+}
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function clearSession() {
+  try { localStorage.removeItem(LS_KEY); } catch {}
+}
+
+/* ─── Initial state from localStorage ─── */
+const saved = loadSession();
+
+export default function App() {
+  const [query,       setQuery]       = useState(saved?.query       ?? '');
+  const [yearMin,     setYearMin]     = useState(saved?.yearMin     ?? 2015);
+  const [yearMax,     setYearMax]     = useState(saved?.yearMax     ?? new Date().getFullYear());
+  const [venueType,   setVenueType]   = useState(saved?.venueType   ?? 'any');
+  const [keywords,    setKeywords]    = useState(saved?.keywords    ?? '');
+
+  const [jobId,       setJobId]       = useState(saved?.jobId       ?? null);
+  const [jobStatus,   setJobStatus]   = useState(saved?.jobStatus   ?? null);
+  const [agentStatus, setAgentStatus] = useState(saved?.agentStatus ?? {});
+  const [results,     setResults]     = useState(saved?.results     ?? null);
+  const [error,       setError]       = useState(null);   // errors not persisted
+  const [activeTab,   setActiveTab]   = useState(saved?.activeTab   ?? 'overview');
   const [highlighted, setHighlighted] = useState([]);
+
+  /* ─── Persist to localStorage whenever important state changes ─── */
+  useEffect(() => {
+    saveSession({
+      query, yearMin, yearMax, venueType, keywords,
+      jobId, jobStatus, agentStatus, results, activeTab,
+    });
+  }, [query, yearMin, yearMax, venueType, keywords, jobId, jobStatus, agentStatus, results, activeTab]);
+
+  /* ─── If we reload mid-job (running), re-attach polling ─── */
+  const isRunning = jobId && (jobStatus === 'pending' || jobStatus === 'running');
+  const isDone    = results && results.status === 'done';
+
+  /* ─── Fetch final results ─── */
+  const fetchResults = useCallback(async (jid, q) => {
+    try {
+      const res  = await fetch(`http://localhost:8000/results/${jid}`);
+      if (!res.ok) throw new Error('Results fetch failed');
+      const data = await res.json();
+      setResults({ ...data, query: q });
+    } catch {
+      setError('Failed to load final results from backend.');
+    }
+  }, []);
 
   /* ─── Poll job status ─── */
   useEffect(() => {
@@ -46,26 +92,14 @@ export default function App() {
         setJobStatus(data.status);
         setAgentStatus(data.agent_status || {});
         setError(data.error || null);
-        if (data.status === 'done')  { clearInterval(interval); fetchResults(); }
+        if (data.status === 'done')  { clearInterval(interval); fetchResults(jobId, query); }
         if (data.status === 'error') { clearInterval(interval); }
       } catch (err) {
         console.error('Polling error:', err);
       }
     }, 2000);
     return () => clearInterval(interval);
-  }, [jobId, jobStatus]);
-
-  const fetchResults = async () => {
-    try {
-      const res  = await fetch(`http://localhost:8000/results/${jobId}`);
-      if (!res.ok) throw new Error('Results fetch failed');
-      const data = await res.json();
-      // Attach query to results so Report tab can display it
-      setResults({ ...data, query });
-    } catch (err) {
-      setError('Failed to load final results from backend.');
-    }
-  };
+  }, [jobId, jobStatus, fetchResults, query]);
 
   /* ─── Submit query ─── */
   const handleSubmit = async (e) => {
@@ -95,30 +129,43 @@ export default function App() {
       setJobStatus('pending');
       setAgentStatus({
         planner: 'pending', search: 'pending', extraction: 'pending',
-        synthesis: 'pending', graph_gap: 'pending', report: 'pending'
+        synthesis: 'pending', graph_gap: 'pending', report: 'pending',
       });
     } catch (err) {
       setError(err.message || 'Server connection error.');
     }
   };
 
-  const isRunning   = jobId && (jobStatus === 'pending' || jobStatus === 'running');
-  const isDone      = results && results.status === 'done';
+  /* ─── Clear all (works even while running) ─── */
+  const handleClear = () => {
+    // Stop polling by setting jobStatus to a terminal value first
+    setJobStatus('cancelled');
+    clearSession();
+    setQuery('');
+    setKeywords('');
+    setYearMin(2015);
+    setYearMax(new Date().getFullYear());
+    setVenueType('any');
+    setJobId(null);
+    setJobStatus(null);
+    setAgentStatus({});
+    setResults(null);
+    setError(null);
+    setActiveTab('overview');
+    setHighlighted([]);
+  };
 
-  // Prefer the full papers list (with URLs) returned by the API; fall back to comparison_table
+  // Prefer the full papers list with URLs; fall back to comparison_table
   const papers = results?.papers?.length
     ? results.papers
     : results?.comparison_table?.map((p, i) => ({
         id: p.id || String(i),
-        arxiv_id: p.arxiv_id,
-        doi: p.doi,
-        pdf_url: p.pdf_url,
-        url: p.url,
-        year: p.year,
-        title: p.title,
+        arxiv_id: p.arxiv_id, doi: p.doi,
+        pdf_url: p.pdf_url, url: p.url,
+        year: p.year, title: p.title,
       })) || [];
 
-  /* ─── Status badge (topbar) ─── */
+  /* ─── Status badge ─── */
   const StatusBadge = () => {
     if (!jobId) return null;
     if (isRunning) return (
@@ -150,7 +197,6 @@ export default function App() {
     return null;
   };
 
-  /* ─── Report: use backend draft if available, else empty ─── */
   const reportDraft = isDone ? (results?.report_draft || {}) : null;
 
   return (
@@ -201,6 +247,18 @@ export default function App() {
         {/* Right cluster */}
         <div className="topbar-right">
           <StatusBadge />
+
+          {/* Clear button — always clickable, even while running */}
+          <button
+            id="clear-btn"
+            className={`clear-btn ${!jobId && !results && !query.trim() ? 'clear-btn--dim' : ''}`}
+            onClick={handleClear}
+            title="Clear all results and stop pipeline"
+          >
+            <Trash2 size={13} />
+            Clear
+          </button>
+
           <button
             id="run-review-btn"
             className="run-btn"
@@ -222,9 +280,7 @@ export default function App() {
         <aside className="sidebar-left">
           {/* Filters */}
           <div className="sidebar-section">
-            <div className="sidebar-section-title">
-              Filters
-            </div>
+            <div className="sidebar-section-title">Filters</div>
 
             <label className="filter-label">Year range</label>
             <div className="filter-row">
@@ -292,7 +348,7 @@ export default function App() {
             </div>
           )}
 
-          {/* Tab bar — only when results are available or running */}
+          {/* Tab bar */}
           {(isDone || isRunning) && (
             <nav className="tab-bar">
               {TABS.map(({ key, label, Icon }) => (
@@ -311,7 +367,7 @@ export default function App() {
 
           {/* Tab panels */}
           <div className="tab-panel">
-            {/* No job yet — hero */}
+            {/* Hero — no job yet */}
             {!jobId && !error && (
               <div className="hero-empty">
                 <div className="hero-badge">
@@ -329,20 +385,16 @@ export default function App() {
                 </p>
                 <div className="hero-features">
                   <div className="hero-feature-chip">
-                    <div className="hero-feature-chip-dot" />
-                    arXiv + Semantic Scholar
+                    <div className="hero-feature-chip-dot" />arXiv + Semantic Scholar
                   </div>
                   <div className="hero-feature-chip">
-                    <div className="hero-feature-chip-dot" />
-                    LLM Extraction &amp; Synthesis
+                    <div className="hero-feature-chip-dot" />LLM Extraction &amp; Synthesis
                   </div>
                   <div className="hero-feature-chip">
-                    <div className="hero-feature-chip-dot" />
-                    Citation Gap Detection
+                    <div className="hero-feature-chip-dot" />Citation Gap Detection
                   </div>
                   <div className="hero-feature-chip">
-                    <div className="hero-feature-chip-dot" />
-                    PDF &amp; Word Export
+                    <div className="hero-feature-chip-dot" />PDF &amp; Word Export
                   </div>
                 </div>
                 <div className="hero-cta-line">
@@ -356,18 +408,17 @@ export default function App() {
               <div className="panel-empty" style={{ minHeight: '300px' }}>
                 <Loader2 size={32} className="spin" style={{ color: 'var(--gray-500)' }} />
                 <p className="panel-empty-title">Pipeline running…</p>
-                <p className="panel-empty-desc">Monitor agent progress in the left sidebar. Results will appear automatically when complete.</p>
+                <p className="panel-empty-desc">
+                  Monitor agent progress in the left sidebar. Results will appear automatically when complete.
+                </p>
               </div>
             )}
 
-            {/* Results tabs */}
+            {/* Results */}
             {isDone && (
               <>
                 {activeTab === 'overview' && (
-                  <OverviewPanel
-                    results={results}
-                    onTabChange={setActiveTab}
-                  />
+                  <OverviewPanel results={results} onTabChange={setActiveTab} />
                 )}
                 {activeTab === 'comparison' && (
                   <ComparisonTable data={results.comparison_table} />

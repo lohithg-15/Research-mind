@@ -24,7 +24,7 @@ class FieldRecord(BaseModel):
     key_metric: str
     limitation: str
     year: int
-    verification_status: Literal["verified", "unverified", "failed"] = "unverified"
+    verification_status: Literal["verified", "unverified", "failed", "heuristic"] = "unverified"
     verification_notes: Optional[str] = None
     abstract_only: bool = False
 

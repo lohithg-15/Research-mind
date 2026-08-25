@@ -178,7 +178,7 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
         },
         {
           selector: 'node:selected',
-          style: { 'border-color': '#ffffff', 'border-width': 2.5 },
+          style: { 'border-color': '#000000', 'border-width': 2.5 },
         },
         {
           selector: 'edge',

@@ -46,7 +46,7 @@ function VerificationBadge({ status, abstractOnly }) {
       ? { background: 'rgba(239,68,68,0.10)', color: '#f87171', borderColor: 'rgba(239,68,68,0.25)' }
       : status === 'heuristic'
       ? { background: 'rgba(251,191,36,0.10)', color: '#fbbf24', borderColor: 'rgba(251,191,36,0.25)' }
-      : { background: 'transparent',           color: 'var(--gray-500)', borderColor: 'var(--border)' };
+      : { background: 'transparent',           color: 'var(--gray-700)', borderColor: 'var(--border)' };
 
   return (
     <span style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -165,7 +165,17 @@ export default function ComparisonTable({ data }) {
         </div>
       </div>
 
-      <div className="table-wrapper">
+      <div
+        className="table-wrapper"
+        style={{
+          overflowX: 'auto',
+          overflowY: 'auto',
+          maxWidth: 'calc(100vw - 226px - 218px - 48px)',
+          maxHeight: 'calc(100vh - 220px)',   /* fixed height = scrollbar always visible */
+          display: 'block',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
         <table className="rm-table">
           <thead>
             <tr>
@@ -236,7 +246,7 @@ export default function ComparisonTable({ data }) {
                     <td title={item.key_metric}><CellValue value={item.key_metric} /></td>
 
                     {/* Limitation */}
-                    <td title={item.limitation} style={{ whiteSpace: 'normal', lineHeight: 1.4 }}><CellValue value={item.limitation} /></td>
+                    <td className="limitation-cell" title={item.limitation}><CellValue value={item.limitation} /></td>
 
                     {/* Verification Status */}
                     <td>

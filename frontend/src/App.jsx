@@ -406,7 +406,7 @@ export default function App() {
             {/* Pipeline running */}
             {isRunning && !isDone && (
               <div className="panel-empty" style={{ minHeight: '300px' }}>
-                <Loader2 size={32} className="spin" style={{ color: 'var(--gray-500)' }} />
+                <Loader2 size={32} className="spin" style={{ color: 'var(--gray-700)' }} />
                 <p className="panel-empty-title">Pipeline running…</p>
                 <p className="panel-empty-desc">
                   Monitor agent progress in the left sidebar. Results will appear automatically when complete.

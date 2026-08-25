@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   BookOpen, Play, Loader2, LayoutDashboard,
   Table2, GitFork, FileText, AlertCircle,
-  Sparkles, Trash2
+  Sparkles, Trash2, MessageSquare
 } from 'lucide-react';
+
+import QAAssistant      from './components/QAAssistant';
 
 import ProgressTracker  from './components/ProgressTracker';
 import ComparisonTable  from './components/ComparisonTable';
@@ -18,6 +20,7 @@ const TABS = [
   { key: 'comparison', label: 'Comparison Table', Icon: Table2 },
   { key: 'gap',        label: 'Gap Evidence',     Icon: GitFork },
   { key: 'report',     label: 'Report',           Icon: FileText },
+  { key: 'qa',         label: 'Ask Assistant',    Icon: MessageSquare },
 ];
 
 /* ─── localStorage helpers ─── */
@@ -404,7 +407,7 @@ export default function App() {
             )}
 
             {/* Pipeline running */}
-            {isRunning && !isDone && (
+            {isRunning && !isDone && activeTab !== 'qa' && (
               <div className="panel-empty" style={{ minHeight: '300px' }}>
                 <Loader2 size={32} className="spin" style={{ color: 'var(--gray-700)' }} />
                 <p className="panel-empty-title">Pipeline running…</p>
@@ -414,7 +417,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Results */}
+            {/* Results & QA */}
             {isDone && (
               <>
                 {activeTab === 'overview' && (
@@ -433,6 +436,10 @@ export default function App() {
                   <ReportExport jobId={jobId} results={results} />
                 )}
               </>
+            )}
+
+            {activeTab === 'qa' && (
+              <QAAssistant jobId={jobId} isDone={isDone} />
             )}
           </div>
         </main>

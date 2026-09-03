@@ -29,3 +29,7 @@ build/
 
 
 backend/fallback_dataset/cache/
+
+# Scratch / temporary
+scratch/
+pytest-cache-files-*/

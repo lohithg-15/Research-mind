@@ -128,17 +128,8 @@ def answer_question(request: QARequest):
     state = job["state"]
     if not state:
         raise HTTPException(status_code=500, detail="Job state is missing.")
-        
-    # Look up similar papers from VectorStore
-    try:
-        from backend.data.vector_store import VectorStore
-        vs = VectorStore()
-        similar_results = vs.query_similarity(request.question, limit=15)
-    except Exception as e:
-        logger.error(f"Error querying VectorStore in QA: {e}")
-        similar_results = []
-        
-    # Filter papers to keep only those that belong to this job
+
+    # Gather paper IDs belonging to this job
     job_paper_ids = set()
     raw_papers = state.get("papers", [])
     for p in raw_papers:
@@ -146,15 +137,25 @@ def answer_question(request: QARequest):
             job_paper_ids.add(p.id)
         elif isinstance(p, dict) and "id" in p:
             job_paper_ids.add(p["id"])
-            
+
     comp_table = state.get("comparison_table", [])
     comp_map = {item["id"]: item for item in comp_table if "id" in item}
-    
-    matched_ids = [r["id"] for r in similar_results if r["id"] in job_paper_ids]
+
+    # Try to use VectorStore for semantic matching; fall back to comparison table
+    matched_ids = []
+    try:
+        from backend.data.vector_store import VectorStore
+        vs = VectorStore()
+        similar_results = vs.query_similarity(request.question, limit=15)
+        matched_ids = [r["id"] for r in similar_results if r["id"] in job_paper_ids]
+    except Exception as e:
+        logger.warning(f"VectorStore unavailable for QA (falling back to comparison table): {e}")
+
     if not matched_ids:
-        # Fallback: use top 8 papers from comparison table if vector store search finds nothing
-        matched_ids = [item["id"] for item in comp_table[:8] if "id" in item]
-        
+        # Fallback: use all papers from comparison table (up to 10)
+        matched_ids = [item["id"] for item in comp_table[:10] if "id" in item]
+    
+    # Build context string from matched papers
     context_str = ""
     papers_referenced = []
     for pid in matched_ids:
@@ -163,12 +164,12 @@ def answer_question(request: QARequest):
             continue
         papers_referenced.append({
             "id": item["id"],
-            "title": item["title"],
+            "title": item.get("title", "Untitled"),
             "url": item.get("url") or item.get("pdf_url")
         })
         context_str += f"""
 Paper ID: {item['id']}
-Title: {item['title']}
+Title: {item.get('title', 'Untitled')}
 Authors: {', '.join(item.get('authors', [])) if isinstance(item.get('authors'), list) else item.get('authors', '')}
 Year: {item.get('year')}
 Venue: {item.get('venue')}
@@ -177,6 +178,25 @@ Evaluation Dataset: {item.get('dataset', 'Not specified')}
 Key Metric: {item.get('key_metric', 'Not specified')}
 Limitation: {item.get('limitation', 'Not specified')}
 """
+
+    # Also include summaries if available for richer context
+    raw_summaries = state.get("summaries", [])
+    for s in raw_summaries:
+        sid = s.paper_id if hasattr(s, "paper_id") else s.get("paper_id", "")
+        stxt = s.summary_text if hasattr(s, "summary_text") else s.get("summary_text", "")
+        if sid in set(matched_ids) and stxt:
+            context_str += f"\nSummary for {sid}: {stxt}\n"
+
+    # If there are no papers at all, provide a helpful response without calling LLM
+    if not papers_referenced:
+        return {
+            "answer": (
+                "I don't have enough paper data from this research session to answer your question. "
+                "This can happen if the pipeline did not find papers or the comparison table is empty. "
+                "Please try running a new literature review query."
+            ),
+            "papers_referenced": []
+        }
 
     from backend.clients.claude_client import ClaudeClient
     claude = ClaudeClient()
@@ -208,7 +228,16 @@ Answer:
         response = claude.complete(prompt=prompt, system=system_prompt, temperature=0.2)
     except Exception as e:
         logger.error(f"Error calling ClaudeClient in QA: {e}")
-        response = "Sorry, I encountered an error while synthesizing the answer."
+        # Generate a basic fallback answer from the paper data itself
+        paper_titles = [p["title"] for p in papers_referenced[:5]]
+        response = (
+            f"I encountered an error while synthesizing a detailed answer, but here's what I can tell you "
+            f"from the {len(papers_referenced)} papers in this research session:\n\n"
+            f"The following papers are most relevant to your question:\n"
+            + "\n".join(f"- {t}" for t in paper_titles)
+            + "\n\nPlease check the Comparison Table tab for detailed method, dataset, and limitation "
+            "information for each paper."
+        )
         
     return {
         "answer": response,

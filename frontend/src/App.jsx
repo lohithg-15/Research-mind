@@ -438,9 +438,10 @@ export default function App() {
               </>
             )}
 
-            {activeTab === 'qa' && (
+            {/* QA — always mounted so chat state survives tab switches */}
+            <div style={{ display: activeTab === 'qa' ? 'block' : 'none' }}>
               <QAAssistant jobId={jobId} isDone={isDone} />
-            )}
+            </div>
           </div>
         </main>
 

@@ -26,8 +26,11 @@ dist/
 build/
 .eslintcache
 
-backend/fallback_dataset/cache/
+# Backend
+backend/db/cache/
+backend/db/chroma/
+backend/db/exports/
 
 # Scratch / temporary
 scratch/
-pytest-cache-files-*/
+pytest-cache-files-*/

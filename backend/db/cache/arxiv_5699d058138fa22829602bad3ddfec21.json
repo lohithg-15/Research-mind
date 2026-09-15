@@ -1,0 +1,132 @@
+[
+  {
+    "id": "2601.03290",
+    "arxiv_id": "2601.03290",
+    "title": "Lightweight Transformer Architectures for Edge Devices in Real-Time Applications",
+    "abstract": "The deployment of transformer-based models on resource-constrained edge devices represents a critical challenge in enabling real-time artificial intelligence applications. This comprehensive survey examines lightweight transformer architectures specifically designed for edge deployment, analyzing recent advances in model compression, quantization, pruning, and knowledge distillation techniques. We systematically review prominent lightweight variants including MobileBERT, TinyBERT, DistilBERT, EfficientFormer, EdgeFormer, and MobileViT, providing detailed performance benchmarks on standard datasets such as GLUE, SQuAD, ImageNet-1K, and COCO. Our analysis encompasses current industry adoption patterns across major hardware platforms (NVIDIA Jetson, Qualcomm Snapdragon, Apple Neural Engine, ARM architectures), deployment frameworks (TensorFlow Lite, ONNX Runtime, PyTorch Mobile, CoreML), and optimization strategies. Experimental results demonstrate that modern lightweight transformers can achieve 75-96% of full-model accuracy while reducing model size by 4-10x and inference latency by 3-9x, enabling deployment on devices with as little as 2-5W power consumption. We identify sparse attention mechanisms, mixed-precision quantization (INT8/FP16), and hardware-aware neural architecture search as the most effective optimization strategies. Novel findings include memory-bandwidth bottleneck analysis revealing 15-40M parameter models achieve optimal hardware utilization (60-75% efficiency), quantization sweet spots for different model types, and comprehensive energy efficiency profiling across edge platforms. We establish real-time performance boundaries and provide a practical 6-step deployment pipeline achieving 8-12x size reduction with less than 2% accuracy degradation.",
+    "authors": [
+      "Hema Hariharan Samson"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.03290v1",
+    "url": "https://arxiv.org/abs/2601.03290",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2602.19174",
+    "arxiv_id": "2602.19174",
+    "title": "TurkicNLP: An NLP Toolkit for Turkic Languages",
+    "abstract": "Natural language processing for the Turkic language family, spoken by over 200 million people across Eurasia, remains fragmented, with most languages lacking unified tooling and resources. We present TurkicNLP, an open-source Python library providing a single, consistent NLP pipeline for Turkic languages across four script families: Latin, Cyrillic, Perso-Arabic, and Old Turkic Runic. The library covers tokenization, morphological analysis, part-of-speech tagging, dependency parsing, named entity recognition, bidirectional script transliteration, cross-lingual sentence embeddings, and machine translation through one language-agnostic API. A modular multi-backend architecture integrates rule-based finite-state transducers and neural models transparently, with automatic script detection and routing between script variants. Outputs follow the CoNLL-U standard for full interoperability and extension. Code and documentation are hosted at https://github.com/turkic-nlp/turkicnlp .",
+    "authors": [
+      "Sherzod Hakimov"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2602.19174v5",
+    "url": "https://arxiv.org/abs/2602.19174",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2602.08216",
+    "arxiv_id": "2602.08216",
+    "title": "Thermodynamic Isomorphism of Transformers: A Lagrangian Approach to Attention Dynamics",
+    "abstract": "We propose an effective field-theoretic framework for analyzing Transformer attention through a thermodynamic lens. By constructing a Lagrangian on the information manifold equipped with the Fisher metric, we show that, within the Shannon--Boltzmann entropy framework, the Softmax function arises as a stationary solution minimizing a Helmholtz free energy functional. This establishes a formal correspondence between scaled dot-product attention and canonical ensemble statistics. Extending this mapping to macroscopic observables, we define an effective specific heat associated with fluctuations of the attention energy landscape. In controlled experiments on the modular addition task ($p = 19$--$113$), we observe a robust peak in this fluctuation measure that consistently precedes the onset of generalization. While no asymptotic power-law divergence is detected in this finite-depth regime, the reproducible enhancement of energy variance suggests a critical-like crossover accompanying representational reorganization. Our framework provides a unified statistical-mechanical perspective on attention scaling, training dynamics, and positional encoding, interpreting the phenomena as emergent properties of an effective thermodynamic system rather than isolated heuristics. Although the present results indicate finite-size crossover behavior rather than a strict phase transition, they motivate further investigation into scaling limits of deep architectures through fluctuation-based observables.",
+    "authors": [
+      "Gunn Kim"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2602.08216v2",
+    "url": "https://arxiv.org/abs/2602.08216",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2503.00209",
+    "arxiv_id": "2503.00209",
+    "title": "Autoencoder-Based Framework to Capture Vocabulary Quality in NLP",
+    "abstract": "Linguistic richness is essential for advancing natural language processing (NLP), as dataset characteristics often directly influence model performance. However, traditional metrics such as Type-Token Ratio (TTR), Vocabulary Diversity (VOCD), and Measure of Lexical Text Diversity (MTLD) do not adequately capture contextual relationships, semantic richness, and structural complexity. In this paper, we introduce an autoencoder-based framework that uses neural network capacity as a proxy for vocabulary richness, diversity, and complexity, enabling a dynamic assessment of the interplay between vocabulary size, sentence structure, and contextual depth. We validate our approach on two distinct datasets: the DIFrauD dataset, which spans multiple domains of deceptive and fraudulent text, and the Project Gutenberg dataset, representing diverse languages, genres, and historical periods. Experimental results highlight the robustness and adaptability of our method, offering practical guidance for dataset curation and NLP model design. By enhancing traditional vocabulary evaluation, our work fosters the development of more context-aware, linguistically adaptive NLP systems.",
+    "authors": [
+      "Vu Minh Hoang Dang",
+      "Rakesh M. Verma"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2503.00209v1",
+    "url": "https://arxiv.org/abs/2503.00209",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2602.01919",
+    "arxiv_id": "2602.01919",
+    "title": "From Code-Centric to Concept-Centric: Teaching NLP with LLM-Assisted \"Vibe Coding\"",
+    "abstract": "The rapid advancement of Large Language Models (LLMs) presents both challenges and opportunities for Natural Language Processing (NLP) education. This paper introduces ``Vibe Coding,'' a pedagogical approach that leverages LLMs as coding assistants while maintaining focus on conceptual understanding and critical thinking. We describe the implementation of this approach in a senior-level undergraduate NLP course, where students completed seven labs using LLMs for code generation while being assessed primarily on conceptual understanding through critical reflection questions. Analysis of end-of-course feedback from 19 students reveals high satisfaction (mean scores 4.4-4.6/5.0) across engagement, conceptual learning, and assessment fairness. Students particularly valued the reduced cognitive load from debugging, enabling deeper focus on NLP concepts. However, challenges emerged around time constraints, LLM output verification, and the need for clearer task specifications. Our findings suggest that when properly structured with mandatory prompt logging and reflection-based assessment, LLM-assisted learning can shift focus from syntactic fluency to conceptual mastery, preparing students for an AI-augmented professional landscape.",
+    "authors": [
+      "Hend Al-Khalifa"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2602.01919v1",
+    "url": "https://arxiv.org/abs/2602.01919",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2505.24717",
+    "arxiv_id": "2505.24717",
+    "title": "PDE-Transformer: Efficient and Versatile Transformers for Physics Simulations",
+    "abstract": "We introduce PDE-Transformer, an improved transformer-based architecture for surrogate modeling of physics simulations on regular grids. We combine recent architectural improvements of diffusion transformers with adjustments specific for large-scale simulations to yield a more scalable and versatile general-purpose transformer architecture, which can be used as the backbone for building large-scale foundation models in physical sciences. We demonstrate that our proposed architecture outperforms state-of-the-art transformer architectures for computer vision on a large dataset of 16 different types of PDEs. We propose to embed different physical channels individually as spatio-temporal tokens, which interact via channel-wise self-attention. This helps to maintain a consistent information density of tokens when learning multiple types of PDEs simultaneously. We demonstrate that our pre-trained models achieve improved performance on several challenging downstream tasks compared to training from scratch and also beat other foundation model architectures for physics simulations.",
+    "authors": [
+      "Benjamin Holzschuh",
+      "Qiang Liu",
+      "Georg Kohl",
+      "Nils Thuerey"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2505.24717v1",
+    "url": "https://arxiv.org/abs/2505.24717",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2605.09092",
+    "arxiv_id": "2605.09092",
+    "title": "Character-Level Transformer for Tajik-Persian Transliteration with a Parallel Lexical Corpus",
+    "abstract": "This study addresses automatic transliteration from Tajik (Cyrillic script) to Persian (Perso-Arabic script). We present a curated, lexicographically verified parallel corpus of 52,152 Tajik--Persian words and short phrases, compiled from printed dictionaries, encyclopedic sources, and manually verified online resources. To the best of our knowledge, this is one of the largest publicly available word-level corpora for Tajik--Persian transliteration. Using this corpus, we train a character-level sequence-to-sequence Transformer model and evaluate it using Character Error Rate (CER) and exact-match accuracy. The Transformer achieves a CER of 0.3216 and an exact-match accuracy of 0.3133, outperforming both dictionary-based rule-based and recurrent neural baselines. With beam search (k=3), performance further improves to CER 0.3182 and accuracy 0.3215. We describe the data collection and preprocessing pipeline, model architecture, and experimental protocol, and report a part-of-speech analysis showing performance differences across lexical categories. All preprocessing scripts, deterministic splits into training, validation, and test sets, and training configurations are released to support reproducibility and further research on Tajik and related Persian dialects. The corpus supports research in character-level transliteration, cross-script NLP, and lexicographic applications.",
+    "authors": [
+      "Mullosharaf K. Arabov"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2605.09092v1",
+    "url": "https://arxiv.org/abs/2605.09092",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

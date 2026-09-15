@@ -1,0 +1,368 @@
+[
+  {
+    "id": "10.1109/ISCTIS70043.2026.11572651",
+    "arxiv_id": null,
+    "title": "Recent Advances in Quantum Error Correction Codes for Superconducting Quantum Computing",
+    "abstract": "Superconducting quantum computing has become one of the leading technological routes toward practical quantum computing due to its relatively long coherence times and compatibility with scalable integration. However, the high error rates of physical qubits create a scaling paradox that limits further system expansion, making quantum error correction (QEC) a core enabler of fault-tolerant quantum computing. This paper briefly introduces superconducting quantum noise models, stabilizer-code principles, and representative research achievements from 2022 to 2023 as necessary theoretical background and benchmarking references, while mainly focusing on the latest research advances in quantum error correction codes in the field of superconducting quantum computing from 2024 to 2026. It elaborates on the foundational principles of superconducting quantum noise models and stabilizer codes, with a focus on analyzing the architectures and mechanisms of surface codes, color codes, high-rate qLDPC codes, and bosonic codes. This work also summarizes recent milestone achievements, including the first exponential suppression of logical errors achieved by surface codes, the significant reduction of hardware redundancy enabled by high-rate codes, and the break-even point crossed by bosonic codes. Through multidimensional comparisons, it is shown that achieving fault tolerance at the million-qubit scale will require deep synergistic optimization of hardware, codes, and decoders. On this basis, pathways and guidance are provided for building low-overhead, high-efficiency universal quantum computers.",
+    "authors": [
+      "Zihang Wang",
+      "G. Gao",
+      "Guangming Wu"
+    ],
+    "year": 2026,
+    "venue": "2026 6th International Symposium on Computer Technology and Information Science (ISCTIS)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/0079b3ff312d21caac9a2b3d36d9a233f23e8d67",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ISCTIS70043.2026.11572651",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1007/s42979-025-04702-x",
+    "arxiv_id": null,
+    "title": "Fault-Tolerant Quantum Realization of Nikhilam Multiplier with Clifford+T-group",
+    "abstract": "",
+    "authors": [
+      "Laxmidhar Biswal",
+      "Anirban Bhattacharjee",
+      "Chandan Bandyopadhyay",
+      "H. Rahaman"
+    ],
+    "year": 2026,
+    "venue": "SN Computer Science",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/fcee129caf84bcbe805e657ae80c9da8c8b08249",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1007/s42979-025-04702-x",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "4f0bbcc5569fc8a937d3fbc36e770088102718f2",
+    "arxiv_id": "2602.20452",
+    "title": "A Unified Error Correction Code for Universal Quantum Computing with Identical Particles",
+    "abstract": "We present a universal fault-tolerant quantum computing architecture based on identical particle qubits (IPQs), where we find that the first-order IPQ - bath interaction fundamentally differs from the conventional first-order qubit-bath interaction. This key distinction necessitates a redesign of existing strategies to fight decoherence. We propose that the simplest quantum error correction code can be realized directly within the physical qubit, provided that conventional correction and restoration are generalized beyond unitary operations to employ physically implementable reversal operations -- naturally placing logical and physical qubits on equal footing. We further demonstrate that dynamical decoupling (DD) remains effective within this unified framework, and that a decoherence-free subspace (DFS) -- like structure emerges. Unlike previous approximate treatments, our analytically solvable IPQ-Bath model enables rigorous testing of these strategies, with numerical simulations validating their effectiveness.",
+    "authors": [
+      "S. L. Wu",
+      "Lian-Ao Wu"
+    ],
+    "year": 2026,
+    "venue": "Unknown",
+    "pdf_url": "https://arxiv.org/pdf/2602.20452.pdf",
+    "url": "https://arxiv.org/abs/2602.20452",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.15302/frontphys.2027.023301",
+    "arxiv_id": "2604.07909",
+    "title": "A Review of Variational Quantum Algorithms: Insights into Fault-Tolerant Quantum Computing",
+    "abstract": "Variational quantum algorithms (VQAs) have established themselves as a central computational paradigm in the Noisy Intermediate-Scale Quantum (NISQ) era. By coupling parameterized quantum circuits (PQCs) with classical optimization, they operate effectively under strict hardware limitations. However, as quantum architectures transition toward early fault-tolerant (EFT) and ultimate fault-tolerant (FT) regimes, the foundational principles and long-term viability of VQAs require systematic reassessment. This review offers an insightful analysis of VQAs and their progression toward the fault-tolerant regime. We deconstruct the core algorithmic framework by examining ansatz design and classical optimization strategies, including cost function formulation, gradient computation, and optimizer selection. Concurrently, we evaluate critical training bottlenecks, notably barren plateaus (BPs), alongside established mitigation strategies. The discussion then explores the EFT phase, detailing how the integration of quantum error mitigation and partial error correction can sustain algorithmic performance. Addressing the FT phase, we analyze the inherent challenges confronting current hybrid VQA models. Furthermore, we synthesize recent VQA applications across diverse domains, including many-body physics, quantum chemistry, machine learning, and mathematical optimization. Ultimately, this review outlines a theoretical roadmap for adapting quantum algorithms to future hardware generations, elucidating how variational principles can be systematically refined to maintain their relevance and efficiency within an error-corrected computational environment.",
+    "authors": [
+      "Zhirao Wang",
+      "Junxiang Huang",
+      "Runyu Ye",
+      "Qingyu Li",
+      "Qi Ding",
+      "Yiming Huang",
+      "Ting Zhang",
+      "Yumeng Zeng",
+      "Jian Gao",
+      "Xiao Yuan",
+      "Yuan Yao"
+    ],
+    "year": 2026,
+    "venue": "Frontiers of Physics",
+    "pdf_url": "https://arxiv.org/pdf/2604.07909.pdf",
+    "url": "https://arxiv.org/abs/2604.07909",
+    "full_text_available": true,
+    "citation_count": 3,
+    "citations": [
+      "2e2533a0f0f873e07694d3fbfa68ab2e56a33855",
+      "1c8595ad906496ce1902167c5775fb1a07edb3fc",
+      "cdbb5346afffa3bbe47bad439b999c6312eb79c7"
+    ],
+    "doi": "10.15302/frontphys.2027.023301",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.36676/jqst.v1.i2.14",
+    "arxiv_id": null,
+    "title": "The Role of Quantum Decoherence in Quantum Computing Systems",
+    "abstract": "Quantum decoherence is a fundamental challenge in the development and operation of quantum computing systems. This paper provides a comprehensive analysis of quantum decoherence, examining its origins, mechanisms, and impact on quantum information processing. We explore the interplay between decoherence and quantum error correction, highlighting the importance of maintaining coherence for reliable quantum computation. Through theoretical models and experimental studies, we investigate various sources of decoherence, including environmental interactions, thermal fluctuations, and operational imperfections. Additionally, we discuss advanced techniques for mitigating decoherence, such as dynamical decoupling, error-correcting codes, and fault-tolerant quantum computing architectures. Our findings underscore the critical role of understanding and managing quantum decoherence in achieving scalable and practical quantum computing systems. This work aims to provide a foundation for future research and development in enhancing the robustness and performance of quantum computers.",
+    "authors": [
+      "Ananya Deshmukh"
+    ],
+    "year": 2024,
+    "venue": "Journal of Quantum Science and Technology",
+    "pdf_url": "https://doi.org/10.36676/jqst.v1.i2.14",
+    "url": "https://www.semanticscholar.org/paper/e37e0abedca20c28befbdf197b8bfd5ad17f8be6",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "c3ed5a56cf6d2f90d7dcc5ed89e4e0444f07c1dd",
+      "08dd3a55fe8ca32dae00bede8560439ad9483854"
+    ],
+    "doi": "10.36676/jqst.v1.i2.14",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.56053/10.1.1",
+    "arxiv_id": null,
+    "title": "Limitations of quantum error correction in noisy intermediatescale quantum (nisq) systems",
+    "abstract": "Study of the Issue Quantum error correction (QEC) is crucial yet incurs significant qubit overhead costs.\nThe current QEC codes lack sufficient efficiency for near-term devices. The current generation of NISQ\ndevices, which often rely on delicate nanostructured qubit architectures, is prone to noise, decoherence,\nand gate faults, which severely limit their computing capability and scalability. While traditional\nquantum error correction codes, such as the surface code, are theoretically resilient, they often require\nsignificant qubit overhead and complex management systems that exceed the hardware capabilities of\nNISQ-era devices. This raises the question of whether new, resource-efficient QEC strategies or hybrid\nerror mitigation approaches can be tailored to the limits of nanostructured NISQ designs. This document\nexamines the constraints of existing quantum error correction (QEC) codes, which are crucial for\npreserving the fidelity of quantum computations yet require substantial qubit resources. This study\nexamines the shortcomings of current Quantum Error Correction (QEC) codes in relation to Noisy\nIntermediate-Scale Quantum (NISQ) devices and explores alternative strategies to create more efficient,\nlow-overhead QEC frameworks appropriate for imminent quantum technologies.",
+    "authors": [
+      "Saif Saad Alnuaimi",
+      "B. Ahamed",
+      "Mustafa Mohammed Rashid Al-Nuaimi"
+    ],
+    "year": 2026,
+    "venue": "Experimental and Theoretical NANOTECHNOLOGY",
+    "pdf_url": "https://etnano.com/index.php/journal/article/download/185/191",
+    "url": "https://www.semanticscholar.org/paper/5d99cc073e09487af8302b0d8df62ac9a9b4f84f",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.56053/10.1.1",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2603.22149",
+    "arxiv_id": "2603.22149",
+    "title": "Low Latency GNN Accelerator for Quantum Error Correction",
+    "abstract": "Quantum computers can solve selected problems more efficiently than classical computers, but current devices are limited by high physical error rates. Quantum Error Correction (QEC) mitigates this by encoding many physical qubits into a logical qubit, with the surface code among the most widely studied approaches. Since syndrome measurements are produced continuously, the decoder must process them fast enough to avoid becoming a system bottleneck, making real-time decoding essential for fault-tolerant quantum computing. While most state-of-the-art real-time decoders rely on Minimum-Weight Perfect Matching (MWPM), we instead use a high-accuracy Graph Neural Network (GNN) that trades higher computational cost for lower logical error rates. To make this GNN practical for real-time decoding, we apply algorithm-hardware co-design. We reduce complexity through hardware-guided pruning and retraining, producing two hardware-friendly models that reduce parameter count by $3.1\\times$ and $6.5\\times$. These target, respectively, an average decoding latency of one syndrome cycle and a worst-case latency within one syndrome cycle. We further reduce hardware cost using input-graph filtering and post-training quantization. Based on these optimized models, we propose an FPGA-based architecture for low-latency inference and real-time decoding. Evaluated on surface codes up to distance 7 under circuit-level noise at physical error rate $p=10^{-3}$, our decoder outperforms MWPM in decoding accuracy for both average-latency and max-latency settings. It reduces logical error rate by 40% at $1\\mu s$ average latency, and by 13% under a strict $1\\mu s$ deadline.",
+    "authors": [
+      "Alessio Cicero",
+      "Luigi Altamura",
+      "M. Lange",
+      "Mats Granath",
+      "Pedro Trancoso"
+    ],
+    "year": 2026,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2603.22149.pdf",
+    "url": "https://arxiv.org/abs/2603.22149",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "07c3d55fd74b052ea35e66a8e8983a3a410a5c5d"
+    ],
+    "doi": "10.48550/arXiv.2603.22149",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1103/PhysRevResearch.6.023247",
+    "arxiv_id": "2402.17001",
+    "title": "Flying-cat parity checks for quantum error correction",
+    "abstract": "Long range, multiqubit parity checks have applications in both quantum error correction and measurement-based entanglement generation. Such parity checks could be performed using qubit-state-dependent phase shifts on propagating pulses of light described by coherent states |α〉 of the electromagnetic field. We consider “flying-cat” parity checks based on an entangling operation that is quantum nondemolition for Schrödinger's cat states |α〉±|−α〉. This operation encodes parity information in the phase of maximally distinguishable coherent states |±α〉, which can be read out using a phase-sensitive measurement of the electromagnetic field. In contrast to many implementations, where single-qubit errors and measurement errors can be treated as independent, photon loss during flying-cat parity checks introduces errors on physical qubits at a rate that is anticorrelated with the probability for measurement errors. We analyze this trade-off for three-qubit parity checks, which are a requirement for universal fault-tolerant quantum computing with the subsystem surface code. We further show how a six-qubit entangled “tetrahedron” state can be prepared using these three-qubit parity checks. The tetrahedron state can be used as a resource for controlled quantum teleportation of a two-qubit state or as a source of shared randomness with potential applications in three-party quantum key distribution. Finally, we provide conditions for performing high-quality flying-cat parity checks in a state-of-the-art circuit QED architecture, accounting for qubit decoherence, internal cavity losses, and finite-duration pulses, in addition to transmission losses.\n \n \n \n \n Published by the American Physical Society\n 2024\n \n \n",
+    "authors": [
+      "Z. McIntyre",
+      "W. Coish"
+    ],
+    "year": 2024,
+    "venue": "Physical Review Research",
+    "pdf_url": "http://link.aps.org/pdf/10.1103/PhysRevResearch.6.023247",
+    "url": "https://arxiv.org/abs/2402.17001",
+    "full_text_available": true,
+    "citation_count": 4,
+    "citations": [
+      "c8b24707b3981f3c5ace5193df35ba549ca73cd2",
+      "378732f2bb0dc9e48bb7934f96c51083ebd3400a",
+      "b2324c6ca28a3b8e6b274d745c443429884c8a3d",
+      "9a5d4365b2cec5ca68f2d0d1951f7dfb4ea0232b"
+    ],
+    "doi": "10.1103/PhysRevResearch.6.023247",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2605.03180",
+    "arxiv_id": "2605.03180",
+    "title": "Mitigating Classical Resource Costs in Quantum Error Correction via Generalized qLDPC Predecoding",
+    "abstract": "Large-scale fault-tolerant quantum computing (FTQC) will require quantum-classical interfaces (QCIs) that orchestrate real-time decoding over thousands to millions of logical qubits simultaneously. To scale FTQC systems, complex decoding resources must be shared between logical qubits, creating resource contention bottlenecks in the QCI. Mitigating this contention via optimal resource allocation remains an open problem. Lightweight predecoding techniques can reduce decoder utilization and average latency, both of which ease contention for shared decoding resources. To date, both decoder allocation and predecoding work is limited to the surface code. As focus shifts towards general qLDPC codes, slower decoding exacerbates resource contention, while code complexity precludes manual predecoder design. To address this gap, we introduce an automated framework designed to generate predecoders for arbitrary qLDPC codes. By independently handling up to 99.98% of the decoding workload, these predecoders reduce decoder utilization up to 4,090$\\times$, including up to 81.19% decrease in expensive OSD post-processing and 59.96% decrease in extra RelayBP legs. An efficient, pipelined hardware architecture enables simultaneous decoding of ~1,800 BB code logical qubits on a single FPGA, while cryogenic ASIC implementation supports ~50,000-500,000 BB code logical qubits within a 1.5 W power budget at 4 K.",
+    "authors": [
+      "Alexander Knapen",
+      "Junyi Luo",
+      "Guanchen Tao",
+      "Yuxuan Wang",
+      "Tomás Bruno",
+      "Qirui Zhang",
+      "Dennis Sylvester",
+      "Mehdi Saligane",
+      "Gokul Subramanian Ravi"
+    ],
+    "year": 2026,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2605.03180.pdf",
+    "url": "https://arxiv.org/abs/2605.03180",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "e577ef82a306013c891a3230609415d3089188b5",
+      "efc567209bb4a03e133dfc6da981ab8eb0ab3f4c"
+    ],
+    "doi": "10.48550/arXiv.2605.03180",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "3f4a395d7777c572e87180dc99ab7ff14e646305",
+    "arxiv_id": "2608.05010",
+    "title": "Neutral Atom Quantum Computing: Principles, Routes, Progress, and Challenges",
+    "abstract": "Neutral atom quantum computing utilizes laser-trapped neutral atoms as qubits and realizes quantum logic gate operations through Rydberg-state interactions. In recent years, it has become one of the most vibrant directions in quantum computing hardware. This paper systematically reviews the working principles of neutral-atom quantum computers, including qubit encoding, atom trapping and manipulation, Rydberg states and interactions, the Rydberg blockade quantum gate mechanism, and atom rearrangement with reconfigurable architectures. The mainstream technical routes are surveyed, represented by optical tweezer arrays combined with Rydberg interactions, optical lattice schemes, and dipole trap arrays. A panoramic review is provided of domestic and international research progress from theoretical foundations in 2000 to the latest achievements in 2026, including thousand-qubit-scale systems, logical qubits, and quantum error correction experiments. Key breakthroughs are highlighted, such as the 6100-atom qubit array, continuous operation of a 3000-qubit system, quantum simulation of the Kitaev honeycomb model, toric code error correction demonstrations, encoding rates exceeding 1/2, and fault-tolerant architectures. The core bottlenecks are analyzed in depth, including the scalability--fidelity trade-off, engineering implementation of quantum error correction, atom loss and mid-circuit replenishment, laser system industrialization, control electronics scalability, and long-distance quantum interconnection. This paper aims to provide a systematic reference for academic research and technological development in this field.",
+    "authors": [
+      "Junchao Wang",
+      "Zeyuan Wang",
+      "Lei Li",
+      "Feng Wang",
+      "Shi-Peng Liang",
+      "Keduo Yan"
+    ],
+    "year": 2026,
+    "venue": "Unknown",
+    "pdf_url": "https://arxiv.org/pdf/2608.05010.pdf",
+    "url": "https://arxiv.org/abs/2608.05010",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ECAI69016.2026.11613609",
+    "arxiv_id": null,
+    "title": "Quantum Computing at the Crossroads: A Structured Analysis of Applications, Scalability Challenges, and Future Research Directions",
+    "abstract": "Quantum computing is one of the most disruptive technologies to emerge this millennium. This research paper provides a complete study of quantum computing, touching upon all aspects of quantum computing from theory to practical application and scalability issues. Moreover, this paper offers an exhaustive bibliometric analysis of quantum computing over the time frame from 2020 to 2026, as well as a comprehensive literature review of 20 recent articles, including extensions up to 2026. The literature review section includes a comprehensive list of articles that have been chosen for review. All articles reviewed have been included in a table, which contains such information as publication year, venue, algorithms, accuracy/performance results, limitations found, and the most important of all – research gaps that should be studied in the future. The key insights gained during the analysis include evidence of tremendous growth within the domain (Compound Annual Growth Rate of 36.2 percent), the prominence of quantum error correction and quantum machine learning as subdomains experiencing growth, the advent of fault-tolerant logical qubits in 2025-2026, and decoherence and fault-tolerance overhead as the main bottlenecks preventing quantum computing from achieving practical results.",
+    "authors": [
+      "A. Dobariya",
+      "J. Gohil",
+      "P. Anghelescu",
+      "V. Ionescu",
+      "Madalin Ciprian Enescu"
+    ],
+    "year": 2026,
+    "venue": "European Conference on Artificial Intelligence",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/f5aa6b86acf646b3902423141de40f358756bf5b",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ECAI69016.2026.11613609",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/DAC63849.2025.11133314",
+    "arxiv_id": "2405.08982",
+    "title": "Efficient and Scalable Architectures for Multi-level Superconducting Qubit Readout",
+    "abstract": "Realizing the full potential of quantum computing requires large-scale quantum computers capable of running quantum error correction (QEC) to mitigate hardware errors and maintain quantum data coherence. While quantum computers operate within a two-level computational subspace, many processor modalities are inherently multi-level systems. This leads to occasional leakage into energy levels outside the computational subspace, complicating error detection and undermining QEC protocols. The problem is particularly severe in engineered qubit devices like superconducting transmons, a leading technology for fault-tolerant quantum computing. Addressing this challenge requires effective multi-level quantum system readout to identify and mitigate leakage errors. We propose a scalable, high-fidelity three-level readout that reduces FPGA resource usage by $60 \\times$ compared to the baseline while reducing readout time by $20 \\%$, enabling faster leakage detection. By employing matched filters to detect relaxation and excitation error patterns and integrating a modular lightweight neural network to correct crosstalk errors, the protocol significantly reduces hardware complexity, achieving a $100 \\times$ reduction in neural network size. Our design supports efficient, real-time implementation on off-the-shelf FPGAs, delivering a $6.6 \\%$ relative improvement in readout accuracy over the baseline. This innovation enables faster leakage mitigation, enhances QEC reliability, and accelerates the path toward faulttolerant quantum computing.",
+    "authors": [
+      "Chaithanya Naik Mude",
+      "Satvik Maurya",
+      "Benjamin Lienhard",
+      "Swamit S. Tannu"
+    ],
+    "year": 2024,
+    "venue": "Design Automation Conference",
+    "pdf_url": "https://arxiv.org/pdf/2405.08982.pdf",
+    "url": "https://arxiv.org/abs/2405.08982",
+    "full_text_available": true,
+    "citation_count": 11,
+    "citations": [
+      "1bcc14ac1ed1d4522963c5975e3ba6aefc368b59",
+      "f7af97d75802aed495d95b1be0a64b92239b5609",
+      "2b91a7ca7e695b2b8e3246bb674e1a27414bb1b8",
+      "71b4c5eb88539dc2ac7e357176a464c55c6a5c2f",
+      "c7ee03e443b94ce2ee52f64181d6454635213a94",
+      "7aa053d4a1d9eb170d73625675cd098111af3554",
+      "d06608b8b143e2f70e2e1edd5f60215a8cf1420d",
+      "62d03e94e6ea0202142a62ca3ae26bf9cd5c571d",
+      "646796b56a7ee75bbd928bbc7161f5938950ce5a",
+      "41f7272e5c503d85100fffb57dc2b6480d2e4025",
+      "08ebcc8270af916952b21476f2f1d67d2b700066"
+    ],
+    "doi": "10.1109/DAC63849.2025.11133314",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1103/PRXQuantum.5.040328",
+    "arxiv_id": "2402.12599",
+    "title": "Towards Early Fault Tolerance on a \n<mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\" overflow=\"scroll\"><mml:mn>2</mml:mn><mml:mo>×</mml:mo><mml:mi>N</mml:mi></mml:math>\n Array of Qubits Equipped with Shuttling",
+    "abstract": "It is well understood that a two-dimensional grid of locally interacting qubits is a promising platform for achieving fault-tolerant quantum computing. However in the near future, it may prove less challenging to develop lower-dimensional structures. In this paper, we show that such constrained architectures can also support fault tolerance; specifically we explore a 2×N array of qubits where the interactions between non-neighboring qubits are enabled by shuttling the logical information along the rows of the array. Despite the apparent constraints of this setup, we demonstrate that error correction is possible and identify the classes of codes that are naturally suited to this platform. Focusing on silicon spin qubits as a practical example of qubits believed to meet our requirements, we provide a protocol for achieving full universal quantum computation with the surface code, while also addressing the additional constraints that are specific to a silicon spin-qubit device. Through numerical simulations, we evaluate the performance of this architecture using a realistic noise model, demonstrating that both surface code and more complex quantum low-density parity-check codes efficiently suppress gate and shuttling noise to a level that allows for the execution of quantum algorithms within the classically intractable regime. This work thus brings us one step closer to the execution of quantum algorithms that outperform classical machines.\n \n \n \n \n Published by the American Physical Society\n 2024\n \n \n",
+    "authors": [
+      "A. Siegel",
+      "Armands Strikis",
+      "M. Fogarty"
+    ],
+    "year": 2024,
+    "venue": "PRX Quantum",
+    "pdf_url": "https://doi.org/10.1103/prxquantum.5.040328",
+    "url": "https://arxiv.org/abs/2402.12599",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1103/PRXQuantum.5.040328",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "de78d1a4101116b7512b413d119f8e6ebd09c3e4",
+    "arxiv_id": "2601.05947",
+    "title": "Below-threshold error reduction in single photons through photon distillation",
+    "abstract": "Photonic quantum computers use the bosonic statistics of photons to construct, through quantum interference, the large entangled states required for measurement-based quantum computation. Therefore, any which-way information present in the photons will degrade quantum interference and introduce errors. While quantum error correction can address such errors in principle, it is highly resource-intensive and operates with a low error threshold, requiring numerous high-quality optical components. We experimentally demonstrate scalable, optimal photon distillation as a substantially more resource-efficient strategy to reduce indistinguishability errors in a way that is compatible with fault-tolerant operation. Photon distillation is an intrinsically bosonic, coherent error-mitigation technique which exploits quantum interference to project single photons into purified internal states, thereby reducing indistinguishability errors at both a higher efficiency and higher threshold than quantum error correction. We observe unconditional error reduction (i.e., below-threshold behaviour) consistent with theoretical predictions, even when accounting for noise introduced by the distillation gate, thereby achieving actual net-gain error mitigation under conditions relevant for fault-tolerant quantum computing. We anticipate photon distillation will find uses in large-scale quantum computers. We also expect this work to inspire the search for additional intrinsically bosonic error-reduction strategies, even for fault-tolerant architectures.",
+    "authors": [
+      "F. Somhorst",
+      "J. Saied",
+      "N. Kannan",
+      "B. Kassenberg",
+      "J. Marshall",
+      "M. Goede",
+      "H. J. Snijders",
+      "P. Stremoukhov",
+      "A. Lukianenko",
+      "P. Venderbosch",
+      "T. B. Demille",
+      "A. Roos",
+      "N. Walk",
+      "J. Eisert",
+      "E. Rieffel",
+      "D. Smith",
+      "J. Renema"
+    ],
+    "year": 2026,
+    "venue": "Unknown",
+    "pdf_url": "https://arxiv.org/pdf/2601.05947.pdf",
+    "url": "https://arxiv.org/abs/2601.05947",
+    "full_text_available": true,
+    "citation_count": 5,
+    "citations": [
+      "925cf933f8ebca7fbcb8572e03a2dfa32bedf7f3",
+      "76458438a86280de68a080acbaf664ea54ed0a8f",
+      "ab7b2648a81505bff09a593b56736170abd9c390",
+      "55d08e9ae1eaaece2dfaf2cbcd118c9a9345bff0",
+      "440dbf8d1f811ddbff428bcaf94ea4ebaf9f8022"
+    ],
+    "doi": null,
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1177/13272314261456990",
+    "arxiv_id": null,
+    "title": "Quantum artificial intelligence: Bridging innovation, ethics, and sustainability in a hybrid era",
+    "abstract": "The convergence of Quantum Computing (QC) and Artificial Intelligence (AI) ushers in a transformative era of computational capability, with profound implications for science and industry alongside significant technical, ethical, and environmental challenges. This article explores quantum-enhanced AI (QAI), focusing on foundational quantum principles—superposition, entanglement, and quantum parallelism—and their applications in molecular simulation, financial optimization, and climate modeling. While quantum algorithms offer exponential speedups for Machine Learning (ML) and optimization, persistent barriers such as qubit decoherence, scalability limitations, and high energy demands hinder progress. Hybrid quantum-classical architectures are identified as critical transitional tools, combining quantum processors for specialized tasks like combinatorial optimization with classical systems for error correction and data preprocessing. Near-term commercial healthcare, finance, and logistics applications are highlighted, including pilot projects using quantum neural networks (QNNs) for drug discovery, portfolio risk analysis, and supply chain optimization. However, dual-use risks—such as quantum-powered surveillance and threats to classical encryption—emphasize the need for post-quantum cryptography (PQC) and ethical frameworks. Environmental concerns, particularly the carbon footprint of superconducting qubits, drive calls for sustainable innovations like photonic qubit designs and renewable-powered quantum data centers. Anticipated milestones include fault-tolerant QNNs, standardized benchmarks for quantum advantage, and democratized cloud access. Achieving these goals requires addressing interdisciplinary talent shortages, algorithmic biases, and global disparities in quantum infrastructure. This work advocates for governance models integrating sustainability metrics and equity-focused policies to steer QAI development responsibly. By harmonizing technical innovation with ethical foresight, the quantum-AI synergy can advance solutions to global challenges while mitigating misuse and ecological harm risks.",
+    "authors": [
+      "Ibrahim Atoum"
+    ],
+    "year": 2026,
+    "venue": "Journal of Knowledge-based & Intelligent Engineering Systems",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/a2adee88cd544fc00c408700add8c428077c6441",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1177/13272314261456990",
+    "source": "semantic_scholar"
+  }
+]

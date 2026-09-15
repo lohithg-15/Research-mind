@@ -1,0 +1,309 @@
+[
+  {
+    "id": "10.1109/ICPCSN68523.2026.11543871",
+    "arxiv_id": null,
+    "title": "Explainable Deep Learning-based Medical Image Analysis Framework for Early Disease Detection Supporting Sustainable Healthcare",
+    "abstract": "This paper presents a clarifiable deep learning model to detect early disease at an early stage with the help of the medical image, eliminating the drawbacks of the traditional diagnostic system, including the delay of the interpretation process and the absence of standardization. The suggested methodology combines the use of Convolutional Neural Networks (CNNs) to extract local features and Vision Transformers (ViTs) to learn global contextual dependencies. To boost the performance of classification, there is a hybrid feature fusion strategy used. Moreover, Explainable Artificial Intelligence (XAI) methods, namely Grad-CAM, are also integrated to enhance the transparency of the models and clinical confidence. The model is also trained and tested on medical image data with the help of standard measures such as accuracy, precision, recall and F1-score. The experimental findings indicate that the hybrid model proposed performs better than the standalone CNN and transformer models and has better diagnostic accuracy and robustness. Moreover, explainability facilitates clinicians to interpret the model decisions visually, which helps to deploy the model reliably in healthcare settings. The framework has a role to play in ensuring sustainable healthcare because it can help in early detection, minimize medical errors, and enhance accessibility in resource-limited environments.",
+    "authors": [
+      "Saveetha.T",
+      "R.Ramya"
+    ],
+    "year": 2026,
+    "venue": "2026 6th International Conference on Pervasive Computing and Social Networking (ICPCSN)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/ce9bf150345b55831d0eded9972de40b64d0ffc3",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICPCSN68523.2026.11543871",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/AKGEC68790.2026.11485827",
+    "arxiv_id": null,
+    "title": "Comparative Analysis of Convolutional Neural Networks and Transfer Learning for Diabetic Retinopathy Detection",
+    "abstract": "",
+    "authors": [
+      "Bhamini Katyal",
+      "Upasna Aggarwal",
+      "Ankita"
+    ],
+    "year": 2026,
+    "venue": "2026 3rd International Conference on Advancements and Key Challenges in Green Energy and Computing (AKGEC)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/b79bf439361e0fe3fbdb5d340c6fb5358006dc5c",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/AKGEC68790.2026.11485827",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICICV68925.2026.11554711",
+    "arxiv_id": null,
+    "title": "Machine Learning-based Automated Eye Disease Detection using Retinal Image Analysis and Real-Time Camera Integration",
+    "abstract": "The ability to detect eye problems early on and accurately is a key to preventing loss of vision and providing early medical treatment. There are a number of eye diseases (including cataracts, glaucoma, and diabetic retinopathy) that typically develop slowly over time, without being identified or addressed until later stages. We created a multi-disease eye disorder detection system based on deep learning that will enable early screening through retinal image analysis, and real-time camera input. The detection model we built includes Convolutional Neural Networks (CNNs) and Efficient Net architectures allowing the model to automatically learn and extract visual features from eye images without the need to manually engineer image features. The model was trained on a labeled dataset of retinal images and was subject to a number of types of preprocessing to increase robustness and generalizability. The resulting model does not require specialized equipment or expert supervision as is common with traditional diagnostic methods. Instead, our system utilizes an online web application connected through a Flask backend, allowing any user to utilize the system to automatically predict diseases. In order to measure the performance of the system, accuracy, precision, recall, and F1-score metrics were measured using a validation dataset. The experimental results indicate strong multiclass classification performance for various eye diseases, with consistently strong confidence scoring. Furthermore, the system provides estimates of the severity of diseases detected as well as rudimentary recommendations for treatment to promote early consultation. In conclusion, the results of our investigation indicate that the use of deep learning and computer vision has the potential to create low-cost, highly accessible, and easily-scalable solutions for early detection of eye disease. The proposed model achieved an overall accuracy of 92.7%, with high precision, recall, and F1-score across all classes",
+    "authors": [
+      "Janani S",
+      "Rohit Singh",
+      "Ashwini Choudhary"
+    ],
+    "year": 2026,
+    "venue": "2026 7th International Conference on Intelligent Communication Technologies and Virtual Mobile Networks (ICICV)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/d737101a92ede2f97ca43a4e478c2da414d4919c",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICICV68925.2026.11554711",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/IC3ECSBHI67834.2026.11468986",
+    "arxiv_id": null,
+    "title": "Deep Learning-Based Medical Image Analysis for Liver Disease Classification",
+    "abstract": "Liver diseases are the main cause of human death from all over the world, in this way, can become very serious if not detected from the very beginning. The liver is a life-support organ that releases harmful substances, produces bile, and stores nutrients, so the least harm to it can lead to a big problem with health. Early detection of diseases is very important for the right treatment and getting well again. Deep learning, especially Convolutional Neural Networks, can significantly assist in medical image analysis to discover patterns indicating a healthy liver, benign, or malignant. Firstly, the images are standardized by resizing, changing them to grayscale, and normalizing, resulting in the model being able to concentrate on the major problems. The layers of the network are identifying the features that matter, and the use of such techniques as dropout is leading to elimination of mistakes and overfitting. The trained model can automatically classify liver images, which means, this can provide the doctors with quick, and even, consistent, decisions to carry out their work more efficiently and patients in distant locations can get an estimation of some technology-based liver problems.",
+    "authors": [
+      "R. Suganthi",
+      "A. Sajuna",
+      "M. Nagarani",
+      "R. Lakshmi",
+      "S. Tamilselvan"
+    ],
+    "year": 2026,
+    "venue": "2026 2nd International Conference on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/a23f3b94910bb2de2da51aefe919602928a2e1dd",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/IC3ECSBHI67834.2026.11468986",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1007/s00521-026-12216-7",
+    "arxiv_id": null,
+    "title": "A novel approach for crop disease detection using transfer-learning-based deep convolutional neural networks",
+    "abstract": "Crop production quality can be enhanced through effective early stage monitoring of crops. In contemporary agriculture, precision farming systems that incorporate advanced technologies, such as drones, are employed for monitoring. Nevertheless, current models lack the ability to be applied broadly across various agricultural settings, leading to the suboptimal detection of crop diseases. Therefore, this study proposes a novel method for monitoring crop diseases using the Transfer-Learning-based Deep Convolutional Neural Network technique. The process commenced with the collection of a multi-crop multi-disease dataset, followed by data preprocessing through the application of Bilateral Filtering and Partial Dynamic Range Adjustment with Histogram Equalization. Subsequently, the dimensionality of the images was reduced using the Multi-Weighted Covariance Matrix Component Analysis method, and the data were organized using the K-Means Clustering algorithm. In addition, various features were extracted, with the most relevant features selected using the Mountain Gazelle Pareto Front Optimizer algorithm. To identify distinct disease characteristics, a Multidimensional Feature Distribution plot was created using the chosen features. Ultimately, the assessed spectral index of the clustered color bands, optimal features, and Multidimensional Feature Distribution plot were used to detect multi-crop diseases using the proposed Transfer Learning based Dynamic Contextual Feature Pooled Convolutional Neural Network model. The effectiveness of the proposed method was evaluated through an experimental analysis using a publicly accessible dataset. The proposed method demonstrated accuracy, precision, recall, and F1 score values of 98.09%, 97.24%, 97.58%, and 97.99%, respectively, which is higher than those of existing methods.",
+    "authors": [
+      "BalaAnand Muthu",
+      "Claudia Cherubini"
+    ],
+    "year": 2026,
+    "venue": "Neural computing & applications (Print)",
+    "pdf_url": "https://link.springer.com/content/pdf/10.1007/s00521-026-12216-7.pdf",
+    "url": "https://www.semanticscholar.org/paper/62d0c5af1648edc4f7223f0d98d52b538dac01e6",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1007/s00521-026-12216-7",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICAISS68683.2026.11525749",
+    "arxiv_id": null,
+    "title": "Crops Disease Detection Using Deep Learning",
+    "abstract": "A deep learning-based system has been created to detect plant diseases in mountainous areas which are experiencing continuous climate change and unstable terrain. The system analyzes leaf photographs for disease indicators even before they become quite apparent thus giving the chance for early treatment and improved crop management. The system is totally automatic and does not require manual inspection or handcrafted features; it relies entirely on convolutional neural networks which directly extract the visual patterns necessary to tell diseased and healthy apart from images. This method allows very precise separation of healthy and diseased crops despite the changing lighting, humidity and temperature conditions that are common in the hills. The model is trained and validated on reference datasets of diverse crop species and different disease classes to guarantee robustness and generalization. The system is capable of providing in real-time disease detection through image analysis and can be linked to smart farming platforms for facilitating decision-making. The proposed solution is very suitable for hill station agriculture where hard access and fast disease spread necessitate automated and trustworthy monitoring. To put it shortly, the present study demonstrates the capability of deep learning to improve disease detection, reduce crop loss and thereby become a partner in the sustainable agriculture of the mountainous regions.",
+    "authors": [
+      "C. Gokul",
+      "V. Karthick",
+      "M. Devaki"
+    ],
+    "year": 2026,
+    "venue": "2026 Fourth International Conference on Augmented Intelligence and Sustainable Systems (ICAISS)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/7e57d3d3c9d74ad666ec2fa319a2c705c4d71062",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICAISS68683.2026.11525749",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/CI2A69097.2026.11576809",
+    "arxiv_id": null,
+    "title": "Skin Disease Detection and Classification Using Deep Learning",
+    "abstract": "Analysis of images has been shown to improve the effectiveness of skin disease detection and overcome global health disasters through recognizing skin diseases basing on their distinctive characteristics such as size, color, shape, and texture. Machine learning technologies transform the field of dermatology, making it possible to recognize and classify skin-related diseases. Convolutional neural networks and deep learning algorithms are applied in this work to consider the image of skin lesions and provide a proper diagnosis of different skin conditions. These algorithms rely on a huge set of annotated pictures to distinguish between several different skin diseases, depending on the visual patterns, textures, and features. Despite progress, requirement of data sets, interpretation of algorithms, accuracy and reliability phenomena of skin disease detection have remained as challenges in world medical practice activities with healthy skin. VGGNet, ResNet and Inception are the most extensive uses of CNNs to image classification. MobileNetV2 are deep learning approaches in detection of skin diseases. The model that we built had 90% classification accuracy, which successfully discriminated against skin diseases using the data augmentation method, such as rotation, flipping and brightness changes.",
+    "authors": [
+      "Kedar Nath Singh",
+      "Harsh Pratap Singh",
+      "Gangeshwari Sharma",
+      "Vedika Patil",
+      "Neeraj Sharma"
+    ],
+    "year": 2026,
+    "venue": "2026 International Conference on Connected Intelligence for Industrial Applications (CI2A)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/e8a5fb4b02b246a6a7bdc80b5c5325cde61d6691",
+    "full_text_available": false,
+    "citation_count": 1,
+    "citations": [
+      "6a28971a45f3a64e76291d8df3c9879c5bb3747b"
+    ],
+    "doi": "10.1109/CI2A69097.2026.11576809",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICIPCN67432.2026.11438264",
+    "arxiv_id": null,
+    "title": "Deep Learning–Enabled Cardiovascular Disease Detection using DenseNet",
+    "abstract": "Cardiovascular diseases pose a global health threat today. Diagnosis needs to be performed quickly so; therefore it is important for healthcare providers to use reliable methods of diagnosis. ECG signals play an important role in measuring the health of the heart. Interpreting the signal manually takes time and is also subject to inconsistent results by varying medical practitioners. Machine learning approaches that have been developed for ECG signal interpretation do not adequately capture the intricate and subtle variations in the ECG's waveform. The goal of the research is to develop an intelligent deep learning framework that use ECG image data to estimate cardiovascular risk. A densely connected convolutional neural network, DenseNet was utilised and is capable of extracting many detailed morphological features from ECG images because of its capability of reusing its features efficiently and propagating gradients effectively. When ECG images are prepared for analysis, the images undergo various pre-processing operations to normalise the input, reduce noise and augment the data set to improve consistency and robustness. Using the trained model, many cardiac conditions such as arrhythmias, coronary artery disease, and heart failure can be found based on the visual pattern of the ECG. Dense connectivity helps to better classification dependability and reduce the possibility of overfitting when using a wide variety of datasets.",
+    "authors": [
+      "D. V",
+      "Jayawardhini V",
+      "Nidharshnaa S T",
+      "K. J"
+    ],
+    "year": 2026,
+    "venue": "2026 6th International Conference on Image Processing and Capsule Networks (ICIPCN)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/120ca2dfdeeddcb097edcbf060680587293013d1",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICIPCN67432.2026.11438264",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICMSCI67830.2026.11469482",
+    "arxiv_id": null,
+    "title": "Deep Learning-Based Ensemble Approach for Sugarcane Leaf Disease Detection",
+    "abstract": "Sugarcane is an important part of the world's agriculture, but leaf diseases that are often undetected in the early stages pose a threat to its yield and quality. Expert visual inspection is a major component of conventional disease identification, which makes the process laborious, subjective, and prone to human error. A viable substitute is offered by recent developments in deep learning and image-based analysis, which allow for precise and automated disease identification. In order to identify and categorize sugarcane leaf diseases using image data, this study suggests an ensemble-based deep learning framework. InceptionV3 and ResNet50, two potent pre-trained convolutional neural networks, are integrated into the framework to take advantage of their complementary feature extraction capabilities. The ensemble model successfully improves classification robustness and generalization by combining their predictions. According to experimental results, the ensemble approach outperforms the individual InceptionV3 and ResNet50 models, which achieve accuracies of 36% and 48%, respectively, with a classification accuracy of 97%. The suggested approach is a useful and effective solution for precision agriculture and smart farming applications since it not only increases diagnostic reliability but also provides scalability to other crop types.",
+    "authors": [
+      "N. Chitra",
+      "T. Deepa",
+      "Theeban S",
+      "Yuvaraj U"
+    ],
+    "year": 2026,
+    "venue": "2026 Second International Conference on Multi-Agent Systems for Collaborative Intelligence (ICMSCI)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/37ee9a50c697aa0570fcc941c10342a9458111f2",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICMSCI67830.2026.11469482",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/MPCON69668.2026.11508621",
+    "arxiv_id": null,
+    "title": "AI-Driven Potato Disease Detection and Yield Optimization Through Leaf Image Analysis",
+    "abstract": "Planting of potatoes around the globe is under severe threat due to diseases Phytophthora infestans and Alternaria solani which cause massive losses in crop. These diseases can be diagnosed early enough hence their effects on global food security systems can be mitigated adequately. The study examines the application of Convolutional Neural Networks under deep learning algorithms to detect diseases in potato leaf images. The CNN-based model with EfficientNet architecture did the classification of the potato leaves under the healthy and two disease conditions of the early blight and the late blight. The developed model registered a high level of success in its operation as it demonstrated an almost perfect performance on both training and validation data sets. The efficacy was also confirmed by the fact that it had rigorous evaluation criteria that comprised of precision metrics as well as recall metrics and F1-score analysis along with the evaluation of the confusion matrix. The model that has been assisted with the methods of transfer learning and data augmentation to attain effective generalization in real-life setting. The model was trained and validated on a dataset of 2152 potato leaf images across three classes, achieving an overall classification accuracy of 99%, with precision, recall, and F1-score also reaching $\\mathbf{9 8 \\%}$. The study findings indicate that CNNs are providing a viable solution to early diagnosis of disease that can enhance potato crops to enhance food security mechanisms.",
+    "authors": [
+      "K. Jindal"
+    ],
+    "year": 2026,
+    "venue": "2026 IEEE Madhya Pradesh Section Conference (MPCON)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/7829dcd382476c80e6b30950023281ebc6ee11d0",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/MPCON69668.2026.11508621",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/GAST67799.2026.11523253",
+    "arxiv_id": null,
+    "title": "Deep Convolutional Neural Networks and Optimization Techniques for Date Palm Disease Detection",
+    "abstract": "This paper presents a comparative evaluation of several deep learning architectures designed for the classification of date palm diseases based on images. Different models were trained in combination with several optimizers in order to examine their influence on classification performance. The experimental results indicate that adaptive optimizers, particularly Adam, offer better performance than conventional approaches, with high levels of accuracy, lower loss values, and good generalization capabilities. The analysis of ROC curves and AUC values confirms these results and highlights a high discrimination capacity for the best-performing models. Among the different configurations evaluated, the combination of MobileNet and Adam optimizer stands out for its stability and overall efficiency. In light of these results, the development of an automatic date palm disease detection system appears to be a prosmising direction. Such a system could be a tool for early diagnosis and contribute to better health management of date palms plantations.",
+    "authors": [
+      "Toutou Soultane",
+      "M. Lachgar",
+      "Mohamedou Cheikh Tourad",
+      "Nanne Mohamedade Farouk"
+    ],
+    "year": 2026,
+    "venue": "2026 2nd International Conference on Global Aeronautical Engineering and Satellite Technology (GAST)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/7e06a1b11c129c1a7e4a50fe4b88411fce9c2b44",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/GAST67799.2026.11523253",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICESST69086.2026.11582900",
+    "arxiv_id": null,
+    "title": "Enhanced Early Disease Detection of Lung Cancer Prediction Using Hybrid Deep Learning and Image Feature Fusion",
+    "abstract": "Since lung cancer remains one of the most common killers, finding ways to detect it early is crucial. A hybrid deep learning architecture that integrates human-generated image descriptors with convolutional neural networks (CNNs) to improve lung cancer early disease detection from CT scan images is presented by this research. ResNet-50 and DenseNet121 architectures are used by the model for transfer learning. Extracted radiomics data such as texture descriptors, shape attributes, and intensity profiles are combined. The suggested fusion procedure was tested on a group of $1,500 \\text{CT}$ scans, 850 of which showed malignancy and 650 of which did not. With a classification accuracy of 96.8%, sensitivity of 95.4%, specificity of 97.2%, and AUC-ROC of 0.982, the hybrid model performed 4.3% better than solo CNN designs. Feature fusion reduced false negatives by 28% when compared to conventional methods. In order to detect subtle nodular patterns and earlystage malignancies, superior performance was demonstrated when deep learning features were integrated with traditional image analysis. An analysis of computational efficiency revealed that the average prediction time for each image was 0.87 seconds. Based on the findings, the hybrid approach provides a dependable and useful substitute for automated lung cancer screening, potentially improving patient outcomes and health care systems.",
+    "authors": [
+      "G. V",
+      "S. I"
+    ],
+    "year": 2026,
+    "venue": "2026 IEEE International Conference on Emerging Synergy Science and Technology (ICESST)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/4203fa0ef95b0b1716ef585ab090b283eadf8875",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICESST69086.2026.11582900",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICSSAS68835.2026.11559390",
+    "arxiv_id": null,
+    "title": "Performance Enhancement in Disease Detection and Classification of Paddy Plant Utilizing Deep Learning Techniques: A Comparative Analysis",
+    "abstract": "Paddy is among the most commonly cultivated staple crops globally; yet, numerous plant diseases significantly affect its yield. To safeguard food security and mitigate crop loss, it is essential to identify paddy plant diseases promptly and precisely. In recent years, deep learning (DL) techniques have significantly advanced in the autonomous detection of diseases through image analysis. This article provides a comprehensive evaluation of DL models designed to enhance the diagnosis and classification of diseases affecting rice plants. A tagged dataset of paddy plant images is utilized to evaluate various advanced convolutional neural network (CNN) architectures. To ensure equitable comparison of the models, they undergo identical preprocessing, augmentation, and optimization procedures, and a variety of performance indicators are employed for evaluation. Simulation results indicate that enhanced DL models significantly outperform baseline methods in classification and generalization. The proposed technology is suitable for real-time field deployment, demonstrating robustness against varying backdrop and lighting conditions.",
+    "authors": [
+      "R. Sivakumar"
+    ],
+    "year": 2026,
+    "venue": "2026 4th International Conference on Self Sustainable Artificial Intelligence Systems (ICSSAS)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/d6b5f7f8181304783128ff307165b57e5a67741f",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICSSAS68835.2026.11559390",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICAISS68683.2026.11525621",
+    "arxiv_id": null,
+    "title": "Automated Thyroid Disease Detection using a Hybrid Attention-based Deep Convolutional Neural Network",
+    "abstract": "Early and accurate diagnosis of thyroid pathology is a crucial precondition of effective clinical care, and the manual analysis of medical images is still a labor-consuming procedure prone to inter-observer error. A hybrid, attention-based deep convolutional architecture is presented in the process of automated identification of thyroid disease in radiology images. The model combines a profound convolutional neural network with the spatial and channel-wise attention modules, which improves discriminative feature retrieval and, at the same time, reduces the irrelevant background signals. In order to reduce overfitting with few medical data, transfer learning and a collection of data-augmentation strategies are utilized. The structure was tested on a thyroid image's dataset, with high accuracy, sensitivity, and F1 -score compared with traditional CNN baselines. The experimentation tests indicate that the attention systems can successfully highlight diagnostically relevant areas enhancing detection accuracy. The research design of this proposed approach offers a viable, scalable, and clinically feasible framework to computer-aided diagnosis of thyroid disease, and thus enables the ability of radiologists to provide a higher rate of consistent decision-making.",
+    "authors": [
+      "M. Velammal",
+      "H. Deen",
+      "V. Sakthivel",
+      "S. Vetri",
+      "S. Vishwanathan"
+    ],
+    "year": 2026,
+    "venue": "2026 Fourth International Conference on Augmented Intelligence and Sustainable Systems (ICAISS)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/41c37e815416906e6dcef2c4d7639643f881c5f4",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICAISS68683.2026.11525621",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICASS69550.2026.11547516",
+    "arxiv_id": null,
+    "title": "Multi-Modal Lightweight Deep Learning Framework for Robust In-Field Plant/Crop Disease Detection with Explainability (XAI)",
+    "abstract": "Timely and precise identification of Plant/Crop diseases continues to be a significant problem in the agricultural sector, especially in developing countries. While there have been improvements in Deep Learning including convolutional neural networks (CNNs), the performance of many DL models still deteriorate in the-field/on-site due to the limited diversity of datasets, the lack of Explainability (Proper XAI Framework) and computational resource restrictions. In this paper, we present a multi-modal Deep Learning Framework for in-field Plant/Crop Disease Detection that is lightweight. Using a customized MobileNetV3 model with integrated environmental metadata (e.g. temperature, humidity, Soil Condition). To solve the problem of fine-grained subtype classification for Plant/Crop Disease images with scarce resources, this paper proposes a multi-stage information fusion based lightweight model enhanced by an attention mechanism model. Built on MobileNetV3, this paper introduces a multi-stage fusion method to extract the \"theme\" contained-rich image information in Plant/Crop Disease images. Furthermore, during the first stage of feature extraction, we present the Selective Kernel (SK) Attention Mechanism, and in the last two steps, we embed the Squeeze-Excitation Coordinate Attention (SCA) Mechanism to obtain deeper semantic and low-level feature extraction. The final feature representations used for sub-type classification are selected from the map weights derived at each stage. Moreover, we integrate Grad-CAM-based visual explanations to enhance model comprehensibility and agriculturalist trust. In addition, we incorporate Grad-CAM-based visual explanations to make the model more interpretable to farmers. It enables identifying relevant regions of an input image that contribute to the CNN’s classification decision. Extensive experiments across three agro-climatic zones and multiple Plants/crops types (Wheat, Potato, Tomato, Rice, Maize etc.) demonstrate its ultra-modern performance, with over 96% average accuracy in varied field conditions and real-time inference capabilities (<200ms). Our Proposed MobileNetV3 model (Selective Kernel (SKA) + Squeeze-Excitation Coordinate Attention (SCA) Mechanism) achieves high classification accuracy while remaining deployable on Smart Phones/Edge Devices. We assessed and contrasted their performances on the basis of various performance evaluation metrics including accuracy, precision, recall, f1-score and confusion matrix. This work represents a significant step toward Practical, Accessible and Explainable AI Solution in Smart & Precision agriculture.",
+    "authors": [
+      "Garima Srivastava",
+      "Pratishtha Saxena",
+      "Bhupendra Kumar",
+      "Tanu",
+      "Monu Gupta",
+      "G.Ramesh Yadav"
+    ],
+    "year": 2026,
+    "venue": "International Conference on Independent Component Analysis and Signal Separation",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/4215b58f85f8029a885a3aa46f8ea5bf21e3f772",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICASS69550.2026.11547516",
+    "source": "semantic_scholar"
+  }
+]

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "2412.00160",
+    "arxiv_id": "2412.00160",
+    "title": "How reproducible are data-driven subtypes of Alzheimer's disease atrophy?",
+    "abstract": "Alzheimer's disease (AD) exhibits substantial clinical and biological heterogeneity, complicating efforts in treatment and intervention development. While new computational methods offer insights into AD progression, the reproducibility of these subtypes across datasets remains understudied, particularly concerning the robustness of subtype definitions when validated on diverse databases. This study evaluates the consistency of AD progression subtypes identified by the Subtype and Stage Inference (SuStaIn) algorithm using T1-weighted MRI data across 5,444 subjects from ANMerge, OASIS, and ADNI datasets, forming four independent cohorts. Each cohort was analyzed under two conditions: one using the full cohort, including cognitively normal controls, and another excluding controls to test subtype robustness. Results confirm the three primary atrophy subtypes identified in earlier studies: Typical, Cortical, and Subcortical, as well as the emergence of rare and atypical AD variants such as posterior cortical atrophy (PCA). Notably, each subtype displayed varying robustness to the inclusion of controls, with certain subtypes, like Subcortical, more influenced by cohort composition. This investigation underscores SuStaIn's reliability for defining stable AD subtypes and suggests its utility in clinical stratification for trials and diagnosis. However, our findings also highlight the need for improved dataset diversity, particularly in terms of ethnic representation, to enhance generalizability and support broader clinical application.",
+    "authors": [
+      "Emma Prevot",
+      "Cameron Shand",
+      "Neil Oxtoby",
+      "for Alzheimer's Disease Neuroimaging Initiative"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.00160v1",
+    "url": "https://arxiv.org/abs/2412.00160",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2308.03766",
+    "arxiv_id": "2308.03766",
+    "title": "AMaizeD: An End to End Pipeline for Automatic Maize Disease Detection",
+    "abstract": "This research paper presents AMaizeD: An End to End Pipeline for Automatic Maize Disease Detection, an automated framework for early detection of diseases in maize crops using multispectral imagery obtained from drones. A custom hand-collected dataset focusing specifically on maize crops was meticulously gathered by expert researchers and agronomists. The dataset encompasses a diverse range of maize varieties, cultivation practices, and environmental conditions, capturing various stages of maize growth and disease progression. By leveraging multispectral imagery, the framework benefits from improved spectral resolution and increased sensitivity to subtle changes in plant health. The proposed framework employs a combination of convolutional neural networks (CNNs) as feature extractors and segmentation techniques to identify both the maize plants and their associated diseases. Experimental results demonstrate the effectiveness of the framework in detecting a range of maize diseases, including powdery mildew, anthracnose, and leaf blight. The framework achieves state-of-the-art performance on the custom hand-collected dataset and contributes to the field of automated disease detection in agriculture, offering a practical solution for early identification of diseases in maize crops advanced machine learning techniques and deep learning architectures.",
+    "authors": [
+      "Anish Mall",
+      "Sanchit Kabra",
+      "Ankur Lhila",
+      "Pawan Ajmera"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2308.03766v1",
+    "url": "https://arxiv.org/abs/2308.03766",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2403.14302",
+    "arxiv_id": "2403.14302",
+    "title": "SpikingResformer: Bridging ResNet and Vision Transformer in Spiking Neural Networks",
+    "abstract": "The remarkable success of Vision Transformers in Artificial Neural Networks (ANNs) has led to a growing interest in incorporating the self-attention mechanism and transformer-based architecture into Spiking Neural Networks (SNNs). While existing methods propose spiking self-attention mechanisms that are compatible with SNNs, they lack reasonable scaling methods, and the overall architectures proposed by these methods suffer from a bottleneck in effectively extracting local features. To address these challenges, we propose a novel spiking self-attention mechanism named Dual Spike Self-Attention (DSSA) with a reasonable scaling method. Based on DSSA, we propose a novel spiking Vision Transformer architecture called SpikingResformer, which combines the ResNet-based multi-stage architecture with our proposed DSSA to improve both performance and energy efficiency while reducing parameters. Experimental results show that SpikingResformer achieves higher accuracy with fewer parameters and lower energy consumption than other spiking Vision Transformer counterparts. Notably, our SpikingResformer-L achieves 79.40% top-1 accuracy on ImageNet with 4 time-steps, which is the state-of-the-art result in the SNN field.",
+    "authors": [
+      "Xinyu Shi",
+      "Zecheng Hao",
+      "Zhaofei Yu"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2403.14302v2",
+    "url": "https://arxiv.org/abs/2403.14302",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2502.01654",
+    "arxiv_id": "2502.01654",
+    "title": "Predicting concentration levels of air pollutants by transfer learning and recurrent neural network",
+    "abstract": "Air pollution (AP) poses a great threat to human health, and people are paying more attention than ever to its prediction. Accurate prediction of AP helps people to plan for their outdoor activities and aids protecting human health. In this paper, long-short term memory (LSTM) recurrent neural networks (RNNs) have been used to predict the future concentration of air pollutants (APS) in Macau. Additionally, meteorological data and data on the concentration of APS have been utilized. Moreover, in Macau, some air quality monitoring stations (AQMSs) have less observed data in quantity, and, at the same time, some AQMSs recorded less observed data of certain types of APS. Therefore, the transfer learning and pre-trained neural networks have been employed to assist AQMSs with less observed data to build a neural network with high prediction accuracy. The experimental sample covers a period longer than 12-year and includes daily measurements from several APS as well as other more classical meteorological values. Records from five stations, four out of them are AQMSs and the remaining one is an automatic weather station, have been prepared from the aforesaid period and eventually underwent to computational intelligence techniques to build and extract a prediction knowledge-based system. As shown by experimentation, LSTM RNNs initialized with transfer learning methods have higher prediction accuracy; it incurred shorter training time than randomly initialized recurrent neural networks.",
+    "authors": [
+      "Iat Hang Fong",
+      "Tengyue Li",
+      "Simon Fong",
+      "Raymond K. Wong",
+      "Antonio J. Tallón-Ballesteros"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2502.01654v1",
+    "url": "https://arxiv.org/abs/2502.01654",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2402.12205",
+    "arxiv_id": "2402.12205",
+    "title": "Self-organized clustering, prediction, and superposition of long-term cognitive decline from short-term individual cognitive test scores in Alzheimer's disease",
+    "abstract": "Progressive cognitive decline spanning across decades is characteristic of Alzheimer's disease (AD). Various predictive models have been designed to realize its early onset and study the long-term trajectories of cognitive test scores across populations of interest. Research efforts have been geared towards superimposing patients' cognitive test scores with the long-term trajectory denoting gradual cognitive decline, while considering the heterogeneity of AD. Multiple trajectories representing cognitive assessment for the long-term have been developed based on various parameters, highlighting the importance of classifying several groups based on disease progression patterns. In this study, a novel method capable of self-organized prediction, classification, and the overlay of long-term cognitive trajectories based on short-term individual data was developed, based on statistical and differential equation modeling. We validated the predictive accuracy of the proposed method for the long-term trajectory of cognitive test score results on two cohorts: the Alzheimer's Disease Neuroimaging Initiative (ADNI) study and the Japanese ADNI study. We also presented two practical illustrations of the simultaneous evaluation of risk factor associated with both the onset and the longitudinal progression of AD, and an innovative randomized controlled trial design for AD that standardizes the heterogeneity of patients enrolled in a clinical trial. These resources would improve the power of statistical hypothesis testing and help evaluate the therapeutic effect. The application of predicting the trajectory of longitudinal disease progression goes beyond AD, and is especially relevant for progressive and neurodegenerative disorders.",
+    "authors": [
+      "Hiroyuki Sato",
+      "Keisuke Suzuki",
+      "Atsushi Hashizume",
+      "Ryoichi Hanazawa",
+      "Masanao Sasaki",
+      "Akihiro Hirakawa",
+      "the Japanese Alzheimer's Disease Neuroimaging Initiative",
+      "the Alzheimer's Disease Neuroimaging Initiative"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2402.12205v1",
+    "url": "https://arxiv.org/abs/2402.12205",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2503.02345",
+    "arxiv_id": "2503.02345",
+    "title": "CQ CNN: A Hybrid Classical Quantum Convolutional Neural Network for Alzheimer's Disease Detection Using Diffusion Generated and U Net Segmented 3D MRI",
+    "abstract": "The detection of Alzheimer disease (AD) from clinical MRI data is an active area of research in medical imaging. Recent advances in quantum computing, particularly the integration of parameterized quantum circuits (PQCs) with classical machine learning architectures, offer new opportunities to develop models that may outperform traditional methods. However, quantum machine learning (QML) remains in its early stages and requires further experimental analysis to better understand its behavior and limitations. In this paper, we propose an end to end hybrid classical quantum convolutional neural network (CQ CNN) for AD detection using clinically formatted 3D MRI data. Our approach involves developing a framework to make 3D MRI data usable for machine learning, designing and training a brain tissue segmentation model (Skull Net), and training a diffusion model to generate synthetic images for the minority class. Our converged models exhibit potential quantum advantages, achieving higher accuracy in fewer epochs than classical models. The proposed beta8 3 qubit model achieves an accuracy of 97.50%, surpassing state of the art (SOTA) models while requiring significantly fewer computational resources. In particular, the architecture employs only 13K parameters (0.48 MB), reducing the parameter count by more than 99.99% compared to current SOTA models. Furthermore, the diffusion-generated data used to train our quantum models, in conjunction with real samples, preserve clinical structural standards, representing a notable first in the field of QML. We conclude that CQCNN architecture like models, with further improvements in gradient optimization techniques, could become a viable option and even a potential alternative to classical models for AD detection, especially in data limited and resource constrained clinical settings.",
+    "authors": [
+      "Mominul Islam",
+      "Mohammad Junayed Hasan",
+      "M. R. C. Mahdy"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2503.02345v1",
+    "url": "https://arxiv.org/abs/2503.02345",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2310.02576",
+    "arxiv_id": "2310.02576",
+    "title": "A Prototype-Based Neural Network for Image Anomaly Detection and Localization",
+    "abstract": "Image anomaly detection and localization perform not only image-level anomaly classification but also locate pixel-level anomaly regions. Recently, it has received much research attention due to its wide application in various fields. This paper proposes ProtoAD, a prototype-based neural network for image anomaly detection and localization. First, the patch features of normal images are extracted by a deep network pre-trained on nature images. Then, the prototypes of the normal patch features are learned by non-parametric clustering. Finally, we construct an image anomaly localization network (ProtoAD) by appending the feature extraction network with $L2$ feature normalization, a $1\\times1$ convolutional layer, a channel max-pooling, and a subtraction operation. We use the prototypes as the kernels of the $1\\times1$ convolutional layer; therefore, our neural network does not need a training phase and can conduct anomaly detection and localization in an end-to-end manner. Extensive experiments on two challenging industrial anomaly detection datasets, MVTec AD and BTAD, demonstrate that ProtoAD achieves competitive performance compared to the state-of-the-art methods with a higher inference speed. The source code is available at: https://github.com/98chao/ProtoAD.",
+    "authors": [
+      "Chao Huang",
+      "Zhao Kang",
+      "Hong Wu"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2310.02576v2",
+    "url": "https://arxiv.org/abs/2310.02576",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2601.07957",
+    "arxiv_id": "2601.07957",
+    "title": "LWMSCNN-SE: A Lightweight Multi-Scale Network for Efficient Maize Disease Classification on Edge Devices",
+    "abstract": "Maize disease classification plays a vital role in mitigating yield losses and ensuring food security. However, the deployment of traditional disease detection models in resource-constrained environments, such as those using smartphones and drones, faces challenges due to high computational costs. To address these challenges, we propose LWMSCNN-SE, a lightweight convolutional neural network (CNN) that integrates multi-scale feature extraction, depthwise separable convolutions, and squeeze-and-Excitation (SE) attention mechanisms. This novel combination enables the model to achieve 96.63% classification accuracy with only 241,348 parameters and 0.666 GFLOPs, making it suitable for real-time deployment in field applications. Our approach addresses the accuracy--efficiency trade-off by delivering high accuracy while maintaining low computational costs, demonstrating its potential for efficient maize disease diagnosis on edge devices in precision farming systems.",
+    "authors": [
+      "Fikadu Weloday",
+      "Jianmei Su"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.07957v1",
+    "url": "https://arxiv.org/abs/2601.07957",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

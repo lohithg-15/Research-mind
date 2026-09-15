@@ -1,0 +1,365 @@
+[
+  {
+    "id": "10.63278/jicrcr.vi.3549",
+    "arxiv_id": null,
+    "title": "A Governance Framework For Agentic AI: Mitigating Systemic Risks In LLM-Powered Multi-Agent Architectures",
+    "abstract": "The unique integration of Large Language Models (LLMs) as the reasoning center inside Agentic Artificial Intelligence (AAI) systems exposes new, systematic hazards that current research is totally ill-fitted to handle. The lack of a consistent, thorough framework that simultaneously addresses the basic problems of LLM unreliability as they spread and grow in autonomous, goal-directed, multi-agent systems reveals a major gap in the literature. These issues reach important, under-investigated fields like avoiding goal misalignment, lowering the danger of opaque decision-making, and guaranteeing strong long-term safety in complicated systems. Clearly establishing moral and legal responsibility and existing means for minimal human supervision are clearly lacking, therefore creating a hazardous hole as these automated systems approach actual deployment. This article provides an innovative, unified framework for responsible development, thus directly tackling this critical need. Specifically intended for LLM-powered agentic systems operating in challenging, high-stakes contexts, the author has presented the Trust, Risk, and Safety Management (TRiSM) governance framework. The core innovation of the framework is the Goal-Constraint Alignment (GCA) mechanism, which dynamically monitors and constrains LLM behavior inside set ethical and safety envelopes, hence acting as a dynamic barrier against both planned and unexpected goal misalignment. Furthermore, we install a Decentralized Oversight Ledger (DOL) to improve transparency and allow realistic accountability. The DOL offers real-time, tamper-proof, auditable tracking of all multi-agent interactions and decisions, therefore enhancing human oversight and establishing a clear chain of custody for agent behavior, which is vital to determine legal responsibility. Studies show a major improvement in systematic safety and a significant decrease in catastrophic failures compared to present baseline systems by verifying the effectiveness of the framework against a fresh collection of high-stakes, multi-agent coordination scenarios. This study offers the essential technical and governance structure needed for the responsible and safe distribution of next-generation autonomous artificial intelligence.",
+    "authors": [
+      "Annapurneswar Putrevu"
+    ],
+    "year": 2025,
+    "venue": "Journal of International Crisis and Risk Communication Research",
+    "pdf_url": "https://jicrcr.com/index.php/jicrcr/article/download/3549/3011",
+    "url": "https://www.semanticscholar.org/paper/c7a7834b990d20e3dc8c29b12f89cf926d344ff1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.63278/jicrcr.vi.3549",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.5753/wesaac.2025.37528",
+    "arxiv_id": null,
+    "title": "LLM-Powered Conversational Multi-Agent Cognitive System for Collaborative Task Solving",
+    "abstract": "Multi-agent system architectures powered by Large Language Models (LLMs) present a promising solution for tackling complex problems through autonomous collaboration. However, key challenges persist, including the need for seamless communication and coordination among agents, computational efficiency, behavioral consistency, and effective memory management. This study proposes a novel multi-agent system architecture in which an orchestrator agent dynamically distributes tasks among specialized LLM-powered agents. Our approach enables efficient task execution and intelligent decision support. We present a case application via an early implementation of our solution to identify factors influencing system effectiveness in terms of the agents’ memory results.",
+    "authors": [
+      "Eryck Silva",
+      "Frances A. Santos",
+      "P. Thompson",
+      "J. C. D. Reis"
+    ],
+    "year": 2025,
+    "venue": "Anais do XIX Workshop-Escola de Sistemas de Agentes, seus Ambientes e Aplicações (WESAAC 2025)",
+    "pdf_url": "https://sol.sbc.org.br/index.php/wesaac/article/download/37528/37310",
+    "url": "https://www.semanticscholar.org/paper/3a526fec2d681d8023c95cb5f24ee041a0844b5b",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "4c06f0bc103ab57ef9cb2e332618672eb2a82b3e"
+    ],
+    "doi": "10.5753/wesaac.2025.37528",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "94f7d9054a4567bbc9d9fabef24295807625ffef",
+    "arxiv_id": "2607.16066",
+    "title": "LLM-Powered Agentic AI for 5G/6G Networks: A Tutorial and Survey on Architectures, Protocols, and Standardization",
+    "abstract": "Agentic Artificial Intelligence (AI), enabled by Large Language Models, marks a shift from rule-based automation toward autonomous, goal-driven control of Next-Generation Networks (NGNs). Existing surveys treat the two domains in isolation, leaving protocol integration, evaluation, and standardization alignment underexplored. To address this gap, a two-part tutorial-and-survey is presented. Part I formalises the control, management, and AI-native planes of 5G and 6G. It then covers the foundations of agentic systems: reasoning, planning, tool use, multi-agent coordination, and evaluation. Part II maps agentic capabilities onto 5G/6G control surfaces, standardization, and major 6G initiatives. Finally, it identifies open challenges shaping autonomous telecommunications.",
+    "authors": [
+      "Mazene Ameur",
+      "Abdelkader Mekrache",
+      "Bouziane Brik",
+      "Adlen Ksentini"
+    ],
+    "year": 2026,
+    "venue": "Unknown",
+    "pdf_url": "https://arxiv.org/pdf/2607.16066.pdf",
+    "url": "https://arxiv.org/abs/2607.16066",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2508.20643",
+    "arxiv_id": "2508.20643",
+    "title": "CyberSleuth: Autonomous Blue-Team LLM Agent for Web Attack Forensics",
+    "abstract": "Post-mortem analysis of compromised systems is a key aspect of cyber forensics, today a mostly manual, slow, and error-prone task. Agentic AI, i.e., LLM-powered agents, is a promising avenue for automation. However, applying such agents to cybersecurity remains largely unexplored and difficult, as this domain demands long-term reasoning, contextual memory, and consistent evidence correlation - capabilities that current LLM agents struggle to master. In this paper, we present the first systematic study of LLM agents to automate post-mortem investigation. As a first scenario, we consider realistic attacks in which remote attackers try to abuse online services using well-known CVEs (30 controlled cases). The agent receives as input the network traces of the attack and extracts forensic evidence. We compare three AI agent architectures, six LLM backends, and assess their ability to i) identify compromised services, ii) map exploits to exact CVEs, and iii) prepare thorough reports. Our best-performing system, CyberSleuth, achieves 80% accuracy on 2025 incidents, producing complete, coherent, and practically useful reports (judged by a panel of 25 experts). We next illustrate how readily CyberSleuth adapts to face the analysis of infected machine traffic, showing that the effective AI agent design can transfer across forensic tasks. Our findings show that (i) multi-agent specialisation is key to sustained reasoning; (ii) simple orchestration outperforms nested hierarchical architectures; and (iii) the CyberSleuth design generalises across different forensic tasks.",
+    "authors": [
+      "Stefano Fumero",
+      "Kai Huang",
+      "Matteo Boffa",
+      "Danilo Giordano",
+      "Marco Mellia",
+      "Zied Ben-Houidi",
+      "Dario Rossi"
+    ],
+    "year": 2025,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2508.20643.pdf",
+    "url": "https://arxiv.org/abs/2508.20643",
+    "full_text_available": true,
+    "citation_count": 4,
+    "citations": [
+      "8006ccd410bc441aa62f01196874d2ef6f0d6c8a",
+      "12cc56d84bd6c79cb7a0927d2cba0f1b8efb2042",
+      "088e1cc233bde4491d067e706240381d7793aa9b",
+      "90352e639dd2977c687a81145a7e2f31f7002e89"
+    ],
+    "doi": "10.48550/arXiv.2508.20643",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "115b93272e0311e5e7f2ca2108b0cdf7ea4fa6cd",
+    "arxiv_id": null,
+    "title": "Converging Hypermedia, Protocols, and Knowledge Architectures: A New Paradigm for Grounded and Interoperable LLM-Agent Systems",
+    "abstract": "",
+    "authors": [
+      "M. Ilin"
+    ],
+    "year": 2025,
+    "venue": "HyperAgents@ECAI",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/115b93272e0311e5e7f2ca2108b0cdf7ea4fa6cd",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/AIAHPC66801.2025.11290487",
+    "arxiv_id": null,
+    "title": "Enhancing Neural Architecture Search with LLM-Based Autonomous Agents for Efficient Network Optimisation",
+    "abstract": "This paper proposes a novel Neural Architecture Search (NAS) framework powered by Large Language Model (LLM)-based autonomous agents. The method integrates self-consistent architecture generation, role-based agent collaboration, and a memory stream for iterative refinement. By simulating structured dialogues between a Strategic Director and a Technical Analyst, the system enables autonomous design exploration and decision-making without human input. A case study on short-term electricity load forecasting demonstrates the framework’s effectiveness, where the final model—developed through iterative reasoning—achieves a 9.2% reduction in MAE, 7.4% reduction in RMSE, and 32% fewer parameters compared to baseline architectures. The results highlight the framework’s ability to generate efficient, high-performing models while maintaining adaptability and interpretability. This approach offers a scalable solution for automated deep learning design and can be extended to other domains requiring efficient and context-aware model optimisation.",
+    "authors": [
+      "Qifan Chen"
+    ],
+    "year": 2025,
+    "venue": "2025 5th International Conference on Artificial Intelligence, Automation and High Performance Computing (AIAHPC)",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/f22b825c2ea72cd1508045f383e78ad4d3660bc5",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/AIAHPC66801.2025.11290487",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICMLA66185.2025.00174",
+    "arxiv_id": "2512.21818",
+    "title": "Analyzing Code Injection Attacks on LLM-based Multi-Agent Systems in Software Development",
+    "abstract": "Agentic AI and Multi-Agent Systems are poised to dominate industry and society imminently. Powered by goal-driven autonomy, they represent a powerful form of generative AI, marking a transition from reactive content generation into proactive multitasking capabilities. As an exemplar, we propose an architecture of a multi-agent system for the implementation phase of the software engineering process. We also present a comprehensive threat model for the proposed system. We demonstrate that while such systems can generate code quite accurately, they are vulnerable to attacks, including code injection. Due to their autonomous design and lack of humans in the loop, these systems cannot identify and respond to attacks by themselves. This paper analyzes the vulnerability of multi-agent systems and concludes that the coder-reviewer-tester architecture is more resilient than both the coder and coder-tester architectures, but is less efficient at writing code. We find that by adding a security analysis agent, we mitigate the loss in efficiency while achieving even better resiliency. We conclude by demonstrating that the security analysis agent is vulnerable to advanced code injection attacks, showing that embedding poisonous few-shot examples in the injected code can increase the attack success rate from 0% to 71.95%.",
+    "authors": [
+      "Brian Bowers",
+      "Smita Khapre",
+      "Jugal K. Kalita"
+    ],
+    "year": 2025,
+    "venue": "International Conference on Machine Learning and Applications",
+    "pdf_url": "https://arxiv.org/pdf/2512.21818.pdf",
+    "url": "https://arxiv.org/abs/2512.21818",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "409ae793af770cdb063fbe189ce63ef68ae5a2cd",
+      "acdc4e328735bfde03f99d09731c7a025c96e655"
+    ],
+    "doi": "10.1109/ICMLA66185.2025.00174",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2509.24408",
+    "arxiv_id": "2509.24408",
+    "title": "FuncPoison: Poisoning Function Library to Hijack Multi-agent Autonomous Driving Systems",
+    "abstract": "Autonomous driving systems increasingly rely on multi-agent architectures powered by large language models (LLMs), where specialized agents collaborate to perceive, reason, and plan. A key component of these systems is the shared function library, a collection of software tools that agents use to process sensor data and navigate complex driving environments. Despite its critical role in agent decision-making, the function library remains an under-explored vulnerability. In this paper, we introduce FuncPoison, a novel poisoning-based attack targeting the function library to manipulate the behavior of LLM-driven multi-agent autonomous systems. FuncPoison exploits two key weaknesses in how agents access the function library: (1) agents rely on text-based instructions to select tools; and (2) these tools are activated using standardized command formats that attackers can replicate. By injecting malicious tools with deceptive instructions, FuncPoison manipulates one agent s decisions--such as misinterpreting road conditions--triggering cascading errors that mislead other agents in the system. We experimentally evaluate FuncPoison on two representative multi-agent autonomous driving systems, demonstrating its ability to significantly degrade trajectory accuracy, flexibly target specific agents to induce coordinated misbehavior, and evade diverse defense mechanisms. Our results reveal that the function library, often considered a simple toolset, can serve as a critical attack surface in LLM-based autonomous driving systems, raising elevated concerns on their reliability.",
+    "authors": [
+      "Yuzhen Long",
+      "Songze Li"
+    ],
+    "year": 2025,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2509.24408.pdf",
+    "url": "https://arxiv.org/abs/2509.24408",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "204b76eb3d0d7e69976d96a48bd14286c81f2eda",
+      "5c834ee3f6df1ec82c104ae6353f331d60068062"
+    ],
+    "doi": "10.48550/arXiv.2509.24408",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1145/3806980.3807205",
+    "arxiv_id": null,
+    "title": "R2R-Agent: An AI-Powered Intelligent Educational System for Automated Repository Reproducibility and Technology-Enhanced Learning",
+    "abstract": "The reproducibility of educational software repositories presents a critical challenge within technology-enhanced learning (TEL) and intelligent educational systems (IES). Empirical studies indicate that over 60% of such repositories fail to execute successfully due primarily to intricate environment configurations, thereby impeding the efficacy of computer-supported learning and AI-empowered teaching. Traditional manual environment setup approaches are inherently inefficient, prone to errors, and fundamentally unscalable. This paper introduces R2R-Agent (Repo-to-Run Agent), an innovative AI-powered intelligent educational system designed to automate repository reproducibility through the integration of self-repairing agent architectures and Large Language Models (LLMs). The system leverages LLM-based semantic analysis for documentation interpretation, AI-driven planning for environment generation, and autonomous error diagnosis coupled with self-repairing mechanisms. Comprehensive experimental evaluation across five diverse educational repositories—encompassing Python programming, machine learning, data science, web scraping, and algorithmic practice—demonstrates a 100% success rate with an average Time-to-First-Success (TTFS) of 5.2 minutes. R2R-Agent effectively identifies and autonomously resolves 80% of common execution errors, including dependency conflicts and path resolution issues, without requiring manual intervention. Our findings underscore the significant potential of AI-driven automation in mitigating technical barriers and substantially enhancing the efficiency of modern educational technology. This work represents a significant step towards intelligent, self-managing educational infrastructures that can democratize access to complex computational resources and truly scalable, barrier-free technology-enhanced learning.",
+    "authors": [
+      "Jianming Wang",
+      "Xin Wang",
+      "Xiaofei Sun",
+      "Yixin Cao",
+      "Jinyu Hu",
+      "Min Cui"
+    ],
+    "year": 2026,
+    "venue": "Proceedings of the 2026 International Conference on Big Data and Informatization Education",
+    "pdf_url": "https://doi.org/10.1145/3806980.3807205",
+    "url": "https://www.semanticscholar.org/paper/42d1fd175658a667e70ab3e385293c8ddc9af93a",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1145/3806980.3807205",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/MIOT.2025.3645767",
+    "arxiv_id": "2601.14437",
+    "title": "Agentic AI Meets Edge Computing in Autonomous UAV Swarms",
+    "abstract": "The integration of agentic AI, powered by large language models (LLMs) with autonomous reasoning, planning, and execution, into unmanned aerial vehicle (UAV) swarms opens new operational possibilities and brings the vision of the Internet of Drones closer to reality. However, infrastructure constraints, dynamic environments, and the computational demands of multi-agent coordination limit real-world deployment in high-risk scenarios such as wildfires and disaster response. This paper investigates the integration of LLM-based agentic AI and edge computing to realize scalable and resilient autonomy in UAV swarms. We first discuss three architectures for supporting UAV swarms - standalone, edge-enabled, and edge-cloud hybrid deployment - each optimized for varying autonomy and connectivity levels. Then, a use case for wildfire search and rescue (SAR) is designed to demonstrate the efficiency of the edge-enabled architecture, enabling high SAR coverage, reduced mission completion times, and a higher level of autonomy compared to traditional approaches. Finally, we highlight open challenges in integrating LLMs and edge computing for mission-critical UAV-swarm applications.",
+    "authors": [
+      "Thuan Minh Nguyen",
+      "V. T. Truong",
+      "Long Bao Le"
+    ],
+    "year": 2026,
+    "venue": "IEEE Internet of Things Magazine",
+    "pdf_url": "https://arxiv.org/pdf/2601.14437.pdf",
+    "url": "https://arxiv.org/abs/2601.14437",
+    "full_text_available": true,
+    "citation_count": 6,
+    "citations": [
+      "ea4d5315f3c20e12499256b2ed74e6fcabb59618",
+      "ad616699b413343a9cedd2ffebc50f19982d6051",
+      "e840fd68d752f3e5611a55a368ae6beb4da803e0",
+      "de6286d4b7c34a1cdd5ccfab032e7a823de7825e",
+      "87f22a595eca83974d8f560fc1fa90c9cd8ba7de",
+      "f1ebfc0d43a44a6b28d0806eb525fd67602fdc68"
+    ],
+    "doi": "10.1109/MIOT.2025.3645767",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.22399/ijcesen.4210",
+    "arxiv_id": null,
+    "title": "Agentic ai-driven enterprise architecture: a foundational framework for scalable, secure, and resilient systems",
+    "abstract": "Agentic AI introduces a new paradigm in enterprise architecture by enabling autonomous, communicative, and goal-driven agents that operate across distributed systems. Building upon generative AI, agentic frameworks deliver scalable, self-orchestrating architectures capable of optimizing performance, fortifying cybersecurity, and enhancing operational resilience. This paper presents a foundational architecture that integrates Agentic AI principles into enterprise systems, offering a unified approach to intelligent orchestration, security, and adaptability. This paper explores the convergence of agentic and generative AI through recent frameworks, emphasizing Agent-to-Agent (A2A) communication protocols, intent-based coordination via the Agent Communication Protocol (ACP), and integration with LLM-powered reasoning engines. Agentic architectures automate complex workflows, detect and respond to cyber threats, and simulate failure scenarios through decentralized, intelligent agents. The proposed framework incorporates event-driven communication, vectorized memory, and optional blockchain-backed verification to support trust, transparency, and traceability across agents. The result is a composable, adaptive infrastructure that redefines how enterprise systems achieve agility, security, and continuity. When implemented with robust governance and AI oversight, Agentic AI powered by A2A emerges as a transformative force for high-performance, resilient enterprise design.",
+    "authors": [
+      "Prince Kumar"
+    ],
+    "year": 2025,
+    "venue": "International Journal of Computational and Experimental Science and Engineering",
+    "pdf_url": "https://ijcesen.com/index.php/ijcesen/article/download/4210/1348",
+    "url": "https://www.semanticscholar.org/paper/63398a5620db4cdc7503b4a6c9f1556b19918105",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "22747d853e0654983fdcb99aeaccd58afde36b21"
+    ],
+    "doi": "10.22399/ijcesen.4210",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/CAIN66642.2025.00031",
+    "arxiv_id": "2501.08243",
+    "title": "Engineering LLM Powered Multi-Agent Framework for Autonomous CloudOps",
+    "abstract": "Cloud Operations (CloudOps) is a rapidly growing field focused on the automated management and optimization of cloud infrastructure which is essential for organizations nav-igating increasingly complex cloud environments. MontyCloud Inc. is one of the major companies in the CloudOps domain that leverages autonomous bots to manage cloud compliance, security, and continuous operations. To make the platform more accessible and effective to the customers, we leveraged the use of GenAl. Developing a GenAl-based solution for autonomous CloudOps for the existing MontyCloud system presented us with various challenges such as i) diverse data sources; ii) orchestration of multiple processes and iii) handling complex workflows to automate routine tasks. To this end, we developed MOYA, a multi-agent framework that leverages GenAI and balances autonomy with the necessary human control. This framework integrates various internal and external systems and is optimized for factors like task orchestration, security, and error mitigation while producing accurate, reliable, and relevant insights by utilizing Retrieval Augmented Generation (RAG). Evaluations of our multi-agent system with the help of practitioners as well as using automated checks demonstrate enhanced accuracy, responsiveness, and effectiveness over non-agentic approaches across complex workflows.",
+    "authors": [
+      "Kannan Parthasarathy",
+      "Karthik Vaidhyanathan",
+      "Rudra Dhar",
+      "Venkat Krishnamachari",
+      "Basil Muhammed",
+      "Adyansh Kakran",
+      "Sreemaee Akshathala",
+      "Shrikara Arun",
+      "Suman Dubey",
+      "Mohan Veerubhotla",
+      "Amey Karan"
+    ],
+    "year": 2025,
+    "venue": "2025 IEEE/ACM 4th International Conference on AI Engineering – Software Engineering for AI (CAIN)",
+    "pdf_url": "https://arxiv.org/pdf/2501.08243.pdf",
+    "url": "https://arxiv.org/abs/2501.08243",
+    "full_text_available": true,
+    "citation_count": 18,
+    "citations": [
+      "338ff9257e5b2abaefa501f1efd943c2d75c9c6d",
+      "4c024e5794aba9aab52951104cfa608bfcb2cd53",
+      "da334b35e8c93da3a3826552350063c8f0291af6",
+      "ab67f489d02fe525c597df47c25a7bfcfc1758cd",
+      "766d08cb5db1bc98252ae0b90538227e90e95239",
+      "d3aed7e7f1d2e743c2a81fe1091d6a45ca17dcac",
+      "6bad6cb411a86c0be216ee051ba51b07f3b0bafa",
+      "cadb3c7c37c92f575fc69c01fdfeecc61770c55f",
+      "b0f345811ac62e667de46b45de91a25bc4d91524",
+      "ffa033011b9e3703396a1168d87e1f97b876e3a9",
+      "b8fe2f39deb5ba3d07790088de3a0c3139a486bf",
+      "d5de349b6b973cb721b564bd53a9b989a67b16ab",
+      "c7788538d691d283fb4430790a65a8d06b8929b3",
+      "037f2e8888d74c452a35eaea1fcd86bfedbdebe4",
+      "d6d4c08ccfe6f66c8c50c9c77c5f38686ced89b2",
+      "eeb8dfc1e478eb7763d2f3b0140d255b84edbdf2",
+      "8bc7555fc18b00330a0794188f6625e50669574c",
+      "ef827c032647893f4f28203973f2eb2265023001"
+    ],
+    "doi": "10.1109/CAIN66642.2025.00031",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ECOC66593.2025.11263325",
+    "arxiv_id": "2504.01234",
+    "title": "First Field-Trial Demonstration of L4 Autonomous Optical Network for Distributed AI Training Communication: An Llm-Powered Multi-AI-Agent Solution",
+    "abstract": "We demonstrate the first cross-domain cross-layer level-4 autonomous optical network via a multi-AI-agent system. Field trials show ~98% task completion rate across the distributed AI training lifecycle©3.2© higher than single agents using advanced LLMs. ©2025 The Author(s)",
+    "authors": [
+      "Yihao Zhang",
+      "Qizhi Qiu",
+      "Xiaomin Liu",
+      "Dianxuan Fu",
+      "Xingyu Liu",
+      "Leyan Fei",
+      "Yuming Cheng",
+      "Lilin Yi",
+      "Weisheng Hu",
+      "Q. Zhuge"
+    ],
+    "year": 2025,
+    "venue": "European Conference on Optical Communication",
+    "pdf_url": "https://arxiv.org/pdf/2504.01234.pdf",
+    "url": "https://arxiv.org/abs/2504.01234",
+    "full_text_available": true,
+    "citation_count": 6,
+    "citations": [
+      "63e43566276e5f8e2fbfb5b6b410cb2e69344ef1",
+      "bd326fc79e20afb73eb82a0dac25b44cc287f447",
+      "1e10decbed4fc213b2018d6374dc748765b075a1",
+      "593e6663dab0821959ef9028f3317c13b071d1a1",
+      "796131193d6735a26f6fc96b12a9a1c0ad209938",
+      "915629770abed1327cc63dec86ec6923e4b089dc"
+    ],
+    "doi": "10.1109/ECOC66593.2025.11263325",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2606.15579",
+    "arxiv_id": "2606.15579",
+    "title": "Your Agent Has a Genome: Sequence-Level Behavioral Analysis and Runtime Governance of LLM-Powered Autonomous Agents",
+    "abstract": "We propose Base Sequence Analysis, a framework that encodes the runtime behavior of LLM-powered autonomous agents into compact symbolic sequences using a four-letter alphabet: X (Explore), E (Execute), P (Plan), and V (Verify). Drawing an analogy to genomic sequence analysis, we apply n-gram pattern mining, Markov transition matrices, and point-biserial correlation to 347 real-world execution traces collected from a production ReAct agent system over 8 days. Our analysis reveals that (1) the trigram P-X-P is the only statistically significant high-risk pattern, lowering success rate by 10.4%; (2) P-ratio is the strongest negative predictor of success (r=-0.256, p<0.0001); and (3) the E->V transition probability is only 2.1%, indicating a systemic verification deficit. Based on these findings, we design Governor, a three-layer runtime intervention system comprising a rule engine, a statistical accumulator, and a chi-square-based threshold adaptor. In a natural before/after deployment evaluation (N=101 vs. N=246), Governor achieves a +6.2% absolute increase in task success rate while simultaneously reducing average token consumption by 44%. To validate cross-system generality, we apply the XEPV encoding to 2,000 public SWE-agent trajectories on SWE-bench, confirming that exploration spirals and the E->V verification deficit replicate in an independent system. We outline six research directions including base sequence language models, cross-agent behavioral fingerprinting, and reward shaping, and release an open-source toolkit for reproducibility.",
+    "authors": [
+      "Sidi Deng"
+    ],
+    "year": 2026,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2606.15579.pdf",
+    "url": "https://arxiv.org/abs/2606.15579",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.48550/arXiv.2606.15579",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ECOC66593.2025.11263012",
+    "arxiv_id": null,
+    "title": "Multi-Agent LLM-powered AI for Autonomous Optical Power Commissioning of OMS Links",
+    "abstract": "We demonstrate that a group of Al agents can autonomously optimize power commissioning in WDM links. By leveraging modern LLMs' reflection and reasoning capabilities and interacting with a network digital twin, the agents achieve optimal solutions for different criteria such as power and OSNR equalization.",
+    "authors": [
+      "Yujiao Hao",
+      "Mahdi Hemmati",
+      "Mehrad Vaezi",
+      "Yuren You",
+      "Christopher Janz"
+    ],
+    "year": 2025,
+    "venue": "European Conference on Optical Communication",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/f7822dc4994760469cd43cb6de25305aa6e1edd9",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ECOC66593.2025.11263012",
+    "source": "semantic_scholar"
+  }
+]

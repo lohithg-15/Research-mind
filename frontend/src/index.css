@@ -142,12 +142,13 @@ body {
 
 .topbar-brand-sub {
   font-family: var(--font-label);
-  font-size: 8.5px;
+  font-size: 8px;
   color: var(--gray-700);
   text-transform: uppercase;
-  letter-spacing: 1.8px;
-  margin-top: 2px;
+  letter-spacing: 1.2px;
+  margin-top: 1px;
   font-weight: 600;
+  line-height: 1.25;
 }
 
 .topbar-divider {
@@ -160,8 +161,8 @@ body {
 
 .topbar-search-input {
   width: 100%; height: 42px;
-  background: var(--gray-100);
-  border: 1.5px solid rgba(0, 0, 0, 0.25);
+  background: var(--white);
+  border: 1.5px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0 16px;
   color: var(--black);
@@ -172,11 +173,19 @@ body {
   outline: none;
   caret-color: var(--black);
 }
-.topbar-search-input::placeholder { color: #888888; font-weight: 300; }
+.topbar-search-input::placeholder { color: var(--gray-400); font-weight: 300; }
 .topbar-search-input:focus {
-  border-color: rgba(255, 255, 255, 0.9);
-  background: #333333;
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+  border-color: var(--black);
+  background: var(--white);
+  color: var(--black);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+.topbar-search-input:-webkit-autofill,
+.topbar-search-input:-webkit-autofill:hover,
+.topbar-search-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--black);
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .topbar-right {
@@ -2017,12 +2026,74 @@ body {
 }
 
 
+/* ─── Topbar Toggle Buttons & Close Buttons ─── */
+.topbar-toggles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.topbar-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  height: 28px;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.topbar-toggle-btn:hover {
+  background: var(--gray-200);
+  color: var(--black);
+}
+.topbar-toggle-btn.active {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+/* Sidebar Section Header with Close Button */
+.sidebar-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sidebar-close-btn {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-close-btn:hover {
+  color: var(--black);
+  background: var(--gray-200);
+}
+
+
 /* ═══════════════════════════════════════════════════════════════════
-   HISTORY SIDEBAR (ChatGPT-style)
+   HISTORY SIDEBAR (Clean White Theme)
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  --history-w: 220px;
+  --history-w: 230px;
 }
 
 .history-sidebar {
@@ -2030,31 +2101,69 @@ body {
   top: var(--topbar-h); left: 0;
   width: var(--history-w);
   height: calc(100vh - var(--topbar-h));
-  background: var(--gray-950);
-  border-right: 1px solid rgba(255,255,255,0.06);
+  background: var(--white);
+  border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   z-index: 55;
   overflow: hidden;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+}
+
+.history-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.history-sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--black);
+}
+
+.history-sidebar-close {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.history-sidebar-close:hover {
+  color: var(--black);
+  background: var(--gray-100);
 }
 
 /* ─ New Research button ─ */
 .history-new-btn {
   display: flex; align-items: center; gap: 7px;
-  margin: 12px 10px 6px;
-  padding: 9px 12px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: var(--radius-md);
-  color: rgba(255,255,255,0.8);
+  margin: 10px 10px 6px;
+  padding: 8px 12px;
+  background: var(--black);
+  border: 1px solid var(--black);
+  border-radius: var(--radius-sm);
+  color: var(--white);
   font-family: var(--font-label);
-  font-size: 11px; font-weight: 600;
+  font-size: 10.5px; font-weight: 700;
   letter-spacing: 0.06em; text-transform: uppercase;
   cursor: pointer;
   transition: var(--transition);
 }
 .history-new-btn:hover {
-  background: rgba(255,255,255,0.12);
-  color: var(--white);
+  background: var(--gray-800);
+  transform: translateY(-1px);
 }
 
 /* ─ Search ─ */
@@ -2065,26 +2174,26 @@ body {
 .history-search-icon {
   position: absolute;
   left: 9px; top: 50%; transform: translateY(-50%);
-  color: rgba(255,255,255,0.3);
+  color: var(--gray-400);
   pointer-events: none;
 }
 .history-search {
   width: 100%;
   height: 30px;
   padding: 0 10px 0 28px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--gray-50);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: rgba(255,255,255,0.8);
+  color: var(--black);
   font-family: var(--font-ui);
   font-size: 11px;
   outline: none;
   transition: var(--transition);
 }
-.history-search::placeholder { color: rgba(255,255,255,0.25); }
+.history-search::placeholder { color: var(--gray-400); }
 .history-search:focus {
-  border-color: rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.07);
+  border-color: var(--border-focus);
+  background: var(--white);
 }
 
 /* ─ List ─ */
@@ -2099,14 +2208,14 @@ body {
   align-items: center; justify-content: center;
   gap: 6px;
   padding: 32px 12px;
-  color: rgba(255,255,255,0.3);
+  color: var(--gray-500);
   font-family: var(--font-ui);
   font-size: 12px;
   text-align: center;
 }
 .history-empty-sub {
   font-size: 10px;
-  color: rgba(255,255,255,0.18);
+  color: var(--gray-400);
 }
 
 /* ─ Date group ─ */
@@ -2118,8 +2227,8 @@ body {
   display: flex; align-items: center; gap: 5px;
   padding: 5px 8px;
   font-family: var(--font-label);
-  font-size: 9px; font-weight: 600;
-  color: rgba(255,255,255,0.3);
+  font-size: 9px; font-weight: 700;
+  color: var(--gray-500);
   text-transform: uppercase;
   letter-spacing: 1.2px;
 }
@@ -2130,13 +2239,19 @@ body {
   width: 100%;
   padding: 8px 8px 8px 10px;
   background: transparent;
-  border: none; border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition);
   text-align: left;
 }
-.history-item:hover { background: rgba(255,255,255,0.06); }
-.history-item.active { background: rgba(255,255,255,0.1); }
+.history-item:hover {
+  background: var(--gray-100);
+}
+.history-item.active {
+  background: var(--gray-200);
+  border-color: var(--border-strong);
+}
 
 .history-item-content {
   flex: 1;
@@ -2147,24 +2262,24 @@ body {
 .history-item-title {
   font-family: var(--font-ui);
   font-size: 12px;
-  color: rgba(255,255,255,0.75);
+  font-weight: 500;
+  color: var(--black);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.3;
 }
-.history-item.active .history-item-title { color: var(--white); }
 
 .history-item-date {
   font-family: var(--font-mono);
   font-size: 9px;
-  color: rgba(255,255,255,0.25);
+  color: var(--gray-500);
 }
 
 .history-item-delete {
   flex-shrink: 0;
   background: none; border: none;
-  color: rgba(255,255,255,0.15);
+  color: var(--gray-400);
   cursor: pointer;
   padding: 3px;
   border-radius: var(--radius-sm);
@@ -2172,18 +2287,31 @@ body {
   opacity: 0;
 }
 .history-item:hover .history-item-delete { opacity: 1; }
-.history-item-delete:hover { color: #f87171; background: rgba(248,113,113,0.12); }
+.history-item-delete:hover { color: #dc2626; background: rgba(220,38,38,0.08); }
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   LAYOUT ADJUSTMENTS when history sidebar is visible
+   LAYOUT ADJUSTMENTS when History and/or Filters sidebars are active
    ═══════════════════════════════════════════════════════════════════ */
 
 .sidebar-left--shifted {
   left: var(--history-w);
 }
 
-.content-main--shifted {
+.content-main--shifted-both {
   margin-left: calc(var(--history-w) + var(--sidebar-l));
 }
+
+.content-main--shifted-history {
+  margin-left: var(--history-w);
+}
+
+.content-main--shifted-left {
+  margin-left: var(--sidebar-l);
+}
+
+.content-main--full {
+  margin-left: 0;
+}
+
 

@@ -1,0 +1,364 @@
+[
+  {
+    "id": "10.3390/platforms3030011",
+    "arxiv_id": null,
+    "title": "Empirical Analysis of Social Media Influencers’ Effect on Consumer Purchase Intentions and Behavior",
+    "abstract": "Social media influencers (SMIs) have become pivotal stakeholders in digital marketing. This study examines how SMIs influence consumer decision-making and investigates the role of trust in this process. Drawing on the theory of planned behavior (TPB), we developed a research model with testable hypotheses. Using partial least squares structural equation modeling (PLS-SEM), we analyzed survey data from 232 social media users in Greater London, UK. Our results indicated that SMIs significantly enhance purchase intentions, yet these intentions exhibited only a weak conversion into actual purchasing behavior. Contrary to expectations, trust in SMIs demonstrated a significant negative relationship with purchase intention, suggesting that higher trust may paradoxically diminish purchase likelihood. This counterintuitive finding underscores the complexity of trust dynamics in influencer marketing, where perceived commercialization or consumer skepticism may counteract its positive effects. Furthermore, while SMIs strongly foster trust, our analysis reveals that trust does not mediate the relationship between SMIs and actual purchases. These findings contribute to literature by elucidating the nuanced role of trust and highlighting the intention–behavior gap in influencer marketing. Future research could explore contextual and psychological moderators to deepen our understanding of trust dynamics.",
+    "authors": [
+      "Godfried B. Adaba",
+      "F. Frimpong",
+      "Leah Mwainyekule"
+    ],
+    "year": 2025,
+    "venue": "Platforms",
+    "pdf_url": "https://www.mdpi.com/2813-4176/3/3/11/pdf?version=1750686693",
+    "url": "https://www.semanticscholar.org/paper/654f806ec5dab5b671c558636240b8330dbbb9ae",
+    "full_text_available": true,
+    "citation_count": 10,
+    "citations": [
+      "7c715c7d4f3d139034c4c9611a30c68a8323a5be",
+      "ce6414009fcc348625cd2e652d5cf6c2d5690f77",
+      "bb41f02408971226f2ed22c55856a983368154a7",
+      "53ba6758145b041ba058f9ce0900fce38c652329",
+      "b081d7c86cc3c2879a67a0220a3db14840b4b7b2",
+      "cd6c21b0cee5610bca3fdde7c39dbca38c8dd1f0",
+      "3c553e1602bd94eca9af69559179aa7ebef0b9c7",
+      "a35f5c5464a8ec47f770f650881e2d423a104306",
+      "70a38ba1da9de1998397eebe13b0fe49523f912e",
+      "82eb49b475122c35219c097ca5cd67c883c8a5d7"
+    ],
+    "doi": "10.3390/platforms3030011",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.52783/pst.1733",
+    "arxiv_id": null,
+    "title": "\"The Strategic Impact of Social Media Influencers on Digital Consumer Decision-Making: An Empirical Investigation into Smartphone Purchasing Patterns in North Karnataka\"",
+    "abstract": "This study investigates the strategic impact of social media influencers on digital consumer decision-making, with a specific focus on smartphone purchasing patterns in North Karnataka. Through a Scopus-based literature review, the research employs topic modeling, trend analysis using Voyant Tools, and bibliometric visualization with VOSviewer to identify key influencer attributes affecting consumer behavior. The findings highlight that influencer credibility, engagement strategies, and content personalization significantly shape purchasing decisions. The trend analysis reveals a rising influence of digital endorsements, while bibliometric analysis underscores the growing academic interest in influencer marketing. This study contributes to the literature by integrating data-driven methodologies for analyzing digital marketing strategies in regional contexts. While limited to smartphone purchases in North Karnataka, the study provides a foundation for future research on regional influencer marketing dynamics, AI-driven personalization, and ethical influencer practices. The insights are valuable for marketers, researchers, and policymakers in the digital economy.\nDOI:https://doi.org/10.52783/pst.1733",
+    "authors": [
+      "Ruturaj Patil"
+    ],
+    "year": 2025,
+    "venue": "Power system technology",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/4799265b146eaa89cc1bdc690d4ae3d93267554a",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.52783/pst.1733",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.36948/ijfmr.2025.v07i06.64263",
+    "arxiv_id": null,
+    "title": "The Role of Digital Influencers in Shaping Consumers Buying Behavior - An Empirical Study",
+    "abstract": "The exponential growth of social media platforms has significantly transformed marketing communication and consumer decision-making processes. Digital influencers have emerged as key opinion leaders who shape consumer perceptions, attitudes, and purchase intentions through credible, authentic, and engaging content. This empirical study examines the role of digital influencers in shaping consumer buying behavior, with specific reference to influencer credibility, authenticity, trust, and engagement. Primary data were collected from 420 active social media users in India using a structured questionnaire. The data were analyzed using descriptive statistics, reliability analysis, correlation, and Structural Equation Modeling (SEM). The findings reveal that influencer credibility and authenticity significantly influence consumer trust, which in turn has a strong positive impact on purchase intention. Engagement was found to partially mediate the relationship between influencer attributes and consumer buying behavior. The study contributes to existing literature by providing empirical evidence from an emerging economy and offers practical implications for marketers, consumers, and policymakers.",
+    "authors": [
+      "Vivek Kochhar"
+    ],
+    "year": 2025,
+    "venue": "International Journal For Multidisciplinary Research",
+    "pdf_url": "https://www.ijfmr.com/papers/2025/6/64263.pdf",
+    "url": "https://www.semanticscholar.org/paper/b6c14bd2c58832b3a938e7ffc832d8ec9a83f896",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.36948/ijfmr.2025.v07i06.64263",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ACCESS.2025.3600564",
+    "arxiv_id": null,
+    "title": "Exploring the Impact Mechanism of AIGC-Driven Social Media Marketing Content on Consumer Decision-Making Behavior: A Two-Stage Hybrid Approach",
+    "abstract": "The swift rise of ChatGPT and the growing integration of AI-generated content (AIGC) technologies are reshaping the digital marketing landscape in profound ways. These advancements are not only changing how social media marketing content is produced, but also altering its underlying characteristics. Despite this shift, there remains a noticeable gap in empirical research on how businesses and brands can effectively harness AIGC to drive consumer engagement. This study draws on the Stimulus–Organism–Response (SOR) theoretical framework to examine how AI-generated content influences consumer cognition, builds trust, and ultimately shapes decision-making behavior. Based on 348 valid survey responses, we employed a mixed-methods approach that integrates Partial Least Squares Structural Equation Modeling (PLS-SEM) with Artificial Neural Network (ANN) analysis. The findings indicate that entertainment, interactivity, trend relevance, electronic word-of-mouth, and visual appeal all positively influence both perceived value and trust. In contrast, customization was found to enhance perceived value only. Both perceived value and trust were shown to significantly increase consumers’ purchase intentions. The ANN model further supported the PLS-SEM results, confirming consistency across methods. Among the predictors, entertainment ( $\\beta =0.176$ , ni =86.28%) was most influential for perceived value, EWOM ( $\\beta =0.192$ , ni =85.94%) played a key role in shaping trust, and perceived value ( $\\beta =0.344$ , ni =99.19%) had the strongest impact on purchase intention. These insights contribute to a deeper theoretical understanding of social media marketing and consumer behavior, while also offering actionable recommendations for businesses aiming to refine their content strategies in an AIGC-driven environment. Additionally, the study highlights promising directions for the evolution of digital consumption and the long-term sustainability of brand development.",
+    "authors": [
+      "Jia-Cheng Luo",
+      "Ke-Wei Zhang",
+      "Jiang Du"
+    ],
+    "year": 2025,
+    "venue": "IEEE Access",
+    "pdf_url": "https://doi.org/10.1109/access.2025.3600564",
+    "url": "https://www.semanticscholar.org/paper/2108607ee6099f1327368b0f2ea98a413d6ede22",
+    "full_text_available": true,
+    "citation_count": 6,
+    "citations": [
+      "cfb5ea579ad069be5d14078d2087c831bb508647",
+      "49abcec2a162f5798d94a260eb7a48c76ed89f94",
+      "ddd5a5bef8e7c8bab758c907adf125b203047e2a",
+      "6c99cebcfb271ecacbd516793440a86b9ac18c07",
+      "28cf0a8d6e6ae9ac59e4e1656c60778c28a8e432",
+      "e75880a8cc1e77327fba4a0517301f8a32010647"
+    ],
+    "doi": "10.1109/ACCESS.2025.3600564",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.55214/2576-8484.v9i8.9705",
+    "arxiv_id": null,
+    "title": "The impact of social media influencers on consumer decision-making in the GCC: A theoretical and empirical analysis",
+    "abstract": "This study examines the impact of social media influencers on consumer decision-making in the Gulf Cooperation Council (GCC) region, where social media usage rates are among the highest globally. The purpose of the research is to explore the psychological and social mechanisms through which influencer marketing shapes purchasing behavior. A quantitative research design was employed, drawing on Cognitive Dissonance Theory, Social Identity Theory, and the Elaboration Likelihood Model. Data were collected from 500 respondents across Saudi Arabia, the United Arab Emirates, Qatar, and Kuwait using a structured questionnaire. Regression analysis revealed that identification with influencers is the most influential predictor of consumer decisions, while credibility and value misalignment trigger cognitive dissonance, reducing trust. Peripheral cues, such as emotional and visual content, also significantly affect decision-making. The study concludes that influencer marketing in the GCC is most effective when it aligns with cultural values and fosters emotional and social connections. Practically, brands targeting GCC consumers should prioritize value congruence and community-oriented content strategies to drive consumer engagement and loyalty.",
+    "authors": [
+      "Fawaz Alshihre"
+    ],
+    "year": 2025,
+    "venue": "Edelweiss Applied Science and Technology",
+    "pdf_url": "https://learning-gate.com/index.php/2576-8484/article/download/9705/3170",
+    "url": "https://www.semanticscholar.org/paper/a02ef0139ef740d2aa755f3d9a1db9bd3658ba92",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.55214/2576-8484.v9i8.9705",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.30574/ijsra.2025.16.2.2354",
+    "arxiv_id": null,
+    "title": "The influence of social media branding on consumer purchase behavior: A comprehensive empirical and thematic analysis",
+    "abstract": "This study investigates the influence of social media branding on consumer purchase behavior through a comprehensive empirical and thematic analysis. By integrating quantitative surveys and qualitative content examination, the research explores how factors such as brand awareness, influencer credibility, and user engagement shape consumer decision-making processes across diverse social media platforms. The findings reveal that authentic and interactive social media branding significantly enhances consumer trust, brand loyalty, and purchase intentions. This research provides valuable insights for marketers aiming to optimize branding strategies in the evolving digital marketplace.",
+    "authors": [
+      "Raiyan Haider",
+      "Md. Farhan Ishrak Shaif",
+      "R. Ahmed",
+      "Nahid Hasan Nafi",
+      "Mahmudul Reza Sumon",
+      "Mushfiqur Rahman"
+    ],
+    "year": 2025,
+    "venue": "International Journal of Science and Research Archive",
+    "pdf_url": "https://journalijsra.com/sites/default/files/fulltext_pdf/IJSRA-2025-2354.pdf",
+    "url": "https://www.semanticscholar.org/paper/fcc95f5336a5a37d19def9aca21a240ba13e7a33",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "08c9e2770d830ba31cb735aa07a0121c3f8fc145"
+    ],
+    "doi": "10.30574/ijsra.2025.16.2.2354",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1002/cb.2308",
+    "arxiv_id": null,
+    "title": "The power of influence: How social media influencers are shaping consumer decision making in the digital age",
+    "abstract": "The prevalence of social media influencer (SMI) marketing has compelled businesses to adjust to the changing landscape of the digital age. This adjustment is driven by the substantial influence that social media influencers (SMIs) wield over consumer decision‐making; however, prior research often treated SMI strategy, content, and credibility as separate elements, leaving a knowledge gap on how these elements intersect and collectively influence SMI and consumer behavior. This study aimed to bridge this research gap by synthesizing existing literature on SMIs and consumer decision making, with a focus on SMI strategy, content, and credibility. It employed a systematic literature review with a hybrid domain‐based approach, integrating the strengths of various review types while addressing their limitations. This study employed a constructivist qualitative methodology with a reflexive thematic analysis approach. It focused on synthesizing and analyzing literature from EBSCO databases on social media influencer marketing and consumer behavior, following carefully designed inclusion and exclusion criteria. The findings revealed that SMI Strategy, SMI Content, and SMI Credibility are interconnected components of SMI marketing, and even subtle modifications to these elements can significantly influence consumer decision‐making. This study provides a holistic understanding of SMI marketing, emphasizing the interplay of SMI strategy, content, and credibility in shaping consumer choices. It offers valuable insights for businesses navigating the dynamic landscape of SMI marketing increasing their comprehension of the phenomenon.",
+    "authors": [
+      "S. Mrisha",
+      "Xi-Xiang Sun"
+    ],
+    "year": 2024,
+    "venue": "Journal of Consumer Behaviour",
+    "pdf_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/cb.2308",
+    "url": "https://www.semanticscholar.org/paper/2afdbfd1ad61819225d6e06539389ca47be74fd2",
+    "full_text_available": true,
+    "citation_count": 43,
+    "citations": [
+      "8579609d21ec0d6087b2009e5deb971ca27b676c",
+      "18688e2f24c6980a15b54fabaa997ac89f3dd8a9",
+      "bd83fc2a67e82013e3f63828e307b7c6b88b785c",
+      "f8d17b0cd04d5bdd7e0efdda58abb3371d0a9b3f",
+      "0f9ef52bea9544921d053ccc1a0daa6b06f7c14a",
+      "be45ba15f0ff9f70ac0b58b575416d596210dd37",
+      "1acdde89992c57937ba200740119e0c8b2eb85c0",
+      "25f47c2a50e57e3ad32fd579a0c884b1c8ae93aa",
+      "038aa4653e7a25e75b379cd38fdbd190a499e696",
+      "cbe4bf6d50707a761abdafec973ce73c71ec97f9",
+      "8d90350bdd1a7e6bafdbe9fc6a850d6d2297a8c4",
+      "353059ce0d7a77dec4229f2cde26c35876533b4d",
+      "589686cde20c194fbac79e711757bbf97836b2cd",
+      "3404f9b41dfa9eb084da071a398dadb2342bd205",
+      "4ef63e1515fede9013ed07eb85de71bc7c7e0b24",
+      "7426196e8fb386555a1748c8b093b3b6c6810ff7",
+      "834714928f93acf2190bb11208ea88671806d740",
+      "b2631cd154545c06ca3f324945a0e0b9ef5000e2",
+      "1f3e7e432f6efd720497f1f68838bdd1bc0d2390",
+      "5b6aeba584fd1f8765112392ea25ac2e6410e71a",
+      "292ebf75ae612561fcacb5951212fad14b2331a7",
+      "f7fb866286365dd1154276c37154ec93689915c2",
+      "cb64c11c8620f98fc067dd15479870ca8b367a22",
+      "9dd594103686c0952bc7d911a9af01df2d1d84ca",
+      "1f8646c9f05e6a839bb17c74f784b904dde2461d",
+      "564a83cac1b17a5ca378fa5705991fa3a13018e6",
+      "1372b654f77b919b83f1f4e09fa150bb3ee9f127",
+      "cb15ffe0f2144920d20b6589c73ad9457fe7a7bd",
+      "120339c70bceb7439359dec45c28470b0552654e",
+      "5d00c2f0c214628772d9bbca05a1d874347bc790",
+      "bf3405995045602745016fe38e73dcbf10f6a9b6",
+      "bcbf8af63cadd90a488f44ff25eed0347233da44",
+      "1cab8947264dd4c10cd21ee2623ed8109682b889",
+      "21006662c856c9b6c1693f0414d3297b2e5b1a59",
+      "b538e4e692dccca3ee523fdbb4aa6e2ae34182c5",
+      "ad70f79449565a3f287163b7630073b13d835dd0",
+      "d6c06607cf84b56b14c213405a1881bce5b26c3c",
+      "a30870bc8a5cd8f0164b7d47a93e3c33a57f4817",
+      "96f4f7141f7895f3c6770ecba2a9da380f5706e2",
+      "f25377c71def1d5c3adeaa3e88e03b2bb0e2ccf6",
+      "df24db7fffb858228cf2892598c71771088473c3",
+      "7e0b6254d6c204afd85dbdc11e53ad0bea3b7fed",
+      "924b00fb9082120f9c3dd0d9e488154d050a954c"
+    ],
+    "doi": "10.1002/cb.2308",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.59413/ajocs/v7.i3.47",
+    "arxiv_id": null,
+    "title": "Examining Effects of Social Media Influencer Marketing on Consumer Purchasing Behavior of Fruiticana Soft Drinks in Central Business District of Lusaka, Zambia",
+    "abstract": "This study examines the influence of social media influencer marketing on consumer purchasing behaviour for the Fruiticana soft drinks in the Central Business District of Lusaka, Zambia. Fruiticana is a product of Big Tree Company, a subsidiary of the Trade Kings group of companies. The fruiticana range of soft drinks was introduced to the market in 2019. The rapid proliferation of social media has significantly reshaped consumer decision‑making and transformed how firms engage with audiences. Within this evolving digital environment, influencer marketing has emerged as a prominent strategy for shaping consumer perceptions and stimulating purchase decisions. Despite its increasing adoption, empirical evidence on the effectiveness of influencer marketing in developing countries, particularly within Zambia’s beverage sector remains limited. This study addresses this gap by analysing how exposure to influencer‑generated content affects consumer engagement, perceptions, and purchasing behaviour. Guided by three objectives assessing consumer engagement with social media, measuring exposure to influencer‑generated content, and evaluating the effect of influencer marketing on purchasing behaviour—the study employed a mixed‑methods approach using a convergent parallel design grounded in a pragmatic research paradigm. Quantitative data were collected through structured questionnaires administered to 272 respondents selected using simple random sampling. Qualitative data were gathered through semi‑structured interviews with 27 purposively selected participants. Quantitative data were analysed using SPSS through descriptive statistics, correlation and regression analysis, whereas qualitative data were analysed thematically using NVivo. The results show that consumers exhibit moderate levels of social media engagement, characterised by frequent platform use but limited active interaction with influencer content. Although exposure to influencer‑generated content was relatively high, it was primarily passive and algorithm‑driven. Regression analysis revealed a statistically significant positive relationship between influencer exposure and purchasing behaviour (R² = 0.176, p < 0.001), indicating a moderate influence on purchase decisions. Qualitative findings further reveal that purchasing behaviour is often driven by curiosity and product trial rather than trust in influencers, with participants expressing skepticism toward influencer credibility. Trust was selective and more closely associated with perceived authenticity and relatability. Structural factors such as product availability and the limited visibility of local influencers also constrained purchasing behaviour. The study concludes that while influencer marketing significantly influences consumer purchasing behaviour, its effectiveness is conditional on engagement quality, credibility, authenticity, and contextual market factors.",
+    "authors": [
+      "Juliana Lungu",
+      "D. Mpolomoka"
+    ],
+    "year": 2026,
+    "venue": "African Journal of Commercial Studies",
+    "pdf_url": "https://ijcsacademia.com/index.php/journal/article/download/594/509",
+    "url": "https://www.semanticscholar.org/paper/aab25bc8f546c74065a51ac9d4d280bfb1e760fb",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.59413/ajocs/v7.i3.47",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.23958/ijssei/vol11-i05/386",
+    "arxiv_id": null,
+    "title": "DECODING CONSUMER TRUST: AN EMPIRICAL DIVE INTO THE KEY FACTORS SHAPING SOCIAL MEDIA INFLUENCER’S IMPACT",
+    "abstract": "This study aimed to examine how social media influencers influence consumer trust and purchase behavior. While previous studies have identified the broad impact of influencer marketing, this study sought to delve deeper into the specific factors related to influencers (influencer’s content, professional expertise, and personal image) that influence consumer trust and uncover how these factors impact their purchase behavior. To achieve the research objectives, a random sampling method was used to survey 311 participants who had experience in purchasing using social media in Ulaanbaatar city, and the results were analyzed using SPSS 27. The study also explored the relationships between various influencer characteristics and their ability to build consumer trust, while also considering demographic variables such as age, gender, and educational background. The results highlighted that certain attribute, such as the influencer’s attractiveness and credibility, had a more significant impact on consumer decision-making processes than others. Furthermore, the findings suggest that content quality and the perceived professionalism of influencers can directly influence consumers' likelihood to trust them and make purchases. The results of this study will provide advice to marketers and businesses using influencer marketing, helping them tailor their campaigns more effectively to boost consumer engagement and drive sales.",
+    "authors": [
+      "Urandelger Gantulga",
+      "Tsolmon Mashlai"
+    ],
+    "year": 2025,
+    "venue": "International Journal of Social Science and Economics Invention",
+    "pdf_url": "https://ijssei.in/index.php/ijssei/article/download/386/180",
+    "url": "https://www.semanticscholar.org/paper/c09a6371f8551bab1109b33b070707f9fc617940",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "93b3938e4a75bd13a8dc9cfda276e8d0ba93ca34"
+    ],
+    "doi": "10.23958/ijssei/vol11-i05/386",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.29070/0vy8nx64",
+    "arxiv_id": null,
+    "title": "Influencer Marketing and Consumer Decision-Making in Online Retail: A Social Media Perspective",
+    "abstract": "This study explores the impact of social media marketing on consumer decision-making within the online retail sector. With the growing influence of platforms like Instagram, Facebook, & YouTube, the research investigates whether social media interactions truly affect consumers' buying behaviors. Using a structured online questionnaire, data were collected from 591 respondents who actively engage in online shopping and social media use. The study adopted both exploratory and descriptive research designs. Descriptive statistics analyzed demographic patterns, while chi-square tests examined the relationship between social media engagement and offline purchase intent. Findings reveal that while social media enhances brand visibility & consumer interaction, it does not significantly influence consumers' in-store purchasing decisions based on web-based product research. Variables such as ad clicks, brand page visits, and feedback seeking on social media showed no statistically significant association with offline buying behavior. This research contributes to digital marketing strategies by indicating that while social media is effective for awareness and engagement, its direct impact on offline purchasing is limited. Marketers should consider more targeted and action-driven campaigns to bridge this gap.",
+    "authors": [
+      "Ravindra Kumar Kirti",
+      "Ankur Saxena"
+    ],
+    "year": 2025,
+    "venue": "Journal of Advances and Scholarly Researches in Allied Education",
+    "pdf_url": "https://ignited.in/index.php/jasrae/article/download/16041/31387",
+    "url": "https://www.semanticscholar.org/paper/d22175f4763bc0d8274db6c86f0931d88345d109",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "6b84ba59efaef1c39b28ac160d94ad817bfff355"
+    ],
+    "doi": "10.29070/0vy8nx64",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.58661/ijsse.v4i2.286",
+    "arxiv_id": null,
+    "title": "The Influence of Social Media Influencers on Consumer Decision-Making: A Comprehensive SEM Analysis",
+    "abstract": "In recent times, social media influencers and their marketing campaigns have gained significant popularity and attention. The aim of this study is to identify the extent to which social media influencers impact consumer decision-making and buying behaviors. The paper examines influencer marketing as a form of electronic word-of-mouth (eWOM) and how it affects the consumer purchase journey. Framework is developed using existing literature on topics like consumer decision-making, eWOM, opinion leadership, source credibility, and digital interaction. The methodology utilizes a deductive research approach with a cross-sectional quantitative survey. The target population comprises consumers in Karachi who regularly use social media. The study uses Structural equation modeling (SEM) analysis to identify the relationship between social media word mouth, quality of information, Digital interaction, Digital Attractiveness, and Digital interaction on consumer decision-making with the mediation effect of opinion leaders.    Convenience sampling is employed to collect data from over 150 respondents. The results provide empirical evidence that opinion leadership and source credibility significantly influence consumer decision-making when it comes to influencer marketing. This implies that the personality and perceived trustworthiness of the influencer matter more than their attractiveness or expertise. However, digital expertise is not found to have a positive effect. Overall, the findings highlight the need for brands to partner with credible influencers who can leverage their leadership to steer audience opinions and purchases. Future research can build on this by investigating negative eWOM, commercialism, and manipulating tactics used by influencers. The paper contributes to the growing research on social media marketing and how online opinion leaders shape consumer behaviors.",
+    "authors": [
+      "Noman Ahsan",
+      "Sobia Jamil Corresponding Author",
+      "Madiha Rais"
+    ],
+    "year": 2024,
+    "venue": "International Journal of Social Science &amp; Entrepreneurship",
+    "pdf_url": "https://doi.org/10.58661/ijsse.v4i2.286",
+    "url": "https://www.semanticscholar.org/paper/8dee8a266c6c29364f551571906e9927c554fb9a",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "898dc64a2758efc35e302ddccc52525c6e86f7f0",
+      "d72947636ecee1fab7f9a79ca30b7491ab5d4843"
+    ],
+    "doi": "10.58661/ijsse.v4i2.286",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.36948/ijfmr.2025.v07i03.44480",
+    "arxiv_id": null,
+    "title": "The Effect of Social Media on Consumer Behavior: A Survey on Influencer Marketing and Online Reviews",
+    "abstract": "Social media has transformed the way consumers interact with brands, gather information, and make purchasing decisions. The rise of social media has revolutionized marketing strategies, enabling brands to reach consumers through digital platforms. Influencer marketing and online reviews have emerged as two key components shaping consumer perceptions and decisions. We study how these factors affect consumer behavior, particularly in terms of trust, brand perception, and purchasing decisions. Social media impact the decision making process of consumers that when they purchase, how they purchase and why they purchase. The decision process involves Problem Recognition, Search of Information, Evaluation of alternatives, Final Decision and Post Purchase Behavior.\nThis paper explores the influence of social media on consumer behavior, with a focus on influencer marketing and online reviews. By analyzing existing literature and conducting a survey, this study examines how influencers shape consumer trust and purchase intentions, as well as the impact of online reviews on decision-making. The findings suggest that social media significantly affects consumer behavior, with influencer credibility and the authenticity of reviews playing crucial roles.",
+    "authors": [
+      "Preeti Verma",
+      "J. Verma"
+    ],
+    "year": 2025,
+    "venue": "International Journal For Multidisciplinary Research",
+    "pdf_url": "https://www.ijfmr.com/papers/2025/3/44480.pdf",
+    "url": "https://www.semanticscholar.org/paper/d3791cc5ebd63705c02fe9003be3c95be17f7118",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.36948/ijfmr.2025.v07i03.44480",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.24182/2073-6258-2024-23-4-64-76",
+    "arxiv_id": null,
+    "title": "The impact of social media on consumer purchasing behavior in the United States",
+    "abstract": "This study examines the impact of social media on consumers’ purchasing behavior using an integrated approach that combines theoretical frameworks, empirical data analysis, and advanced technological solutions. The study utilizes a mixed method approach combining quantitative analysis of user engagement metrics and qualitative assessment of content effectiveness. The main results indicate the significant influence of social proof, information cascades, and the echo chamber effect on consumer decision–making in digital environments. The study proposes a novel multifactor content optimization system (CMOS) that uses machine learning algorithms for semantic analysis, computer vision, virality prediction, and dynamic pricing. The implementation of CMOC can significantly improve marketing effectiveness and consumer engagement. This study contributes to the field by providing a holistic framework for understanding and optimizing social media marketing strategies, highlighting the importance of ethical considerations and creating true value in digital consumer interactions.",
+    "authors": [
+      "D. S. Gibson"
+    ],
+    "year": 2025,
+    "venue": "Scientific notes of the Russian academy of entrepreneurship",
+    "pdf_url": "https://www.scinotes.ru/jour/article/download/1091/890",
+    "url": "https://www.semanticscholar.org/paper/5ad04d4b89d4269a6764a102bd010d5ead70ccbb",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.24182/2073-6258-2024-23-4-64-76",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.62823/ijarcmss/09.02(i).8808",
+    "arxiv_id": null,
+    "title": "Impact of Social Media Marketing on Consumer Buying Behaviour - A Descriptive Study",
+    "abstract": "Social media marketing (SMM) has become a pervasive influence on how consumers recognize needs, search for information, evaluate alternatives, and make purchase decisions. Drawing on the Consumer Decision-Making Model, Uses and Gratifications Theory, stimulus organism response (SOR), and consumer engagement perspectives, this descriptive paper synthesizes current evidence on how SMM elements (entertainment, interaction, customization, trendiness, and electronic word-of-mouth) shape consumer attitudes, engagement, purchase intention, and actual buying behaviour. Empirical studies across industries and regions indicate that SMM builds brand awareness and consumer-based brand equity, stimulates online brand-related activities (COBRAs), strengthens trust and perceived value, and operates in tandem with influencer marketing and parasocial interactions to influence both planned and impulse purchases. The paper outlines a descriptive survey–content analysis design to map these relationships and concludes with theoretical and managerial implications, limitations, and directions for future research.",
+    "authors": [
+      "M. Meena",
+      "Saroj Kumar"
+    ],
+    "year": 2026,
+    "venue": "International Journal of Advanced Research in Commerce, Management &amp; Social Science",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/8bd96b5e8330ba8bf9ea2eee94dac9d9755ab91c",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.62823/ijarcmss/09.02(i).8808",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.63056/acad.004.03.0773",
+    "arxiv_id": null,
+    "title": "Effect of Social Media Influencer Marketing on Consumer Purchase Intention in Pakistan: The Mediating Role of Credibility and the Moderating Role of Trust",
+    "abstract": "This study aims to build a comprehensive understanding of the multi-dimensional dynamics that define influencer marketing within the unique socio-cultural context of Pakistan. At its core, the research examines how social media influencers influence the purchasing intentions of Pakistani consumers, with a focus on the nuanced and evolving nature of influencer-consumer interactions. Recognizing that intention formation is not a linear process, this study delves into the complex web of psychological, emotional, and social triggers activated by influencers through elements such as credibility, authenticity, trustworthiness, and commitment. Motivated by the growing relevance of influencer marketing in Pakistan’s digital economy, this research moves beyond theoretical inquiry to offer actionable insights for businesses. It examines how influencers strategically cultivate trust and authenticity to guide consumer behavior and decision-making processes. By analyzing these patterns, the study highlights both opportunities and challenges in executing culturally aligned influencer campaigns within Pakistan’s socio-economic framework. The findings contribute not only to academic discourse but also offer practical implications for brands seeking to leverage influencer marketing in a locally relevant and impactful manner.",
+    "authors": [
+      "Sharjeel Abdul Rahim",
+      "A. Iqbal",
+      "M. Ramish",
+      "Hira Hashmani",
+      "Muhammad Hassan Khan"
+    ],
+    "year": 2025,
+    "venue": "ACADEMIA International Journal for Social Sciences",
+    "pdf_url": "https://doi.org/10.63056/acad.004.03.0773",
+    "url": "https://www.semanticscholar.org/paper/0690dcede4462d663f7aa761e57af52603d60e88",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.63056/acad.004.03.0773",
+    "source": "semantic_scholar"
+  }
+]

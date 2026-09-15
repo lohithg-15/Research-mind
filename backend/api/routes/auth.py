@@ -3,9 +3,9 @@ Authentication routes — register and login with JWT tokens.
 """
 import uuid
 import logging
+import bcrypt
 from fastapi import APIRouter, HTTPException, status, Depends
-from pydantic import BaseModel, Field, EmailStr
-from passlib.context import CryptContext
+from pydantic import BaseModel, Field
 
 from backend.db.database import get_connection
 from backend.api.deps import create_access_token, get_current_user
@@ -13,8 +13,15 @@ from backend.api.deps import create_access_token, get_current_user
 logger = logging.getLogger("researchmind.api.auth")
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    """Hash a password using bcrypt."""
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+
+def verify_password(password: str, hashed: str) -> bool:
+    """Verify a password against a bcrypt hash."""
+    return bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8"))
 
 
 class RegisterRequest(BaseModel):
@@ -51,7 +58,7 @@ def register(req: RegisterRequest):
             )
 
         user_id = str(uuid.uuid4())
-        hashed = pwd_context.hash(req.password)
+        hashed = hash_password(req.password)
         conn.execute(
             "INSERT INTO users (id, email, hashed_password) VALUES (?, ?, ?)",
             (user_id, email, hashed),
@@ -81,7 +88,7 @@ def login(req: LoginRequest):
                 detail="Invalid email or password.",
             )
 
-        if not pwd_context.verify(req.password, row["hashed_password"]):
+        if not verify_password(req.password, row["hashed_password"]):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password.",
@@ -99,3 +106,4 @@ def login(req: LoginRequest):
 def get_me(user=Depends(get_current_user)):
     """Return the current authenticated user's info."""
     return {"user_id": user["user_id"], "email": user["email"]}
+

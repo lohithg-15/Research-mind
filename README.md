@@ -18,7 +18,9 @@ ResearchMind is an agentic AI system that automates systematic academic literatu
 | 💬 **QA Research Assistant** | Chat-based Q&A over collected papers (similar to Elicit) |
 | 🛡️ **Offline Resilience** | Committed fallback dataset + local file-based cache |
 | 🧪 **Mock Mode** | Runs fully without API keys using simulated Gemini responses |
-| 🔁 **Session Persistence** | Browser localStorage saves progress across page reloads |
+| 🔐 **JWT User Authentication** | Secure Register and Login modal with JWT tokens & 7-day session persistence |
+| 📜 **GPT-Style Research History** | ChatGPT-style dark sidebar; auto-saves research sessions to SQLite DB for logged-in users |
+| 🔁 **Session Persistence** | Browser localStorage saves active progress across page reloads |
 
 ---
 
@@ -47,6 +49,7 @@ User Query
 | **Vector Store** | ChromaDB (with hash-based fallback embeddings) |
 | **Graph** | NetworkX (MultiDiGraph) |
 | **Backend API** | FastAPI + Uvicorn |
+| **Database & Auth** | SQLite (`researchmind.db`) + JWT (`python-jose`, `bcrypt`) |
 | **Frontend** | Vite 8 + React 19 (glassmorphic dark-mode UI) |
 | **PDF Export** | ReportLab |
 | **DOCX Export** | python-docx |
@@ -97,10 +100,13 @@ Research-Mind/
 │   ├── __init__.py
 │   ├── api/                        # FastAPI server & routes
 │   │   ├── __init__.py
+│   │   ├── deps.py                 # JWT auth dependency helpers
 │   │   ├── main.py                 # FastAPI app, CORS, /health, /status endpoints
 │   │   ├── jobs.py                 # In-memory jobs dictionary (shared state)
 │   │   └── routes/
 │   │       ├── __init__.py
+│   │       ├── auth.py             # POST /auth/register, /auth/login, GET /auth/me
+│   │       ├── history.py          # GET /history, GET /history/{id}, DELETE /history/{id}
 │   │       ├── query.py            # POST /query, GET /results, POST /qa endpoints
 │   │       └── export.py           # GET /export/{job_id} — PDF/DOCX download
 │   ├── agents/                     # 6-agent pipeline stages
@@ -124,7 +130,9 @@ Research-Mind/
 │   │   ├── cache.py                # File-based JSON cache + exponential backoff
 │   │   ├── vector_store.py         # ChromaDB vector store wrapper
 │   │   └── graph_store.py          # NetworkX graph builder (CITES, SIMILAR_TOPIC)
-│   ├── db/                         # Runtime data directory (auto-created, gitignored)
+│   ├── db/                         # Database module & runtime data directory
+│   │   ├── __init__.py             # Package init
+│   │   ├── database.py             # SQLite database init & query functions
 │   │   ├── cache/                  # Cached API responses
 │   │   ├── chroma/                 # ChromaDB persistent storage
 │   │   └── exports/                # Generated PDF/DOCX report files
@@ -143,7 +151,11 @@ Research-Mind/
 │       ├── App.jsx                 # Main dashboard, tab routing & API calls
 │       ├── App.css                 # App-level overrides
 │       ├── index.css               # Design system & glassmorphic styles
+│       ├── context/
+│       │   └── AuthContext.jsx     # JWT authentication state & functions
 │       └── components/
+│           ├── AuthModal.jsx       # Login & Registration modal dialog
+│           ├── HistorySidebar.jsx  # ChatGPT-style research session history sidebar
 │           ├── QueryForm.jsx       # Research query input & filters
 │           ├── ProgressTracker.jsx # Live agent status tracker
 │           ├── OverviewPanel.jsx   # Results overview & gap cards
@@ -300,6 +312,11 @@ GEMINI_API_KEY=your-gemini-api-key-here
 # Without this key, the API applies aggressive rate limits (1 req/s).
 # Get a free key at: https://www.semanticscholar.org/product/api
 SEMANTIC_SCHOLAR_API_KEY=your-semantic-scholar-api-key-here
+
+# ── JWT Authentication Configuration ──────────────────────────────
+JWT_SECRET_KEY=change-this-to-a-secure-random-secret-key-in-production
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=10080
 ```
 
 #### LLM Provider
@@ -369,17 +386,23 @@ Expected response:
 
 ## 📡 API Endpoints
 
-| Method | URL | Description |
-|---|---|---|
-| `GET` | `/health` | Health check — confirms server is up |
-| `POST` | `/query` | Submit a research topic to start the 6-agent pipeline |
-| `GET` | `/status/{job_id}` | Poll live execution progress of each agent |
-| `GET` | `/results/{job_id}` | Fetch final results (papers, gaps, graph, report) |
-| `POST` | `/qa` | Ask a question about papers from a completed job |
-| `GET` | `/export/{job_id}?format=pdf` | Download the generated PDF report |
-| `GET` | `/export/{job_id}?format=docx` | Download the generated DOCX report |
-| `GET` | `/docs` | Interactive Swagger UI — explore & test all routes |
-| `GET` | `/redoc` | ReDoc API documentation |
+| Method | URL | Auth Required | Description |
+|---|---|---|---|
+| `GET` | `/health` | No | Health check — confirms server is up |
+| `POST` | `/auth/register` | No | Create user account, returns JWT token |
+| `POST` | `/auth/login` | No | Authenticate user, returns JWT token |
+| `GET` | `/auth/me` | **Yes** | Get current authenticated user details |
+| `POST` | `/query` | Optional | Submit research topic to start 6-agent pipeline (saves to history if authenticated) |
+| `GET` | `/status/{job_id}` | No | Poll live execution progress of each agent |
+| `GET` | `/results/{job_id}` | No | Fetch final results (papers, gaps, graph, report) |
+| `GET` | `/history` | **Yes** | List all saved research sessions for current user |
+| `GET` | `/history/{id}` | **Yes** | Get full details of a specific saved session |
+| `DELETE` | `/history/{id}` | **Yes** | Delete a saved research session |
+| `POST` | `/qa` | No | Ask a question about papers from a completed job |
+| `GET` | `/export/{job_id}?format=pdf` | No | Download the generated PDF report |
+| `GET` | `/export/{job_id}?format=docx` | No | Download the generated DOCX report |
+| `GET` | `/docs` | No | Interactive Swagger UI — explore & test all routes |
+| `GET` | `/redoc` | No | ReDoc API documentation |
 
 ### Request/Response Examples
 
@@ -637,6 +660,8 @@ ResearchMind is designed to remain usable even without live API access:
 
 | Component | File | Key Technical Details |
 |---|---|---|
+| `AuthModal` | `AuthModal.jsx` | Glassmorphic modal with login/registration tab toggles, error feedback, and JWT authentication handling. |
+| `HistorySidebar` | `HistorySidebar.jsx` | White glassmorphic sidebar with close `X` button, date-grouped research sessions, search bar, and session deletion. |
 | `QueryForm` | `QueryForm.jsx` | Controlled inputs for topic, year range (number inputs), venue type (`<select>`), and comma-separated keywords. Submits via `App.jsx` `handleSubmit()`. |
 | `ProgressTracker` | `ProgressTracker.jsx` | Renders each of the 6 agent statuses (`pending`/`running`/`done`/`error`) with colour-coded badges and pulse animation for `running`. |
 | `OverviewPanel` | `OverviewPanel.jsx` | Summary stat cards (paper count, gap count, sub-queries) and gap claim tiles with description + citation density. |
@@ -1096,8 +1121,8 @@ sequenceDiagram
 
 | Limitation | Impact | Possible Future Improvement |
 |---|---|---|
-| **In-memory job store** | All jobs and results are lost on server restart | Persist to SQLite or Redis |
-| **Single-user design** | No authentication, authorisation, or user isolation | Add JWT auth + per-user job namespacing |
+| **In-memory job store** | Active job status stored in memory; completed sessions auto-persisted to SQLite for authenticated users | Full persistent task queue via Redis/Celery |
+| **Authentication & Auth** | Implemented! Supports optional JWT Auth + per-user SQLite session history | Add multi-tenant RBAC and OAuth2 (Google/GitHub login) |
 | **CORS `allow_origins=["*"]`** | Insecure for production deployment | Restrict to specific frontend origin |
 | **No WebSocket** | Frontend polls every 2s instead of receiving push updates | Add WebSocket channel for real-time agent status |
 | **Sequential agent execution** | All 6 agents run in strict sequence; no parallelism within the pipeline | Use LangGraph branching for parallel Search + Extraction |

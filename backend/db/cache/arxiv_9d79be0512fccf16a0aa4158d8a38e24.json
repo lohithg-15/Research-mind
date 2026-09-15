@@ -1,0 +1,311 @@
+[
+  {
+    "id": "2007.04193",
+    "arxiv_id": "2007.04193",
+    "title": "Mobility driven Cloud-Fog-Edge Framework for Location-aware Services: A Comprehensive Review",
+    "abstract": "With the pervasiveness of IoT devices, smart-phones and improvement of location-tracking technologies huge volume of heterogeneous geo-tagged (location specific) data is generated which facilitates several location-aware services. The analytics with this spatio-temporal (having location and time dimensions) datasets provide varied important services such as, smart transportation, emergency services (health-care, national defence or urban planning). While cloud paradigm is suitable for the capability of storage and computation, the major bottleneck is network connectivity loss. In time-critical application, where real-time response is required for emergency service-provisioning, such connectivity issues increases the latency and thus affects the overall quality of system (QoS). To overcome the issue, fog/ edge topology has emerged, where partial computation is carried out in the edge of the network to reduce the delay in communication. Such fog/ edge based system complements the cloud technology and extends the features of the system. This chapter discusses cloud-fog-edge based hierarchical collaborative framework, where several components are deployed to improve the QoS. On the other side. mobility is another critical factor to enhance the efficacy of such location-aware service provisioning. Therefore, this chapter discusses the concerns and challenges associated with mobility-driven cloud-fog-edge based framework to provide several location-aware services to the end-users efficiently.",
+    "authors": [
+      "Shreya Ghosh",
+      "Soumya Ghosh"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2007.04193v2",
+    "url": "https://arxiv.org/abs/2007.04193",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1706.06535",
+    "arxiv_id": "1706.06535",
+    "title": "Combining edge and cloud computing for mobility analytics",
+    "abstract": "Mobility analytics using data generated from the Internet of Mobile Things (IoMT) is facing many challenges which range from the ingestion of data streams coming from a vast number of fog nodes and IoMT devices to avoiding overflowing the cloud with useless massive data streams that can trigger bottlenecks [1]. Managing data flow is becoming an important part of the IoMT because it will dictate in which platform analytical tasks should run in the future. Data flows are usually a sequence of out-of-order tuples with a high data input rate, and mobility analytics requires a real-time flow of data in both directions, from the edge to the cloud, and vice-versa. Before pulling the data streams to the cloud, edge data stream processing is needed for detecting missing, broken, and duplicated tuples in addition to recognize tuples whose arrival time is out of order. Analytical tasks such as data filtering, data cleaning and low-level data contextualization can be executed at the edge of a network. In contrast, more complex analytical tasks such as graph processing can be deployed in the cloud, and the results of ad-hoc queries and streaming graph analytics can be pushed to the edge as needed by a user application. Graphs are efficient representations used in mobility analytics because they unify knowledge about connectivity, proximity and interaction among moving things. This poster describes the preliminary results from our experimental prototype developed for supporting transit systems, in which edge and cloud computing are combined to process transit data streams forwarded from fog nodes into a cloud. The motivation of this research is to understand how to perform meaningfulness mobility analytics on transit feeds by combining cloud and fog computing architectures in order to improve fleet management, mass transit and remote asset monitoring",
+    "authors": [
+      "Ikechukwu Maduako",
+      "Hung Cao",
+      "Lilian Hernandez",
+      "Monica Wachowicz"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1706.06535v1",
+    "url": "https://arxiv.org/abs/1706.06535",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2302.10681",
+    "arxiv_id": "2302.10681",
+    "title": "FrankenSplit: Efficient Neural Feature Compression with Shallow Variational Bottleneck Injection for Mobile Edge Computing",
+    "abstract": "The rise of mobile AI accelerators allows latency-sensitive applications to execute lightweight Deep Neural Networks (DNNs) on the client side. However, critical applications require powerful models that edge devices cannot host and must therefore offload requests, where the high-dimensional data will compete for limited bandwidth. This work proposes shifting away from focusing on executing shallow layers of partitioned DNNs. Instead, it advocates concentrating the local resources on variational compression optimized for machine interpretability. We introduce a novel framework for resource-conscious compression models and extensively evaluate our method in an environment reflecting the asymmetric resource distribution between edge devices and servers. Our method achieves 60% lower bitrate than a state-of-the-art SC method without decreasing accuracy and is up to 16x faster than offloading with existing codec standards.",
+    "authors": [
+      "Alireza Furutanpey",
+      "Philipp Raith",
+      "Schahram Dustdar"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2302.10681v4",
+    "url": "https://arxiv.org/abs/2302.10681",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2009.03598",
+    "arxiv_id": "2009.03598",
+    "title": "Green-aware Mobile Edge Computing for IoT: Challenges, Solutions and Future Directions",
+    "abstract": "The development of Internet of Things (IoT) technology enables the rapid growth of connected smart devices and mobile applications. However, due to the constrained resources and limited battery capacity, there are bottlenecks when utilizing the smart devices. Mobile edge computing (MEC) offers an attractive paradigm to handle this challenge. In this work, we concentrate on the MEC application for IoT and deal with the energy saving objective via offloading workloads between cloud and edge. In this regard, we firstly identify the energy-related challenges in MEC. Then we present a green-aware framework for MEC to address the energy-related challenges, and provide a generic model formulation for the green MEC. We also discuss some state-of-the-art workloads offloading approaches to achieve green IoT and compare them in comprehensive perspectives. Finally, some future research directions related to energy efficiency in MEC are given.",
+    "authors": [
+      "Minxian Xu",
+      "Chengxi Gao",
+      "Shashikant Ilager",
+      "Huaming Wu",
+      "Chengzhong Xu",
+      "Rajkumar Buyya"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2009.03598v1",
+    "url": "https://arxiv.org/abs/2009.03598",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1705.08449",
+    "arxiv_id": "1705.08449",
+    "title": "Developing an edge computing platform for real-time descriptive analytics",
+    "abstract": "The Internet of Mobile Things encompasses stream data being generated by sensors, network communications that pull and push these data streams, as well as running processing and analytics that can effectively leverage actionable information for transportation planning, management, and business advantage. Edge computing emerges as a new paradigm that decentralizes the communication, computation, control and storage resources from the cloud to the edge of the network. This paper proposes an edge computing platform where mobile edge nodes are physical devices deployed on a transit bus where descriptive analytics is used to uncover meaningful patterns from real-time transit data streams. An application experiment is used to evaluate the advantages and disadvantages of our proposed platform to support descriptive analytics at a mobile edge node and generate actionable information to transit managers.",
+    "authors": [
+      "Hung Cao",
+      "Monica Wachowicz",
+      "Sangwhan Cha"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1705.08449v4",
+    "url": "https://arxiv.org/abs/1705.08449",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1808.01977",
+    "arxiv_id": "1808.01977",
+    "title": "Deep Reinforcement Learning for Online Computation Offloading in Wireless Powered Mobile-Edge Computing Networks",
+    "abstract": "Wireless powered mobile-edge computing (MEC) has recently emerged as a promising paradigm to enhance the data processing capability of low-power networks, such as wireless sensor networks and internet of things (IoT). In this paper, we consider a wireless powered MEC network that adopts a binary offloading policy, so that each computation task of wireless devices (WDs) is either executed locally or fully offloaded to an MEC server. Our goal is to acquire an online algorithm that optimally adapts task offloading decisions and wireless resource allocations to the time-varying wireless channel conditions. This requires quickly solving hard combinatorial optimization problems within the channel coherence time, which is hardly achievable with conventional numerical optimization methods. To tackle this problem, we propose a Deep Reinforcement learning-based Online Offloading (DROO) framework that implements a deep neural network as a scalable solution that learns the binary offloading decisions from the experience. It eliminates the need of solving combinatorial optimization problems, and thus greatly reduces the computational complexity especially in large-size networks. To further reduce the complexity, we propose an adaptive procedure that automatically adjusts the parameters of the DROO algorithm on the fly. Numerical results show that the proposed algorithm can achieve near-optimal performance while significantly decreasing the computation time by more than an order of magnitude compared with existing optimization methods. For example, the CPU execution latency of DROO is less than $0.1$ second in a $30$-user network, making real-time and optimal offloading truly viable even in a fast fading environment.",
+    "authors": [
+      "Liang Huang",
+      "Suzhi Bi",
+      "Ying-Jun Angela Zhang"
+    ],
+    "year": 2018,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1808.01977v6",
+    "url": "https://arxiv.org/abs/1808.01977",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2306.11113",
+    "arxiv_id": "2306.11113",
+    "title": "Learn to Accumulate Evidence from All Training Samples: Theory and Practice",
+    "abstract": "Evidential deep learning, built upon belief theory and subjective logic, offers a principled and computationally efficient way to turn a deterministic neural network uncertainty-aware. The resultant evidential models can quantify fine-grained uncertainty using the learned evidence. To ensure theoretically sound evidential models, the evidence needs to be non-negative, which requires special activation functions for model training and inference. This constraint often leads to inferior predictive performance compared to standard softmax models, making it challenging to extend them to many large-scale datasets. To unveil the real cause of this undesired behavior, we theoretically investigate evidential models and identify a fundamental limitation that explains the inferior performance: existing evidential activation functions create zero evidence regions, which prevent the model to learn from training samples falling into such regions. A deeper analysis of evidential activation functions based on our theoretical underpinning inspires the design of a novel regularizer that effectively alleviates this fundamental limitation. Extensive experiments over many challenging real-world datasets and settings confirm our theoretical findings and demonstrate the effectiveness of our proposed approach.",
+    "authors": [
+      "Deep Pandey",
+      "Qi Yu"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2306.11113v2",
+    "url": "https://arxiv.org/abs/2306.11113",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2105.04026",
+    "arxiv_id": "2105.04026",
+    "title": "The Modern Mathematics of Deep Learning",
+    "abstract": "We describe the new field of mathematical analysis of deep learning. This field emerged around a list of research questions that were not answered within the classical framework of learning theory. These questions concern: the outstanding generalization power of overparametrized neural networks, the role of depth in deep architectures, the apparent absence of the curse of dimensionality, the surprisingly successful optimization performance despite the non-convexity of the problem, understanding what features are learned, why deep architectures perform exceptionally well in physical problems, and which fine aspects of an architecture affect the behavior of a learning task in which way. We present an overview of modern approaches that yield partial answers to these questions. For selected approaches, we describe the main ideas in more detail.",
+    "authors": [
+      "Julius Berner",
+      "Philipp Grohs",
+      "Gitta Kutyniok",
+      "Philipp Petersen"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2105.04026v2",
+    "url": "https://arxiv.org/abs/2105.04026",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2502.06963",
+    "arxiv_id": "2502.06963",
+    "title": "Intelligent Offloading in Vehicular Edge Computing: A Comprehensive Review of Deep Reinforcement Learning Approaches and Architectures",
+    "abstract": "The increasing complexity of Intelligent Transportation Systems (ITS) has led to significant interest in computational offloading to external infrastructures such as edge servers, vehicular nodes, and UAVs. These dynamic and heterogeneous environments pose challenges for traditional offloading strategies, prompting the exploration of Reinforcement Learning (RL) and Deep Reinforcement Learning (DRL) as adaptive decision-making frameworks. This survey presents a comprehensive review of recent advances in DRL-based offloading for vehicular edge computing (VEC). We classify and compare existing works based on learning paradigms (e.g., single-agent, multi-agent), system architectures (e.g., centralized, distributed, hierarchical), and optimization objectives (e.g., latency, energy, fairness). Furthermore, we analyze how Markov Decision Process (MDP) formulations are applied and highlight emerging trends in reward design, coordination mechanisms, and scalability. Finally, we identify open challenges and outline future research directions to guide the development of robust and intelligent offloading strategies for next-generation ITS.",
+    "authors": [
+      "Ashab Uddin",
+      "Ahmed Hamdi Sakr",
+      "Ning Zhang"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2502.06963v3",
+    "url": "https://arxiv.org/abs/2502.06963",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2301.00942",
+    "arxiv_id": "2301.00942",
+    "title": "Deep Learning and Computational Physics (Lecture Notes)",
+    "abstract": "These notes were compiled as lecture notes for a course developed and taught at the University of the Southern California. They should be accessible to a typical engineering graduate student with a strong background in Applied Mathematics. The main objective of these notes is to introduce a student who is familiar with concepts in linear algebra and partial differential equations to select topics in deep learning. These lecture notes exploit the strong connections between deep learning algorithms and the more conventional techniques of computational physics to achieve two goals. First, they use concepts from computational physics to develop an understanding of deep learning algorithms. Not surprisingly, many concepts in deep learning can be connected to similar concepts in computational physics, and one can utilize this connection to better understand these algorithms. Second, several novel deep learning algorithms can be used to solve challenging problems in computational physics. Thus, they offer someone who is interested in modeling a physical phenomena with a complementary set of tools.",
+    "authors": [
+      "Deep Ray",
+      "Orazio Pinti",
+      "Assad A. Oberai"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2301.00942v1",
+    "url": "https://arxiv.org/abs/2301.00942",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1701.01090",
+    "arxiv_id": "1701.01090",
+    "title": "A Survey on Mobile Edge Computing: The Communication Perspective",
+    "abstract": "Driven by the visions of Internet of Things and 5G communications, recent years have seen a paradigm shift in mobile computing, from the centralized Mobile Cloud Computing towards Mobile Edge Computing (MEC). The main feature of MEC is to push mobile computing, network control and storage to the network edges (e.g., base stations and access points) so as to enable computation-intensive and latency-critical applications at the resource-limited mobile devices. MEC promises dramatic reduction in latency and mobile energy consumption, tackling the key challenges for materializing 5G vision. The promised gains of MEC have motivated extensive efforts in both academia and industry on developing the technology. A main thrust of MEC research is to seamlessly merge the two disciplines of wireless communications and mobile computing, resulting in a wide-range of new designs ranging from techniques for computation offloading to network architectures. This paper provides a comprehensive survey of the state-of-the-art MEC research with a focus on joint radio-and-computational resource management. We also present a research outlook consisting of a set of promising directions for MEC research, including MEC system deployment, cache-enabled MEC, mobility management for MEC, green MEC, as well as privacy-aware MEC. Advancements in these directions will facilitate the transformation of MEC from theory to practice. Finally, we introduce recent standardization efforts on MEC as well as some typical MEC application scenarios.",
+    "authors": [
+      "Yuyi Mao",
+      "Changsheng You",
+      "Jun Zhang",
+      "Kaibin Huang",
+      "Khaled B. Letaief"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1701.01090v4",
+    "url": "https://arxiv.org/abs/1701.01090",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2412.00160",
+    "arxiv_id": "2412.00160",
+    "title": "How reproducible are data-driven subtypes of Alzheimer's disease atrophy?",
+    "abstract": "Alzheimer's disease (AD) exhibits substantial clinical and biological heterogeneity, complicating efforts in treatment and intervention development. While new computational methods offer insights into AD progression, the reproducibility of these subtypes across datasets remains understudied, particularly concerning the robustness of subtype definitions when validated on diverse databases. This study evaluates the consistency of AD progression subtypes identified by the Subtype and Stage Inference (SuStaIn) algorithm using T1-weighted MRI data across 5,444 subjects from ANMerge, OASIS, and ADNI datasets, forming four independent cohorts. Each cohort was analyzed under two conditions: one using the full cohort, including cognitively normal controls, and another excluding controls to test subtype robustness. Results confirm the three primary atrophy subtypes identified in earlier studies: Typical, Cortical, and Subcortical, as well as the emergence of rare and atypical AD variants such as posterior cortical atrophy (PCA). Notably, each subtype displayed varying robustness to the inclusion of controls, with certain subtypes, like Subcortical, more influenced by cohort composition. This investigation underscores SuStaIn's reliability for defining stable AD subtypes and suggests its utility in clinical stratification for trials and diagnosis. However, our findings also highlight the need for improved dataset diversity, particularly in terms of ethnic representation, to enhance generalizability and support broader clinical application.",
+    "authors": [
+      "Emma Prevot",
+      "Cameron Shand",
+      "Neil Oxtoby",
+      "for Alzheimer's Disease Neuroimaging Initiative"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.00160v1",
+    "url": "https://arxiv.org/abs/2412.00160",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2409.20247",
+    "arxiv_id": "2409.20247",
+    "title": "Resource Allocation for Stable LLM Training in Mobile Edge Computing",
+    "abstract": "As mobile devices increasingly become focal points for advanced applications, edge computing presents a viable solution to their inherent computational limitations, particularly in deploying large language models (LLMs). However, despite the advancements in edge computing, significant challenges remain in efficient training and deploying LLMs due to the computational demands and data privacy concerns associated with these models. This paper explores a collaborative training framework that integrates mobile users with edge servers to optimize resource allocation, thereby enhancing both performance and efficiency. Our approach leverages parameter-efficient fine-tuning (PEFT) methods, allowing mobile users to adjust the initial layers of the LLM while edge servers handle the more demanding latter layers. Specifically, we formulate a multi-objective optimization problem to minimize the total energy consumption and delay during training. We also address the common issue of instability in model performance by incorporating stability enhancements into our objective function. Through novel fractional programming technique, we achieve a stationary point for the formulated problem. Simulations demonstrate that our method reduces the energy consumption as well as the latency, and increases the reliability of LLMs across various mobile settings.",
+    "authors": [
+      "Chang Liu",
+      "Jun Zhao"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2409.20247v1",
+    "url": "https://arxiv.org/abs/2409.20247",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1801.05610",
+    "arxiv_id": "1801.05610",
+    "title": "A Taxonomy for Management and Optimization of Multiple Resources in Edge Computing",
+    "abstract": "Edge computing is promoted to meet increasing performance needs of data-driven services using computational and storage resources close to the end devices, at the edge of the current network. To achieve higher performance in this new paradigm one has to consider how to combine the efficiency of resource usage at all three layers of architecture: end devices, edge devices, and the cloud. While cloud capacity is elastically extendable, end devices and edge devices are to various degrees resource-constrained. Hence, an efficient resource management is essential to make edge computing a reality. In this work, we first present terminology and architectures to characterize current works within the field of edge computing. Then, we review a wide range of recent articles and categorize relevant aspects in terms of 4 perspectives: resource type, resource management objective, resource location, and resource use. This taxonomy and the ensuing analysis is used to identify some gaps in the existing research. Among several research gaps, we found that research is less prevalent on data, storage, and energy as a resource, and less extensive towards the estimation, discovery and sharing objectives. As for resource types, the most well-studied resources are computation and communication resources. Our analysis shows that resource management at the edge requires a deeper understanding of how methods applied at different levels and geared towards different resource types interact. Specifically, the impact of mobility and collaboration schemes requiring incentives are expected to be different in edge architectures compared to the classic cloud solutions. Finally, we find that fewer works are dedicated to the study of non-functional properties or to quantifying the footprint of resource management techniques, including edge-specific means of migrating data and services.",
+    "authors": [
+      "Klervie Toczé",
+      "Simin Nadjm-Tehrani"
+    ],
+    "year": 2018,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1801.05610v3",
+    "url": "https://arxiv.org/abs/1801.05610",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2302.10473",
+    "arxiv_id": "2302.10473",
+    "title": "Oriented object detection in optical remote sensing images using deep learning: a survey",
+    "abstract": "Oriented object detection is a fundamental yet challenging task in remote sensing (RS), aiming to locate and classify objects with arbitrary orientations. Recent advancements in deep learning have significantly enhanced the capabilities of oriented object detection methods. Given the rapid development of this field, a comprehensive survey of the recent advances in oriented object detection is presented in this paper. Specifically, we begin by tracing the technical evolution from horizontal object detection to oriented object detection and highlighting the specific related challenges, including feature misalignment, spatial misalignment, oriented bounding box (OBB) regression problems, and common issues encountered in RS. Subsequently, we further categorize the existing methods into detection frameworks, OBB regression techniques, feature representation approaches, and solutions to common issues and provide an in-depth discussion of how these methods address the above challenges. In addition, we cover several publicly available datasets and evaluation protocols. Furthermore, we provide a comprehensive comparison and analysis involving the state-of-the-art methods. Toward the end of this paper, we identify several future directions for oriented object detection research.",
+    "authors": [
+      "Kun Wang",
+      "Zi Wang",
+      "Zhang Li",
+      "Ang Su",
+      "Xichao Teng",
+      "Erting Pan",
+      "Minhao Liu",
+      "Qifeng Yu"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2302.10473v6",
+    "url": "https://arxiv.org/abs/2302.10473",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

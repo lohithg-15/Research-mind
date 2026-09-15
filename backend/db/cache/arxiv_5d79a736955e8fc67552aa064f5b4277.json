@@ -1,0 +1,160 @@
+[
+  {
+    "id": "2504.16021",
+    "arxiv_id": "2504.16021",
+    "title": "Navigating the State of Cognitive Flow: Context-Aware AI Interventions for Effective Reasoning Support",
+    "abstract": "Flow theory describes an optimal cognitive state where individuals experience deep focus and intrinsic motivation when a task's difficulty aligns with their skill level. In AI-augmented reasoning, interventions that disrupt the state of cognitive flow can hinder rather than enhance decision-making. This paper proposes a context-aware cognitive augmentation framework that adapts interventions based on three key contextual factors: type, timing, and scale. By leveraging multimodal behavioral cues (e.g., gaze behavior, typing hesitation, interaction speed), AI can dynamically adjust cognitive support to maintain or restore flow. We introduce the concept of cognitive flow, an extension of flow theory in AI-augmented reasoning, where interventions are personalized, adaptive, and minimally intrusive. By shifting from static interventions to context-aware augmentation, our approach ensures that AI systems support deep engagement in complex decision-making and reasoning without disrupting cognitive immersion.",
+    "authors": [
+      "Dinithi Dissanayake",
+      "Suranga Nanayakkara"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2504.16021v1",
+    "url": "https://arxiv.org/abs/2504.16021",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2606.24322",
+    "arxiv_id": "2606.24322",
+    "title": "Securing LLM-Agent Long-Term Memory Against Poisoning: Non-Malleable, Origin-Bound Authority with Machine-Checked Guarantees",
+    "abstract": "LLM agents increasingly rely on persistent long-term memory, which creates a critical vulnerability that we study here: memory poisoning. An adversary can store untrusted content in one session that later steers a consequential action, such as a payment, a setting change, or data exfiltration, in a future session. Existing defenses base a memory item's authority to act on either its content (detection or trust-scoring) or its derivation history (lineage). We show that both signals are malleable. An attacker can launder an untrusted origin through three channels specific to LLM agents: the agent's own summarization, a trusted-tool echo, and manufactured corroboration. Each makes the content look benign and breaks or flips its derivation edge to ``trusted.'' We formalize malleability for the memory write-retrieve-act pipeline and prove a machine-checked separation theorem. No content- or lineage-based defense is sound under laundering (T1), write-time origin binding is necessary (T2), and non-malleable origin-bound authority with Sybil-resistant corroboration-gated elevation is sufficient (T3). Our construction, TMA-NM (Tamper-evident Memory Authority, Non-Malleable), instantiates non-malleable information-flow control (IFC) for LLM-agent memory. A cross-defense, cross-attack, and cross-model benchmark over eight frontier models shows that existing defenses fail exactly where the theory predicts (up to 68% laundering attack-success), while TMA-NM reaches 0% attack success on both direct and laundering attacks across all models and channels, at full legitimate utility. We release the benchmark, harness, and machine-checked TLA+ models to support reproducibility.",
+    "authors": [
+      "Yedidel Louck"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2606.24322v1",
+    "url": "https://arxiv.org/abs/2606.24322",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2505.07486",
+    "arxiv_id": "2505.07486",
+    "title": "Shots and Boosters: Exploring the Use of Combined Prebunking Interventions to Raise Critical Thinking and Create Long-Term Protection Against Misinformation",
+    "abstract": "The problem of how to effectively mitigate the flow of misinformation remains a significant challenge. The classical approach to this is public disapproval of claims or \"debunking.\" The approach is still widely used on social media, but it has some severe limitations in terms of applicability and efficiency. An alternative strategy is to enhance individuals' critical thinking through educational interventions. Instead of merely disproving misinformation, these approaches aim to strengthen users' reasoning skills, enabling them to evaluate and reject false information independently. In this position paper, we explore a combination of intervention methods designed to improve critical thinking in the context of online media consumption. We highlight the role of AI in supporting different stages of these interventions and present a design concept that integrates AI-driven strategies to foster critical reasoning and media literacy.",
+    "authors": [
+      "Huiyun Tang",
+      "Anastasia Sergeeva"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2505.07486v1",
+    "url": "https://arxiv.org/abs/2505.07486",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2602.06413",
+    "arxiv_id": "2602.06413",
+    "title": "Intrinsic Stability Limits of Autoregressive Reasoning: Structural Consequences for Long-Horizon Execution",
+    "abstract": "Large language models (LLMs) demonstrate remarkable reasoning capabilities, yet their performance often deteriorates sharply in long-horizon tasks, exhibiting systematic breakdown beyond certain scales. Conventional explanations primarily attribute this phenomenon to task complexity, such as combinatorial search explosion or long-term credit assignment challenges. In this work, we argue that these explanations are incomplete: even in linear, unbranched tasks without semantic ambiguity, autoregressive execution is subject to an intrinsic stability limit. We propose that the fundamental constraint on long-horizon reasoning arises from process-level instability in autoregressive generation rather than solely from search or task complexity, reframing long-horizon reasoning as a problem of structural governance. We derive Theorem~A, showing that decision advantage in single-path autoregressive reasoning decays exponentially with execution length, imposing a fundamental bound on maintainable reasoning chains. This result implies a structural consequence: stable long-horizon reasoning requires discrete segmentation, naturally inducing graph-like execution structures such as directed acyclic graphs (DAGs). Empirical studies in both synthetic environments and real TextWorld tasks reveal observable performance cliffs consistent with theoretical predictions. Our findings provide a dynamical perspective on long-horizon reasoning failure and suggest new limitations on maintaining long-term coherence under purely autoregressive architectures. Furthermore, we highlight that short-horizon evaluation protocols may obscure structural instability, indicating a potential shift from scaling toward structured governance in future reasoning systems.",
+    "authors": [
+      "Hsien-Jyh Liao"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2602.06413v1",
+    "url": "https://arxiv.org/abs/2602.06413",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2602.12311",
+    "arxiv_id": "2602.12311",
+    "title": "Perceptual Self-Reflection in Agentic Physics Simulation Code Generation",
+    "abstract": "We present a multi-agent framework for generating physics simulation code from natural language descriptions, featuring a novel perceptual self-reflection mechanism for validation. The system employs four specialized agents: a natural language interpreter that converts user requests into physics-based descriptions; a technical requirements generator that produces scaled simulation parameters; a physics code generator with automated self-correction; and a physics validator that implements perceptual self-reflection. The key innovation is perceptual validation, which analyzes rendered animation frames using a vision-capable language model rather than inspecting code structure directly. This approach addresses the ``oracle gap'' where syntactically correct code produces physically incorrect behavior--a limitation that conventional testing cannot detect. We evaluate the system across seven domains including classical mechanics, fluid dynamics, thermodynamics, electromagnetics, wave physics, reaction-diffusion systems, and non-physics data visualization. The perceptual self-reflection architecture demonstrates substantial improvement over single-shot generation baselines, with the majority of tested scenarios achieving target physics accuracy thresholds. The system exhibits robust pipeline stability with consistent code self-correction capability, operating at approximately \\$0.20 per animation. These results validate our hypothesis that feeding visual simulation outputs back to a vision-language model for iterative refinement significantly outperforms single-shot code generation for physics simulation tasks and highlights the potential of agentic AI to support engineering workflows and physics data generation pipelines.",
+    "authors": [
+      "Prashant Shende",
+      "Bradley Camburn"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2602.12311v1",
+    "url": "https://arxiv.org/abs/2602.12311",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2601.05960",
+    "arxiv_id": "2601.05960",
+    "title": "Distilling Feedback into Memory-as-a-Tool",
+    "abstract": "We propose a framework that amortizes the cost of inference-time reasoning by converting transient critiques into retrievable guidelines, through a file-based memory system and agent-controlled tool calls. We evaluate this method on the Rubric Feedback Bench, a novel dataset for rubric-based learning. Experiments demonstrate that our augmented LLMs rapidly match the performance of test-time refinement pipelines while drastically reducing inference cost.",
+    "authors": [
+      "Víctor Gallego"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.05960v2",
+    "url": "https://arxiv.org/abs/2601.05960",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2603.15280",
+    "arxiv_id": "2603.15280",
+    "title": "Advancing Multimodal Agent Reasoning with Long-Term Neuro-Symbolic Memory",
+    "abstract": "Recent advances in large language models have driven the emergence of intelligent agents operating in open-world, multimodal environments. To support long-term reasoning, such agents are typically equipped with external memory systems. However, most existing multimodal agent memories rely primarily on neural representations and vector-based retrieval, which are well-suited for inductive, intuitive reasoning but fundamentally limited in supporting analytical, deductive reasoning critical for real-world decision making. To address this limitation, we propose NS-Mem, a long-term neuro-symbolic memory framework designed to advance multimodal agent reasoning by integrating neural memory with explicit symbolic structures and rules. Specifically, NS-Mem is operated around three core components of a memory system: (1) a three-layer memory architecture that consists episodic layer, semantic layer and logic rule layer, (2) a memory construction and maintenance mechanism implemented by SK-Gen that automatically consolidates structured knowledge from accumulated multimodal experiences and incrementally updates both neural representations and symbolic rules, and (3) a hybrid memory retrieval mechanism that combines similarity-based search with deterministic symbolic query functions to support structured reasoning. Experiments on real-world multimodal reasoning benchmarks demonstrate that Neural-Symbolic Memory achieves an average 4.35% improvement in overall reasoning accuracy over pure neural memory systems, with gains of up to 12.5% on constrained reasoning queries, validating the effectiveness of NS-Mem.",
+    "authors": [
+      "Rongjie Jiang",
+      "Jianwei Wang",
+      "Gengda Zhao",
+      "Chengyang Luo",
+      "Kai Wang",
+      "Wenjie Zhang"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2603.15280v1",
+    "url": "https://arxiv.org/abs/2603.15280",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2506.02550",
+    "arxiv_id": "2506.02550",
+    "title": "Technical Report for Ego4D Long-Term Action Anticipation Challenge 2025",
+    "abstract": "In this report, we present a novel three-stage framework developed for the Ego4D Long-Term Action Anticipation (LTA) task. Inspired by recent advances in foundation models, our method consists of three stages: feature extraction, action recognition, and long-term action anticipation. First, visual features are extracted using a high-performance visual encoder. The features are then fed into a Transformer to predict verbs and nouns, with a verb-noun co-occurrence matrix incorporated to enhance recognition accuracy. Finally, the predicted verb-noun pairs are formatted as textual prompts and input into a fine-tuned large language model (LLM) to anticipate future action sequences. Our framework achieves first place in this challenge at CVPR 2025, establishing a new state-of-the-art in long-term action prediction. Our code will be released at https://github.com/CorrineQiu/Ego4D-LTA-Challenge-2025.",
+    "authors": [
+      "Qiaohui Chu",
+      "Haoyu Zhang",
+      "Yisen Feng",
+      "Meng Liu",
+      "Weili Guan",
+      "Yaowei Wang",
+      "Liqiang Nie"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2506.02550v2",
+    "url": "https://arxiv.org/abs/2506.02550",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

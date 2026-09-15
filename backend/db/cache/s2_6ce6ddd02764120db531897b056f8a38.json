@@ -1,0 +1,377 @@
+[
+  {
+    "id": "10.59075/k8ra0b02",
+    "arxiv_id": null,
+    "title": "Algorithmic Amplification and Political Discourse: The Role of AI in Shaping Public Opinion on Social Media in Pakistan",
+    "abstract": "This paper investigates the influence of AI-driven algorithmic systems—particularly recommendation engines and content ranking algorithms—on political discourse in Pakistan’s social media landscape. As millions of Pakistanis engage with platforms like Facebook, YouTube, and TikTok for news and political commentary, AI systems play a critical but opaque role in curating the content that users see. Drawing on qualitative interviews, social listening data, and policy analysis, the study examines how algorithmic amplification contributes to echo chambers, political polarization, and misinformation dissemination. It also explores public perception of these technologies, the role of influencers and digital political campaigns, and the implications for democratic engagement and regulatory governance. The findings reveal a significant impact of AI-mediated information environments on shaping opinions and narratives, highlighting the urgent need for algorithmic transparency and digital media literacy in Pakistan.",
+    "authors": [
+      "Muhammad Yaseen Moroojo",
+      "Usman Farooq",
+      "M. Madni",
+      "Taha Shabbir",
+      "Hadia Khalil"
+    ],
+    "year": 2025,
+    "venue": "The Critical Review of Social Sciences Studies",
+    "pdf_url": "https://thecrsss.com/index.php/Journal/article/download/644/672",
+    "url": "https://www.semanticscholar.org/paper/46889a10cc3f7f93540be4498aca3bde6bf5fd84",
+    "full_text_available": true,
+    "citation_count": 6,
+    "citations": [
+      "a3fd7d31f28ad8b8564615dc772fc783e358f67d",
+      "d0f741b0bb006931331a6c0e9ff7ed409e46276a",
+      "05b13189182a67beb2849a95e3e5573fdcdb27f9",
+      "6841d3c83b8998c7c0110ccb124faf91451c2f1b",
+      "6bf3b5c6f4a274a825d7359ea65adbbf119861fc",
+      "2c0c6a8237d3e0037bf3e0775e7ef0d6d0c66b21"
+    ],
+    "doi": "10.59075/k8ra0b02",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.71086/iajir/v12i3/iajir1234",
+    "arxiv_id": null,
+    "title": "The Role of Social Media Echo Chambers in Political Polarization Within Democratic Societies",
+    "abstract": "The study examines how the process of algorithmic curation on social media and its escalation of political polarization increase in modern-day democracies. The work is concerned with the significant problem of digital insularity, in which the automated recommendation systems are based on the idea of engagement instead of cognitive diversity, thus contributing to the formation of echo chambers. This paper employed a mixed-methodology to analyze a dataset of close to 1.4 million social media interactions in three leading platforms over a high-stakes electoral cycle. The research was carried out using the Sentiment Analysis and Social Network Analysis (SNA) to measure the level of inter-group isolation. Major statistical results indicate that users in homogenic digital networks had a 64% lower chance of being exposed to noncompliant opinions than they did a decade ago. Moreover, the statistics show that there is 42 % growth in the degree of affective polarization through the common occurrence of abusive language to conflicting political identities in these closed-off clusters. The results suggest that the application of algorithmic feedback loops not only intensifies already existing biases but also allows for radicalizing moderate opinions through the selection of only subtle discourse. The paper concludes that the current trend in social media architecture is endangering the presence of a systemic risk to democratic deliberation due to its erosion of the presence of a shared reality that is needed to achieve consensus. On the way to stop them, the paper proposes more transparency in automated content moderation, and more impartial-by-design algorithmic interventions. These outcomes are an informational foundation through which policymakers and technologists can develop new methods of maintaining democratic stability in the digital age.",
+    "authors": [
+      "Mansurov Isroiljon Gofur Ugli",
+      "Ortikov Elyor Abdumajidovich",
+      "Otamirzaev Muzaffar Bakhodir Ugli"
+    ],
+    "year": 2025,
+    "venue": "International Academic Journal of Innovative Research",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/d0e75089389876d0427b6077c55767fd8c259899",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.71086/iajir/v12i3/iajir1234",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.4018/ijec.401344",
+    "arxiv_id": null,
+    "title": "Mechanisms of Algorithmic Recommendation on Social Media Opinion Polarization",
+    "abstract": "With the rise of short video platforms, algorithmic recommendation systems, while enabling personalized content distribution, have been criticized for fueling social media opinion polarization. This study empirically explores how algorithms drive such polarization on mainstream short video platforms. Integrating user behavior, content distribution patterns, and interactive networks, it examines algorithms' filtering and amplification in information flow. Through a theoretical model and multi-source data, it reveals how algorithms shape viewpoint exposure and extreme opinion spread, identifying varying polarization impacts across algorithms and platforms. Via flowcharts and data models, it elaborates on coupling mechanisms among content push, interaction, and differentiation. Finally, targeted algorithm optimization suggestions reduce polarization risks, aiding governance and healthy online ecosystems.",
+    "authors": [
+      "Tie Zhang"
+    ],
+    "year": 2026,
+    "venue": "International Journal of e-collaboration",
+    "pdf_url": "https://doi.org/10.4018/ijec.401344",
+    "url": "https://www.semanticscholar.org/paper/37180c01bb254ffaf4598f5a4572b82aca666de2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.4018/ijec.401344",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1051/shsconf/202623603007",
+    "arxiv_id": null,
+    "title": "Exploring the Impact of Information Cocoons Formed by Social Media Algorithmic Recommendations on Misinformation Dissemination Effects",
+    "abstract": "Information cocoons can be generated by algorithmic recommendation systems and misinformation is spread with ease over the Internet. All these interrelated dynamics disturb the information ecosystem and endanger the interests of the masses. This paper evaluates the effects of information cocoons in social media generated through algorithmic recommendation systems on the spread of misinformation, both in the mechanisms and observable trends. Questionnaires were given randomly among the target population, with 144 valid responses obtained. Cross tabulation analysis and descriptive statistics were used. The majority of the respondents were young students, regular consumers of domestic social networks, and highly depended on algorithmic suggestions. More than 70% perceived the effects of information cocoons. Results show that information cocoons allow spreading misinformation in various ways, exposing people to it and hindering their ability to distinguish. These impacts are age, education, and occupation specific. The research provides empirical local contributions and practical implications of optimizing platform algorithms, enhancing media literacy of users and designing regulatory policy.",
+    "authors": [
+      "Yu-Feng Lu",
+      "Yan-Shui Zhou"
+    ],
+    "year": 2026,
+    "venue": "SHS Web of Conferences",
+    "pdf_url": "https://www.shs-conferences.org/articles/shsconf/pdf/2026/10/shsconf_idepmda26_03007.pdf",
+    "url": "https://www.semanticscholar.org/paper/e13ad8d8671431d8f460009a7354b7be62c2dfde",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1051/shsconf/202623603007",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.71465/gmssrj55",
+    "arxiv_id": null,
+    "title": "ALGORITHMIC BIAS AND POLITICAL POLARIZATION: CHALLENGES FOR DEMOCRACY",
+    "abstract": "Algorithmic systems play a pivotal role in shaping public discourse and political engagement, particularly through social media platforms and news recommendation engines. However, the increasing reliance on algorithms to curate content has raised concerns about political polarization, misinformation, and algorithmic bias. This article explores the relationship between algorithmic systems, political polarization, and democracy, focusing on how biased algorithms exacerbate divisions within society and influence political behavior. By examining the role of algorithms in political campaigns, social media platforms, and news consumption, the article evaluates the challenges these biases present for democratic values such as equality, fairness, and informed citizenship. The article also provides case studies from the United States, the European Union, and Brazil to illustrate the real-world implications of algorithmic bias. It concludes with recommendations for mitigating these issues through regulatory oversight, transparency in algorithmic design, and the promotion of digital literacy.",
+    "authors": [
+      "F. Shah"
+    ],
+    "year": 2025,
+    "venue": "Global Media and Social Sciences Research Journal",
+    "pdf_url": "https://gmssrj.com/index.php/main/article/download/55/186",
+    "url": "https://www.semanticscholar.org/paper/76c1898ebabc6fe75580052e7ecedda8d80ac922",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "14ece1af6381dc519dd1f9ea9f277f8346bb45f9"
+    ],
+    "doi": "10.71465/gmssrj55",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.47205/jdss.2025(6-i)61",
+    "arxiv_id": null,
+    "title": "Social Media and Political Polarization: Investigating the Role of Online Platforms in Shaping Public Opinion",
+    "abstract": ": The rapid rise of social media platforms has profoundly influenced public discourse, contributing both positively and negatively to the political landscape. This paper investigates the role of social media in shaping political polarization, focusing on how algorithms, and selective exposure mechanisms intensify ideological divisions. Through an examination of recent case studies, such as the 2016 U.S. Presidential Election and the Brexit referendum, the research highlights the complex interplay between social media dynamics and political polarization. While social media has democratized information sharing and enabled broader participation in political discussions, it has also facilitated the spread of misinformation and the entrenchment of extreme viewpoints. The paper also explores counterarguments that challenge the narrative of social media as the primary driver of polarization, suggesting that traditional media and broader socio-political factors may also play significant roles. To address the polarizing effects of social media, the study underscores the need for regulatory measures that promote algorithmic transparency, content diversity, and media literacy. The findings offer critical insights into the challenges and opportunities presented by social media in the context of democratic processes and public opinion formation.",
+    "authors": [
+      "Mohammad Afsar Alam"
+    ],
+    "year": 2025,
+    "venue": "Journal of Development and Social Sciences",
+    "pdf_url": "https://ojs.jdss.org.pk/journal/article/download/1551/1462",
+    "url": "https://www.semanticscholar.org/paper/f68511f530547d45c08fbec687d181498b534bd3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.47205/jdss.2025(6-i)61",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.3389/fcomm.2025.1667471",
+    "arxiv_id": null,
+    "title": "Algorithmic influence and media legitimacy: a systematic review of social media’s impact on news production",
+    "abstract": "Digital platforms and algorithms mediate news production, distribution, and evaluation. This review synthesizes evidence on social media’s influence on news judgment, autonomy, commercialization, public trust, and the amplification of polarization and misinformation, noting algorithmic roles in audience development and novel formats. This systematic review searched +Scopus and Web of Science+ (2015–2025; last search 03 Sept 2025) for peer-reviewed empirical studies on digital journalism and algorithms. Search queries combined algorithm- and platform-related terms (e.g., algorithm, recommendation, ranking, news feed, Facebook, X/Twitter, YouTube, TikTok, Instagram). Eligibility criteria focused on empirical studies of algorithmic influence in English, excluding theoretical papers. All steps followed PRISMA 2020 guidelines, with screening performed independently by two reviewers. A total of 78 studies were included, with counts harmonized across sections and visualized in the PRISMA flowchart. Risk of bias was assessed using CASP and Risk-of-Bias frameworks. Results were synthesized via a hybrid thematic analysis (deductive-inductive) structured across four themes. Findings indicate algorithmic systems reconfigure gatekeeping, prioritizing engagement metrics and reframing news values toward “shareworthiness.” Platform business models intensify metric dependence, limiting investigative depth. Algorithmic intermediation affects legitimacy; opaque recommenders depress trust, while transparent ones can mitigate skepticism. Optimization for virality correlates with polarization and misinformation, with potential for self-censorship. Newsrooms exhibit bounded agency. An evidence map is presented, summarizing platform types, methodological approaches, geographic scope, and key outcomes. Limitations include a dominance of Western-centric, English-language studies and a scarcity of longitudinal designs. Interpretation highlights that algorithmic curation reshapes journalistic practices, with legitimacy dependent on platform transparency and affordances. A dedicated Limitations section addresses methodological constraints, data extraction subjectivity, and potential exclusion bias. Aligning incentives with public interest requires auditable transparency and quality-rewarding metrics, supported by comparative, cross-regional research. This work was supported by the Competitive Research Grant from the Research Institute at the Universitas Muhammadiyah Buton (Grant Number: B/630/UMB.3.2/PT.01.05/2025). The complete protocol, search strings, and appraisal data are available in the linked repository.",
+    "authors": [
+      "Hastuti Hastuti",
+      "Harry Fajar Maulana",
+      "Herman Lawelai",
+      "Ansar Suherman"
+    ],
+    "year": 2025,
+    "venue": "Frontiers in Communication",
+    "pdf_url": "https://www.frontiersin.org/journals/communication/articles/10.3389/fcomm.2025.1667471/pdf",
+    "url": "https://www.semanticscholar.org/paper/65b239f968f2827606033b046280753113d3c7d9",
+    "full_text_available": true,
+    "citation_count": 38,
+    "citations": [
+      "dda64e4b09fb281710b50aa4279ff29bbc154216",
+      "c552b2a11b09b5140be6ec9e2f5eb1ddc20e6bf8",
+      "f293c9c7762234d1f5a1d508835e34ccb16c7117",
+      "352bbca91f1eca2bd7d2fff76268251a79542637",
+      "f06f35200ffba90ca429ce830614537946d23062",
+      "0053f188e19430ff4e392471f9764b091fffb489",
+      "c7ec5f1281805372cbe83d28a791e2a36a29c1c9",
+      "a0e8635146686dcac9e30f9ec030bfb0713c88ef",
+      "21b49487ec91b695ec015b46dde144bba8f32748",
+      "c34360964b6faf9ce16592f37bfb0e41a41230c3",
+      "44dfd6e3edf678d77a725bee92ad698357b846cc",
+      "8c05a86316b76f5451baf2bf43b6531a26c079e2",
+      "b46f2eef5393fd58f79f5446f61493cdc8792fa5",
+      "c0dcc341448f6276a6579a8961746dcc548355cc",
+      "4d1c0ee0f8370f00d8edbe69e57dcc7d3d50a64c",
+      "eb3d982e3132e1037502d65ec02bb430a72603d9",
+      "64d205e0826638b638aea2991de35c390ba6a04a",
+      "3bb85f2e67229a86f89945f75d85cbc9373700a4",
+      "f91ac1eab13fb99961e8379fc4233811b00e3f52",
+      "4654934ffc4875c440a3a8f13437dade84121ba6",
+      "9458666a1843a5c7a8deb14c169154d79210a107",
+      "27784c484f4a9eda2a1319aebbdbb46f18983093",
+      "da15e66af574a99c727abd7f36109c7b82d67730",
+      "ef5b1ad7a4af547995a3afecabb9f30841e785e5",
+      "d1cd0a5531855bb523fae322068efbab7e94c974",
+      "e89c737713cf99f17cf1bda7b3db5888666007d2",
+      "55a2cfadc2f2d1f7bdd47378f98316cbb8df9611",
+      "b06755369023b20e21b10531c6758ca6e1769979",
+      "71ea8d44b759c6e5480fa77d29c1a30d4eb8b7d1",
+      "ad98cb63781405b662d4b054b93c734c0cfa087d",
+      "e4fa8ffa25a05ddf80d10cdfbdfd3bf724405de9",
+      "e32688aff1aa52875181db7ddd98923c98a53dde",
+      "db386203e849801a69276d3ca2fa4a712b7722d7",
+      "cb454a830d1e0318b84e189c89e1935e9d27358e",
+      "a70429786a41cb04f0f1b6d0e4c80831e69bac32",
+      "3a337206205be00c2575773c1a016161efcfbe02",
+      "c110c3a558157196841e2e8cee1ed07ab2f7e199",
+      "a61517ef121299c649906ee20682cec64e3f7cd5"
+    ],
+    "doi": "10.3389/fcomm.2025.1667471",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1145/3631700.3664870",
+    "arxiv_id": null,
+    "title": "Analyzing the Interplay between Diversity of News Recommendations and Misinformation Spread in Social Media",
+    "abstract": "Recommender systems play a crucial role in social media platforms, especially in the context of news, by assisting users in discovering relevant news. However, these systems can inadvertently contribute to increased personalization, and the formation of filter bubbles and echo chambers, thereby aiding in the propagation of fake news or misinformation. This study specifically focuses on examining the tradeoffs between the diversity of news recommendations and the dissemination of misinformation on social media. We evaluated classical recommender algorithms on two Twitter (now X) datasets to assess the diversity of top-10 recommendation lists and simulated the propagation of recommended misinformation within the user network to analyze the impact of diversity on misinformation spread. The research findings indicate that an increase in news recommendation diversity indeed contributes to mitigating the propagation of misinformation. Additionally, collaborative and content-based recommender systems provide more diversity in comparison to popularity and network-based systems, resulting in less misinformation propagation. Our study underscores the crucial role of diversity recommendations in mitigating misinformation propagation, offering valuable insights for designing misinformation-aware recommender systems and diversity-based misinformation intervention.",
+    "authors": [
+      "R. Pathak",
+      "F. Spezzano"
+    ],
+    "year": 2024,
+    "venue": "User Modeling, Adaptation, and Personalization",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/59e48b18e756d7c602ed18f1d736e84e5a7dd7e7",
+    "full_text_available": false,
+    "citation_count": 2,
+    "citations": [
+      "3bce5e83188f0f59811b31082d400aecd5a1afd9",
+      "22e8745134af68040d08ac3cce76b6a372562d62"
+    ],
+    "doi": "10.1145/3631700.3664870",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.59890/ijgsr.v4i2.156",
+    "arxiv_id": null,
+    "title": "Social Media and Democracy: Polarization, Misinformation, and the Battle for Narrative Control",
+    "abstract": "This research paper explores the complex and often contradictory effects of social media on democratic societies. It examines how social media platforms, while offering powerful tools for citizen engagement and political participation, can also contribute to harmful trends that threaten democratic processes. The paper’s central argument is that social media’s impact is a double-edged sword: it empowers some while simultaneously disenfranchising others and distorting political discourse. The study focuses on three key areas where social media’s influence is particularly pronounced: empowerment of civic engagement, exacerbation of political polarization, and the spread of misinformation and manipulation. The paper will use real-world examples (case studies) to illustrate these points. These examples will likely include instances of election interference through the spread of false or misleading information, analysis of how algorithms on social media platforms can bias what users see and therefore shape their opinions, and examples of grassroots activism and mobilization that have been successful through the use of social media. The analysis goes beyond simply documenting positive and negative effects. It delves into the interplay of various factors contributing to social media’s influence on democracy. This includes an examination of the design of social media platforms themselves – how features like algorithms and newsfeeds shape information flows and user behavior. It also considers the role of political actors, both governments and political parties, who strategically use social media to advance their agendas, often through targeted advertising, manipulation of narratives, and the creation and spread of disinformation\n ",
+    "authors": [
+      "Aarif Mohd Waza"
+    ],
+    "year": 2026,
+    "venue": "International Journal of Global Sustainable Research",
+    "pdf_url": "https://slamultitechpublisher.my.id/index.php/ijgsr/article/download/156/260",
+    "url": "https://www.semanticscholar.org/paper/aa17d897532dfc3b04dfdd9cb057e18dbd5bb5a8",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.59890/ijgsr.v4i2.156",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.26524/ijpm.4.1",
+    "arxiv_id": null,
+    "title": "AI’s Role in Regulating Fake News and Misinformation on Social Media in West Bengal, 2014–2024",
+    "abstract": "From 2014 to 2024, West Bengal’s social media ecosystem, encompassing over 50 million users on platforms like WhatsApp, X, and Instagram, has amplified fake news and misinformation, intensifying political polarization and communal tensions. This narrative review examines Artificial Intelligence’s (AI) role in mitigating these issues through natural language processing (NLP), visual content verification, and predictive modeling, focusing on key events like the 2016 Dhulagarh riots, the 2020 public health crisis, and the 2024 Murshidabad violence. AI has enabled rapid detection and containment of false narratives, yet it faces challenges such as Bengali dialect complexities, algorithmic biases, and ethical concerns like privacy and censorship. Recommendations include localized AI training, hybrid verification systems, public education initiatives, and collaborative networks to enhance efficacy while preserving democratic discourse in West Bengal’s diverse context.",
+    "authors": [
+      "Mahamudul Hasan Gayen"
+    ],
+    "year": 2025,
+    "venue": "International Journal of Politics and Media",
+    "pdf_url": "https://ijpmonline.com/index.php/ojs/article/download/65/69",
+    "url": "https://www.semanticscholar.org/paper/565c0091f76b2807844724b9634e6cfaa04db32d",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "9670ba88a4c19f32a91e55e2f840ed64e35af9b7",
+      "dc14bd3b155814f22f12134f562723b9c3ff81e5"
+    ],
+    "doi": "10.26524/ijpm.4.1",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1111/nyas.15359",
+    "arxiv_id": null,
+    "title": "Designing social media content recommendation algorithms for societal good",
+    "abstract": "In the face of mounting evidence for a relationship between social media platforms and detrimental societal outcomes such as polarization, the erosion of trust in institutions, and the spread of misinformation, this perspective argues for the design of alternative content recommendation algorithms that serve the societal good and a lively democratic discourse. We propose to approach the design of content recommendation algorithms through the lens of fostering a healthy civic discourse, which serves to identify dimensions of relevance to guide the development of content recommendation algorithms. This approach lends alternative content recommendation algorithms legitimacy by being rooted in the EU's novel Digital Services Act and by aligning content recommendation with democratic values. We explore the trade‐off between interventions in content recommendation and freedom of expression and propose a research agenda that uses approaches from multistakeholder metric construction and scenario‐based risk assessment to find situation‐dependent just balances between individual rights and societal outcomes.",
+    "authors": [
+      "Jana Lasser",
+      "Nikolaus Poechhacker"
+    ],
+    "year": 2025,
+    "venue": "Annals of the New York Academy of Sciences",
+    "pdf_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/nyas.15359",
+    "url": "https://www.semanticscholar.org/paper/c772cae2fc86c56155d42ee29ee542230ae6c79e",
+    "full_text_available": true,
+    "citation_count": 24,
+    "citations": [
+      "c252175ff8d6991dc64bca6538a5cec3a5ae020d",
+      "e2871b62e0c6fa6fe47986ccf5e7e8f85afbb307",
+      "ff2dac2ff7cb72806f5b59d3c7cde85789674dc5",
+      "9cbf6f163b525411ad8252245812d5eee42fcfa3",
+      "af621557c8a4bfb8b089d1531a774fa5f78e7c6c",
+      "e222dafc509441ceef15799edf0594ed477578b8",
+      "da548f9bed2b8dda598d271abbea7273c54bb645",
+      "4469d797a03a6260693749413cd596a6cd652737",
+      "1078a78cbb7f556db37144479e8f9f3fecdbebf0",
+      "0c5f7156a006059a4cdba0239ce75ff7000df2b2",
+      "11a959e22fdca7ca92d73103eacd9df3ae5c279a",
+      "726a02f885cad3ac083f8e14f105e9dcc218182b",
+      "5c7299713ec68b5694bd7768fb0b278228d8ade2",
+      "deaf97c74252c62faa7a43d2a1394bbb56baac42",
+      "ec9efa85530f9e3d803a04a4e6a1600a54e20fc2",
+      "3bbbba0603e65a4a502b0012288f9405b7ddbe15",
+      "e87606d5d6f847e11c945c87b133417fc91ad355",
+      "62fc8c794aa1c3d70a816181283bd5de6a7816e2",
+      "fd2ca1cffa83c263f8b2ba4c6819af7967514849",
+      "ed582cf013805627d03a5757ae86e37ae3b521d8",
+      "353059ce0d7a77dec4229f2cde26c35876533b4d",
+      "2204e081e2831e70e41c560e9ba0d21dfb2d91d6",
+      "b408bc13a9339d69d5167d53cc5f6ad94663bd9e",
+      "83f25f8d6efca52b7086e21b6da95571e51eb029"
+    ],
+    "doi": "10.1111/nyas.15359",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.23900/ra.v24i118.1636",
+    "arxiv_id": null,
+    "title": "From information to influence: how Generative AI is reshaping public opinion, misinformation, and social polarization in the digital age",
+    "abstract": "Generative Artificial Intelligence (AI) has revolutionized digital communication, changing the way information is generated, shared, and accessed. However, despite its advantages, it also comes with risks such as AI-generated misinformation, algorithmically tailored opinion-forming, and growing polarization. This proposed study aims to investigate the interplay between generative AI, public opinion formation, misinformation and social polarization from an interpretivist philosophical perspective by adopting a qualitative research approach and thematic analysis, as well as qualitative document analysis of journal articles, AI governance reports, policy documents and selected digital media case studies to identify patterns, meanings and emerging themes. The analysis identifies four related themes: the transformation of information production with generative AI, the amplification and spread of misinformation created with AI, increased influence of algorithmic systems on public opinion and political discourse, and further ideological polarization with new governance and ethical issues. The study findings suggest that while generative AI can improve information access, communication and civic engagement, its misuse can lead to the fragmentation of information integrity, destroy public confidence in information, impair democratic discourse, and exacerbate social polarization. It offers innovative insights for policymakers, tech companies, media platforms, teachers, and researchers to help ensure a morally accountable digital information sphere and develop coordinated policy measures to address misinformation and foster a healthier digital information environment.",
+    "authors": [
+      "Ahmad Sajjad",
+      "Omar J. Alkhatib",
+      "Yusra Zarrar",
+      "Aiza Yasmeen",
+      "Sana Karim",
+      "Shah E. Yar Qadeem"
+    ],
+    "year": 2026,
+    "venue": "Aposta: Revista de Ciencias Sociales",
+    "pdf_url": "https://revistaaposta.com/index.php/ra/article/download/1636/1448",
+    "url": "https://www.semanticscholar.org/paper/437e6035b1761e5837f4a829d3aeb37b3208daa3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.23900/ra.v24i118.1636",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.54254/2753-7064/2025.29695",
+    "arxiv_id": null,
+    "title": "The Role of Social Media Algorithms in Amplifying Misinformation in Political Elections",
+    "abstract": "Social media platforms curate political information through engagement-optimising algorithms that determine what voters see and share. Evidence from computational communication and behavioural science demonstrates that false and sensational content spreads faster and farther than verified information, propelled less by automated actors than by human attention dynamics that algorithms privilege. This paper synthesises findings from twenty-two peer-reviewed studies across political communication, psychology, and information science to situate election misinformation within an engagement-first platform ecology. It reviews mechanisms by which recommender systems and feed ranking elevate emotionally charged posts; examines consequences for opinion formation, polarisation, and institutional trust across the United States, the United Kingdom, Brazil, and India; and articulates a theoretically grounded agenda for empirical assessment. Building on this review, the paper specifies research questions that connect algorithmic amplification to voter-level exposure, belief change, and trust outcomes, and proposes a mixed-methods design integrating trace data, audit experiments, and voter surveys. The contribution clarifies how engagement metrics function as algorithmic signals that advantage misinformation at scale and outlines an evaluative framework for mitigation levers including transparency, friction, and literacy interventions.",
+    "authors": [
+      "Ruoheng Yang"
+    ],
+    "year": 2025,
+    "venue": "Communications in Humanities Research",
+    "pdf_url": "https://www.ewadirect.com/proceedings/chr/article/view/29695/pdf",
+    "url": "https://www.semanticscholar.org/paper/4a9af8824bf0cd8acbe0a15c30df46c864bedee2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.54254/2753-7064/2025.29695",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.47067/real.v9i1.470",
+    "arxiv_id": null,
+    "title": "The Future of Democracy in the Digital Age: The Impact of Social Media and Digital Technologies on Political Participation",
+    "abstract": "This study examines the impact of social media and digital technologies on political participation in the digital age through a qualitative case study approach. Three country-specific cases—youth mobilization in India, hashtag activism in the United States, and digital political campaigns in Kenya—were analyzed using data collected from social media content, online campaigns, news reports, and interviews with active participants. The results show that digital platforms can be viewed as drivers of civic engagement, where they contribute to the spread of information related to politics, peer-to-peer mobilization, and amplifying the voices of marginalized individuals, but also introduce some problems to the platform, such as misinformation, algorithmic biases, polarization, and inequality of access. The paper points to the potential change brought forth by digital technologies to improve democratic engagement, especially among young people and digitally literate citizens, and the need to improve digital literacy, fair access, and governance protection to create an inclusive and effective democracy. These observations aid in the interpretation of the changing nature of political interaction in the digital communication world.",
+    "authors": [
+      "M. Hussain",
+      "Marium Akhtar",
+      "Sara Anwar"
+    ],
+    "year": 2026,
+    "venue": "Review of Education, Administration &amp; Law",
+    "pdf_url": "https://real.spcrd.org/index.php/real/article/download/470/464",
+    "url": "https://www.semanticscholar.org/paper/96c27bf2490edf525ddcd6e155db73e5c8afbc4d",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.47067/real.v9i1.470",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1007/s13278-023-01175-9",
+    "arxiv_id": null,
+    "title": "Shaping climate change discourse: the nexus between political media landscape and recommendation systems in social networks",
+    "abstract": "Recommendation systems have become ubiquitous, and they actively participate in creating our individual and collective identity. In this paper, the diffusion of climate change information has been studied based on YouTube’s recommendation system and the political media landscape. The YouTube channels of CNN, BBC News and Fox News, as the most popular channels, respectively, for Left, Center and Right parties, were explored using web scraping and social network analysis to check what kind of recommended content will pop up if a user looks for climate change videos. Using an agent-based modeling approach, the competition between Left, Center and Right media in pushing their own narrative of climate change in society was simulated. The results suggest YouTube’s recommendation algorithm is highly biased since most of the recommended content was from the same channel fitting their own political agenda. The agent-based modeling indicates the size of a network is a decisive factor in further spread of a message as Left media always dominated Center and Right media in pushing their own perspective on climate change regardless of higher weights assigned to Right media. This study shed light on how public perception on climate change can be shaped by recommendation systems and digital companies.",
+    "authors": [
+      "Y. Sakieh"
+    ],
+    "year": 2023,
+    "venue": "Social Network Analysis and Mining",
+    "pdf_url": "https://link.springer.com/content/pdf/10.1007/s13278-023-01175-9.pdf",
+    "url": "https://www.semanticscholar.org/paper/54342e7edfe3b9a2424dfa2b47248cbf27034093",
+    "full_text_available": true,
+    "citation_count": 6,
+    "citations": [
+      "1fade54fab8b625c95a75013162ba822b4b77183",
+      "9f610994e85dd1a232cd5329bc9924a3f89a0c97",
+      "a594736a40189927649f489d4de7cfade52386ae",
+      "763e1e6582ac89b732bcf5709004b47b364cc31b",
+      "29b6a3224de9b3cbce5a2a083866f14d2d03e439",
+      "cc9e211a6c2848802ca59c6de676cd007aba1fb6"
+    ],
+    "doi": "10.1007/s13278-023-01175-9",
+    "source": "semantic_scholar"
+  }
+]

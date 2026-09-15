@@ -1,0 +1,315 @@
+[
+  {
+    "id": "2203.10596",
+    "arxiv_id": "2203.10596",
+    "title": "Towards Clinical Practice: Design and Implementation of Convolutional Neural Network-Based Assistive Diagnosis System for COVID-19 Case Detection from Chest X-Ray Images",
+    "abstract": "One of the critical tools for early detection and subsequent evaluation of the incidence of lung diseases is chest radiography. This study presents a real-world implementation of a convolutional neural network (CNN) based Carebot Covid app to detect COVID-19 from chest X-ray (CXR) images. Our proposed model takes the form of a simple and intuitive application. Used CNN can be deployed as a STOW-RS prediction endpoint for direct implementation into DICOM viewers. The results of this study show that the deep learning model based on DenseNet and ResNet architecture can detect SARS-CoV-2 from CXR images with precision of 0.981, recall of 0.962 and AP of 0.993.",
+    "authors": [
+      "Daniel Kvak",
+      "Marian Bendik",
+      "Anna Chromcova"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2203.10596v1",
+    "url": "https://arxiv.org/abs/2203.10596",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2402.16221",
+    "arxiv_id": "2402.16221",
+    "title": "Integrating Preprocessing Methods and Convolutional Neural Networks for Effective Tumor Detection in Medical Imaging",
+    "abstract": "This research presents a machine-learning approach for tumor detection in medical images using convolutional neural networks (CNNs). The study focuses on preprocessing techniques to enhance image features relevant to tumor detection, followed by developing and training a CNN model for accurate classification. Various image processing techniques, including Gaussian smoothing, bilateral filtering, and K-means clustering, are employed to preprocess the input images and highlight tumor regions. The CNN model is trained and evaluated on a dataset of medical images, with augmentation and data generators utilized to enhance model generalization. Experimental results demonstrate the effectiveness of the proposed approach in accurately detecting tumors in medical images, paving the way for improved diagnostic tools in healthcare.",
+    "authors": [
+      "Ha Anh Vu"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2402.16221v1",
+    "url": "https://arxiv.org/abs/2402.16221",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2004.02396",
+    "arxiv_id": "2004.02396",
+    "title": "A Learning Framework for n-bit Quantized Neural Networks toward FPGAs",
+    "abstract": "The quantized neural network (QNN) is an efficient approach for network compression and can be widely used in the implementation of FPGAs. This paper proposes a novel learning framework for n-bit QNNs, whose weights are constrained to the power of two. To solve the gradient vanishing problem, we propose a reconstructed gradient function for QNNs in back-propagation algorithm that can directly get the real gradient rather than estimating an approximate gradient of the expected loss. We also propose a novel QNN structure named n-BQ-NN, which uses shift operation to replace the multiply operation and is more suitable for the inference on FPGAs. Furthermore, we also design a shift vector processing element (SVPE) array to replace all 16-bit multiplications with SHIFT operations in convolution operation on FPGAs. We also carry out comparable experiments to evaluate our framework. The experimental results show that the quantized models of ResNet, DenseNet and AlexNet through our learning framework can achieve almost the same accuracies with the original full-precision models. Moreover, when using our learning framework to train our n-BQ-NN from scratch, it can achieve state-of-the-art results compared with typical low-precision QNNs. Experiments on Xilinx ZCU102 platform show that our n-BQ-NN with our SVPE can execute 2.9 times faster than with the vector processing element (VPE) in inference. As the SHIFT operation in our SVPE array will not consume Digital Signal Processings (DSPs) resources on FPGAs, the experiments have shown that the use of SVPE array also reduces average energy consumption to 68.7% of the VPE array with 16-bit.",
+    "authors": [
+      "Jun Chen",
+      "Liang Liu",
+      "Yong Liu",
+      "Xianfang Zeng"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2004.02396v1",
+    "url": "https://arxiv.org/abs/2004.02396",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1911.06009",
+    "arxiv_id": "1911.06009",
+    "title": "A Recurrent Probabilistic Neural Network with Dimensionality Reduction Based on Time-series Discriminant Component Analysis",
+    "abstract": "This paper proposes a probabilistic neural network developed on the basis of time-series discriminant component analysis (TSDCA) that can be used to classify high-dimensional time-series patterns. TSDCA involves the compression of high-dimensional time series into a lower-dimensional space using a set of orthogonal transformations and the calculation of posterior probabilities based on a continuous-density hidden Markov model with a Gaussian mixture model expressed in the reduced-dimensional space. The analysis can be incorporated into a neural network, which is named a time-series discriminant component network (TSDCN), so that parameters of dimensionality reduction and classification can be obtained simultaneously as network coefficients according to a backpropagation through time-based learning algorithm with the Lagrange multiplier method. The TSDCN is considered to enable high-accuracy classification of high-dimensional time-series patterns and to reduce the computation time taken for network training. The validity of the TSDCN is demonstrated for high-dimensional artificial data and EEG signals in the experiments conducted during the study.",
+    "authors": [
+      "Hideaki Hayashi",
+      "Taro Shibanoki",
+      "Keisuke Shima",
+      "Yuichi Kurita",
+      "Toshio Tsuji"
+    ],
+    "year": 2019,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1911.06009v1",
+    "url": "https://arxiv.org/abs/1911.06009",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2205.13273",
+    "arxiv_id": "2205.13273",
+    "title": "Acute Lymphoblastic Leukemia Detection Using Hypercomplex-Valued Convolutional Neural Networks",
+    "abstract": "This paper features convolutional neural networks defined on hypercomplex algebras applied to classify lymphocytes in blood smear digital microscopic images. Such classification is helpful for the diagnosis of acute lymphoblast leukemia (ALL), a type of blood cancer. We perform the classification task using eight hypercomplex-valued convolutional neural networks (HvCNNs) along with real-valued convolutional networks. Our results show that HvCNNs perform better than the real-valued model, showcasing higher accuracy with a much smaller number of parameters. Moreover, we found that HvCNNs based on Clifford algebras processing HSV-encoded images attained the highest observed accuracies. Precisely, our HvCNN yielded an average accuracy rate of 96.6% using the ALL-IDB2 dataset with a 50% train-test split, a value extremely close to the state-of-the-art models but using a much simpler architecture with significantly fewer parameters.",
+    "authors": [
+      "Guilherme Vieira",
+      "Marcos Eduardo Valle"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2205.13273v1",
+    "url": "https://arxiv.org/abs/2205.13273",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2103.00113",
+    "arxiv_id": "2103.00113",
+    "title": "Anomaly Detection on Attributed Networks via Contrastive Self-Supervised Learning",
+    "abstract": "Anomaly detection on attributed networks attracts considerable research interests due to wide applications of attributed networks in modeling a wide range of complex systems. Recently, the deep learning-based anomaly detection methods have shown promising results over shallow approaches, especially on networks with high-dimensional attributes and complex structures. However, existing approaches, which employ graph autoencoder as their backbone, do not fully exploit the rich information of the network, resulting in suboptimal performance. Furthermore, these methods do not directly target anomaly detection in their learning objective and fail to scale to large networks due to the full graph training mechanism. To overcome these limitations, in this paper, we present a novel contrastive self-supervised learning framework for anomaly detection on attributed networks. Our framework fully exploits the local information from network data by sampling a novel type of contrastive instance pair, which can capture the relationship between each node and its neighboring substructure in an unsupervised way. Meanwhile, a well-designed graph neural network-based contrastive learning model is proposed to learn informative embedding from high-dimensional attributes and local structure and measure the agreement of each instance pairs with its outputted scores. The multi-round predicted scores by the contrastive learning model are further used to evaluate the abnormality of each node with statistical estimation. In this way, the learning model is trained by a specific anomaly detection-aware target. Furthermore, since the input of the graph neural network module is batches of instance pairs instead of the full network, our framework can adapt to large networks flexibly. Experimental results show that our proposed framework outperforms the state-of-the-art baseline methods on all seven benchmark datasets.",
+    "authors": [
+      "Yixin Liu",
+      "Zhao Li",
+      "Shirui Pan",
+      "Chen Gong",
+      "Chuan Zhou",
+      "George Karypis"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2103.00113v2",
+    "url": "https://arxiv.org/abs/2103.00113",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1512.00242",
+    "arxiv_id": "1512.00242",
+    "title": "Towards Dropout Training for Convolutional Neural Networks",
+    "abstract": "Recently, dropout has seen increasing use in deep learning. For deep convolutional neural networks, dropout is known to work well in fully-connected layers. However, its effect in convolutional and pooling layers is still not clear. This paper demonstrates that max-pooling dropout is equivalent to randomly picking activation based on a multinomial distribution at training time. In light of this insight, we advocate employing our proposed probabilistic weighted pooling, instead of commonly used max-pooling, to act as model averaging at test time. Empirical evidence validates the superiority of probabilistic weighted pooling. We also empirically show that the effect of convolutional dropout is not trivial, despite the dramatically reduced possibility of over-fitting due to the convolutional architecture. Elaborately designing dropout training simultaneously in max-pooling and fully-connected layers, we achieve state-of-the-art performance on MNIST, and very competitive results on CIFAR-10 and CIFAR-100, relative to other approaches without data augmentation. Finally, we compare max-pooling dropout and stochastic pooling, both of which introduce stochasticity based on multinomial distributions at pooling stage.",
+    "authors": [
+      "Haibing Wu",
+      "Xiaodong Gu"
+    ],
+    "year": 2015,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1512.00242v1",
+    "url": "https://arxiv.org/abs/1512.00242",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2307.05639",
+    "arxiv_id": "2307.05639",
+    "title": "Learning Active Subspaces and Discovering Important Features with Gaussian Radial Basis Functions Neural Networks",
+    "abstract": "Providing a model that achieves a strong predictive performance and is simultaneously interpretable by humans is one of the most difficult challenges in machine learning research due to the conflicting nature of these two objectives. To address this challenge, we propose a modification of the radial basis function neural network model by equipping its Gaussian kernel with a learnable precision matrix. We show that precious information is contained in the spectrum of the precision matrix that can be extracted once the training of the model is completed. In particular, the eigenvectors explain the directions of maximum sensitivity of the model revealing the active subspace and suggesting potential applications for supervised dimensionality reduction. At the same time, the eigenvectors highlight the relationship in terms of absolute variation between the input and the latent variables, thereby allowing us to extract a ranking of the input variables based on their importance to the prediction task enhancing the model interpretability. We conducted numerical experiments for regression, classification, and feature selection tasks, comparing our model against popular machine learning models, the state-of-the-art deep learning-based embedding feature selection techniques, and a transformer model for tabular data. Our results demonstrate that the proposed model does not only yield an attractive prediction performance compared to the competitors but also provides meaningful and interpretable results that potentially could assist the decision-making process in real-world applications. A PyTorch implementation of the model is available on GitHub at the following link. https://github.com/dannyzx/Gaussian-RBFNN",
+    "authors": [
+      "Danny D'Agostino",
+      "Ilija Ilievski",
+      "Christine Annette Shoemaker"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2307.05639v2",
+    "url": "https://arxiv.org/abs/2307.05639",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2306.14753",
+    "arxiv_id": "2306.14753",
+    "title": "The Deep Arbitrary Polynomial Chaos Neural Network or how Deep Artificial Neural Networks could benefit from Data-Driven Homogeneous Chaos Theory",
+    "abstract": "Artificial Intelligence and Machine learning have been widely used in various fields of mathematical computing, physical modeling, computational science, communication science, and stochastic analysis. Approaches based on Deep Artificial Neural Networks (DANN) are very popular in our days. Depending on the learning task, the exact form of DANNs is determined via their multi-layer architecture, activation functions and the so-called loss function. However, for a majority of deep learning approaches based on DANNs, the kernel structure of neural signal processing remains the same, where the node response is encoded as a linear superposition of neural activity, while the non-linearity is triggered by the activation functions. In the current paper, we suggest to analyze the neural signal processing in DANNs from the point of view of homogeneous chaos theory as known from polynomial chaos expansion (PCE). From the PCE perspective, the (linear) response on each node of a DANN could be seen as a $1^{st}$ degree multi-variate polynomial of single neurons from the previous layer, i.e. linear weighted sum of monomials. From this point of view, the conventional DANN structure relies implicitly (but erroneously) on a Gaussian distribution of neural signals. Additionally, this view revels that by design DANNs do not necessarily fulfill any orthogonality or orthonormality condition for a majority of data-driven applications. Therefore, the prevailing handling of neural signals in DANNs could lead to redundant representation as any neural signal could contain some partial information from other neural signals. To tackle that challenge, we suggest to employ the data-driven generalization of PCE theory known as arbitrary polynomial chaos (aPC) to construct a corresponding multi-variate orthonormal representations on each node of a DANN to obtain Deep arbitrary polynomial chaos neural networks.",
+    "authors": [
+      "Sergey Oladyshkin",
+      "Timothy Praditia",
+      "Ilja Kröker",
+      "Farid Mohammadi",
+      "Wolfgang Nowak",
+      "Sebastian Otte"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2306.14753v1",
+    "url": "https://arxiv.org/abs/2306.14753",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2212.06370",
+    "arxiv_id": "2212.06370",
+    "title": "Dual Accuracy-Quality-Driven Neural Network for Prediction Interval Generation",
+    "abstract": "Accurate uncertainty quantification is necessary to enhance the reliability of deep learning models in real-world applications. In the case of regression tasks, prediction intervals (PIs) should be provided along with the deterministic predictions of deep learning models. Such PIs are useful or \"high-quality\" as long as they are sufficiently narrow and capture most of the probability density. In this paper, we present a method to learn prediction intervals for regression-based neural networks automatically in addition to the conventional target predictions. In particular, we train two companion neural networks: one that uses one output, the target estimate, and another that uses two outputs, the upper and lower bounds of the corresponding PI. Our main contribution is the design of a novel loss function for the PI-generation network that takes into account the output of the target-estimation network and has two optimization objectives: minimizing the mean prediction interval width and ensuring the PI integrity using constraints that maximize the prediction interval probability coverage implicitly. Furthermore, we introduce a self-adaptive coefficient that balances both objectives within the loss function, which alleviates the task of fine-tuning. Experiments using a synthetic dataset, eight benchmark datasets, and a real-world crop yield prediction dataset showed that our method was able to maintain a nominal probability coverage and produce significantly narrower PIs without detriment to its target estimation accuracy when compared to those PIs generated by three state-of-the-art neural-network-based methods. In other words, our method was shown to produce higher-quality PIs.",
+    "authors": [
+      "Giorgio Morales",
+      "John W. Sheppard"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2212.06370v4",
+    "url": "https://arxiv.org/abs/2212.06370",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2103.07492",
+    "arxiv_id": "2103.07492",
+    "title": "Continual Learning for Recurrent Neural Networks: an Empirical Evaluation",
+    "abstract": "Learning continuously during all model lifetime is fundamental to deploy machine learning solutions robust to drifts in the data distribution. Advances in Continual Learning (CL) with recurrent neural networks could pave the way to a large number of applications where incoming data is non stationary, like natural language processing and robotics. However, the existing body of work on the topic is still fragmented, with approaches which are application-specific and whose assessment is based on heterogeneous learning protocols and datasets. In this paper, we organize the literature on CL for sequential data processing by providing a categorization of the contributions and a review of the benchmarks. We propose two new benchmarks for CL with sequential data based on existing datasets, whose characteristics resemble real-world applications. We also provide a broad empirical evaluation of CL and Recurrent Neural Networks in class-incremental scenario, by testing their ability to mitigate forgetting with a number of different strategies which are not specific to sequential data processing. Our results highlight the key role played by the sequence length and the importance of a clear specification of the CL scenario.",
+    "authors": [
+      "Andrea Cossu",
+      "Antonio Carta",
+      "Vincenzo Lomonaco",
+      "Davide Bacciu"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2103.07492v4",
+    "url": "https://arxiv.org/abs/2103.07492",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2107.09543",
+    "arxiv_id": "2107.09543",
+    "title": "Data synthesis and adversarial networks: A review and meta-analysis in cancer imaging",
+    "abstract": "Despite technological and medical advances, the detection, interpretation, and treatment of cancer based on imaging data continue to pose significant challenges. These include inter-observer variability, class imbalance, dataset shifts, inter- and intra-tumour heterogeneity, malignancy determination, and treatment effect uncertainty. Given the recent advancements in Generative Adversarial Networks (GANs), data synthesis, and adversarial training, we assess the potential of these technologies to address a number of key challenges of cancer imaging. We categorise these challenges into (a) data scarcity and imbalance, (b) data access and privacy, (c) data annotation and segmentation, (d) cancer detection and diagnosis, and (e) tumour profiling, treatment planning and monitoring. Based on our analysis of 164 publications that apply adversarial training techniques in the context of cancer imaging, we highlight multiple underexplored solutions with research potential. We further contribute the Synthesis Study Trustworthiness Test (SynTRUST), a meta-analysis framework for assessing the validation rigour of medical image synthesis studies. SynTRUST is based on 26 concrete measures of thoroughness, reproducibility, usefulness, scalability, and tenability. Based on SynTRUST, we analyse 16 of the most promising cancer imaging challenge solutions and observe a high validation rigour in general, but also several desirable improvements. With this work, we strive to bridge the gap between the needs of the clinical cancer imaging community and the current and prospective research on data synthesis and adversarial networks in the artificial intelligence community.",
+    "authors": [
+      "Richard Osuala",
+      "Kaisar Kushibar",
+      "Lidia Garrucho",
+      "Akis Linardos",
+      "Zuzanna Szafranowska",
+      "Stefan Klein",
+      "Ben Glocker",
+      "Oliver Diaz",
+      "Karim Lekadir"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2107.09543v2",
+    "url": "https://arxiv.org/abs/2107.09543",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2307.07881",
+    "arxiv_id": "2307.07881",
+    "title": "Graph Embedded Intuitionistic Fuzzy Random Vector Functional Link Neural Network for Class Imbalance Learning",
+    "abstract": "The domain of machine learning is confronted with a crucial research area known as class imbalance learning, which presents considerable hurdles in precise classification of minority classes. This issue can result in biased models where the majority class takes precedence in the training process, leading to the underrepresentation of the minority class. The random vector functional link (RVFL) network is a widely used and effective learning model for classification due to its good generalization performance and efficiency. However, it suffers when dealing with imbalanced datasets. To overcome this limitation, we propose a novel graph embedded intuitionistic fuzzy RVFL for class imbalance learning (GE-IFRVFL-CIL) model incorporating a weighting mechanism to handle imbalanced datasets. The proposed GE-IFRVFL-CIL model offers plethora of benefits: $(i)$ leveraging graph embedding to preserve the inherent topological structure of the datasets, $(ii)$ employing intuitionistic fuzzy theory to handle uncertainty and imprecision in the data, $(iii)$ and the most important, it tackles class imbalance learning. The amalgamation of a weighting scheme, graph embedding, and intuitionistic fuzzy sets leads to the superior performance of the proposed models on KEEL benchmark imbalanced datasets with and without Gaussian noise. Furthermore, we implemented the proposed GE-IFRVFL-CIL on the ADNI dataset and achieved promising results, demonstrating the model's effectiveness in real-world applications. The proposed GE-IFRVFL-CIL model offers a promising solution to address the class imbalance issue, mitigates the detrimental effect of noise and outliers, and preserves the inherent geometrical structures of the dataset.",
+    "authors": [
+      "M. A. Ganaie",
+      "M. Sajid",
+      "A. K. Malik",
+      "M. Tanveer"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2307.07881v2",
+    "url": "https://arxiv.org/abs/2307.07881",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2006.06494",
+    "arxiv_id": "2006.06494",
+    "title": "Anti-Transfer Learning for Task Invariance in Convolutional Neural Networks for Speech Processing",
+    "abstract": "We introduce the novel concept of anti-transfer learning for speech processing with convolutional neural networks. While transfer learning assumes that the learning process for a target task will benefit from re-using representations learned for another task, anti-transfer avoids the learning of representations that have been learned for an orthogonal task, i.e., one that is not relevant and potentially misleading for the target task, such as speaker identity for speech recognition or speech content for emotion recognition. In anti-transfer learning, we penalize similarity between activations of a network being trained and another one previously trained on an orthogonal task, which yields more suitable representations. This leads to better generalization and provides a degree of control over correlations that are spurious or undesirable, e.g. to avoid social bias. We have implemented anti-transfer for convolutional neural networks in different configurations with several similarity metrics and aggregation functions, which we evaluate and analyze with several speech and audio tasks and settings, using six datasets. We show that anti-transfer actually leads to the intended invariance to the orthogonal task and to more appropriate features for the target task at hand. Anti-transfer learning consistently improves classification accuracy in all test cases. While anti-transfer creates computation and memory cost at training time, there is relatively little computation cost when using pre-trained models for orthogonal tasks. Anti-transfer is widely applicable and particularly useful where a specific invariance is desirable or where trained models are available and labeled data for orthogonal tasks are difficult to obtain.",
+    "authors": [
+      "Eric Guizzo",
+      "Tillman Weyde",
+      "Giacomo Tarroni"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2006.06494v2",
+    "url": "https://arxiv.org/abs/2006.06494",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1901.06610",
+    "arxiv_id": "1901.06610",
+    "title": "Hierarchical Attentional Hybrid Neural Networks for Document Classification",
+    "abstract": "Document classification is a challenging task with important applications. The deep learning approaches to the problem have gained much attention recently. Despite the progress, the proposed models do not incorporate the knowledge of the document structure in the architecture efficiently and not take into account the contexting importance of words and sentences. In this paper, we propose a new approach based on a combination of convolutional neural networks, gated recurrent units, and attention mechanisms for document classification tasks. The main contribution of this work is the use of convolution layers to extract more meaningful, generalizable and abstract features by the hierarchical representation. The proposed method in this paper improves the results of the current attention-based approaches for document classification.",
+    "authors": [
+      "Jader Abreu",
+      "Luis Fred",
+      "David Macêdo",
+      "Cleber Zanchettin"
+    ],
+    "year": 2019,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1901.06610v2",
+    "url": "https://arxiv.org/abs/1901.06610",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

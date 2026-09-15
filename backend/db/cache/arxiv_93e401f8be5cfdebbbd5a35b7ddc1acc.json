@@ -1,0 +1,299 @@
+[
+  {
+    "id": "cs",
+    "arxiv_id": "cs",
+    "title": "Complexity limitations on quantum computation",
+    "abstract": "We use the powerful tools of counting complexity and generic oracles to help understand the limitations of the complexity of quantum computation. We show several results for the probabilistic quantum class BQP. 1. BQP is low for PP, i.e., PP^BQP=PP. 2. There exists a relativized world where P=BQP and the polynomial-time hierarchy is infinite. 3. There exists a relativized world where BQP does not have complete sets. 4. There exists a relativized world where P=BQP but P is not equal to UP intersect coUP and one-way functions exist. This gives a relativized answer to an open question of Simon.",
+    "authors": [
+      "Lance Fortnow",
+      "John D. Rogers"
+    ],
+    "year": 1998,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/cs/9811023v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1404.0653",
+    "arxiv_id": "1404.0653",
+    "title": "On the complexity of computing Kronecker coefficients",
+    "abstract": "We study the complexity of computing Kronecker coefficients $g(λ,μ,ν)$. We give explicit bounds in terms of the number of parts $\\ell$ in the partitions, their largest part size $N$ and the smallest second part $M$ of the three partitions. When $M = O(1)$, i.e. one of the partitions is hook-like, the bounds are linear in $\\log N$, but depend exponentially on $\\ell$. Moreover, similar bounds hold even when $M=e^{O(\\ell)}$. By a separate argument, we show that the positivity of Kronecker coefficients can be decided in $O(\\log N)$ time for a bounded number $\\ell$ of parts and without restriction on $M$. Related problems of computing Kronecker coefficients when one partition is a hook, and computing characters of $S_n$ are also considered.",
+    "authors": [
+      "Igor Pak",
+      "Greta Panova"
+    ],
+    "year": 2014,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1404.0653v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "cs",
+    "arxiv_id": "cs",
+    "title": "Computational Complexity and Phase Transitions",
+    "abstract": "Phase transitions in combinatorial problems have recently been shown to be useful in locating \"hard\" instances of combinatorial problems. The connection between computational complexity and the existence of phase transitions has been addressed in Statistical Mechanics and Artificial Intelligence, but not studied rigorously. We take a step in this direction by investigating the existence of sharp thresholds for the class of generalized satisfiability problems defined by Schaefer. In the case when all constraints are clauses we give a complete characterization of such problems that have a sharp threshold. While NP-completeness does not imply (even in this restricted case) the existence of a sharp threshold, it \"almost implies\" this, since clausal generalized satisfiability problems that lack a sharp threshold are either 1. polynomial time solvable, or 2. predicted, with success probability lower bounded by some positive constant by across all the probability range, by a single, trivial procedure.",
+    "authors": [
+      "Gabriel Istrate"
+    ],
+    "year": 2000,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/cs/0005032v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "cs",
+    "arxiv_id": "cs",
+    "title": "Polynomial-time computing over quadratic maps I: sampling in real algebraic sets",
+    "abstract": "Given a quadratic map Q : K^n -> K^k defined over a computable subring D of a real closed field K, and a polynomial p(Y_1,...,Y_k) of degree d, we consider the zero set Z=Z(p(Q(X)),K^n) of the polynomial p(Q(X_1,...,X_n)). We present a procedure that computes, in (dn)^O(k) arithmetic operations in D, a set S of (real univariate representations of) sampling points in K^n that intersects nontrivially each connected component of Z. As soon as k=o(n), this is faster than the standard methods that all have exponential dependence on n in the complexity. In particular, our procedure is polynomial-time for constant k. In contrast, the best previously known procedure (due to A.Barvinok) is only capable of deciding in n^O(k^2) operations the nonemptiness (rather than constructing sampling points) of the set Z in the case of p(Y)=sum_i Y_i^2 and homogeneous Q. A by-product of our procedure is a bound (dn)^O(k) on the number of connected components of Z. The procedure consists of exact symbolic computations in D and outputs vectors of algebraic numbers. It involves extending K by infinitesimals and subsequent limit computation by a novel procedure that utilizes knowledge of an explicit isomorphism between real algebraic sets.",
+    "authors": [
+      "Dima Grigoriev",
+      "Dmitrii V. Pasechnik"
+    ],
+    "year": 2004,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/cs/0403008v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2111.02125",
+    "arxiv_id": "2111.02125",
+    "title": "Expected Complexity of Persistence Barcode Computation via Matrix Reduction",
+    "abstract": "We study the algorithmic complexity of computing the persistence barcode of a randomly generated filtration. We provide a general technique to bound the expected complexity of reducing the boundary matrix in terms of the density of its reduced form. We apply this technique finding upper bounds for the average fill-in (number of non-zero entries) of the boundary matrix on Čech, Vietoris--Rips and Erdős--Rényi filtrations after matrix reduction, thus obtaining bounds on the expected complexity of the barcode computation. Our method is based on previous results on the expected Betti numbers of the corresponding complexes. Our fill-in bounds for Čech and Vietoris--Rips complexes are asymptotically tight up to a logarithmic factor. In particular, both our fill-in and computation bounds are better than the worst-case estimates. We also provide an Erdős--Rényi filtration realising the worst-case fill-in and computation.",
+    "authors": [
+      "Barbara Giunti",
+      "Guillaume Houry",
+      "Michael Kerber",
+      "Matthias Söls"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2111.02125v5",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2504.04416",
+    "arxiv_id": "2504.04416",
+    "title": "Meta-Mathematics of Computational Complexity Theory",
+    "abstract": "We survey results on the formalization and independence of mathematical statements related to major open problems in computational complexity theory. Our primary focus is on recent findings concerning the (un)provability of complexity bounds within theories of bounded arithmetic. This includes the techniques employed and related open problems, such as the (non)existence of a feasible proof that P = NP.",
+    "authors": [
+      "Igor C. Oliveira"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2504.04416v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1712.04281",
+    "arxiv_id": "1712.04281",
+    "title": "Computational Complexity of the Interleaving Distance",
+    "abstract": "The interleaving distance is arguably the most prominent distance measure in topological data analysis. In this paper, we provide bounds on the computational complexity of determining the interleaving distance in several settings. We show that the interleaving distance is NP-hard to compute for persistence modules valued in the category of vector spaces. In the specific setting of multidimensional persistent homology we show that the problem is at least as hard as a matrix invertibility problem. Furthermore, this allows us to conclude that the interleaving distance of interval decomposable modules depends on the characteristic of the field. Persistence modules valued in the category of sets are also studied. As a corollary, we obtain that the isomorphism problem for Reeb graphs is graph isomorphism complete.",
+    "authors": [
+      "Håvard Bakke Bjerkevik",
+      "Magnus Bakke Botnan"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1712.04281v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2402.10351",
+    "arxiv_id": "2402.10351",
+    "title": "Quantum Automating $\\mathbf{TC}^0$-Frege Is LWE-Hard",
+    "abstract": "We prove the first hardness results against efficient proof search by quantum algorithms. We show that under Learning with Errors (LWE), the standard lattice-based cryptographic assumption, no quantum algorithm can weakly automate $\\mathbf{TC}^0$-Frege. This extends the line of results of Krajíček and Pudlák (Information and Computation, 1998), Bonet, Pitassi, and Raz (FOCS, 1997), and Bonet, Domingo, Gavaldà, Maciel, and Pitassi (Computational Complexity, 2004), who showed that Extended Frege, $\\mathbf{TC}^0$-Frege and $\\mathbf{AC}^0$-Frege, respectively, cannot be weakly automated by classical algorithms if either the RSA cryptosystem or the Diffie-Hellman key exchange protocol are secure. To the best of our knowledge, this is the first interaction between quantum computation and propositional proof search.",
+    "authors": [
+      "Noel Arteche",
+      "Gaia Carenini",
+      "Matthew Gray"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2402.10351v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2102.13455",
+    "arxiv_id": "2102.13455",
+    "title": "Inverse deformation analysis: an experimental and numerical assessment using the FEniCS Project",
+    "abstract": "In this paper, we develop a framework for solving inverse deformation problems using the FEniCS Project finite element software. We validate our approach with experimental imaging data acquired from a soft silicone beam under gravity. In contrast with inverse iterative algorithms that require multiple solutions of a standard elasticity problem, the proposed method can compute the undeformed configuration by solving only one modified elasticity problem. This modified problem has a complexity comparable to the standard one. The framework is implemented within an open-source pipeline enabling the direct and inverse deformation simulation directly from imaging data. We use the high-level Unified Form Language (UFL) of the FEniCS Project to express the finite element model in variational form and to automatically derive the consistent Jacobian. Consequently, the design of the pipeline is flexible: for example, it allows the modification of the constitutive models by changing a single line of code. We include a complete working example showing the inverse deformation of a beam deformed by gravity as supplementary material.",
+    "authors": [
+      "Arnaud Mazier",
+      "Alexandre Bilger",
+      "Antonio E. Forte",
+      "Igor Peterlik",
+      "Jack S. Hale",
+      "Stéphane P. A. Bordas",
+      ".",
+      "Institute of Computational Engineering",
+      "Department of Engineering",
+      "University of Luxembourg",
+      "Esch-sur-Alzette",
+      "Luxembourg.",
+      "Harvard University",
+      "Cambridge",
+      "USA.",
+      "Department of Electronics",
+      "Information",
+      "Bioengineering",
+      "Politecnico di Milano",
+      "Milan",
+      "Italy.",
+      "Institute of Computer Science",
+      "Masaryk University",
+      "Czech Republic.",
+      "Institute of Research",
+      "Development Duy Tan University",
+      "Danang",
+      "Vietnam"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2102.13455v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1211.2376",
+    "arxiv_id": "1211.2376",
+    "title": "Lee-Yang theorems and the complexity of computing averages",
+    "abstract": "We study the complexity of computing average quantities related to spin systems, such as the mean magnetization and susceptibility in the ferromagnetic Ising model, and the average dimer count (or average size of a matching) in the monomer-dimer model. By establishing connections between the complexity of computing these averages and the location of the complex zeros of the partition function, we show that these averages are #P-hard to compute. In case of the Ising model, our approach requires us to prove an extension of the famous Lee-Yang Theorem from the 1950s.",
+    "authors": [
+      "Alistair Sinclair",
+      "Piyush Srivastava"
+    ],
+    "year": 2012,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1211.2376v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "0911.3482",
+    "arxiv_id": "0911.3482",
+    "title": "Complexity of Networks (reprise)",
+    "abstract": "Network or graph structures are ubiquitous in the study of complex systems. Often, we are interested in complexity trends of these system as it evolves under some dynamic. An example might be looking at the complexity of a food web as species enter an ecosystem via migration or speciation, and leave via extinction. In a previous paper, a complexity measure of networks was proposed based on the {\\em complexity is information content} paradigm. To apply this paradigm to any object, one must fix two things: a representation language, in which strings of symbols from some alphabet describe, or stand for the objects being considered; and a means of determining when two such descriptions refer to the same object. With these two things set, the information content of an object can be computed in principle from the number of equivalent descriptions describing a particular object. The previously proposed representation language had the deficiency that the fully connected and empty networks were the most complex for a given number of nodes. A variation of this measure, called zcomplexity, applied a compression algorithm to the resulting bitstring representation, to solve this problem. Unfortunately, zcomplexity proved too computationally expensive to be practical. In this paper, I propose a new representation language that encodes the number of links along with the number of nodes and a representation of the linklist. This, like zcomplexity, exhibits minimal complexity for fully connected and empty networks, but is as tractable as the original measure. ...",
+    "authors": [
+      "Russell K. Standish"
+    ],
+    "year": 2009,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/0911.3482v5",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "nlin",
+    "arxiv_id": "nlin",
+    "title": "On Complexity and Emergence",
+    "abstract": "Numerous definitions for complexity have been proposed over the last half century, with little consensus achieved on how to use the term. A definition of complexity is supplied here that is closely related to the Kolmogorov Complexity and Shannon Entropy measures widely used as complexity measures, yet addresses a number of concerns raised against these measures. However, the price of doing this is to introduce context dependence into the definition of complexity. It is argued that such context dependence is an inherent property of complexity, and related concepts such as entropy and emergence. Scientists are uncomfortable with such context dependence, which smacks of subjectivity, and this is perhaps the reason why little agreement has been found on the meaning of these terms.",
+    "authors": [
+      "Russell K. Standish"
+    ],
+    "year": 2001,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/nlin/0101006v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "0810.3163",
+    "arxiv_id": "0810.3163",
+    "title": "Reduced Kronecker coefficients and counter-examples to Mulmuley's strong saturation conjecture SH",
+    "abstract": "We provide counter-examples to Mulmuley's strong saturation conjecture (strong SH) for the Kronecker coefficients. This conjecture was proposed in the setting of Geometric Complexity Theory to show that deciding whether or not a Kronecker coefficient is zero can be done in polynomial time. We also provide a short proof of the #P-hardness of computing the Kronecker coefficients. Both results rely on the connections between the Kronecker coefficients and another family of structural constants in the representation theory of the symmetric groups: Murnaghan's reduced Kronecker coefficients. An appendix by Mulmuley introduces a relaxed form of the saturation hypothesis SH, still strong enough for the aims of Geometric Complexity Theory.",
+    "authors": [
+      "Emmanuel Briand",
+      "Rosa Orellana",
+      "Mercedes Rosas"
+    ],
+    "year": 2008,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/0810.3163v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1512.03531",
+    "arxiv_id": "1512.03531",
+    "title": "Constructive noncommutative rank computation is in deterministic polynomial time",
+    "abstract": "We extend our techniques developed in our earlier paper appeared in Computational Complexity, 2017 (preprint: arXiv:1508.00690) to obtain a deterministic polynomial time algorithm for computing the non-commutative rank together with certificates of linear spaces of matrices over sufficiently large base fields. The key new idea is a reduction procedure that keeps the blow-up parameter small, and there are two methods to implement this idea: the first one is a greedy argument that removes certain rows and columns, and the second one is an efficient algorithmic version of a result of Derksen and Makam. Both methods rely crucially on the regularity lemma in our aforementioned paper, and in this manuscript we also improve that lemma by removing a coprime condition there.",
+    "authors": [
+      "Gábor Ivanyos",
+      "Youming Qiao",
+      "K. V. Subrahmanyam"
+    ],
+    "year": 2015,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1512.03531v6",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2207.00729",
+    "arxiv_id": "2207.00729",
+    "title": "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+    "abstract": "Despite their omnipresence in modern NLP, characterizing the computational power of transformer neural nets remains an interesting open question. We prove that transformers whose arithmetic precision is logarithmic in the number of input tokens (and whose feedforward nets are computable using space linear in their input) can be simulated by constant-depth logspace-uniform threshold circuits. This provides insight on the power of transformers using known results in complexity theory. For example, if $\\mathsf L \\neq \\mathsf P$ (i.e., not all poly-time problems can be solved using logarithmic space), then transformers cannot even accurately solve linear equalities or check membership in an arbitrary context-free grammar with empty productions. Our result intuitively emerges from the transformer architecture's high parallelizability. We thus speculatively introduce the idea of a fundamental parallelism tradeoff: any model architecture as parallelizable as the transformer will obey limitations similar to it. Since parallelism is key to training models at massive scale, this suggests a potential inherent weakness of the scaling paradigm.",
+    "authors": [
+      "William Merrill",
+      "Ashish Sabharwal"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2207.00729v4",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

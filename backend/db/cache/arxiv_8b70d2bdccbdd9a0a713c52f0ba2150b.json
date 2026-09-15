@@ -1,0 +1,67 @@
+[
+  {
+    "id": "2504.19833",
+    "arxiv_id": "2504.19833",
+    "title": "Quantum Error Correction in Quaternionic Hilbert Spaces",
+    "abstract": "We propose quaternion-based strategies for quantum error correction by extending quantum mechanics into quaternionic Hilbert spaces. Building on the properties of quaternionic quantum states, we define quaternionic analogues of Pauli operators and quantum gates, ensuring inner product preservation and Hilbert space conditions. A simple encoding scheme maps logical qubits into quaternionic systems, introducing natural redundancy and enhanced resilience against noise. We construct a quaternionic extension of the five-qubit code, introducing a framework of 15 syndrome measurements to detect quaternionic errors, including quaternionically rotated error components. Numerical estimates show that the quaternionic five-qubit code achieves a logical error threshold of approximately $p_{th} \\approx 0.015$, demonstrating improved performance compared to the standard complex-valued code. These results suggest a new pathway for quantum error correction in high-noise environments, leveraging the richer structure of quaternionic quantum mechanics to improve fault tolerance.",
+    "authors": [
+      "Valentine Nyirahafashimana",
+      "Nurisya Mohd Shah",
+      "Umair Abdul Halim",
+      "Mohamed Othman",
+      "Sharifah Kartini Said Husain"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2504.19833v1",
+    "url": "https://arxiv.org/abs/2504.19833",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2605.17156",
+    "arxiv_id": "2605.17156",
+    "title": "Sparse Mamba Decoder for Quantum Error Correction: Efficient Defect-Centric Processing of Surface Code Syndromes",
+    "abstract": "Quantum error correction (QEC) is essential for building fault-tolerant quantum computers, requiring decoders that are simultaneously accurate, fast, and scalable. Most state-of-the-art neural decoders achieve high accuracy but process the full dense syndrome array of size $O(d^2 R) $regardless of the actual error rate, where d is the code distance and R is the number of measurement rounds. At physically relevant error rates (p ~ 0.1%), fewer than 5% of syndrome entries contain active detection events -- yet existing decoders process the entire syndrome volume. We introduce the Sparse Mamba Decoder (SMD), a defect-centric neural decoder that processes only the k active detection events using a 13-dimensional feature representation per defect and a Mamba state-space backbone, achieving $O(k)$ complexity. Across depolarizing, uniform circuit-level, SI1000, and Google Sycamore experimental benchmarks, SMD reduces the MWPM logical error rate by up to 49% at $d \\le 5$ under SI1000 noise, runs 95-467x faster than the Tesseract near-MLD decoder and 232-463x faster than Belief Matching, and maintains nearly constant latency (24-57 us) across d = 3-9 under uniform circuit-level noise. On the Sycamore experimental dataset, the SMD ensemble matches or slightly surpasses the dense Mamba decoder of Varbanov et al. All results are obtained on commodity NVIDIA GPUs with 7.5-16M parameters, without specialized accelerators.",
+    "authors": [
+      "Samira Sayedsalehi",
+      "Nader Bagherzadeh",
+      "Maxim Shcherbakov",
+      "Jean-Luc Gaudiot"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2605.17156v2",
+    "url": "https://arxiv.org/abs/2605.17156",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2401.04271",
+    "arxiv_id": "2401.04271",
+    "title": "Fault-tolerant quantum computation using large spin cat-codes",
+    "abstract": "We construct a fault-tolerant quantum error-correcting protocol based on a qubit encoded in a large spin qudit using a spin-cat code, analogous to the continuous variable cat encoding. With this, we can correct the dominant error sources, namely processes that can be expressed as error operators that are linear or quadratic in the components of angular momentum. Such codes tailored to dominant error sources {can} exhibit superior thresholds and lower resource overheads when compared to those designed for unstructured noise models. To preserve the dominant errors during gate operations, we identify a suitable universal gate set. A key component is the CNOT gate that preserves the rank of spherical tensor operators. Categorizing the dominant errors as phase and amplitude errors, we demonstrate how phase errors, analogous to phase-flip errors for qubits, can be effectively corrected. Furthermore, we propose a measurement-free error correction scheme to address amplitude errors without relying on syndrome measurements. Through an in-depth analysis of logical CNOT gate errors, we establish that the fault-tolerant threshold for error correction in the spin-cat encoding surpasses that of standard qubit-based encodings. We consider a specific implementation based on neutral-atom quantum computing, with qudits encoded in the nuclear spin of $^{87}$Sr, and show how to generate the universal gate set, including the rank-preserving CNOT gate, using quantum control and the Rydberg blockade. These findings pave the way for encoding a qubit in a large spin with the potential to achieve fault tolerance, high threshold, and reduced resource overhead in quantum information processing.",
+    "authors": [
+      "Sivaprasad Omanakuttan",
+      "Vikas Buchemmavari",
+      "Jonathan A. Gross",
+      "Ivan H Deutsch",
+      "Milad Marvian"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2401.04271v4",
+    "url": "https://arxiv.org/abs/2401.04271",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

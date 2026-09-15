@@ -1,0 +1,317 @@
+[
+  {
+    "id": "2302.04143",
+    "arxiv_id": "2302.04143",
+    "title": "Predicting Thrombectomy Recanalization from CT Imaging Using Deep Learning Models",
+    "abstract": "For acute ischemic stroke (AIS) patients with large vessel occlusions, clinicians must decide if the benefit of mechanical thrombectomy (MTB) outweighs the risks and potential complications following an invasive procedure. Pre-treatment computed tomography (CT) and angiography (CTA) are widely used to characterize occlusions in the brain vasculature. If a patient is deemed eligible, a modified treatment in cerebral ischemia (mTICI) score will be used to grade how well blood flow is reestablished throughout and following the MTB procedure. An estimation of the likelihood of successful recanalization can support treatment decision-making. In this study, we proposed a fully automated prediction of a patient's recanalization score using pre-treatment CT and CTA imaging. We designed a spatial cross attention network (SCANet) that utilizes vision transformers to localize to pertinent slices and brain regions. Our top model achieved an average cross-validated ROC-AUC of 77.33 $\\pm$ 3.9\\%. This is a promising result that supports future applications of deep learning on CT and CTA for the identification of eligible AIS patients for MTB.",
+    "authors": [
+      "Haoyue Zhang",
+      "Jennifer S. Polson",
+      "Eric J. Yang",
+      "Kambiz Nael",
+      "William Speier",
+      "Corey W. Arnold"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2302.04143v2",
+    "url": "https://arxiv.org/abs/2302.04143",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2311.16109",
+    "arxiv_id": "2311.16109",
+    "title": "Transfer Learning between Motor Imagery Datasets using Deep Learning -- Validation of Framework and Comparison of Datasets",
+    "abstract": "We present a simple deep learning-based framework commonly used in computer vision and demonstrate its effectiveness for cross-dataset transfer learning in mental imagery decoding tasks that are common in the field of Brain-Computer Interfaces (BCI). We investigate, on a large selection of 12 motor-imagery datasets, which ones are well suited for transfer, both as donors and as receivers. Challenges. Deep learning models typically require long training times and are data-hungry, which impedes their use for BCI systems that have to minimize the recording time for (training) examples and are subject to constraints induced by experiments involving human subjects. A solution to both issues is transfer learning, but it comes with its own challenge, i.e., substantial data distribution shifts between datasets, subjects and even between subsequent sessions of the same subject. Approach. For every pair of pre-training (donor) and test (receiver) dataset, we first train a model on the donor before training merely an additional new linear classification layer based on a few receiver trials. Performance of this transfer approach is then tested on other trials of the receiver dataset. Significance. First, we lower the threshold to use transfer learning between motor imagery datasets: the overall framework is extremely simple and nevertheless obtains decent classification scores. Second, we demonstrate that deep learning models are a good option for motor imagery cross-dataset transfer both for the reasons outlined in the first point and because the framework presented is viable in online scenarios. Finally, analysing which datasets are best suited for transfer learning can be used as a reference for future researchers to determine which to use for pre-training or benchmarking.",
+    "authors": [
+      "Pierre Guetschel",
+      "Michael Tangermann"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2311.16109v1",
+    "url": "https://arxiv.org/abs/2311.16109",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2008.04221",
+    "arxiv_id": "2008.04221",
+    "title": "Deep learning for photoacoustic imaging: a survey",
+    "abstract": "Machine learning has been developed dramatically and witnessed a lot of applications in various fields over the past few years. This boom originated in 2009, when a new model emerged, that is, the deep artificial neural network, which began to surpass other established mature models on some important benchmarks. Later, it was widely used in academia and industry. Ranging from image analysis to natural language processing, it fully exerted its magic and now become the state-of-the-art machine learning models. Deep neural networks have great potential in medical imaging technology, medical data analysis, medical diagnosis and other healthcare issues, and is promoted in both pre-clinical and even clinical stages. In this review, we performed an overview of some new developments and challenges in the application of machine learning to medical image analysis, with a special focus on deep learning in photoacoustic imaging. The aim of this review is threefold: (i) introducing deep learning with some important basics, (ii) reviewing recent works that apply deep learning in the entire ecological chain of photoacoustic imaging, from image reconstruction to disease diagnosis, (iii) providing some open source materials and other resources for researchers interested in applying deep learning to photoacoustic imaging.",
+    "authors": [
+      "Changchun Yang",
+      "Hengrong Lan",
+      "Feng Gao",
+      "Fei Gao"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2008.04221v4",
+    "url": "https://arxiv.org/abs/2008.04221",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2404.07754",
+    "arxiv_id": "2404.07754",
+    "title": "Generating Synthetic Satellite Imagery With Deep-Learning Text-to-Image Models -- Technical Challenges and Implications for Monitoring and Verification",
+    "abstract": "Novel deep-learning (DL) architectures have reached a level where they can generate digital media, including photorealistic images, that are difficult to distinguish from real data. These technologies have already been used to generate training data for Machine Learning (ML) models, and large text-to-image models like DALL-E 2, Imagen, and Stable Diffusion are achieving remarkable results in realistic high-resolution image generation. Given these developments, issues of data authentication in monitoring and verification deserve a careful and systematic analysis: How realistic are synthetic images? How easily can they be generated? How useful are they for ML researchers, and what is their potential for Open Science? In this work, we use novel DL models to explore how synthetic satellite images can be created using conditioning mechanisms. We investigate the challenges of synthetic satellite image generation and evaluate the results based on authenticity and state-of-the-art metrics. Furthermore, we investigate how synthetic data can alleviate the lack of data in the context of ML methods for remote-sensing. Finally we discuss implications of synthetic satellite imagery in the context of monitoring and verification.",
+    "authors": [
+      "Tuong Vy Nguyen",
+      "Alexander Glaser",
+      "Felix Biessmann"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2404.07754v1",
+    "url": "https://arxiv.org/abs/2404.07754",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2306.11113",
+    "arxiv_id": "2306.11113",
+    "title": "Learn to Accumulate Evidence from All Training Samples: Theory and Practice",
+    "abstract": "Evidential deep learning, built upon belief theory and subjective logic, offers a principled and computationally efficient way to turn a deterministic neural network uncertainty-aware. The resultant evidential models can quantify fine-grained uncertainty using the learned evidence. To ensure theoretically sound evidential models, the evidence needs to be non-negative, which requires special activation functions for model training and inference. This constraint often leads to inferior predictive performance compared to standard softmax models, making it challenging to extend them to many large-scale datasets. To unveil the real cause of this undesired behavior, we theoretically investigate evidential models and identify a fundamental limitation that explains the inferior performance: existing evidential activation functions create zero evidence regions, which prevent the model to learn from training samples falling into such regions. A deeper analysis of evidential activation functions based on our theoretical underpinning inspires the design of a novel regularizer that effectively alleviates this fundamental limitation. Extensive experiments over many challenging real-world datasets and settings confirm our theoretical findings and demonstrate the effectiveness of our proposed approach.",
+    "authors": [
+      "Deep Pandey",
+      "Qi Yu"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2306.11113v2",
+    "url": "https://arxiv.org/abs/2306.11113",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2105.04026",
+    "arxiv_id": "2105.04026",
+    "title": "The Modern Mathematics of Deep Learning",
+    "abstract": "We describe the new field of mathematical analysis of deep learning. This field emerged around a list of research questions that were not answered within the classical framework of learning theory. These questions concern: the outstanding generalization power of overparametrized neural networks, the role of depth in deep architectures, the apparent absence of the curse of dimensionality, the surprisingly successful optimization performance despite the non-convexity of the problem, understanding what features are learned, why deep architectures perform exceptionally well in physical problems, and which fine aspects of an architecture affect the behavior of a learning task in which way. We present an overview of modern approaches that yield partial answers to these questions. For selected approaches, we describe the main ideas in more detail.",
+    "authors": [
+      "Julius Berner",
+      "Philipp Grohs",
+      "Gitta Kutyniok",
+      "Philipp Petersen"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2105.04026v2",
+    "url": "https://arxiv.org/abs/2105.04026",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2308.03766",
+    "arxiv_id": "2308.03766",
+    "title": "AMaizeD: An End to End Pipeline for Automatic Maize Disease Detection",
+    "abstract": "This research paper presents AMaizeD: An End to End Pipeline for Automatic Maize Disease Detection, an automated framework for early detection of diseases in maize crops using multispectral imagery obtained from drones. A custom hand-collected dataset focusing specifically on maize crops was meticulously gathered by expert researchers and agronomists. The dataset encompasses a diverse range of maize varieties, cultivation practices, and environmental conditions, capturing various stages of maize growth and disease progression. By leveraging multispectral imagery, the framework benefits from improved spectral resolution and increased sensitivity to subtle changes in plant health. The proposed framework employs a combination of convolutional neural networks (CNNs) as feature extractors and segmentation techniques to identify both the maize plants and their associated diseases. Experimental results demonstrate the effectiveness of the framework in detecting a range of maize diseases, including powdery mildew, anthracnose, and leaf blight. The framework achieves state-of-the-art performance on the custom hand-collected dataset and contributes to the field of automated disease detection in agriculture, offering a practical solution for early identification of diseases in maize crops advanced machine learning techniques and deep learning architectures.",
+    "authors": [
+      "Anish Mall",
+      "Sanchit Kabra",
+      "Ankur Lhila",
+      "Pawan Ajmera"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2308.03766v1",
+    "url": "https://arxiv.org/abs/2308.03766",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2012.06469",
+    "arxiv_id": "2012.06469",
+    "title": "DILIE: Deep Internal Learning for Image Enhancement",
+    "abstract": "We consider the generic deep image enhancement problem where an input image is transformed into a perceptually better-looking image. Recent methods for image enhancement consider the problem by performing style transfer and image restoration. The methods mostly fall into two categories: training data-based and training data-independent (deep internal learning methods). We perform image enhancement in the deep internal learning framework. Our Deep Internal Learning for Image Enhancement framework enhances content features and style features and uses contextual content loss for preserving image context in the enhanced image. We show results on both hazy and noisy image enhancement. To validate the results, we use structure similarity and perceptual error, which is efficient in measuring the unrealistic deformation present in the images. We show that the proposed framework outperforms the relevant state-of-the-art works for image enhancement.",
+    "authors": [
+      "Indra Deep Mastan",
+      "Shanmuganathan Raman"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2012.06469v1",
+    "url": "https://arxiv.org/abs/2012.06469",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2302.10473",
+    "arxiv_id": "2302.10473",
+    "title": "Oriented object detection in optical remote sensing images using deep learning: a survey",
+    "abstract": "Oriented object detection is a fundamental yet challenging task in remote sensing (RS), aiming to locate and classify objects with arbitrary orientations. Recent advancements in deep learning have significantly enhanced the capabilities of oriented object detection methods. Given the rapid development of this field, a comprehensive survey of the recent advances in oriented object detection is presented in this paper. Specifically, we begin by tracing the technical evolution from horizontal object detection to oriented object detection and highlighting the specific related challenges, including feature misalignment, spatial misalignment, oriented bounding box (OBB) regression problems, and common issues encountered in RS. Subsequently, we further categorize the existing methods into detection frameworks, OBB regression techniques, feature representation approaches, and solutions to common issues and provide an in-depth discussion of how these methods address the above challenges. In addition, we cover several publicly available datasets and evaluation protocols. Furthermore, we provide a comprehensive comparison and analysis involving the state-of-the-art methods. Toward the end of this paper, we identify several future directions for oriented object detection research.",
+    "authors": [
+      "Kun Wang",
+      "Zi Wang",
+      "Zhang Li",
+      "Ang Su",
+      "Xichao Teng",
+      "Erting Pan",
+      "Minhao Liu",
+      "Qifeng Yu"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2302.10473v6",
+    "url": "https://arxiv.org/abs/2302.10473",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1907.02644",
+    "arxiv_id": "1907.02644",
+    "title": "PathologyGAN: Learning deep representations of cancer tissue",
+    "abstract": "Histopathological images of tumors contain abundant information about how tumors grow and how they interact with their micro-environment. Better understanding of tissue phenotypes in these images could reveal novel determinants of pathological processes underlying cancer, and in turn improve diagnosis and treatment options. Advances of Deep learning makes it ideal to achieve those goals, however, its application is limited by the cost of high quality labels from patients data. Unsupervised learning, in particular, deep generative models with representation learning properties provides an alternative path to further understand cancer tissue phenotypes, capturing tissue morphologies. In this paper, we develop a framework which allows GANs to capture key tissue features and uses these characteristics to give structure to its latent space. To this end, we trained our model on two different datasets, an H&E colorectal cancer tissue from the National Center for Tumor diseases (NCT) and an H&E breast cancer tissue from the Netherlands Cancer Institute (NKI) and Vancouver General Hospital (VGH). Composed of 86 slide images and 576 TMAs respectively. We show that our model generates high quality images, with a FID of 16.65 (breast cancer) and 32.05 (colorectal cancer). We further assess the quality of the images with cancer tissue characteristics (e.g. count of cancer, lymphocytes, or stromal cells), using quantitative information to calculate the FID and showing consistent performance of 9.86. Additionally, the latent space of our model shows an interpretable structure and allows semantic vector operations that translate into tissue feature transformations. Furthermore, ratings from two expert pathologists found no significant difference between our generated tissue images from real ones. The code, images, and pretrained models are available at https://github.com/AdalbertoCq/Pathology-GAN",
+    "authors": [
+      "Adalberto Claudio Quiros",
+      "Roderick Murray-Smith",
+      "Ke Yuan"
+    ],
+    "year": 2019,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1907.02644v5",
+    "url": "https://arxiv.org/abs/1907.02644",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2009.04857",
+    "arxiv_id": "2009.04857",
+    "title": "A Comparison of Deep Learning Object Detection Models for Satellite Imagery",
+    "abstract": "In this work, we compare the detection accuracy and speed of several state-of-the-art models for the task of detecting oil and gas fracking wells and small cars in commercial electro-optical satellite imagery. Several models are studied from the single-stage, two-stage, and multi-stage object detection families of techniques. For the detection of fracking well pads (50m - 250m), we find single-stage detectors provide superior prediction speed while also matching detection performance of their two and multi-stage counterparts. However, for detecting small cars, two-stage and multi-stage models provide substantially higher accuracies at the cost of some speed. We also measure timing results of the sliding window object detection algorithm to provide a baseline for comparison. Some of these models have been incorporated into the Lockheed Martin Globally-Scalable Automated Target Recognition (GATR) framework.",
+    "authors": [
+      "Austen Groener",
+      "Gary Chern",
+      "Mark Pritt"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2009.04857v1",
+    "url": "https://arxiv.org/abs/2009.04857",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2412.00160",
+    "arxiv_id": "2412.00160",
+    "title": "How reproducible are data-driven subtypes of Alzheimer's disease atrophy?",
+    "abstract": "Alzheimer's disease (AD) exhibits substantial clinical and biological heterogeneity, complicating efforts in treatment and intervention development. While new computational methods offer insights into AD progression, the reproducibility of these subtypes across datasets remains understudied, particularly concerning the robustness of subtype definitions when validated on diverse databases. This study evaluates the consistency of AD progression subtypes identified by the Subtype and Stage Inference (SuStaIn) algorithm using T1-weighted MRI data across 5,444 subjects from ANMerge, OASIS, and ADNI datasets, forming four independent cohorts. Each cohort was analyzed under two conditions: one using the full cohort, including cognitively normal controls, and another excluding controls to test subtype robustness. Results confirm the three primary atrophy subtypes identified in earlier studies: Typical, Cortical, and Subcortical, as well as the emergence of rare and atypical AD variants such as posterior cortical atrophy (PCA). Notably, each subtype displayed varying robustness to the inclusion of controls, with certain subtypes, like Subcortical, more influenced by cohort composition. This investigation underscores SuStaIn's reliability for defining stable AD subtypes and suggests its utility in clinical stratification for trials and diagnosis. However, our findings also highlight the need for improved dataset diversity, particularly in terms of ethnic representation, to enhance generalizability and support broader clinical application.",
+    "authors": [
+      "Emma Prevot",
+      "Cameron Shand",
+      "Neil Oxtoby",
+      "for Alzheimer's Disease Neuroimaging Initiative"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.00160v1",
+    "url": "https://arxiv.org/abs/2412.00160",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2310.16210",
+    "arxiv_id": "2310.16210",
+    "title": "Semantic Segmentation in Satellite Hyperspectral Imagery by Deep Learning",
+    "abstract": "Satellites are increasingly adopting on-board AI to optimize operations and increase autonomy through in-orbit inference. The use of Deep Learning (DL) models for segmentation in hyperspectral imagery offers advantages for remote sensing applications. In this work, we train and test 20 models for multi-class segmentation in hyperspectral imagery, selected for their potential in future space deployment. These models include 1D and 2D Convolutional Neural Networks (CNNs) and the latest vision transformers (ViTs). We propose a lightweight 1D-CNN model, 1D-Justo-LiuNet, which outperforms state-of-the-art models in the hypespectral domain. 1D-Justo-LiuNet exceeds the performance of 2D-CNN UNets and outperforms Apple's lightweight vision transformers designed for mobile inference. 1D-Justo-LiuNet achieves the highest accuracy (0.93) with the smallest model size (4,563 parameters) among all tested models, while maintaining fast inference. Unlike 2D-CNNs and ViTs, which encode both spectral and spatial information, 1D-Justo-LiuNet focuses solely on the rich spectral features in hyperspectral data, benefitting from the high-dimensional feature space. Our findings are validated across various satellite datasets, with the HYPSO-1 mission serving as the primary case study for sea, land, and cloud segmentation. We further confirm our conclusions through generalization tests on other hyperspectral missions, such as NASA's EO-1. Based on its superior performance and compact size, we conclude that 1D-Justo-LiuNet is highly suitable for in-orbit deployment, providing an effective solution for optimizing and automating satellite operations at edge.",
+    "authors": [
+      "Jon Alvarez Justo",
+      "Alexandru Ghita",
+      "Daniel Kovac",
+      "Joseph L. Garrett",
+      "Mariana-Iuliana Georgescu",
+      "Jesus Gonzalez-Llorente",
+      "Radu Tudor Ionescu",
+      "Tor Arne Johansen"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2310.16210v4",
+    "url": "https://arxiv.org/abs/2310.16210",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1711.00146",
+    "arxiv_id": "1711.00146",
+    "title": "A multitask deep learning model for real-time deployment in embedded systems",
+    "abstract": "We propose an approach to Multitask Learning (MTL) to make deep learning models faster and lighter for applications in which multiple tasks need to be solved simultaneously, which is particularly useful in embedded, real-time systems. We develop a multitask model for both Object Detection and Semantic Segmentation and analyze the challenges that appear during its training. Our multitask network is 1.6x faster, lighter and uses less memory than deploying the single-task models in parallel. We conclude that MTL has the potential to give superior performance in exchange of a more complex training process that introduces challenges not present in single-task models.",
+    "authors": [
+      "Miquel Martí",
+      "Atsuto Maki"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1711.00146v1",
+    "url": "https://arxiv.org/abs/1711.00146",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2203.09096",
+    "arxiv_id": "2203.09096",
+    "title": "DeepAD: A Robust Deep Learning Model of Alzheimer's Disease Progression for Real-World Clinical Applications",
+    "abstract": "The ability to predict the future trajectory of a patient is a key step toward the development of therapeutics for complex diseases such as Alzheimer's disease (AD). However, most machine learning approaches developed for prediction of disease progression are either single-task or single-modality models, which can not be directly adopted to our setting involving multi-task learning with high dimensional images. Moreover, most of those approaches are trained on a single dataset (i.e. cohort), which can not be generalized to other cohorts. We propose a novel multimodal multi-task deep learning model to predict AD progression by analyzing longitudinal clinical and neuroimaging data from multiple cohorts. Our proposed model integrates high dimensional MRI features from a 3D convolutional neural network with other data modalities, including clinical and demographic information, to predict the future trajectory of patients. Our model employs an adversarial loss to alleviate the study-specific imaging bias, in particular the inter-study domain shifts. In addition, a Sharpness-Aware Minimization (SAM) optimization technique is applied to further improve model generalization. The proposed model is trained and tested on various datasets in order to evaluate and validate the results. Our results showed that 1) our model yields significant improvement over the baseline models, and 2) models using extracted neuroimaging features from 3D convolutional neural network outperform the same models when applied to MRI-derived volumetric features.",
+    "authors": [
+      "Somaye Hashemifar",
+      "Claudia Iriondo",
+      "Evan Casey",
+      "Mohsen Hejrati",
+      "for Alzheimer's Disease Neuroimaging Initiative"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2203.09096v5",
+    "url": "https://arxiv.org/abs/2203.09096",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "id": "2507.20019",
+    "arxiv_id": "2507.20019",
+    "title": "Anomaly Detection in Human Language via Meta-Learning: A Few-Shot Approach",
+    "abstract": "We propose a meta learning framework for detecting anomalies in human language across diverse domains with limited labeled data. Anomalies in language ranging from spam and fake news to hate speech pose a major challenge due to their sparsity and variability. We treat anomaly detection as a few shot binary classification problem and leverage meta-learning to train models that generalize across tasks. Using datasets from domains such as SMS spam, COVID-19 fake news, and hate speech, we evaluate model generalization on unseen tasks with minimal labeled anomalies. Our method combines episodic training with prototypical networks and domain resampling to adapt quickly to new anomaly detection tasks. Empirical results show that our method outperforms strong baselines in F1 and AUC scores. We also release the code and benchmarks to facilitate further research in few-shot text anomaly detection.",
+    "authors": [
+      "Saurav Singla",
+      "Aarav Singla",
+      "Advik Gupta",
+      "Parnika Gupta"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2507.20019v1",
+    "url": "https://arxiv.org/abs/2507.20019",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2302.08893",
+    "arxiv_id": "2302.08893",
+    "title": "Active learning for data streams: a survey",
+    "abstract": "Online active learning is a paradigm in machine learning that aims to select the most informative data points to label from a data stream. The problem of minimizing the cost associated with collecting labeled observations has gained a lot of attention in recent years, particularly in real-world applications where data is only available in an unlabeled form. Annotating each observation can be time-consuming and costly, making it difficult to obtain large amounts of labeled data. To overcome this issue, many active learning strategies have been proposed in the last decades, aiming to select the most informative observations for labeling in order to improve the performance of machine learning models. These approaches can be broadly divided into two categories: static pool-based and stream-based active learning. Pool-based active learning involves selecting a subset of observations from a closed pool of unlabeled data, and it has been the focus of many surveys and literature reviews. However, the growing availability of data streams has led to an increase in the number of approaches that focus on online active learning, which involves continuously selecting and labeling observations as they arrive in a stream. This work aims to provide an overview of the most recently proposed approaches for selecting the most informative observations from data streams in real time. We review the various techniques that have been proposed and discuss their strengths and limitations, as well as the challenges and opportunities that exist in this area of research.",
+    "authors": [
+      "Davide Cacciarelli",
+      "Murat Kulahci"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2302.08893v4",
+    "url": "https://arxiv.org/abs/2302.08893",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2506.09781",
+    "arxiv_id": "2506.09781",
+    "title": "On the Similarities of Embeddings in Contrastive Learning",
+    "abstract": "Contrastive learning operates on a simple yet effective principle: Embeddings of positive pairs are pulled together, while those of negative pairs are pushed apart. In this paper, we propose a unified framework for understanding contrastive learning through the lens of cosine similarity, and present two key theoretical insights derived from this framework. First, in full-batch settings, we show that perfect alignment of positive pairs is unattainable when negative-pair similarities fall below a threshold, and this misalignment can be mitigated by incorporating within-view negative pairs into the objective. Second, in mini-batch settings, smaller batch sizes induce stronger separation among negative pairs in the embedding space, i.e., higher variance in their similarities, which in turn degrades the quality of learned representations compared to full-batch settings. To address this, we propose an auxiliary loss that reduces the variance of negative-pair similarities in mini-batch settings. Empirical results show that incorporating the proposed loss improves performance in small-batch settings.",
+    "authors": [
+      "Chungpa Lee",
+      "Sehee Lim",
+      "Kibok Lee",
+      "Jy-yong Sohn"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2506.09781v2",
+    "url": "https://arxiv.org/abs/2506.09781",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2311.14544",
+    "arxiv_id": "2311.14544",
+    "title": "Inferring Latent Class Statistics from Text for Robust Visual Few-Shot Learning",
+    "abstract": "In the realm of few-shot learning, foundation models like CLIP have proven effective but exhibit limitations in cross-domain robustness especially in few-shot settings. Recent works add text as an extra modality to enhance the performance of these models. Most of these approaches treat text as an auxiliary modality without fully exploring its potential to elucidate the underlying class visual features distribution. In this paper, we present a novel approach that leverages text-derived statistics to predict the mean and covariance of the visual feature distribution for each class. This predictive framework enriches the latent space, yielding more robust and generalizable few-shot learning models. We demonstrate the efficacy of incorporating both mean and covariance statistics in improving few-shot classification performance across various datasets. Our method shows that we can use text to predict the mean and covariance of the distribution offering promising improvements in few-shot learning scenarios.",
+    "authors": [
+      "Yassir Bendou",
+      "Vincent Gripon",
+      "Bastien Pasdeloup",
+      "Giulia Lioi",
+      "Lukas Mauch",
+      "Fabien Cardinaux",
+      "Ghouthi Boukli Hacene"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2311.14544v1",
+    "url": "https://arxiv.org/abs/2311.14544",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

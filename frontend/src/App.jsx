@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   BookOpen, Play, Loader2, LayoutDashboard,
   Table2, GitFork, FileText, AlertCircle,
-  Sparkles, Trash2, MessageSquare, User, LogOut
+  Sparkles, Trash2, MessageSquare, User, LogOut,
+  Clock, SlidersHorizontal, X
 } from 'lucide-react';
 
 import { useAuth } from './context/AuthContext';
@@ -68,6 +69,10 @@ export default function App() {
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu]   = useState(false);
+
+  // Sidebar visibility state (user can close history and filters sidebars to view content full screen)
+  const [showHistorySidebar, setShowHistorySidebar] = useState(true);
+  const [showLeftSidebar, setShowLeftSidebar]       = useState(true);
 
   // Active loaded history session ID (for highlighting in sidebar)
   const [activeSessionId, setActiveSessionId] = useState(null);
@@ -229,18 +234,10 @@ export default function App() {
       </span>
     );
     if (jobStatus === 'done') return (
-      <>
-        {papers.length > 0 && (
-          <span className="status-badge status-badge-sources">
-            <span className="status-badge-dot" />
-            {papers.length} sources loaded
-          </span>
-        )}
-        <span className="status-badge status-badge-done">
-          <span className="status-badge-dot" />
-          Pipeline complete
-        </span>
-      </>
+      <span className="status-badge status-badge-done">
+        <span className="status-badge-dot" />
+        Pipeline complete
+      </span>
     );
     if (jobStatus === 'error') return (
       <span className="status-badge status-badge-error">
@@ -270,7 +267,9 @@ export default function App() {
           </div>
           <div className="topbar-brand">
             <span className="topbar-brand-name">ResearchMind</span>
-            <span className="topbar-brand-sub">Literature review, with its evidence attached</span>
+            <span className="topbar-brand-sub">
+              Literature review,<br />with its evidence attached
+            </span>
           </div>
         </div>
 
@@ -280,13 +279,13 @@ export default function App() {
         <form
           onSubmit={handleSubmit}
           className="topbar-search"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}
         >
           <input
             id="main-query-input"
             type="text"
             className="topbar-search-input"
-            style={{ flex: 1 }}
+            style={{ flex: '3 1 300px', minWidth: '150px' }}
             placeholder="e.g. agentic AI, quantum error correction, diffusion models…"
             value={query}
             onChange={e => setQuery(e.target.value)}
@@ -296,13 +295,35 @@ export default function App() {
             id="keywords-topbar-input"
             type="text"
             className="topbar-search-input"
-            style={{ flex: '0 1 200px', minWidth: '120px' }}
-            placeholder="Keywords (e.g. meta-learning)"
+            style={{ flex: '0 1 110px', minWidth: '85px', maxWidth: '120px' }}
+            placeholder="Keywords"
             value={keywords}
             onChange={e => setKeywords(e.target.value)}
             disabled={isRunning}
           />
         </form>
+
+        {/* Sidebar Toggle Buttons */}
+        <div className="topbar-toggles">
+          {isAuthenticated && (
+            <button
+              className={`topbar-toggle-btn ${showHistorySidebar ? 'active' : ''}`}
+              onClick={() => setShowHistorySidebar(!showHistorySidebar)}
+              title={showHistorySidebar ? "Close History sidebar" : "Show History sidebar"}
+            >
+              <Clock size={13} />
+              <span>History</span>
+            </button>
+          )}
+          <button
+            className={`topbar-toggle-btn ${showLeftSidebar ? 'active' : ''}`}
+            onClick={() => setShowLeftSidebar(!showLeftSidebar)}
+            title={showLeftSidebar ? "Close Filters sidebar" : "Show Filters sidebar"}
+          >
+            <SlidersHorizontal size={13} />
+            <span>Filters</span>
+          </button>
+        </div>
 
         {/* Right cluster */}
         <div className="topbar-right">
@@ -365,73 +386,97 @@ export default function App() {
       </header>
 
       {/* ─── Body layout ─── */}
-      <div className={`app-layout ${isAuthenticated ? 'has-history' : ''}`}>
+      <div className="app-layout">
 
-        {/* ── History Sidebar (left-most, only when logged in) ── */}
+        {/* ── History Sidebar (left-most, only when logged in and open) ── */}
         <HistorySidebar
           onLoadSession={handleLoadSession}
           onNewResearch={handleNewResearch}
           activeSessionId={activeSessionId}
+          isOpen={showHistorySidebar && isAuthenticated}
+          onClose={() => setShowHistorySidebar(false)}
         />
 
-        {/* ── Left Sidebar ── */}
-        <aside className={`sidebar-left ${isAuthenticated ? 'sidebar-left--shifted' : ''}`}>
-          {/* Filters */}
-          <div className="sidebar-section">
-            <div className="sidebar-section-title">Filters</div>
+        {/* ── Left Sidebar (Filters & Pipeline) ── */}
+        {showLeftSidebar && (
+          <aside className={`sidebar-left ${isAuthenticated && showHistorySidebar ? 'sidebar-left--shifted' : ''}`}>
+            {/* Filters */}
+            <div className="sidebar-section">
+              <div className="sidebar-section-header">
+                <span className="sidebar-section-title">Filters</span>
+                <button
+                  className="sidebar-close-btn"
+                  onClick={() => setShowLeftSidebar(false)}
+                  title="Close filters sidebar"
+                  aria-label="Close filters sidebar"
+                >
+                  <X size={14} />
+                </button>
+              </div>
 
-            <label className="filter-label">Year range</label>
-            <div className="filter-row">
-              <input
-                id="year-min"
-                type="number"
-                className="filter-input"
-                value={yearMin}
-                onChange={e => setYearMin(e.target.value)}
-                min="1900"
-                max={yearMax}
-                disabled={isRunning}
-              />
-              <span className="filter-sep">—</span>
-              <input
-                id="year-max"
-                type="number"
-                className="filter-input"
-                value={yearMax}
-                onChange={e => setYearMax(e.target.value)}
-                min={yearMin}
-                max={new Date().getFullYear() + 2}
-                disabled={isRunning}
-              />
+              <label className="filter-label">Year range</label>
+              <div className="filter-row">
+                <input
+                  id="year-min"
+                  type="number"
+                  className="filter-input"
+                  value={yearMin}
+                  onChange={e => setYearMin(e.target.value)}
+                  min="1900"
+                  max={yearMax}
+                  disabled={isRunning}
+                />
+                <span className="filter-sep">—</span>
+                <input
+                  id="year-max"
+                  type="number"
+                  className="filter-input"
+                  value={yearMax}
+                  onChange={e => setYearMax(e.target.value)}
+                  min={yearMin}
+                  max={new Date().getFullYear() + 2}
+                  disabled={isRunning}
+                />
+              </div>
+
+              <label className="filter-label">Publication type</label>
+              <div style={{ marginBottom: '12px' }}>
+                <select
+                  id="publication-type"
+                  className="filter-select"
+                  value={venueType}
+                  onChange={e => setVenueType(e.target.value)}
+                  disabled={isRunning}
+                >
+                  <option value="any">Any</option>
+                  <option value="conference">Conference</option>
+                  <option value="journal">Journal</option>
+                  <option value="arxiv">arXiv preprint</option>
+                  <option value="workshop">Workshop</option>
+                </select>
+              </div>
             </div>
 
-            <label className="filter-label">Publication type</label>
-            <div style={{ marginBottom: '12px' }}>
-              <select
-                id="publication-type"
-                className="filter-select"
-                value={venueType}
-                onChange={e => setVenueType(e.target.value)}
-                disabled={isRunning}
-              >
-                <option value="any">Any</option>
-                <option value="conference">Conference</option>
-                <option value="journal">Journal</option>
-                <option value="arxiv">arXiv preprint</option>
-                <option value="workshop">Workshop</option>
-              </select>
+            {/* Pipeline */}
+            <div className="sidebar-section" style={{ borderBottom: 'none', paddingBottom: 8 }}>
+              <div className="sidebar-section-title">Pipeline</div>
             </div>
-          </div>
+            <ProgressTracker agentStatus={agentStatus} />
+          </aside>
+        )}
 
-          {/* Pipeline */}
-          <div className="sidebar-section" style={{ borderBottom: 'none', paddingBottom: 8 }}>
-            <div className="sidebar-section-title">Pipeline</div>
-          </div>
-          <ProgressTracker agentStatus={agentStatus} />
-        </aside>
-
-        {/* ── Center Content ── */}
-        <main className={`content-main ${isAuthenticated ? 'content-main--shifted' : ''}`}>
+        {/* ── Center Content (Dynamic margins based on active sidebars) ── */}
+        <main
+          className={`content-main ${
+            isAuthenticated && showHistorySidebar
+              ? showLeftSidebar
+                ? 'content-main--shifted-both'
+                : 'content-main--shifted-history'
+              : showLeftSidebar
+              ? 'content-main--shifted-left'
+              : 'content-main--full'
+          }`}
+        >
 
           {/* Error banner */}
           {error && (

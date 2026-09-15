@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Clock, Plus, Trash2, Search, ChevronRight,
-  Loader2, BookOpen, Calendar
+  Loader2, BookOpen, Calendar, X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -36,7 +36,7 @@ function groupByDate(sessions) {
   return groups;
 }
 
-export default function HistorySidebar({ onLoadSession, onNewResearch, activeSessionId }) {
+export default function HistorySidebar({ onLoadSession, onNewResearch, activeSessionId, isOpen = true, onClose }) {
   const { token, isAuthenticated, authHeaders } = useAuth();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -106,7 +106,7 @@ export default function HistorySidebar({ onLoadSession, onNewResearch, activeSes
     }
   };
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated || !isOpen) return null;
 
   // Filter
   const filtered = searchTerm.trim()
@@ -121,6 +121,22 @@ export default function HistorySidebar({ onLoadSession, onNewResearch, activeSes
 
   return (
     <div className="history-sidebar">
+      {/* Header with Close Symbol Button */}
+      <div className="history-sidebar-header">
+        <div className="history-sidebar-title">
+          <Clock size={14} />
+          <span>Research History</span>
+        </div>
+        <button
+          className="history-sidebar-close"
+          onClick={onClose}
+          title="Close history sidebar"
+          aria-label="Close history sidebar"
+        >
+          <X size={15} />
+        </button>
+      </div>
+
       {/* New Research button */}
       <button className="history-new-btn" onClick={onNewResearch}>
         <Plus size={14} />

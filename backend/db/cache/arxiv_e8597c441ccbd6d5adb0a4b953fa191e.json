@@ -1,0 +1,314 @@
+[
+  {
+    "id": "2601.11816",
+    "arxiv_id": "2601.11816",
+    "title": "POLARIS: Typed Planning and Governed Execution for Agentic AI in Back-Office Automation",
+    "abstract": "Enterprise back office workflows require agentic systems that are auditable, policy-aligned, and operationally predictable, capabilities that generic multi-agent setups often fail to deliver. We present POLARIS (Policy-Aware LLM Agentic Reasoning for Integrated Systems), a governed orchestration framework that treats automation as typed plan synthesis and validated execution over LLM agents. A planner proposes structurally diverse, type checked directed acyclic graphs (DAGs), a rubric guided reasoning module selects a single compliant plan, and execution is guarded by validator gated checks, a bounded repair loop, and compiled policy guardrails that block or route side effects before they occur. Applied to document centric finance tasks, POLARIS produces decision grade artifacts and full execution traces while reducing human intervention. Empirically, POLARIS achieves a micro F1 of 0.81 on the SROIE dataset and, on a controlled synthetic suite, achieves 0.95 to 1.00 precision for anomaly routing with preserved audit trails. These evaluations constitute an initial benchmark for governed Agentic AI. POLARIS provides a methodological and benchmark reference for policy-aligned Agentic AI. Keywords Agentic AI, Enterprise Automation, Back-Office Tasks, Benchmarks, Governance, Typed Planning, Evaluation",
+    "authors": [
+      "Zahra Moslemi",
+      "Keerthi Koneru",
+      "Yen-Ting Lee",
+      "Sheethal Kumar",
+      "Ramesh Radhakrishnan"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.11816v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2607.13034",
+    "arxiv_id": "2607.13034",
+    "title": "Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution",
+    "abstract": "Large language model (LLM) agents increasingly automate multi-step engineering and informatics workflows, yet they rarely ask how much effort a task actually requires. They often follow a maximum-context-first strategy--re-reading files and dependencies they have already seen--turning a one-line edit into a small code-base audit. We argue the missing capability is task-aware execution-scope estimation: judging a task's difficulty, the information it truly needs, and the shortest reliable path before committing budget. We formalize minimum-sufficient execution and the Agent Cognitive Redundancy Ratio (ACRR), and propose E3 (Estimate, Execute, Expand): the agent estimates an initial operating point, executes a minimum viable path, and expands scope only when verification fails. On MSE-Bench--a deterministic benchmark of 121 edits in a capability-controlled simulator--E3 matches the strongest baseline's 100% success while cutting cost by 85%, tokens by 91%, and inspected files by 92%, and further beats a strong adaptive retrieval baseline by 16%; the gains survive held-out instruction wording and essentially every cost weighting. A companion real-model harness (LLM-Case) corroborates the effect on a live gpt-4o agent editing a real open-source library, with every candidate patch graded by actually running the project's real pytest suite against a measured oracle: the over-reading is milder but real, and E3 is the leanest and fastest policy at comparable task success--its one shortfall a provider rate-limit, not a wrong edit. We frame this as a controlled probe of execution redundancy, not a measurement of any deployed agent, and position task-aware execution as a step toward engineering-grounded AI (EGAI)--agents whose effort is anchored in the engineering reality of the task. We release the framework and benchmark.",
+    "authors": [
+      "Junjie Yin",
+      "Xinyu Feng"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2607.13034v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2501.11803",
+    "arxiv_id": "2501.11803",
+    "title": "Automating RT Planning at Scale: High Quality Data For AI Training",
+    "abstract": "Radiotherapy (RT) planning is complex, subjective, and time-intensive. Advances with artificial intelligence (AI) promise to improve its precision and efficiency, but progress is often limited by the scarcity of large, standardized datasets. To address this, we introduce the Automated Iterative RT Planning (AIRTP) system, a scalable solution for generating high-quality treatment plans. This scalable solution is designed to generate substantial volumes of consistently high-quality treatment plans, overcoming a key obstacle in the advancement of AI-driven RT planning. Our AIRTP pipeline adheres to clinical guidelines and automates essential steps, including organ-at-risk (OAR) contouring, helper structure creation, beam setup, optimization, and plan quality improvement, using AI integrated with RT planning software like Varian Eclipse. Furthermore, a novel approach for determining optimization parameters to reproduce 3D dose distributions, i.e. a method to convert dose predictions to deliverable treatment plans constrained by machine limitations is proposed. A comparative analysis of plan quality reveals that our automated pipeline produces treatment plans of quality comparable to those generated manually, which traditionally require several hours of labor per plan. Committed to public research, the first data release of our AIRTP pipeline includes nine cohorts covering head-and-neck and lung cancer sites to support an AAPM 2025 challenge. To our best knowledge, this dataset features more than 10 times number of plans compared to the largest existing well-curated public dataset. Repo: https://github.com/RiqiangGao/GDP-HMM_AAPMChallenge.",
+    "authors": [
+      "Riqiang Gao",
+      "Mamadou Diallo",
+      "Han Liu",
+      "Anthony Magliari",
+      "Jonathan Sackett",
+      "Wilko Verbakel",
+      "Sandra Meyers",
+      "Rafe Mcbeth",
+      "Masoud Zarepisheh",
+      "Simon Arberet",
+      "Martin Kraus",
+      "Florin C. Ghesu",
+      "Ali Kamen"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2501.11803v6",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2603.28944",
+    "arxiv_id": "2603.28944",
+    "title": "Faith in AI can narrow the futures individuals consider",
+    "abstract": "Artificial intelligence (AI) predictions are increasingly used to inform human decisions. Here, using a behavioral implementation of the classic Newcomb's paradox in 1,305 participants, we show that AI predictions can also shape the reasoning people use to make a decision. In this paradigm, perceived predictive authority can alter how people reason about their future actions, leading them to forgo a guaranteed reward. Over 40% of participants treated AI as such a predictive authority about their own behavior, significantly increasing the odds of forgoing the guaranteed reward by a factor of 3.39 (95% CI: 2.45-4.70) and reducing earnings by 10.7-42.9%. The effect appeared across AI presentations and decision contexts and remained detectable even when predictions repeatedly failed. When people perceive AI as capable of predicting their personal behavior, the mere presence of AI predictions may shape their decision-making, narrowing the futures they consider.",
+    "authors": [
+      "Aoi Naito",
+      "Hirokazu Shirado"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2603.28944v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2011.01774",
+    "arxiv_id": "2011.01774",
+    "title": "Provenance-Based Assessment of Plans in Context",
+    "abstract": "Many real-world planning domains involve diverse information sources, external entities, and variable-reliability agents, all of which may impact the confidence, risk, and sensitivity of plans. Humans reviewing a plan may lack context about these factors; however, this information is available during the domain generation, which means it can also be interwoven into the planner and its resulting plans. This paper presents a provenance-based approach to explaining automated plans. Our approach (1) extends the SHOP3 HTN planner to generate dependency information, (2) transforms the dependency information into an established PROV-O representation, and (3) uses graph propagation and TMS-inspired algorithms to support dynamic and counter-factual assessment of information flow, confidence, and support. We qualified our approach's explanatory scope with respect to explanation targets from the automated planning literature and the information analysis literature, and we demonstrate its ability to assess a plan's pertinence, sensitivity, risk, assumption support, diversity, and relative confidence.",
+    "authors": [
+      "Scott E. Friedman",
+      "Robert P. Goldman",
+      "Richard G. Freedman",
+      "Ugur Kuter",
+      "Christopher Geib",
+      "Jeffrey Rye"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2011.01774v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2501.02842",
+    "arxiv_id": "2501.02842",
+    "title": "Foundations of GenIR",
+    "abstract": "The chapter discusses the foundational impact of modern generative AI models on information access (IA) systems. In contrast to traditional AI, the large-scale training and superior data modeling of generative AI models enable them to produce high-quality, human-like responses, which brings brand new opportunities for the development of IA paradigms. In this chapter, we identify and introduce two of them in details, i.e., information generation and information synthesis. Information generation allows AI to create tailored content addressing user needs directly, enhancing user experience with immediate, relevant outputs. Information synthesis leverages the ability of generative AI to integrate and reorganize existing information, providing grounded responses and mitigating issues like model hallucination, which is particularly valuable in scenarios requiring precision and external knowledge. This chapter delves into the foundational aspects of generative models, including architecture, scaling, and training, and discusses their applications in multi-modal scenarios. Additionally, it examines the retrieval-augmented generation paradigm and other methods for corpus modeling and understanding, demonstrating how generative AI can enhance information access systems. It also summarizes potential challenges and fruitful directions for future studies.",
+    "authors": [
+      "Qingyao Ai",
+      "Jingtao Zhan",
+      "Yiqun Liu"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2501.02842v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2604.24153",
+    "arxiv_id": "2604.24153",
+    "title": "Right-to-Act: A Pre-Execution Non-Compensatory Decision Protocol for AI Systems",
+    "abstract": "Current AI systems increasingly operate in contexts where their outputs directly trigger real-world actions. Most existing approaches to AI safety, risk management, and governance focus on post-hoc validation, probabilistic risk estimation, or certification of model behavior. However, these approaches implicitly assume that once a decision is produced, it is eligible for execution. In this work, we introduce the Right-to-Act protocol, a deterministic, non-compensatory pre-execution decision layer that evaluates whether an AI-generated decision is permitted to be realized at all. Unlike compensatory systems, where high-confidence signals can override failed conditions, the proposed framework enforces strict structural constraints: if any required condition is unmet, execution is halted or deferred. We formalize the distinction between compensatory and non-compensatory decision regimes and define a pre-execution legitimacy boundary. Through a scenario-based case study, we demonstrate how identical AI outputs can lead to divergent outcomes when evaluated under a Right-to-Act protocol, preserving reversibility and preventing premature or irreversible actions. The proposed approach reframes AI control from optimizing decisions to governing their admissibility, introducing a protocol-level abstraction that operates independently of model architecture or training methodology.",
+    "authors": [
+      "Gadi Lavi"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2604.24153v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2601.16513",
+    "arxiv_id": "2601.16513",
+    "title": "Competing Visions of Ethical AI: A Case Study of OpenAI",
+    "abstract": "Introduction. AI Ethics is framed distinctly across actors and stakeholder groups. We report results from a case study of OpenAI analysing ethical AI discourse. Method. Research addressed: How has OpenAI's public discourse leveraged 'ethics', 'safety', 'alignment' and adjacent related concepts over time, and what does discourse signal about framing in practice? A structured corpus, differentiating between communication for a general audience and communication with an academic audience, was assembled from public documentation. Analysis. Qualitative content analysis of ethical themes combined inductively derived and deductively applied codes. Quantitative analysis leveraged computational content analysis methods via NLP to model topics and quantify changes in rhetoric over time. Visualizations report aggregate results. For reproducible results, we have released our code at https://github.com/famous-blue-raincoat/AI_Ethics_Discourse. Results. Results indicate that safety and risk discourse dominate OpenAI's public communication and documentation, without applying academic and advocacy ethics frameworks or vocabularies. Conclusions. Implications for governance are presented, along with discussion of ethics-washing practices in industry.",
+    "authors": [
+      "Melissa Wilfley",
+      "Mengting Ai",
+      "Madelyn Rose Sanfilippo"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.16513v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2510.01751",
+    "arxiv_id": "2510.01751",
+    "title": "A cybersecurity AI agent selection and decision support framework",
+    "abstract": "This paper presents a novel, structured decision support framework that systematically aligns diverse artificial intelligence (AI) agent architectures, reactive, cognitive, hybrid, and learning, with the comprehensive National Institute of Standards and Technology (NIST) Cybersecurity Framework (CSF) 2.0. By integrating agent theory with industry guidelines, this framework provides a transparent and stepwise methodology for selecting and deploying AI solutions to address contemporary cyber threats. Employing a granular decomposition of NIST CSF 2.0 functions into specific tasks, the study links essential AI agent properties such as autonomy, adaptive learning, and real-time responsiveness to each subcategory's security requirements. In addition, it outlines graduated levels of autonomy (assisted, augmented, and fully autonomous) to accommodate organisations at varying stages of cybersecurity maturity. This holistic approach transcends isolated AI applications, providing a unified detection, incident response, and governance strategy. Through conceptual validation, the framework demonstrates how tailored AI agent deployments can align with real-world constraints and risk profiles, enhancing situational awareness, accelerating response times, and fortifying long-term resilience via adaptive risk management. Ultimately, this research bridges the gap between theoretical AI constructs and operational cybersecurity demands, establishing a foundation for robust, empirically validated multi-agent systems that adhere to industry standards.",
+    "authors": [
+      "Masike Malatji"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2510.01751v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2511.02841",
+    "arxiv_id": "2511.02841",
+    "title": "AI Agents with Decentralized Identifiers and Verifiable Credentials",
+    "abstract": "A fundamental limitation of current LLM-based AI agents is their inability to build differentiated trust among each other at the onset of an agent-to-agent dialogue. However, autonomous and interoperable trust establishment becomes essential once agents start to operate beyond isolated environments and engage in dialogues across individual or organizational boundaries. A promising way to fill this gap in Agentic AI is to equip agents with long-lived digital identities and introduce tamper-proof and flexible identity-bound attestations of agents, provisioned by commonly trusted third parties and designed for cross-domain verifiability. This article presents a conceptual framework and a prototypical multi-agent system, where each agent is endowed with a self-sovereign digital identity. It combines a unique and ledger-anchored W3C Decentralized Identifier (DID) of an agent with a set of third-party issued W3C Verifiable Credentials (VCs). This enables agents at the start of a dialog to prove ownership of their self-controlled DIDs for authentication purposes and to establish various cross-domain trust relationships through the spontaneous exchange of their self-hosted DID-bound VCs. A comprehensive evaluation of the prototypical implementation demonstrates technical feasibility but also reveals limitations once an agent's LLM is in sole charge to control the respective security procedures.",
+    "authors": [
+      "Sandro Rodriguez Garzon",
+      "Awid Vaziry",
+      "Enis Mert Kuzu",
+      "Dennis Enrique Gehrmann",
+      "Buse Varkan",
+      "Alexander Gaballa",
+      "Axel Küpper"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2511.02841v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2510.09567",
+    "arxiv_id": "2510.09567",
+    "title": "Safe, Untrusted, \"Proof-Carrying\" AI Agents: toward the agentic lakehouse",
+    "abstract": "Data lakehouses run sensitive workloads, where AI-driven automation raises concerns about trust, correctness, and governance. We argue that API-first, programmable lakehouses provide the right abstractions for safe-by-design, agentic workflows. Using Bauplan as a case study, we show how data branching and declarative environments extend naturally to agents, enabling reproducibility and observability while reducing the attack surface. We present a proof-of-concept in which agents repair data pipelines using correctness checks inspired by proof-carrying code. Our prototype demonstrates that untrusted AI agents can operate safely on production data and outlines a path toward a fully agentic lakehouse.",
+    "authors": [
+      "Jacopo Tagliabue",
+      "Ciro Greco"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2510.09567v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2412.10999",
+    "arxiv_id": "2412.10999",
+    "title": "Cocoa: Co-Planning and Co-Execution with AI Agents",
+    "abstract": "As AI agents take on increasingly long-running tasks involving sophisticated planning and execution, there is a corresponding need for novel interaction designs that enable deeper human-agent collaboration. However, most prior works leverage human interaction to fix \"autonomous\" workflows that have yet to become fully autonomous or rigidly treat planning and execution as separate stages. Based on a formative study with 9 researchers using AI to support their work, we propose a design that affords greater flexibility in collaboration, so that users can 1) delegate agency to the user or agent via a collaborative plan where individual steps can be assigned; and 2) interleave planning and execution so that plans can adjust after partial execution. We introduce Cocoa, a system that takes design inspiration from computational notebooks to support complex research tasks. A lab study (n=16) found that Cocoa enabled steerability without sacrificing ease-of-use, and a week-long field deployment (n=7) showed how researchers collaborated with Cocoa to accomplish real-world tasks.",
+    "authors": [
+      "K. J. Kevin Feng",
+      "Kevin Pu",
+      "Matt Latzke",
+      "Tal August",
+      "Pao Siangliulue",
+      "Jonathan Bragg",
+      "Daniel S. Weld",
+      "Amy X. Zhang",
+      "Joseph Chee Chang"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.10999v4",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2301.03724",
+    "arxiv_id": "2301.03724",
+    "title": "SoK: Hardware Defenses Against Speculative Execution Attacks",
+    "abstract": "Speculative execution attacks leverage the speculative and out-of-order execution features in modern computer processors to access secret data or execute code that should not be executed. Secret information can then be leaked through a covert channel. While software patches can be installed for mitigation on existing hardware, these solutions can incur big performance overhead. Hardware mitigation is being studied extensively by the computer architecture community. It has the benefit of preserving software compatibility and the potential for much smaller performance overhead than software solutions. This paper presents a systematization of the hardware defenses against speculative execution attacks that have been proposed. We show that speculative execution attacks consist of 6 critical attack steps. We propose defense strategies, each of which prevents a critical attack step from happening, thus preventing the attack from succeeding. We then summarize 20 hardware defenses and overhead-reducing features that have been proposed. We show that each defense proposed can be classified under one of our defense strategies, which also explains why it can thwart the attack from succeeding. We discuss the scope of the defenses, their performance overhead, and the security-performance trade-offs that can be made.",
+    "authors": [
+      "Guangyuan Hu",
+      "Zecheng He",
+      "Ruby Lee"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2301.03724v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1503.07220",
+    "arxiv_id": "1503.07220",
+    "title": "Individual Planning in Agent Populations: Exploiting Anonymity and Frame-Action Hypergraphs",
+    "abstract": "Interactive partially observable Markov decision processes (I-POMDP) provide a formal framework for planning for a self-interested agent in multiagent settings. An agent operating in a multiagent environment must deliberate about the actions that other agents may take and the effect these actions have on the environment and the rewards it receives. Traditional I-POMDPs model this dependence on the actions of other agents using joint action and model spaces. Therefore, the solution complexity grows exponentially with the number of agents thereby complicating scalability. In this paper, we model and extend anonymity and context-specific independence -- problem structures often present in agent populations -- for computational gain. We empirically demonstrate the efficiency from exploiting these problem structures by solving a new multiagent problem involving more than 1,000 agents.",
+    "authors": [
+      "Ekhlas Sonu",
+      "Yingke Chen",
+      "Prashant Doshi"
+    ],
+    "year": 2015,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1503.07220v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2605.23989",
+    "arxiv_id": "2605.23989",
+    "title": "Towards trustworthy agentic AI: a comprehensive survey of safety, robustness, privacy, and system security",
+    "abstract": "Agentic AI systems -- Large Language Models (LLMs) augmented with planning, tool use, memory, and long-horizon interactions -- can execute complex tasks autonomously, but their multi-step trajectories introduce new failure modes that challenge trustworthiness. This survey provides a focused examination of trustworthy agentic AI through two core dimensions that are critical for high-risk deployments: Safety and Robustness, and Privacy and System Security. For each dimension, we clarify key concepts, identify where risks emerge along the agent workflow, and summarize stage-targeted mitigation strategies. Other trustworthiness aspects (value alignment, transparency, fairness, and accountability) are discussed as relevant context rather than parallel chapters. To support consistent comparison and deployment decisions, we consolidate evaluation into a unified metrics-and-benchmarks hub, emphasizing both outcome and process signals (e.g., constraint violations, trace completeness, and adversarial success rates) and offering scenario-to-metric guidance for release gating. We conclude by outlining open challenges such as self-evolving agents, runtime monitoring and verification, privacy-preserving personalization, and the trust-utility trade-off, and present a case study of real-world security failures in open-source agentic systems. Our goal is to serve as a practical reference for researchers and practitioners building trustworthy agentic systems in high-stakes environments.",
+    "authors": [
+      "Jinhu Qi",
+      "Muzhi Li",
+      "Jiahong Liu",
+      "Yuqin Shu",
+      "Dianzhi Yu",
+      "Shicheng Ma",
+      "Wenqian Cui",
+      "Yiyang Zhao",
+      "Yiyi Chen",
+      "Ruoxi Jiang",
+      "Irwin King",
+      "Zenglin Xu"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2605.23989v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

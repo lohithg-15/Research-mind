@@ -1,0 +1,74 @@
+[
+  {
+    "id": "2606.04079",
+    "arxiv_id": "2606.04079",
+    "title": "Quantum error correction with the toric code",
+    "abstract": "Quantum computing platforms based on arrays of tweezer-confined neutral atoms have recently emerged as a competitive modality thanks to a direct path toward high qubit count, rapidly advancing operation fidelities, and their ability to execute circuits with arbitrary qubit connectivity. These features will enable the use of efficient error correction schemes with high encoding-rates, time-efficient decoding, and resource-efficient architectures based on transversal gates. With these goals in mind, recent state of the art neutral atom demonstrations focus on the transition from the use of physical qubits to error-corrected logical qubits, but to date there has been no demonstration of repeated error correction scalable to arbitrary depth. Here, we demonstrate many cycles of syndrome extraction in a toric quantum error correcting code, using mid-circuit measurement and replacement of lost qubits, including reloading of a qubit reservoir for indefinite coherent operation. We characterize the logical error rate after up to 90 cycles, showing that logical information can be preserved through multiple rounds of qubit reloading. Comparing two distances of the code up to 8 rounds of syndrome extraction shows a lower absolute logical error rate for the larger distance code.",
+    "authors": [
+      "Atom Computing",
+      "Collaborators"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2606.04079v1",
+    "url": "https://arxiv.org/abs/2606.04079",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2601.07522",
+    "arxiv_id": "2601.07522",
+    "title": "Thermodynamic Recycling of Algorithmic Failure Branches: Quantum-Computer Demonstration with Quantum Error Correction",
+    "abstract": "Thermodynamic trade-off relations dictate fundamental limits on the performance of thermodynamic tasks through costs such as heat dissipation. Here, we propose a framework called thermodynamic recycling to circumvent these limits in quantum processors by exploiting failure branches of quantum algorithms, which are usually discarded. The key component is an athermal bath naturally generated during the resetting of a failure branch. By coupling this bath to a target system prior to relaxation, thermodynamic tasks can be performed beyond conventional thermodynamic limits. We apply this framework to information erasure and derive the reduction in heat dissipation analytically. As a demonstration, we implement our framework on IBM's superconducting quantum processor by combining the Harrow--Hassidim--Lloyd algorithm with three-qubit quantum error correction, thereby reducing the heat dissipated in erasing syndrome information. Despite substantial noise and errors in current hardware, our method achieves erasure with heat dissipation below the Landauer limit. This work establishes an operational connection between quantum computing and quantum thermodynamics for resource-efficient quantum computation.",
+    "authors": [
+      "Nobumasa Ishida",
+      "Yoshihiko Hasegawa"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2601.07522v2",
+    "url": "https://arxiv.org/abs/2601.07522",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2403.02240",
+    "arxiv_id": "2403.02240",
+    "title": "Quantum Computing: Vision and Challenges",
+    "abstract": "The recent development of quantum computing, which uses entanglement, superposition, and other quantum fundamental concepts, can provide substantial processing advantages over traditional computing. These quantum features help solve many complex problems that cannot be solved otherwise with conventional computing methods. These problems include modeling quantum mechanics, logistics, chemical-based advances, drug design, statistical science, sustainable energy, banking, reliable communication, and quantum chemical engineering. The last few years have witnessed remarkable progress in quantum software and algorithm creation and quantum hardware research, which has significantly advanced the prospect of realizing quantum computers. It would be helpful to have comprehensive literature research on this area to grasp the current status and find outstanding problems that require considerable attention from the research community working in the quantum computing industry. To better understand quantum computing, this paper examines the foundations and vision based on current research in this area. We discuss cutting-edge developments in quantum computer hardware advancement and subsequent advances in quantum cryptography, quantum software, and high-scalability quantum computers. Many potential challenges and exciting new trends for quantum technology research and development are highlighted in this paper for a broader debate.",
+    "authors": [
+      "Sukhpal Singh Gill",
+      "Oktay Cetinkaya",
+      "Stefano Marrone",
+      "Daniel Claudino",
+      "David Haunschild",
+      "Leon Schlote",
+      "Huaming Wu",
+      "Carlo Ottaviani",
+      "Xiaoyuan Liu",
+      "Sree Pragna Machupalli",
+      "Kamalpreet Kaur",
+      "Priyansh Arora",
+      "Ji Liu",
+      "Ahmed Farouk",
+      "Houbing Herbert Song",
+      "Steve Uhlig",
+      "Kotagiri Ramamohanarao"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2403.02240v5",
+    "url": "https://arxiv.org/abs/2403.02240",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

@@ -1,0 +1,388 @@
+[
+  {
+    "id": "10.1145/3696443.3708966",
+    "arxiv_id": "2501.13262",
+    "title": "ASDF: A Compiler for Qwerty, a Basis-Oriented Quantum Programming Language",
+    "abstract": "Qwerty is a high-level quantum programming language built on bases and functions rather than circuits. This new paradigm introduces new challenges in compilation, namely synthesizing circuits from basis translations and automatically specializing adjoint or predicated forms of functions. This paper presents ASDF, an open-source compiler for Qwerty that answers these challenges in compiling basis-oriented languages. Enabled with a novel high-level quantum IR implemented in the MLIR framework, our compiler produces OpenQASM 3 or QIR for either simulation or execution on hardware. Our compiler is evaluated by comparing the fault-tolerant resource requirements of generated circuits with other compilers, finding that ASDF produces circuits with comparable cost to prior circuit-oriented compilers.",
+    "authors": [
+      "Austin J. Adams",
+      "Sharjeel Khan",
+      "Arjun S. Bhamra",
+      "Ryan R. Abusaada",
+      "Anthony M. Cabrera",
+      "Cameron C. Hoechst",
+      "Travis S. Humble",
+      "Jeffrey S. Young",
+      "Tom Conte"
+    ],
+    "year": 2025,
+    "venue": "IEEE/ACM International Symposium on Code Generation and Optimization",
+    "pdf_url": "https://doi.org/10.1145/3696443.3708966",
+    "url": "https://arxiv.org/abs/2501.13262",
+    "full_text_available": true,
+    "citation_count": 3,
+    "citations": [
+      "44b8f691015cd25c20bfa0c65bc9f2629760603b",
+      "67505ae7baf0368b1a5cb0325eca5b78f9fa1718",
+      "3d4780db71adea3deb80dd65dec9639159dc13ae"
+    ],
+    "doi": "10.1145/3696443.3708966",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1145/3731545.3744153",
+    "arxiv_id": "2503.13084",
+    "title": "Qutes: A High-Level Quantum Programming Language for Simplified Quantum Computing",
+    "abstract": "Quantum computing leverages the principles of quantum mechanics to perform computations far beyond the capabilities of classical systems, particularly in fields such as cryptography and optimization. However, current quantum programming languages often require low-level implementation, posing significant barriers for many developers due to their steep learning curve and limited abstraction. In response, we introduce Qutes, a high-level quantum programming language designed to simplify quantum algorithm development while maintaining the flexibility required for advanced applications. By abstracting complex quantum operations and allowing intuitive expressions through high-level constructs, Qutes enables users to write efficient quantum programs without extensive knowledge of quantum mechanics or circuit design. Built upon Qiskit, Qutes translates its syntax directly into executable quantum code, facilitating seamless integration with quantum hardware. This paper provides an overview of the language's architecture, core functionalities, and its ability to unify classical and quantum operations within a single framework. Additionally, we demonstrate Qutes' application in key quantum algorithms, showcasing its potential to make quantum programming more accessible and practical for a wider range of developers and researchers.",
+    "authors": [
+      "Simone Faro",
+      "Francesco Pio Marino",
+      "G. Messina"
+    ],
+    "year": 2025,
+    "venue": "IEEE International Symposium on High-Performance Parallel Distributed Computing",
+    "pdf_url": "https://doi.org/10.1145/3731545.3744153",
+    "url": "https://arxiv.org/abs/2503.13084",
+    "full_text_available": true,
+    "citation_count": 5,
+    "citations": [
+      "8048a3803968d41a89f90ac2332d4f28e850cb6b",
+      "194447bc1281395b71e4a98ba9d1dc09967d2f2a",
+      "e6cf35203275d87a7171d57a537f65d675912088",
+      "3d4780db71adea3deb80dd65dec9639159dc13ae",
+      "d833eceedf716c3356b472cb80b212edbb74e23c"
+    ],
+    "doi": "10.1145/3731545.3744153",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICSEC67360.2025.11298108",
+    "arxiv_id": null,
+    "title": "A Universal Quantum Compiler GPT: Multi-Framework Optimization and Translation Using Large Language Models",
+    "abstract": "We present the first universal quantum compiler based on Generative Pre-trained Transformer (GPT) architecture that provides cross-framework optimization and translation capabilities for quantum circuits. Our Quantum Compiler GPT (QC-GPT) unifies four major quantum computing frameworks—Qiskit Terra, Cirq, tket and PyQuil— into a single Al-driven compilation system. The model demonstrates significant improvements in circuit optimization, achieving 23-47% reduction in gate count, 18-35% reduction in circuit depth, and 12-28% improvement in estimated fidelity compared to existing compilers. QC-GPT also enables seamless translation between quantum frameworks with 96.3% accuracy while providing human-readable explanations for optimization decisions. Our approach leverages a quantum-aware transformer architecture with 512M parameters, trained on 104,000 circuit optimization examples across all supported frameworks. This work represents the first successful application of large language models to universal quantum compilation, opening new possibilities for Al-assisted quantum software development.",
+    "authors": [
+      "Somrak Petchartee"
+    ],
+    "year": 2025,
+    "venue": "International Computer Science and Engineering Conference",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/26e046a18609126562181014389bfc26dd656b02",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/ICSEC67360.2025.11298108",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1145/3769851",
+    "arxiv_id": null,
+    "title": "A Polytime Quantum Programming Language",
+    "abstract": "As quantum computing emerges as a promising computational paradigm, quantum programming languages provide the tools that bridge the distance between abstract programming and its hardware implementation. In some cases, restricted programming languages may even provide an avenue for more efficient circuit compilation strategies. In this work, we introduce foq, a first-order quantum programming language which allows for quantum control and recursion, and where a syntactically restricted subset of programs (pfoq) is shown to be sound and complete for quantum polytime computation. This is achieved by bounding both the recursion depth and the branching width of programs, which we demonstrate to still be compatible with various interesting applications, such as quantum teleportation and the quantum Fourier transform. pfoq constitutes the first programming-language-based characterization of the quantum complexity class fbqp, and we provide a semantics-preserving compilation algorithm such that any pfoq program can be compiled into a quantum circuit that grows polynomially on its number of input qubits, using an anchoring-and-merging technique to solve the problem of branch sequentialization.",
+    "authors": [
+      "Emmanuel Hainry",
+      "Romain Péchoux",
+      "Mário Silva"
+    ],
+    "year": 2025,
+    "venue": "ACM Transactions on Quantum Computing",
+    "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3769851",
+    "url": "https://www.semanticscholar.org/paper/7dabcd02148e7997b3a9428b185dfd4a8a16466c",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1145/3769851",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2501.09667",
+    "arxiv_id": "2501.09667",
+    "title": "Unitary Expressions: A Necessary Abstraction for Extensible Quantum Programming Languages and Systems",
+    "abstract": "Quantum gates are the fundamental instructions of digital quantum computers. Current programming languages, systems, and software development toolkits identify these operational gates by their titles, which requires a shared understanding of their meanings. However, in the continuously developing software ecosystem surrounding quantum computing -- spanning high-level programming systems to low-level control stacks -- this identification process is often error-prone, challenging to debug, maintenance-heavy, and resistant to change. In this paper, we propose replacing this nominal gate representation with a functional one. We introduce the OpenQudit system for describing, parsing, optimizing, analyzing, and utilizing programs comprising gates described as symbolic unitary expressions. As part of this effort, we design the Qudit Gate Language (QGL), a unitary-specific expression language, and implement a differentiating just-in-time compiler in OpenQudit towards embedding this language in quantum programming languages and systems. Additionally, we have precisely designed and implemented the Qudit Virtual Machine (QVM) to evaluate quantum programs and their gradients efficiently. This evaluation is performed millions of times during the compilation of quantum programs. Our QVM can compute gradients approximately ten times faster than current leading numerical quantum compilation frameworks in the most common use cases. Altogether, the OpenQudit system is envisioned to (1) support many-level or qudit-based quantum systems, (2) enable the safe composition of program transformation tools, (3) accelerate circuit optimizers and transpilers, (4) enable compiler extensibility, and (5) provide a productive, simple-to-use interface to quantum practitioners.",
+    "authors": [
+      "Ed Younis"
+    ],
+    "year": 2025,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2501.09667.pdf",
+    "url": "https://arxiv.org/abs/2501.09667",
+    "full_text_available": true,
+    "citation_count": 1,
+    "citations": [
+      "3a7eb35e4dc43627f436eb6583e998a19335122c"
+    ],
+    "doi": "10.48550/arXiv.2501.09667",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1145/3750720.3757285",
+    "arxiv_id": null,
+    "title": "Support SIMD Optimization with Post Quantum Cryptography Validation on Move Language",
+    "abstract": "Move, a novel blockchain programming language originally developed by Facebook’s Libra (now Diem) project, is designed with a strong emphasis on security, flexibility, and performance. Its type-safe and resource-oriented programming model ensures that digital assets, such as tokens or smart contracts, cannot be accidentally duplicated or deleted—significantly enhancing the security of blockchain applications. While type safety plays a crucial role at the language level, the increasing capabilities of quantum computing have significantly undermined the security of cryptographic schemes based on prime factorization. As a result, such schemes are becoming inadequate in protecting user keys and signatures against quantum attacks. Post-quantum cryptographic algorithms enhance the Move language’s resilience against quantum attacks; however, their increased computational complexity often leads to performance degradation. Despite this overhead, authentication within the Move ecosystem remains crucial even on resource-constrained embedded systems. This is especially relevant in decentralized environments where lightweight nodes—such as mobile wallets or IoT devices—must independently verify transactions without relying on trusted intermediaries. In this work, we integrate post-quantum cryptography into the Move infrastructure and further leverage hardware acceleration techniques on both server-class systems (x86 with AVX2) and embedded platforms (AArch64 with NEON and RISC-V with the V extension). We conduct experiments across these platforms and observe speedups ranging from 2.4 × to 3.06 × on server-class systems. For embedded platforms, we observe speedups ranging from 7.35 × to 11.15 × on AArch64, and from 3.86 × to 4.47 × on RISC-V.",
+    "authors": [
+      "ChiaHui Su",
+      "Hsuan-Yun Hung",
+      "Liang-Ni Wang",
+      "I-An Chen",
+      "Jenq-Kuen Lee"
+    ],
+    "year": 2025,
+    "venue": "ICPP Workshops",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/8788b85b50a5c49bb6bb8bcf644f9541e6b7a804",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1145/3750720.3757285",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/QCE65121.2025.10298",
+    "arxiv_id": null,
+    "title": "Trustworthy Natural Language Interfaces for Quantum Optimization: A Secure and Resilient Translation Framework",
+    "abstract": "As quantum computing emerges as a powerful tool for solving combinatorial optimization problems, the absence of intuitive programming interfaces remains a major barrier to practical adoption. This work presents a secure and resilient natural language interface that translates high-level optimization prompts into QUBO (Quadratic Unconstrained Binary Optimization) formulations suitable for quantum solvers such as D-Wave. The translation pipeline leverages large language models (LLMs) and incorporates multiple verification layers, including schema validation, constraint compliance checks, and reverse translation for semantic fidelity auditing. Fidelity is quantified using cosine similarity between sentence embeddings of the original and reconstructed problem descriptions, enabling intent alignment analysis. We evaluate the system across 100 optimization instances spanning five canonical problem types: Knapsack, Traveling Salesman Problem, Graph Coloring, Seating Assignment, and Team Assignment. Results show that GPT-4 significantly outperforms GPT-3.5 in complex cases such as TSP, achieving up to $90\\%$ success rates where earlier models fail entirely. Latency measurements confirm interactive performance, with most translations completing in under 6 seconds. These results demonstrate the feasibility of trustworthy natural language interfaces for quantum optimization and provide a framework for verifiable, interpretable, and efficient translation from user intent to quantum-executable code.",
+    "authors": [
+      "Kensay Sato",
+      "M. Singh",
+      "Rishabh Dhadda",
+      "A. Rizzuto",
+      "Alan Atrach",
+      "Lu Xiao",
+      "Ying Wang"
+    ],
+    "year": 2025,
+    "venue": "International Conference on Quantum Computing and Engineering",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/11c4dc8d926efd3a29d82ba213325f27fa6cc84a",
+    "full_text_available": false,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.1109/QCE65121.2025.10298",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2511.09447",
+    "arxiv_id": "2511.09447",
+    "title": "SPADA: A Spatial Dataflow Architecture Programming Language",
+    "abstract": "Spatial dataflow architectures like the Cerebras Wafer-Scale Engine deliver exceptional performance in AI and scientific computing by distributing scratchpad memory across hundreds of thousands of processing elements (PEs). Yet programming these architectures remains difficult: with no shared memory, data movement requires explicit configuration, and asynchronous task management introduces substantial complexity. We present SpaDA, a programming language that offers precise control over data placement, dataflow patterns, and asynchronous operations while abstracting low-level architectural details. We design and implement a compiler targeting Cerebras CSL through multi-level lowering and unique optimization passes. SpaDA functions as a high-level programming interface and an intermediate representation for domain-specific languages (DSLs), demonstrated here with the GT4Py stencil DSL. SpaDA enables concise expression of operations with complex parallel patterns -- including pipelined collective operations, multi-dimensional stencils, and dense linear algebra -- in 14.09x fewer lines than CSL, achieving over 260 TFlop/s across 730,000 PEs on a single device.",
+    "authors": [
+      "Lukas Gianinazzi",
+      "Tal Ben-Nun",
+      "Torsten Hoefler"
+    ],
+    "year": 2025,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2511.09447.pdf",
+    "url": "https://arxiv.org/abs/2511.09447",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "5c0365bd6548b318d5541d18de5cb5b863855c03",
+      "d3c3224afd0a90061fb95b63a9045745b72aee0a"
+    ],
+    "doi": "10.48550/arXiv.2511.09447",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/QCE65121.2025.00179",
+    "arxiv_id": "2504.11109",
+    "title": "Agent-Q: Fine-Tuning Large Language Models for Quantum Circuit Generation and Optimization",
+    "abstract": "Large language models (LLMs) have achieved remarkable outcomes in complex problems, including math, coding, and analyzing large amounts of scientific reports. Yet, few works have explored the potential of LLMs in quantum computing. The most challenging problem is to leverage LLMs to automatically generate quantum circuits at a large scale. Fundamentally, the existing pre-trained LLMs lack the knowledge of quantum circuits. In this paper, we address this challenge by fine-tuning LLMs and injecting the domain-specific knowledge of quantum computing. We describe Agent-Q, an LLM fine-tuning system to generate and optimize quantum circuits. In particular, agentQ implements the mechanisms to generate training data sets and constructs an end-to-end pipeline to fine-tune pre-trained LLMs to generate parameterized quantum circuits for various optimization problems. Agent-Q provides $\\mathbf{1 4, 0 0 0}$ quantum circuits covering a large spectrum of the quantum optimization landscape: 12 optimization problem instances and their optimized QAOA, VQE, and adaptive VQE circuits. Based thereon, Agent-Q fine-tunes LLMs and constructs syntactically correct parametrized quantum circuits in OpenQASM 3.0. We have evaluated the quality of the LLM-generated circuits and parameters by comparing them to the optimized expectation values and distributions. Experimental results show superior performance of Agent-Q, compared to several state-of-the-art LLMs and better parameters than random. Agent-Q can be integrated into an agentic workflow, and the generated parametrized circuits with initial parameters can be used as a starting point for further optimization, e.g., as templates in quantum machine learning and as benchmarks for compilers and hardware.",
+    "authors": [
+      "Linus Jern",
+      "Valter Uotila",
+      "Cong Yu",
+      "Bo Zhao"
+    ],
+    "year": 2025,
+    "venue": "International Conference on Quantum Computing and Engineering",
+    "pdf_url": "https://arxiv.org/pdf/2504.11109.pdf",
+    "url": "https://arxiv.org/abs/2504.11109",
+    "full_text_available": true,
+    "citation_count": 24,
+    "citations": [
+      "54ba727729b8dcbe7d5eae3d24ad822c8c2f21ce",
+      "fd3dfb143553a46f914b7236f09e1bf5cb442d25",
+      "2836baebbc19c3117bd8fbfdeaa4a9dfb427c166",
+      "538737f24a198796638f8da8938e51fa3c76c7eb",
+      "a538f5e21803d67b69012214dcf238ddd038bb2f",
+      "b60285d94f82a9001c8504b1a2e3f2b0de3b732f",
+      "0ad4d56b3458ef384b33993acb9b83aa3c06f99a",
+      "a3b6e7afb8c9d9303c37d8b31a1ea48adffe1afb",
+      "28bc68d3e0f0cdf08f6f1c67ed94ed7d26bc1203",
+      "7db3413d35ff77becb934f155d35db0e13a7c098",
+      "ef8723a02adb64e0726cb97af7b81dfd1c99edf2",
+      "3bdc6690f367354683f3980075c34849ef8bfc0f",
+      "c71f8407c4c787cc23dba4fa0d22c4fdb3ec4903",
+      "b9527a88612d1e53f20779a2b75e906472541971",
+      "3eb69bc8bd12ab7e6bea876c6945b772cfaecdc3",
+      "c33354df043b1da440124a7136f817394a818e98",
+      "d8c1b961ea0fd0d4857677b1c6a6ea5886994980",
+      "8a7f8965d2db9da69a8a3d7d1714d6063b0a0b54",
+      "a6d63e1b56c52a94d3e40f28fdb15005631e6147",
+      "2d89e1002afdccb5ce0264b0d6de083439aa3bee",
+      "bde4857cd33d88ef9c79ec2792f484d9b0ea2bf4",
+      "6cb5b2f6237546ff6edb8d63519ef39abdb4fb28",
+      "720e33ee507178e51cc57e2a228698c26b790b6a",
+      "7fec7a1f6498b24d53962b6b516dcd036f68ae05"
+    ],
+    "doi": "10.1109/QCE65121.2025.00179",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1117/12.3067061",
+    "arxiv_id": null,
+    "title": "Memory access coalescing optimization based on Triton compiler",
+    "abstract": "With the advent of the era of large artificial intelligence models, the massive number of parameters and complex data processing have led to an increasing proportion of memory-intensive operators. The abundance of high-latency memory access behaviors results in underutilization of computational resources. Triton programming language and compiler enable efficient development and execution of GPU operators to accelerate model training. Currently, the memory access optimization module of the compiler faces issues where some tensor sizes cannot be coalesced for memory access or vectorized for efficient memory access. To address these challenges, we studied the implementation process of memory access coalescing optimization passes. By optimizing the computation logic of memory access patterns, we achieved coalesced memory access for operators with odd tensor sizes. For the problem of various tensor sizes not fully leveraging vectorized memory access instructions for efficient access, we implemented support for vectorized memory access by adding axis attribute value types during the degradation of the abstract syntax tree. Experiments were conducted using kernel examples from the Triton official tutorial for testing. The experimental results demonstrate that the average speedup achieved by thread memory access pattern optimization is 2.4, and the average speedup for vectorized memory access optimization across multiple tensor sizes is 1.5.",
+    "authors": [
+      "Lin Han",
+      "Zexian Fang",
+      "Yingying Li",
+      "Jing Li",
+      "Wei Gao"
+    ],
+    "year": 2025,
+    "venue": "Conference on Electronic Information Engineering and Data Processing",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/2c0f8263112eef6a4b10d82f062a2ffc8b860c31",
+    "full_text_available": false,
+    "citation_count": 3,
+    "citations": [
+      "0c7c7b5d9e81c6ad4fee1ffca6a349dc95333d67",
+      "c310fc4b1d68c6287f868b3518cdfb91f368ea8e",
+      "5c4b411e897ae5c6dbf4bf5f738eb635bf15c63f"
+    ],
+    "doi": "10.1117/12.3067061",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/ICCEA65460.2025.11102282",
+    "arxiv_id": null,
+    "title": "Kernel Instruction Optimization Based on the Triton Compiler",
+    "abstract": "With the continuous growth of model parameter scale and computational density, kernel execution performance has gradually become an important part of overall model inference and training. The programming language Triton, developed by OpenAI, can serve as the backend of Torch Inductor to assist in generating high-performance GPU kernels. Aiming at the problem of low-quality kernels in the Inductor kernel generation process, the Triton compiler can introduce optimization strategies such as redundant instruction elimination. However, when dealing with program features such as complex memory dependencies, repeated loading, and multiple consecutive division operations, there are still issues of insufficient optimization depth and inadequate recognition and mitigation of performance bottlenecks. Therefore, this paper proposes a unified optimization strategy targeting the intermediate representation level based on the Triton compiler. Through the combination of static analysis and equivalence rewriting, it performs fused optimization on instruction redundancy and algebraic computation patterns. Under the premise of preserving semantic consistency, the method restructures data dependency paths and kernel expression forms, effectively reducing redundant memory accesses, decreasing repetitive and inefficient computation overhead, and improving kernel execution efficiency. Experimental results show that the average speedup of redundant instruction optimization reaches 1.47, while the average speedup of algebraic transformation optimization reaches 1.29.",
+    "authors": [
+      "Lin Han",
+      "Yubo Du",
+      "Jianan Li",
+      "Wei Gao"
+    ],
+    "year": 2025,
+    "venue": "International Conference Civil Engineering and Architecture",
+    "pdf_url": null,
+    "url": "https://www.semanticscholar.org/paper/d1194a4b007997e829cba792b9e9600657a290cf",
+    "full_text_available": false,
+    "citation_count": 1,
+    "citations": [
+      "0c7c7b5d9e81c6ad4fee1ffca6a349dc95333d67"
+    ],
+    "doi": "10.1109/ICCEA65460.2025.11102282",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.54389/cwbl6597",
+    "arxiv_id": null,
+    "title": "Implementation of Wyltl: An Imperative Language with a Dual Interpreter – Compiler Architecture",
+    "abstract": "When using a programming language, a common drawback is the prevalence of resource constraints. A lack of resources often results in programs executing faster on high end hardware in comparison to middling or low-end hardware. While a core tenant of programming is optimization, with which entire industries have been built upon, when implementing a programming language, the process becomes significantly more complex. Minute slowdowns in a programming language implementation could very quickly result in major slowdown when executing some code. This paper examines the process of implementing the Wyltl language while balancing the need for performance and resource efficiency provided precious insight and hints towards future optimization, and the unique challenges and opportunities for evolution. Including evaluation of varying parsers, processors and technologies. The evaluation of different parsers and processors was done throughout development with a varied range of programming language optimization techniques being followed as required.\nKeywords— Parser Evaluation, Optimization, Programming Language Implementation, Wyltl, Interpreter, Compiler, Web Assembly, JavaScript Interoperability, Go.",
+    "authors": [
+      "Dineth Mallawarachchi",
+      "Yasas Jayaweera"
+    ],
+    "year": 2025,
+    "venue": "Proceedings of the Annual Research Conference of SCU",
+    "pdf_url": "https://rda.sliit.lk/bitstreams/d6d513ff-cdc8-4ae5-a262-80de35559a13/download",
+    "url": "https://www.semanticscholar.org/paper/c2dea676ecff631d75c9f89f4ebc0c77492e51a4",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.54389/cwbl6597",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1109/DAC63849.2025.11133316",
+    "arxiv_id": "2504.14557",
+    "title": "Enhancing LLM-based Quantum Code Generation with Multi-Agent Optimization and Quantum Error Correction",
+    "abstract": "Multi-agent frameworks with Large Language Models (LLMs) have become promising tools for generating generalpurpose programming languages using test-driven development, allowing developers to create more accurate and robust code. However, their potential has not been fully unleashed for domainspecific programming languages, where specific domain exhibits unique optimization opportunities for customized improvement. In this paper, we take the first step in exploring multi-agent code generation for quantum programs. By identifying the unique optimizations in quantum designs such as quantum error correction, we introduce a novel multi-agent framework tailored to generating accurate, fault-tolerant quantum code. Each agent in the framework focuses on distinct optimizations, iteratively refining the code using a semantic analyzer with multi-pass inference, alongside an error correction code decoder. We also examine the effectiveness of traditional techniques, like Chain-ofThought (CoT) and Retrieval-Augmented Generation (RAG) in the context of quantum programming, uncovering observations that are different from general-purpose code generation. To evaluate our approach, we develop a test suite to measure the impact each optimization has on the accuracy of the generated code. Our findings indicate that techniques such as structured CoT significantly improve the generation of quantum algorithms by up to $50 \\%$. In contrast, we have also found that certain techniques such as RAG show limited improvement, yielding an accuracy increase of only $4 \\%$. Moreover, we showcase examples of AIassisted quantum error prediction and correction, demonstrating the effectiveness of our multi-agent framework in reducing the errors of generated quantum programs.",
+    "authors": [
+      "Charlie Campbell",
+      "H. Chen",
+      "Wayne Luk",
+      "Hongxiang Fan"
+    ],
+    "year": 2025,
+    "venue": "Design Automation Conference",
+    "pdf_url": "https://arxiv.org/pdf/2504.14557.pdf",
+    "url": "https://arxiv.org/abs/2504.14557",
+    "full_text_available": true,
+    "citation_count": 19,
+    "citations": [
+      "7442c51afb8a48c03fba04549d926ef71a11a9b6",
+      "d27ad48c0f67236d521b66ea195c4937ff339215",
+      "a538f5e21803d67b69012214dcf238ddd038bb2f",
+      "0cb9e60e14a95e452f2b2ef8169a09fa308278c4",
+      "a3b6e7afb8c9d9303c37d8b31a1ea48adffe1afb",
+      "0cf0003b897f1b04d3732a942ebc9a123e308822",
+      "ef8723a02adb64e0726cb97af7b81dfd1c99edf2",
+      "b9527a88612d1e53f20779a2b75e906472541971",
+      "9e9dd9c08e722cb109d20b797cb67f6dc7ccd408",
+      "b18869b4740bb8cb2466416d749f9768b09abeca",
+      "870b0465f1f19f91c6523cc5a330f2ad98ac56ee",
+      "86e57666dea817e66382d221786ce40a8796e048",
+      "6cb5b2f6237546ff6edb8d63519ef39abdb4fb28",
+      "bcef824b9e597242a8fe9e91c44c48b83597bd0e",
+      "720e33ee507178e51cc57e2a228698c26b790b6a",
+      "e55eaca07b3bd3e0fdf0d0f3d03b88fd215f8ba0",
+      "08659644353e2e5a7feb6d9288438814ec08c19e",
+      "6a893fc0c2bd8f1563b62879cce77e169701be98",
+      "1bfe10d85a517b68faff89fe5ffba71ead466d8e"
+    ],
+    "doi": "10.1109/DAC63849.2025.11133316",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.48550/arXiv.2509.18583",
+    "arxiv_id": "2509.18583",
+    "title": "A Verified Compiler for Quantum Simulation",
+    "abstract": "Hamiltonian simulation is a central application of quantum computing, with significant potential in modeling physical systems and solving complex optimization problems. Existing compilers for such simulations typically focus on low-level representations based on Pauli operators, limiting programmability and offering no formal guarantees of correctness across the compilation pipeline. We introduce QBlue, a high-level, formally verified framework for compiling Hamiltonian simulations. QBlue is based on the formalism of second quantization, which provides a natural and expressive way to describe quantum particle systems using creation and annihilation operators. To ensure safety and correctness, QBlue includes a type system that tracks particle types and enforces Hermitian structure. The framework supports compilation to both digital and analog quantum circuits and captures multiple layers of semantics, from static constraints to dynamic evolution. All components of QBlue, including its language design, type system, and compilation correctness, are fully mechanized in the Rocq proof framework, making it the first end-to-end verified compiler for second-quantized Hamiltonian simulation.",
+    "authors": [
+      "Liyi Li",
+      "F. An",
+      "F. Zahariev",
+      "Z. Chong",
+      "Amr Sabry",
+      "Mark S. Gordon"
+    ],
+    "year": 2025,
+    "venue": "arXiv.org",
+    "pdf_url": "https://arxiv.org/pdf/2509.18583.pdf",
+    "url": "https://arxiv.org/abs/2509.18583",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": "10.48550/arXiv.2509.18583",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.1145/3779212.3790159",
+    "arxiv_id": "2508.17518",
+    "title": "Evaluating Compiler Optimization Impacts on zkVM Performance",
+    "abstract": "Zero-knowledge proofs (ZKPs) are the cornerstone of programmable cryptography. They enable (1) privacy-preserving and verifiable computation across blockchains, and (2) an expanding range of off-chain applications such as credential schemes. Zero-knowledge virtual machines (zkVMs) lower the barrier by turning ZKPs into a drop-in backend for standard compilation pipelines. This lets developers write proof-generating programs in conventional languages (e.g., Rust or C++) instead of hand-crafting arithmetic circuits. However, these VMs inherit compiler infrastructures tuned for traditional architectures rather than for proof systems. In particular, standard compiler optimizations assume features that are absent in zkVMs, including cache locality, branch prediction, or instruction-level parallelism. Therefore, their impact on proof generation is questionable. We present the first systematic study of the impact of compiler optimizations on zkVMs. We evaluate 64 LLVM passes, six standard optimization levels, and an unoptimized baseline across 58 benchmarks on two RISC-V–based zkVMs (RISC Zero and SP1). While standard LLVM optimization levels do improve zkVM performance (over 40%), their impact is far smaller than on traditional CPUs, since their decisions rely on hardware features rather than proof constraints. Guided by a performance impact analysis, we slightly refine a small set of LLVM passes to be zkVM-aware, improving zkVM execution time by up to 45% (average +4.6% on RISC Zero, +1% on SP1) and achieving consistent proving-time gains. Our work highlights the potential of compiler-level optimizations for zkVM performance and opens new directions for zkVM-specific passes, backends, and superoptimizers.",
+    "authors": [
+      "Thomas Gassmann",
+      "Stefanos Chaliasos",
+      "T. Sotiropoulos",
+      "Zhendong Su"
+    ],
+    "year": 2025,
+    "venue": "International Conference on Architectural Support for Programming Languages and Operating Systems",
+    "pdf_url": "https://doi.org/10.1145/3779212.3790159",
+    "url": "https://arxiv.org/abs/2508.17518",
+    "full_text_available": true,
+    "citation_count": 3,
+    "citations": [
+      "e1b541bac6086729aff7788f9ea5eba50d1d3bd3",
+      "2357631e9fa532bd82cbeff7f9c5907fdee8c306",
+      "513f58a4680e87d588cca8428ed56ea25f52c2b2"
+    ],
+    "doi": "10.1145/3779212.3790159",
+    "source": "semantic_scholar"
+  }
+]

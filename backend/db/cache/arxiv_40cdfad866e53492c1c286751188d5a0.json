@@ -1,0 +1,155 @@
+[
+  {
+    "id": "2412.05353",
+    "arxiv_id": "2412.05353",
+    "title": "Incremental Sentence Processing Mechanisms in Autoregressive Transformer Language Models",
+    "abstract": "Autoregressive transformer language models (LMs) possess strong syntactic abilities, often successfully handling phenomena from agreement to NPI licensing. However, the features they use to incrementally process language inputs are not well understood. In this paper, we fill this gap by studying the mechanisms underlying garden path sentence processing in LMs. We ask: (1) Do LMs use syntactic features or shallow heuristics to perform incremental sentence processing? (2) Do LMs represent only one potential interpretation, or multiple? and (3) Do LMs reanalyze or repair their initial incorrect representations? To address these questions, we use sparse autoencoders to identify interpretable features that determine which continuation - and thus which reading - of a garden path sentence the LM prefers. We find that while many important features relate to syntactic structure, some reflect syntactically irrelevant heuristics. Moreover, while most active features correspond to one reading of the sentence, some features correspond to the other, suggesting that LMs assign weight to both possibilities simultaneously. Finally, LMs do not re-use features from garden path sentence processing to answer follow-up questions.",
+    "authors": [
+      "Michael Hanna",
+      "Aaron Mueller"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2412.05353v1",
+    "url": "https://arxiv.org/abs/2412.05353",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2404.05657",
+    "arxiv_id": "2404.05657",
+    "title": "MLP Can Be A Good Transformer Learner",
+    "abstract": "Self-attention mechanism is the key of the Transformer but often criticized for its computation demands. Previous token pruning works motivate their methods from the view of computation redundancy but still need to load the full network and require same memory costs. This paper introduces a novel strategy that simplifies vision transformers and reduces computational load through the selective removal of non-essential attention layers, guided by entropy considerations. We identify that regarding the attention layer in bottom blocks, their subsequent MLP layers, i.e. two feed-forward layers, can elicit the same entropy quantity. Meanwhile, the accompanied MLPs are under-exploited since they exhibit smaller feature entropy compared to those MLPs in the top blocks. Therefore, we propose to integrate the uninformative attention layers into their subsequent counterparts by degenerating them into identical mapping, yielding only MLP in certain transformer blocks. Experimental results on ImageNet-1k show that the proposed method can remove 40% attention layer of DeiT-B, improving throughput and memory bound without performance compromise. Code is available at https://github.com/sihaoevery/lambda_vit.",
+    "authors": [
+      "Sihao Lin",
+      "Pumeng Lyu",
+      "Dongrui Liu",
+      "Tao Tang",
+      "Xiaodan Liang",
+      "Andy Song",
+      "Xiaojun Chang"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2404.05657v1",
+    "url": "https://arxiv.org/abs/2404.05657",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2405.09508",
+    "arxiv_id": "2405.09508",
+    "title": "Modeling Bilingual Sentence Processing: Evaluating RNN and Transformer Architectures for Cross-Language Structural Priming",
+    "abstract": "This study evaluates the performance of Recurrent Neural Network (RNN) and Transformer models in replicating cross-language structural priming, a key indicator of abstract grammatical representations in human language processing. Focusing on Chinese-English priming, which involves two typologically distinct languages, we examine how these models handle the robust phenomenon of structural priming, where exposure to a particular sentence structure increases the likelihood of selecting a similar structure subsequently. Our findings indicate that transformers outperform RNNs in generating primed sentence structures, with accuracy rates that exceed 25.84\\% to 33. 33\\%. This challenges the conventional belief that human sentence processing primarily involves recurrent and immediate processing and suggests a role for cue-based retrieval mechanisms. This work contributes to our understanding of how computational models may reflect human cognitive processes across diverse language families.",
+    "authors": [
+      "Demi Zhang",
+      "Bushi Xiao",
+      "Chao Gao",
+      "Sangpil Youm",
+      "Bonnie J Dorr"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2405.09508v2",
+    "url": "https://arxiv.org/abs/2405.09508",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2607.25798",
+    "arxiv_id": "2607.25798",
+    "title": "Transformer Transformer: A Unified Model for Motion-Conditioned Robot Co-design",
+    "abstract": "An often overlooked factor of robot manipulation performance is the embodiment of the robot itself. Motivated by this problem, we study motion-conditioned robot co-design, where the goal is to generate complete robot designs that track target end-effector trajectories (from human demonstrations) while optimizing user-defined rewards. We introduce Transformer Transformer, a diffusion transformer trained on RoboTokens, a unified tokenization of robot embodiments, states, and actions. The same architecture can be used across embodiment spaces (e.g., wheeled bimanual, quadrupeds, humanoids) and use cases (embodiment generation, cross embodiment controller). Rather than overfitting to one reward function, Transformer Transformer is a dynamics model, whose reward-agnostic state and action predictions can be converted into reward-specific value predictions. These value predictions are used to steer embodiment diffusion towards high value robot designs, through a procedure we call Dynamics Self-Guidance. Experiments across multiple design spaces show zero-shot optimization of unseen rewards and trajectories, improving performance and runtime over the evolutionary baseline. Finally, we fabricated an optimized ALOHA design, which reduced tracking error by over 70% compared to the original design.",
+    "authors": [
+      "Huy Ha",
+      "C. Karen Liu",
+      "Shuran Song"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2607.25798v1",
+    "url": "https://arxiv.org/abs/2607.25798",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2411.16170",
+    "arxiv_id": "2411.16170",
+    "title": "CARE Transformer: Mobile-Friendly Linear Visual Transformer via Decoupled Dual Interaction",
+    "abstract": "Recently, large efforts have been made to design efficient linear-complexity visual Transformers. However, current linear attention models are generally unsuitable to be deployed in resource-constrained mobile devices, due to suffering from either few efficiency gains or significant accuracy drops. In this paper, we propose a new de\\textbf{C}oupled du\\textbf{A}l-interactive linea\\textbf{R} att\\textbf{E}ntion (CARE) mechanism, revealing that features' decoupling and interaction can fully unleash the power of linear attention. We first propose an asymmetrical feature decoupling strategy that asymmetrically decouples the learning process for local inductive bias and long-range dependencies, thereby preserving sufficient local and global information while effectively enhancing the efficiency of models. Then, a dynamic memory unit is employed to maintain critical information along the network pipeline. Moreover, we design a dual interaction module to effectively facilitate interaction between local inductive bias and long-range information as well as among features at different layers. By adopting a decoupled learning way and fully exploiting complementarity across features, our method can achieve both high efficiency and accuracy. Extensive experiments on ImageNet-1K, COCO, and ADE20K datasets demonstrate the effectiveness of our approach, e.g., achieving $78.4/82.1\\%$ top-1 accuracy on ImagegNet-1K at the cost of only $0.7/1.9$ GMACs. Codes will be released on \\href{https://github.com/zhouyuan888888/CARE-Transformer}{https://github.com/zhouyuan888888/CARE-Transformer}.",
+    "authors": [
+      "Yuan Zhou",
+      "Qingshan Xu",
+      "Jiequan Cui",
+      "Junbao Zhou",
+      "Jing Zhang",
+      "Richang Hong",
+      "Hanwang Zhang"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2411.16170v2",
+    "url": "https://arxiv.org/abs/2411.16170",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2402.05964",
+    "arxiv_id": "2402.05964",
+    "title": "A Survey on Transformer Compression",
+    "abstract": "Transformer plays a vital role in the realms of natural language processing (NLP) and computer vision (CV), specially for constructing large language models (LLM) and large vision models (LVM). Model compression methods reduce the memory and computational cost of Transformer, which is a necessary step to implement large language/vision models on practical devices. Given the unique architecture of Transformer, featuring alternative attention and feedforward neural network (FFN) modules, specific compression techniques are usually required. The efficiency of these compression methods is also paramount, as retraining large models on the entire training dataset is usually impractical. This survey provides a comprehensive review of recent compression methods, with a specific focus on their application to Transformer-based models. The compression methods are primarily categorized into pruning, quantization, knowledge distillation, and efficient architecture design (Mamba, RetNet, RWKV, etc.). In each category, we discuss compression methods for both language and vision tasks, highlighting common underlying principles. Finally, we delve into the relation between various compression methods, and discuss further directions in this domain.",
+    "authors": [
+      "Yehui Tang",
+      "Yunhe Wang",
+      "Jianyuan Guo",
+      "Zhijun Tu",
+      "Kai Han",
+      "Hailin Hu",
+      "Dacheng Tao"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2402.05964v2",
+    "url": "https://arxiv.org/abs/2402.05964",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2505.11918",
+    "arxiv_id": "2505.11918",
+    "title": "Transformers as Unsupervised Learning Algorithms: A study on Gaussian Mixtures",
+    "abstract": "The transformer architecture has demonstrated remarkable capabilities in modern artificial intelligence, among which the capability of implicitly learning an internal model during inference time is widely believed to play a key role in the under standing of pre-trained large language models. However, most recent works have been focusing on studying supervised learning topics such as in-context learning, leaving the field of unsupervised learning largely unexplored. This paper investigates the capabilities of transformers in solving Gaussian Mixture Models (GMMs), a fundamental unsupervised learning problem through the lens of statistical estimation. We propose a transformer-based learning framework called TGMM that simultaneously learns to solve multiple GMM tasks using a shared transformer backbone. The learned models are empirically demonstrated to effectively mitigate the limitations of classical methods such as Expectation-Maximization (EM) or spectral algorithms, at the same time exhibit reasonable robustness to distribution shifts. Theoretically, we prove that transformers can approximate both the EM algorithm and a core component of spectral methods (cubic tensor power iterations). These results bridge the gap between practical success and theoretical understanding, positioning transformers as versatile tools for unsupervised learning.",
+    "authors": [
+      "Zhiheng Chen",
+      "Ruofan Wu",
+      "Guanhua Fang"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2505.11918v2",
+    "url": "https://arxiv.org/abs/2505.11918",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

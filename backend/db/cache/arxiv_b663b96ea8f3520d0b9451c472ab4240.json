@@ -1,0 +1,304 @@
+[
+  {
+    "id": "2209.15001",
+    "arxiv_id": "2209.15001",
+    "title": "Dilated Neighborhood Attention Transformer",
+    "abstract": "Transformers are quickly becoming one of the most heavily applied deep learning architectures across modalities, domains, and tasks. In vision, on top of ongoing efforts into plain transformers, hierarchical transformers have also gained significant attention, thanks to their performance and easy integration into existing frameworks. These models typically employ localized attention mechanisms, such as the sliding-window Neighborhood Attention (NA) or Swin Transformer's Shifted Window Self Attention. While effective at reducing self attention's quadratic complexity, local attention weakens two of the most desirable properties of self attention: long range inter-dependency modeling, and global receptive field. In this paper, we introduce Dilated Neighborhood Attention (DiNA), a natural, flexible and efficient extension to NA that can capture more global context and expand receptive fields exponentially at no additional cost. NA's local attention and DiNA's sparse global attention complement each other, and therefore we introduce Dilated Neighborhood Attention Transformer (DiNAT), a new hierarchical vision transformer built upon both. DiNAT variants enjoy significant improvements over strong baselines such as NAT, Swin, and ConvNeXt. Our large model is faster and ahead of its Swin counterpart by 1.6% box AP in COCO object detection, 1.4% mask AP in COCO instance segmentation, and 1.4% mIoU in ADE20K semantic segmentation. Paired with new frameworks, our large variant is the new state of the art panoptic segmentation model on COCO (58.5 PQ) and ADE20K (49.4 PQ), and instance segmentation model on Cityscapes (45.1 AP) and ADE20K (35.4 AP) (no extra data). It also matches the state of the art specialized semantic segmentation models on ADE20K (58.1 mIoU), and ranks second on Cityscapes (84.5 mIoU) (no extra data).",
+    "authors": [
+      "Ali Hassani",
+      "Humphrey Shi"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2209.15001v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2309.01692",
+    "arxiv_id": "2309.01692",
+    "title": "Mask-Attention-Free Transformer for 3D Instance Segmentation",
+    "abstract": "Recently, transformer-based methods have dominated 3D instance segmentation, where mask attention is commonly involved. Specifically, object queries are guided by the initial instance masks in the first cross-attention, and then iteratively refine themselves in a similar manner. However, we observe that the mask-attention pipeline usually leads to slow convergence due to low-recall initial instance masks. Therefore, we abandon the mask attention design and resort to an auxiliary center regression task instead. Through center regression, we effectively overcome the low-recall issue and perform cross-attention by imposing positional prior. To reach this goal, we develop a series of position-aware designs. First, we learn a spatial distribution of 3D locations as the initial position queries. They spread over the 3D space densely, and thus can easily capture the objects in a scene with a high recall. Moreover, we present relative position encoding for the cross-attention and iterative refinement for more accurate position queries. Experiments show that our approach converges 4x faster than existing work, sets a new state of the art on ScanNetv2 3D instance segmentation benchmark, and also demonstrates superior performance across various datasets. Code and models are available at https://github.com/dvlab-research/Mask-Attention-Free-Transformer.",
+    "authors": [
+      "Xin Lai",
+      "Yuhui Yuan",
+      "Ruihang Chu",
+      "Yukang Chen",
+      "Han Hu",
+      "Jiaya Jia"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2309.01692v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2605.26355",
+    "arxiv_id": "2605.26355",
+    "title": "Energy-Gated Attention and Wavelet Positional Encoding: Complementary Inductive Biases for Transformer Attention",
+    "abstract": "Standard transformer attention computes pairwise token similarity but treats all tokens as equally salient and all positions as equally local, regardless of the informational structure of the input. We identify two complementary inductive biases that standard attention lacks: energy salience (which tokens concentrate informational energy, learned end-to-end without explicit frequency decomposition) and scale-selective locality (how far positional influence extends at each frequency, implemented via Morlet wavelet encoding). We address both with two simple components. Energy-Gated Attention (EGA) gates value aggregation by a learned energy estimate of key token embeddings, computed via a single linear projection; it selects what to attend to. Morlet Positional Encoding (MoPE) replaces fixed sinusoidal encodings with learned Gaussian-windowed wavelets that adapt the joint position-frequency localization to the corpus; it specifies where attention operates at each scale. On TinyShakespeare, EGA alone achieves +0.092 validation loss improvement over standard attention (+0.103 over Phase 1-3 baseline); MoPE alone is -0.032 (below baseline as a standalone encoding); but their combination achieves +0.119 -- more than the sum of parts. This superadditivity, observed across two independent training runs, is the central empirical finding: salience and locality are complementary inductive biases, each addressing a gap the other cannot fill alone. Ablations confirm that structured spectral priors (Morlet wavelet gates, scale-initialized heads, fixed sinusoidal PE) consistently underperform their unconstrained learned counterparts, while complementary learned components interact superadditively. All experiments are at small scale (<=6M parameters, character-level benchmarks, single seed); larger-scale multi-seed validation is the most important direction for future work.",
+    "authors": [
+      "Athanasios Zeris"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2605.26355v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2206.03003",
+    "arxiv_id": "2206.03003",
+    "title": "Transformer-based Personalized Attention Mechanism for Medical Images with Clinical Records",
+    "abstract": "In medical image diagnosis, identifying the attention region, i.e., the region of interest for which the diagnosis is made, is an important task. Various methods have been developed to automatically identify target regions from given medical images. However, in actual medical practice, the diagnosis is made based not only on the images but also on a variety of clinical records. This means that pathologists examine medical images with some prior knowledge of the patients and that the attention regions may change depending on the clinical records. In this study, we propose a method called the Personalized Attention Mechanism (PersAM), by which the attention regions in medical images are adaptively changed according to the clinical records. The primary idea of the PersAM method is to encode the relationships between the medical images and clinical records using a variant of Transformer architecture. To demonstrate the effectiveness of the PersAM method, we applied it to a large-scale digital pathology problem of identifying the subtypes of 842 malignant lymphoma patients based on their gigapixel whole slide images and clinical records.",
+    "authors": [
+      "Yusuke Takagi",
+      "Noriaki Hashimoto",
+      "Hiroki Masuda",
+      "Hiroaki Miyoshi",
+      "Koichi Ohshima",
+      "Hidekata Hontani",
+      "Ichiro Takeuchi"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2206.03003v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2402.04563",
+    "arxiv_id": "2402.04563",
+    "title": "Attention Guided CAM: Visual Explanations of Vision Transformer Guided by Self-Attention",
+    "abstract": "Vision Transformer(ViT) is one of the most widely used models in the computer vision field with its great performance on various tasks. In order to fully utilize the ViT-based architecture in various applications, proper visualization methods with a decent localization performance are necessary, but these methods employed in CNN-based models are still not available in ViT due to its unique structure. In this work, we propose an attention-guided visualization method applied to ViT that provides a high-level semantic explanation for its decision. Our method selectively aggregates the gradients directly propagated from the classification output to each self-attention, collecting the contribution of image features extracted from each location of the input image. These gradients are additionally guided by the normalized self-attention scores, which are the pairwise patch correlation scores. They are used to supplement the gradients on the patch-level context information efficiently detected by the self-attention mechanism. This approach of our method provides elaborate high-level semantic explanations with great localization performance only with the class labels. As a result, our method outperforms the previous leading explainability methods of ViT in the weakly-supervised localization task and presents great capability in capturing the full instances of the target class object. Meanwhile, our method provides a visualization that faithfully explains the model, which is demonstrated in the perturbation comparison test.",
+    "authors": [
+      "Saebom Leem",
+      "Hyunseok Seo"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2402.04563v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2511.13780",
+    "arxiv_id": "2511.13780",
+    "title": "Self-Attention as Distributional Projection: A Unified Interpretation of Transformer Architecture",
+    "abstract": "This paper presents a mathematical interpretation of self-attention by connecting it to distributional semantics principles. We show that self-attention emerges from projecting corpus-level co-occurrence statistics into sequence context. Starting from the co-occurrence matrix underlying GloVe embeddings, we demonstrate how the projection naturally captures contextual influence, with the query-key-value mechanism arising as the natural asymmetric extension for modeling directional relationships. Positional encodings and multi-head attention then follow as structured refinements of this same projection principle. Our analysis demonstrates that the Transformer architecture's particular algebraic form follows from these projection principles rather than being an arbitrary design choice.",
+    "authors": [
+      "Nihal Mehta"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2511.13780v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "1809.04281",
+    "arxiv_id": "1809.04281",
+    "title": "Music Transformer",
+    "abstract": "Music relies heavily on repetition to build structure and meaning. Self-reference occurs on multiple timescales, from motifs to phrases to reusing of entire sections of music, such as in pieces with ABA structure. The Transformer (Vaswani et al., 2017), a sequence model based on self-attention, has achieved compelling results in many generation tasks that require maintaining long-range coherence. This suggests that self-attention might also be well-suited to modeling music. In musical composition and performance, however, relative timing is critically important. Existing approaches for representing relative positional information in the Transformer modulate attention based on pairwise distance (Shaw et al., 2018). This is impractical for long sequences such as musical compositions since their memory complexity for intermediate relative information is quadratic in the sequence length. We propose an algorithm that reduces their intermediate memory requirement to linear in the sequence length. This enables us to demonstrate that a Transformer with our modified relative attention mechanism can generate minute-long compositions (thousands of steps, four times the length modeled in Oore et al., 2018) with compelling structure, generate continuations that coherently elaborate on a given motif, and in a seq2seq setup generate accompaniments conditioned on melodies. We evaluate the Transformer with our relative attention mechanism on two datasets, JSB Chorales and Piano-e-Competition, and obtain state-of-the-art results on the latter.",
+    "authors": [
+      "Cheng-Zhi Anna Huang",
+      "Ashish Vaswani",
+      "Jakob Uszkoreit",
+      "Noam Shazeer",
+      "Ian Simon",
+      "Curtis Hawthorne",
+      "Andrew M. Dai",
+      "Matthew D. Hoffman",
+      "Monica Dinculescu",
+      "Douglas Eck"
+    ],
+    "year": 2018,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/1809.04281v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2503.02130",
+    "arxiv_id": "2503.02130",
+    "title": "Forgetting Transformer: Softmax Attention with a Forget Gate",
+    "abstract": "An essential component of modern recurrent sequence models is the forget gate. While Transformers do not have an explicit recurrent form, we show that a forget gate can be naturally incorporated into Transformers by down-weighting the unnormalized attention scores in a data-dependent way. We name this attention mechanism Forgetting Attention and the resulting model the Forgetting Transformer (FoX). We show that FoX outperforms the Transformer on long-context language modeling, length extrapolation, and short-context downstream tasks, while performing on par with the Transformer on long-context downstream tasks. Moreover, it is compatible with the FlashAttention algorithm and does not require any positional embeddings. Several analyses, including the needle-in-the-haystack test, show that FoX also retains the Transformer's superior long-context capabilities over recurrent sequence models such as Mamba-2, HGRN2, and DeltaNet. We also introduce a \"Pro\" block design that incorporates some common architectural components in recurrent sequence models and find it significantly improves the performance of both FoX and the Transformer. Our code is available at https://github.com/zhixuan-lin/forgetting-transformer.",
+    "authors": [
+      "Zhixuan Lin",
+      "Evgenii Nikishin",
+      "Xu Owen He",
+      "Aaron Courville"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2503.02130v2",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2305.11403",
+    "arxiv_id": "2305.11403",
+    "title": "Efficient Mixed Transformer for Single Image Super-Resolution",
+    "abstract": "Recently, Transformer-based methods have achieved impressive results in single image super-resolution (SISR). However, the lack of locality mechanism and high complexity limit their application in the field of super-resolution (SR). To solve these problems, we propose a new method, Efficient Mixed Transformer (EMT) in this study. Specifically, we propose the Mixed Transformer Block (MTB), consisting of multiple consecutive transformer layers, in some of which the Pixel Mixer (PM) is used to replace the Self-Attention (SA). PM can enhance the local knowledge aggregation with pixel shifting operations. At the same time, no additional complexity is introduced as PM has no parameters and floating-point operations. Moreover, we employ striped window for SA (SWSA) to gain an efficient global dependency modelling by utilizing image anisotropy. Experimental results show that EMT outperforms the existing methods on benchmark dataset and achieved state-of-the-art performance. The Code is available at https://github.com/Fried-Rice-Lab/FriedRiceLab.",
+    "authors": [
+      "Ling Zheng",
+      "Jinchen Zhu",
+      "Jinpeng Shi",
+      "Shizhuang Weng"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2305.11403v5",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2409.17625",
+    "arxiv_id": "2409.17625",
+    "title": "Benign Overfitting in Token Selection of Attention Mechanism",
+    "abstract": "Attention mechanism is a fundamental component of the transformer model and plays a significant role in its success. However, the theoretical understanding of how attention learns to select tokens is still an emerging area of research. In this work, we study the training dynamics and generalization ability of the attention mechanism under classification problems with label noise. We show that, with the characterization of signal-to-noise ratio (SNR), the token selection of attention mechanism achieves benign overfitting, i.e., maintaining high generalization performance despite fitting label noise. Our work also demonstrates an interesting delayed acquisition of generalization after an initial phase of overfitting. Finally, we provide experiments to support our theoretical analysis using both synthetic and real-world datasets.",
+    "authors": [
+      "Keitaro Sakamoto",
+      "Issei Sato"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2409.17625v3",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2606.09951",
+    "arxiv_id": "2606.09951",
+    "title": "Hasse Diagrams for Attention: A Partial Order Framework for Designing Transformer Masks",
+    "abstract": "During the training of large Transformer models, attention masks regulate the scope and direction of information flow across a sequence. Numerous mask variants exist, and operators such as FlexAttention already support arbitrary attention masks. Nevertheless, a systematic formal analysis of the information-flow structure induced by arbitrary masks has been missing. This paper develops a complete theoretical framework. We prove that, with sufficient depth, the information flow of a multi-layer Transformer converges to a Hasse diagram -- a directed acyclic graph representing a partial order. Building on this, we recast the design of parallel training tasks as the problem of finding a minimal common supergraph of Hasse diagrams, and we establish a criterion for the minimal common supergraph. This yields a constructive method to derive attention masks directly from a family of tasks. Applying the framework, we design two novel masks: a block-generation attention mask that ensures training-inference consistency (Block Two-Stream Attention), and a fully supervised bidirectional attention mask (Butterfly Attention). These results demonstrate the framework's capacity to discover new structures.",
+    "authors": [
+      "Chentao Li",
+      "Han Guo"
+    ],
+    "year": 2026,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2606.09951v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2411.12502",
+    "arxiv_id": "2411.12502",
+    "title": "Transformer Neural Processes - Kernel Regression",
+    "abstract": "Neural Processes (NPs) are a rapidly evolving class of models designed to directly model the posterior predictive distribution of stochastic processes. Originally developed as a scalable alternative to Gaussian Processes (GPs), which are limited by $O(n^3)$ runtime complexity, the most accurate modern NPs can often rival GPs but still suffer from an $O(n^2)$ bottleneck due to their attention mechanism. We introduce the Transformer Neural Process - Kernel Regression (TNP-KR), a scalable NP featuring: (1) a Kernel Regression Block (KRBlock), a simple, extensible, and parameter efficient transformer block with complexity $O(n_c^2 + n_c n_t)$, where $n_c$ and $n_t$ are the number of context and test points, respectively; (2) a kernel-based attention bias; and (3) two novel attention mechanisms: scan attention (SA), a memory-efficient scan-based attention that when paired with a kernel-based bias can make TNP-KR translation invariant, and deep kernel attention (DKA), a Performer-style attention that implicitly incoporates a distance bias and further reduces complexity to $O(n_c)$. These enhancements enable both TNP-KR variants to perform inference with 100K context points on over 1M test points in under a minute on a single 24GB GPU. On benchmarks spanning meta regression, Bayesian optimization, image completion, and epidemiology, TNP-KR with DKA outperforms its Performer counterpart on nearly every benchmark, while TNP-KR with SA achieves state-of-the-art results.",
+    "authors": [
+      "Daniel Jenson",
+      "Jhonathan Navott",
+      "Mengyan Zhang",
+      "Makkunda Sharma",
+      "Elizaveta Semenova",
+      "Seth Flaxman"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2411.12502v4",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2303.15105",
+    "arxiv_id": "2303.15105",
+    "title": "Vision Transformer with Quadrangle Attention",
+    "abstract": "Window-based attention has become a popular choice in vision transformers due to its superior performance, lower computational complexity, and less memory footprint. However, the design of hand-crafted windows, which is data-agnostic, constrains the flexibility of transformers to adapt to objects of varying sizes, shapes, and orientations. To address this issue, we propose a novel quadrangle attention (QA) method that extends the window-based attention to a general quadrangle formulation. Our method employs an end-to-end learnable quadrangle regression module that predicts a transformation matrix to transform default windows into target quadrangles for token sampling and attention calculation, enabling the network to model various targets with different shapes and orientations and capture rich context information. We integrate QA into plain and hierarchical vision transformers to create a new architecture named QFormer, which offers minor code modifications and negligible extra computational cost. Extensive experiments on public benchmarks demonstrate that QFormer outperforms existing representative vision transformers on various vision tasks, including classification, object detection, semantic segmentation, and pose estimation. The code will be made publicly available at \\href{https://github.com/ViTAE-Transformer/QFormer}{QFormer}.",
+    "authors": [
+      "Qiming Zhang",
+      "Jing Zhang",
+      "Yufei Xu",
+      "Dacheng Tao"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2303.15105v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2404.05657",
+    "arxiv_id": "2404.05657",
+    "title": "MLP Can Be A Good Transformer Learner",
+    "abstract": "Self-attention mechanism is the key of the Transformer but often criticized for its computation demands. Previous token pruning works motivate their methods from the view of computation redundancy but still need to load the full network and require same memory costs. This paper introduces a novel strategy that simplifies vision transformers and reduces computational load through the selective removal of non-essential attention layers, guided by entropy considerations. We identify that regarding the attention layer in bottom blocks, their subsequent MLP layers, i.e. two feed-forward layers, can elicit the same entropy quantity. Meanwhile, the accompanied MLPs are under-exploited since they exhibit smaller feature entropy compared to those MLPs in the top blocks. Therefore, we propose to integrate the uninformative attention layers into their subsequent counterparts by degenerating them into identical mapping, yielding only MLP in certain transformer blocks. Experimental results on ImageNet-1k show that the proposed method can remove 40% attention layer of DeiT-B, improving throughput and memory bound without performance compromise. Code is available at https://github.com/sihaoevery/lambda_vit.",
+    "authors": [
+      "Sihao Lin",
+      "Pumeng Lyu",
+      "Dongrui Liu",
+      "Tao Tang",
+      "Xiaodan Liang",
+      "Andy Song",
+      "Xiaojun Chang"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2404.05657v1",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  },
+  {
+    "id": "2003.05997",
+    "arxiv_id": "2003.05997",
+    "title": "Efficient Content-Based Sparse Attention with Routing Transformers",
+    "abstract": "Self-attention has recently been adopted for a wide range of sequence modeling problems. Despite its effectiveness, self-attention suffers from quadratic compute and memory requirements with respect to sequence length. Successful approaches to reduce this complexity focused on attending to local sliding windows or a small set of locations independent of content. Our work proposes to learn dynamic sparse attention patterns that avoid allocating computation and memory to attend to content unrelated to the query of interest. This work builds upon two lines of research: it combines the modeling flexibility of prior work on content-based sparse attention with the efficiency gains from approaches based on local, temporal sparse attention. Our model, the Routing Transformer, endows self-attention with a sparse routing module based on online k-means while reducing the overall complexity of attention to $O\\left(n^{1.5}d\\right)$ from $O\\left(n^2d\\right)$ for sequence length $n$ and hidden dimension $d$. We show that our model outperforms comparable sparse attention models on language modeling on Wikitext-103 (15.8 vs 18.3 perplexity) as well as on image generation on ImageNet-64 (3.43 vs 3.44 bits/dim) while using fewer self-attention layers. Additionally, we set a new state-of-the-art on the newly released PG-19 data-set, obtaining a test perplexity of 33.2 with a 22 layer Routing Transformer model trained on sequences of length 8192.",
+    "authors": [
+      "Aurko Roy",
+      "Mohammad Saffar",
+      "Ashish Vaswani",
+      "David Grangier"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "pdf_url": "https://arxiv.org/pdf/2003.05997v5",
+    "full_text_available": true,
+    "citation_count": 0,
+    "citations": [],
+    "doi": null,
+    "source": "arxiv"
+  }
+]

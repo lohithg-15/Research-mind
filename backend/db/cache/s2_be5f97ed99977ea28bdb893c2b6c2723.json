@@ -1,0 +1,54 @@
+[
+  {
+    "id": "10.36306/konjes.1583103",
+    "arxiv_id": null,
+    "title": "DEEP LEARNING APPROACHES IN PRECISION AGRICULTURE: A COMPREHENSIVE REVIEW OF CROP CLASSIFICATION, DISEASE DETECTION, AND WEED DETECTION TECHNIQUES",
+    "abstract": "This paper presents a systematic and comprehensive review of deep learning (DL) methodologies used in precision agriculture (PA). It focuses on three critical application areas in particular: plant classification, plant disease detection, and weed detection. The study covers 93 peer-reviewed papers published between 2020 and 2025 and indexed in the SCI and SCI-Expanded indexed WoS database. Of these, 68 studies addressed disease detection, 13 focused on plant classification, and 12 examined weed detection strategies. The review describes a wide range of DL architectures, including Convolutional Neural Networks (CNNs), Residual Networks (ResNet), You Only Look Once (YOLO), Image Transformers (ViT), and various hybrid frameworks. A large number of models demonstrated exceptional performance with classification accuracies reaching up to 99.64% and precision and sensitivity values exceeding 98%. Studies have evaluated a wide range of datasets such as PlantVillage, COCO, and privately acquired RGB/UAV imagery, and a variety of sensor platforms such as drones, smartphones, hyperspectral, and LiDAR systems. Moreover, transfer learning and ensemble learning approaches have been frequently adopted to enhance generalization capabilities and model robustness. The integration of DL models with advanced technologies such as unmanned aerial vehicles (UAVs), unmanned ground robots (UGRs), depth-sensing cameras, and mobile-based platforms facilitates automation in agricultural monitoring, disease diagnosis, and yield prediction. This review not only consolidates the current technological developments, but also analyzes the emerging trends, methodological gaps, and possible directions for the advancement of sustainable, data-driven agricultural systems using artificial intelligence.",
+    "authors": [
+      "A. Albayrak",
+      "Emre Can Kuran",
+      "F. Kayaalp"
+    ],
+    "year": 2025,
+    "venue": "Konya Journal of Engineering Sciences",
+    "pdf_url": "https://dergipark.org.tr/en/download/article-file/4356555",
+    "url": "https://www.semanticscholar.org/paper/3b5c2df71ef73a0c69c98b6553eb743a7f52111f",
+    "full_text_available": true,
+    "citation_count": 2,
+    "citations": [
+      "9f1f1568795f311c4d043247172d28f1426e8aaf",
+      "8c8d621a880dec9ed5a5db9753b222393c662df4"
+    ],
+    "doi": "10.36306/konjes.1583103",
+    "source": "semantic_scholar"
+  },
+  {
+    "id": "10.9734/jsrr/2025/v31i32902",
+    "arxiv_id": null,
+    "title": "Detection and Management of Plant Disease Using Artificial Intelligence and Machine Learning Applications: A Review",
+    "abstract": "The detection and management of plant disease using Artificial intelligence and machine learning applications. Artificial intelligence (AI) and machine learning (ML) have emerged as transformative technologies in plant disease detection and management, offering highly accurate, scalable, and real-time diagnostic solutions. Traditional disease detection methods, reliant on manual scouting and laboratory-based assays, are time-intensive, prone to human error, and often fail to detect early-stage infections. AI-driven approaches, particularly deep learning models such as convolutional neural networks (CNNs), recurrent neural networks (RNNs), and vision transformers, have significantly improved disease classification accuracy, surpassing 95% in multiple studies. The integration of AI with the Internet of Things (IoT) enables real-time disease monitoring through smart sensors, drone-based imaging, and cloud computing, enhancing large-scale agricultural surveillance. Big data analytics play a crucial role in AI-driven disease management, utilizing satellite imagery, hyperspectral data, and field-based mobile applications to detect infections before symptoms become visible. Predictive analytics models, powered by AI, analyse environmental and pathogen-related data to forecast disease outbreaks, supporting proactive decision-making in precision agriculture. Despite significant advancements, challenges such as limited access to large, annotated datasets, computational resource constraints, and model generalization issues across diverse crops and climatic conditions persist. Ethical concerns related to data privacy and the adoption of AI technologies among farmers further hinder widespread implementation. Blockchain technology has been proposed for secure and transparent disease data sharing, while edge computing solutions aim to reduce latency in AI-driven disease detection systems. Autonomous AI-powered agricultural robots equipped with deep learning models and multispectral sensors are being developed for real-time disease monitoring and targeted treatment. Future research must focus on optimizing AI algorithms for large-scale agricultural deployment, integrating AI-driven genomic selection for disease-resistant crop breeding, and leveraging emerging technologies such as quantum computing and synthetic biology to enhance plant disease management and global food security. The quantum computing and artificial intelligence combinedly offers ground breaking capabilities in real-time data processing, predictive analytics, and optimization, enabling high-precision agricultural strategies that can transform crop management, climate adaptation, and global food distribution.",
+    "authors": [
+      "A. K. Koshariya",
+      "Alok",
+      "S. Hiremath",
+      "Rashmi Nigam",
+      "Uma Shankar",
+      "Shivangi S Kansara",
+      "Sushmita Suman Sinha",
+      "Pratibha"
+    ],
+    "year": 2025,
+    "venue": "Journal of Scientific Research and Reports",
+    "pdf_url": "https://doi.org/10.9734/jsrr/2025/v31i32902",
+    "url": "https://www.semanticscholar.org/paper/4485a81f74c1ea57c72cb18f4593bfc75dec6a4e",
+    "full_text_available": true,
+    "citation_count": 3,
+    "citations": [
+      "7bff078e7151d1aceff7f679395375e011bf57a4",
+      "9d52fe694bad1015054dd2ba1b81cc8b05aafa86",
+      "f9f9ec9ddbd6c9e46a328d3a4822b3ba257132aa"
+    ],
+    "doi": "10.9734/jsrr/2025/v31i32902",
+    "source": "semantic_scholar"
+  }
+]

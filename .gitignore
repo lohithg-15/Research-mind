@@ -17,7 +17,6 @@ __pycache__/
 .idea/
 
 # Local databases/data
-db/
 *.db
 *.sqlite
 
@@ -27,12 +26,8 @@ dist/
 build/
 .eslintcache
 
-
 backend/fallback_dataset/cache/
-
-# SQLite database
-*.db
 
 # Scratch / temporary
 scratch/
-pytest-cache-files-*/
+pytest-cache-files-*/

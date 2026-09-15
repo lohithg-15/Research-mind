@@ -1,10 +1,11 @@
 import uuid
 import logging
 import threading
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Dict, Any, Optional, List
 from backend.api.jobs import jobs
+from backend.api.deps import get_optional_user
 from backend.orchestration.pipeline import app as pipeline_app, create_initial_state
 
 logger = logging.getLogger("researchmind.api.query")
@@ -22,6 +23,7 @@ class QARequest(BaseModel):
 def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
     """
     Executes the LangGraph pipeline in the background and updates the job state.
+    If the job has a user_id, auto-saves the results to the database on completion.
     """
     logger.info(f"Starting pipeline execution for job {job_id}")
     try:
@@ -35,15 +37,60 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
         jobs[job_id]["state"] = final_state
         jobs[job_id]["status"] = "done"
         logger.info(f"Pipeline execution completed successfully for job {job_id}")
+
+        # Auto-save for authenticated users
+        user_id = jobs[job_id].get("user_id")
+        if user_id:
+            try:
+                from backend.api.routes.history import save_session
+                # Build the results dict (same shape as GET /results)
+                state = final_state
+                raw_papers = state.get("papers", [])
+                papers_list = [
+                    p.model_dump() if hasattr(p, "model_dump") else p
+                    for p in raw_papers
+                ]
+                raw_summaries = state.get("summaries", [])
+                summaries_list = [
+                    s.model_dump() if hasattr(s, "model_dump") else s
+                    for s in raw_summaries
+                ]
+                gap_claims_list = [
+                    g.model_dump() if hasattr(g, "model_dump") else g
+                    for g in state.get("gap_claims", [])
+                ]
+                results_to_save = {
+                    "status": "done",
+                    "papers": papers_list,
+                    "comparison_table": state.get("comparison_table", []),
+                    "gap_claims": gap_claims_list,
+                    "summaries": summaries_list,
+                    "sub_queries": state.get("sub_queries", []),
+                    "report_draft": state.get("report_draft", {}),
+                }
+                save_session(
+                    user_id=user_id,
+                    session_id=job_id,
+                    query=query,
+                    filters=filters,
+                    results=results_to_save,
+                )
+            except Exception as save_err:
+                logger.error(f"Auto-save failed for job {job_id}: {save_err}")
     except Exception as e:
         logger.error(f"Error executing pipeline for job {job_id}: {e}")
         jobs[job_id]["status"] = "error"
         jobs[job_id]["error"] = str(e)
 
 @router.post("/query")
-def submit_query(request: QueryRequest, background_tasks: BackgroundTasks):
+def submit_query(
+    request: QueryRequest,
+    background_tasks: BackgroundTasks,
+    user=Depends(get_optional_user),
+):
     """
     Submits a research topic to start the agentic literature review pipeline.
+    If an authenticated user submits, results are auto-saved on completion.
     """
     if not request.query or not request.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
@@ -52,7 +99,8 @@ def submit_query(request: QueryRequest, background_tasks: BackgroundTasks):
     jobs[job_id] = {
         "status": "pending",
         "state": None,
-        "error": None
+        "error": None,
+        "user_id": user["user_id"] if user else None,
     }
     
     # Run the pipeline in a background task

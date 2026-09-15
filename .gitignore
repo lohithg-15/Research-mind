@@ -30,6 +30,9 @@ build/
 
 backend/fallback_dataset/cache/
 
+# SQLite database
+*.db
+
 # Scratch / temporary
 scratch/
 pytest-cache-files-*/

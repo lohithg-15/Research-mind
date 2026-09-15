@@ -3,8 +3,9 @@ import logging
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from backend.api.routes import query, export
+from backend.api.routes import query, export, auth, history
 from backend.api.jobs import jobs
+from backend.db.database import init_db
 
 # Load environment variables from backend/.env before anything else
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
@@ -31,9 +32,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize database on startup
+@app.on_event("startup")
+def startup_event():
+    init_db()
+    logger.info("Database initialized on startup.")
+
 # Include routers
 app.include_router(query.router, tags=["Query & Pipeline"])
 app.include_router(export.router, tags=["Report Export"])
+app.include_router(auth.router)
+app.include_router(history.router)
 
 @app.get("/status/{job_id}")
 def get_job_status(job_id: str):

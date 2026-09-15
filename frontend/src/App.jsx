@@ -2,9 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   BookOpen, Play, Loader2, LayoutDashboard,
   Table2, GitFork, FileText, AlertCircle,
-  Sparkles, Trash2, MessageSquare
+  Sparkles, Trash2, MessageSquare, User, LogOut
 } from 'lucide-react';
 
+import { useAuth } from './context/AuthContext';
+import AuthModal       from './components/AuthModal';
+import HistorySidebar  from './components/HistorySidebar';
 import QAAssistant      from './components/QAAssistant';
 
 import ProgressTracker  from './components/ProgressTracker';
@@ -46,6 +49,8 @@ function clearSession() {
 const saved = loadSession();
 
 export default function App() {
+  const { isAuthenticated, user, logout, authHeaders, token } = useAuth();
+
   const [query,       setQuery]       = useState(saved?.query       ?? '');
   const [yearMin,     setYearMin]     = useState(saved?.yearMin     ?? 2015);
   const [yearMax,     setYearMax]     = useState(saved?.yearMax     ?? new Date().getFullYear());
@@ -59,6 +64,13 @@ export default function App() {
   const [error,       setError]       = useState(null);   // errors not persisted
   const [activeTab,   setActiveTab]   = useState(saved?.activeTab   ?? 'overview');
   const [highlighted, setHighlighted] = useState([]);
+
+  // Auth modal state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUserMenu, setShowUserMenu]   = useState(false);
+
+  // Active loaded history session ID (for highlighting in sidebar)
+  const [activeSessionId, setActiveSessionId] = useState(null);
 
   /* ─── Persist to localStorage whenever important state changes ─── */
   useEffect(() => {
@@ -112,11 +124,16 @@ export default function App() {
     setResults(null);
     setActiveTab('overview');
     setHighlighted([]);
+    setActiveSessionId(null);
 
     try {
+      const headers = {
+        'Content-Type': 'application/json',
+        ...authHeaders(),
+      };
       const res = await fetch('http://localhost:8000/query', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body:    JSON.stringify({
           query,
           filters: {
@@ -156,6 +173,40 @@ export default function App() {
     setError(null);
     setActiveTab('overview');
     setHighlighted([]);
+    setActiveSessionId(null);
+  };
+
+  /* ─── Load a saved session from history ─── */
+  const handleLoadSession = useCallback((session) => {
+    // session comes from GET /history/{id}: { id, title, query, filters, results, created_at }
+    setActiveSessionId(session.id);
+    setQuery(session.query || '');
+    setResults(session.results ? { ...session.results, query: session.query } : null);
+    setJobId(session.id);
+    setJobStatus('done');
+    setAgentStatus({
+      planner: 'done', search: 'done', extraction: 'done',
+      synthesis: 'done', graph_gap: 'done', report: 'done',
+    });
+    setActiveTab('overview');
+    setError(null);
+    setHighlighted([]);
+
+    // Restore filters if available
+    if (session.filters) {
+      const yr = session.filters.year_range;
+      if (yr && yr.length === 2) {
+        setYearMin(yr[0]);
+        setYearMax(yr[1]);
+      }
+      if (session.filters.venue_type) setVenueType(session.filters.venue_type);
+      if (session.filters.keywords) setKeywords(session.filters.keywords.join(', '));
+    }
+  }, []);
+
+  /* ─── New research (clear & start fresh) ─── */
+  const handleNewResearch = () => {
+    handleClear();
   };
 
   // Prefer the full papers list with URLs; fall back to comparison_table
@@ -202,8 +253,14 @@ export default function App() {
 
   const reportDraft = isDone ? (results?.report_draft || {}) : null;
 
+  /* ─── User avatar initial ─── */
+  const userInitial = user?.email ? user.email[0].toUpperCase() : '?';
+
   return (
     <>
+      {/* Auth Modal */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+
       {/* ─── Top Bar ─── */}
       <header className="topbar">
         {/* Logo */}
@@ -273,14 +330,52 @@ export default function App() {
               : <Sparkles size={14} />}
             {isRunning ? 'Running…' : 'Run review'}
           </button>
+
+          {/* Auth / User section */}
+          {isAuthenticated ? (
+            <div className="user-menu-wrap" onMouseLeave={() => setShowUserMenu(false)}>
+              <button
+                className="user-avatar"
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                title={user?.email}
+              >
+                {userInitial}
+              </button>
+              {showUserMenu && (
+                <div className="user-dropdown">
+                  <div className="user-dropdown-email">{user?.email}</div>
+                  <div className="user-dropdown-divider" />
+                  <button className="user-dropdown-item" onClick={() => { logout(); setShowUserMenu(false); }}>
+                    <LogOut size={13} />
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              className="auth-topbar-btn"
+              onClick={() => setShowAuthModal(true)}
+            >
+              <User size={13} />
+              Sign In
+            </button>
+          )}
         </div>
       </header>
 
       {/* ─── Body layout ─── */}
-      <div className="app-layout">
+      <div className={`app-layout ${isAuthenticated ? 'has-history' : ''}`}>
+
+        {/* ── History Sidebar (left-most, only when logged in) ── */}
+        <HistorySidebar
+          onLoadSession={handleLoadSession}
+          onNewResearch={handleNewResearch}
+          activeSessionId={activeSessionId}
+        />
 
         {/* ── Left Sidebar ── */}
-        <aside className="sidebar-left">
+        <aside className={`sidebar-left ${isAuthenticated ? 'sidebar-left--shifted' : ''}`}>
           {/* Filters */}
           <div className="sidebar-section">
             <div className="sidebar-section-title">Filters</div>
@@ -336,7 +431,7 @@ export default function App() {
         </aside>
 
         {/* ── Center Content ── */}
-        <main className="content-main">
+        <main className={`content-main ${isAuthenticated ? 'content-main--shifted' : ''}`}>
 
           {/* Error banner */}
           {error && (

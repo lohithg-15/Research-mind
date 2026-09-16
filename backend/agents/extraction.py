@@ -40,10 +40,10 @@ def verify_grounding(extracted: Dict[str, str], text: str, abstract_only: bool) 
     """
     Verifies that the extracted fields are supported by the text.
     For abstract-only papers uses a relaxed check (keyword presence).
-    Returns (status, notes).
+    Returns (status, notes) where status is one of: "verified", "unverified", "failed".
     """
     fields_to_check = ["method", "dataset", "key_metric", "limitation"]
-    all_verified = True
+    field_statuses = {}
     notes = []
     clean_text_lower = text.lower()
 
@@ -51,42 +51,59 @@ def verify_grounding(extracted: Dict[str, str], text: str, abstract_only: bool) 
         val = extracted.get(f, "").strip()
 
         if not val or val.lower() in ["not specified", "none", "n/a", "unknown", "not mentioned"]:
+            field_statuses[f] = "verified"  # Not specified is acceptable, not a failure
             notes.append(f"Field '{f}': not found in text (acceptable).")
             continue
 
         if abstract_only:
-            # Relaxed: check if at least one significant word from the value appears in the text
+            # Stricter: require either (1) an exact number match OR (2) at least 2 significant words
+            has_number = bool(re.search(r'\d', val))
             significant_words = [w for w in re.findall(r'\b\w{4,}\b', val.lower()) if w not in {
                 "with", "that", "this", "from", "using", "based", "model", "paper", "approach"
             }]
-            found = any(w in clean_text_lower for w in significant_words)
-            if found:
+
+            number_verified = False
+            if has_number:
+                numbers = re.findall(r'\d+(?:\.\d+)?', val)
+                number_verified = any(str(num) in clean_text_lower for num in numbers)
+
+            words_verified = sum(1 for w in significant_words if w in clean_text_lower) >= 2
+
+            if number_verified or words_verified:
+                field_statuses[f] = "verified"
                 notes.append(f"Field '{f}': keyword-verified in abstract.")
             else:
-                all_verified = False
+                field_statuses[f] = "unverified"
                 notes.append(f"Field '{f}': value '{val}' not grounded in abstract text.")
         else:
             # Full-text: check exact quote presence
             quote = extracted.get(f"{f}_quote", "").strip()
             if not quote:
-                all_verified = False
-                notes.append(f"Field '{f}' has no supporting quote.")
+                field_statuses[f] = "unverified"
+                notes.append(f"Field '{f}': no supporting quote (inferred/unverified).")
                 continue
 
             clean_quote = re.sub(r'\s+', '', quote.lower()).strip()
             clean_text = re.sub(r'\s+', '', clean_text_lower).strip()
 
             if clean_quote in clean_text:
+                field_statuses[f] = "verified"
                 notes.append(f"Field '{f}' verified.")
             else:
-                all_verified = False
+                field_statuses[f] = "failed"
                 notes.append(f"Field '{f}' quote not found in full text.")
 
-    if abstract_only:
-        # For abstract-only, "verified" means keywords found; otherwise "unverified" (not "failed")
-        status = "verified" if all_verified else "unverified"
+    # Compute overall status:
+    # - "verified" if ALL checked (non-empty) fields are verified
+    # - "failed" if ANY field was explicitly contradicted (quote given but not found)
+    # - "unverified" if fields lack quotes (inferred) but not contradicted
+    has_failed = any(s == "failed" for s in field_statuses.values())
+    if has_failed:
+        status = "failed"
+    elif all(s == "verified" for s in field_statuses.values()):
+        status = "verified"
     else:
-        status = "verified" if all_verified else "failed"
+        status = "unverified"
 
     return status, "; ".join(notes)
 

@@ -51,8 +51,8 @@ def create_initial_state(query: str, filters: Dict[str, Any] = None) -> Pipeline
     """
     if filters is None:
         filters = {}
-        
-    return {
+
+    state = {
         "query": query,
         "filters": filters,
         "sub_queries": [],
@@ -70,5 +70,7 @@ def create_initial_state(query: str, filters: Dict[str, Any] = None) -> Pipeline
             "synthesis": "pending",
             "graph_gap": "pending",
             "report": "pending"
-        }
+        },
+        "job_id": None,  # Will be set by execute_pipeline if available
     }
+    return state

@@ -1,4 +1,5 @@
 import os
+import uuid
 import logging
 import docx
 from typing import List, Dict, Any
@@ -537,8 +538,13 @@ def run_report(state: dict) -> dict:
     exports_dir = os.path.join(base_dir, "db", "exports")
     os.makedirs(exports_dir, exist_ok=True)
 
-    pdf_path  = os.path.join(exports_dir, "report.pdf")
-    docx_path = os.path.join(exports_dir, "report.docx")
+    # Get job_id from state, or generate a short uuid
+    job_id = state.get("job_id")
+    if not job_id:
+        job_id = uuid.uuid4().hex[:8]
+
+    pdf_path  = os.path.join(exports_dir, f"report_{job_id}.pdf")
+    docx_path = os.path.join(exports_dir, f"report_{job_id}.docx")
 
     try:
         generate_docx(

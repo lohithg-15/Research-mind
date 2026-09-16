@@ -28,6 +28,7 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
     logger.info(f"Starting pipeline execution for job {job_id}")
     try:
         initial_state = create_initial_state(query, filters)
+        initial_state["job_id"] = job_id
         jobs[job_id]["state"] = initial_state
         jobs[job_id]["status"] = "running"
         

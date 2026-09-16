@@ -6,9 +6,10 @@ from backend.data.models import PaperMeta
 
 def create_mock_papers(count: int) -> list[PaperMeta]:
     """
-    Creates a list of mock PaperMeta objects.
+    Creates a list of mock PaperMeta objects with varying publication years.
     """
     papers = []
+    current_year = 2024
     for i in range(count):
         # We group papers into different topics in their titles/abstracts to help the keyword fallback
         if i % 3 == 0:
@@ -20,18 +21,21 @@ def create_mock_papers(count: int) -> list[PaperMeta]:
         else:
             title = f"CNN Image classification study {i}"
             abstract = "An analysis of CNN architectures for image classification tasks."
-            
+
+        # Vary years so some papers are recent (for recency filter in density calculation)
+        paper_year = current_year - (i % 5)
+
         papers.append(PaperMeta(
             id=f"paper-{i}",
             title=title,
             authors=[f"Author A{i}", f"Author B{i}"],
-            year=2020 + (i % 5),
+            year=paper_year,
             venue="arXiv" if i % 2 == 0 else "NeurIPS",
             abstract=abstract,
             pdf_url=None,
             full_text_available=False,
-            citation_count=i * 2,  # Different citation counts
-            citations=[f"paper-{(i+1)%count}"],
+            citation_count=i * 2,  # Different citation counts (no longer used, kept for backwards compat)
+            citations=[f"paper-{(i+1)%count}"],  # Papers cite the next one
             source="arxiv"
         ))
     return papers

@@ -141,23 +141,27 @@ JSON Schema:
                 G.add_edge(pid, label, type="BELONGS_TO", membership_score=1.0)
                 
     # 5. Gap Detection Heuristic
-    # Compute citation density for each cluster in the last 3 years
+    # Compute citation density for each cluster (recent CITES edges, last 3 years)
     current_year = datetime.datetime.now().year
     cluster_densities = []
-    
+
     for cluster in clusters:
         label = cluster["topic_label"]
         paper_ids = [pid for pid in cluster["paper_ids"] if pid in paper_ids_set]
-        
+
         if not paper_ids:
             continue
-            
-        # Compute density: average citation count of papers in cluster
+
+        # Compute density: count in-corpus CITES edges targeting papers in cluster, filtered by year
         total_citations = 0
         for pid in paper_ids:
-            p_node = G.nodes[pid]
-            total_citations += p_node.get("citation_count", 0)
-            
+            # Count incoming CITES edges with year_of_citation >= current_year - 3
+            for source, target, edge_data in G.in_edges(pid, data=True):
+                if edge_data.get("type") == "CITES":
+                    year_of_citation = edge_data.get("year_of_citation", 0)
+                    if year_of_citation >= current_year - 3:
+                        total_citations += 1
+
         density = total_citations / len(paper_ids)
         cluster_densities.append((cluster, density, paper_ids))
         

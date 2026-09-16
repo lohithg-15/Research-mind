@@ -164,10 +164,31 @@ def get_results(job_id: str):
 def answer_question(request: QARequest):
     """
     Answers a question about the papers obtained during a specific research job.
-    Similar to Elicit QA functionality.
+    Supports explicit paper matching (by title, author, paper number/index, or keyword)
+    as well as semantic vector search across all session literature.
     """
+    import json
+    import re
+
+    # 1. Job Lookup (In-memory or SQLite Database recovery)
     if request.job_id not in jobs:
-        raise HTTPException(status_code=404, detail="Job not found.")
+        try:
+            from backend.db.database import get_connection
+            conn = get_connection()
+            row = conn.execute("SELECT query, results FROM research_sessions WHERE id = ?", (request.job_id,)).fetchone()
+            conn.close()
+            if row and row["results"]:
+                saved_results = json.loads(row["results"])
+                jobs[request.job_id] = {
+                    "status": "done",
+                    "state": saved_results,
+                    "error": None
+                }
+            else:
+                raise HTTPException(status_code=404, detail="Job not found.")
+        except Exception as db_err:
+            logger.error(f"Error restoring job {request.job_id} from DB: {db_err}")
+            raise HTTPException(status_code=404, detail="Job not found.")
         
     job = jobs[request.job_id]
     if job["status"] != "done":
@@ -177,95 +198,194 @@ def answer_question(request: QARequest):
     if not state:
         raise HTTPException(status_code=500, detail="Job state is missing.")
 
-    # Gather paper IDs belonging to this job
-    job_paper_ids = set()
-    raw_papers = state.get("papers", [])
-    for p in raw_papers:
-        if hasattr(p, "id"):
-            job_paper_ids.add(p.id)
-        elif isinstance(p, dict) and "id" in p:
-            job_paper_ids.add(p["id"])
+    # 2. Build Unified Paper Dictionary Map & Paper List
+    paper_map = {}  # id -> dict
+    paper_order = []  # preserve original order
 
     comp_table = state.get("comparison_table", [])
-    comp_map = {item["id"]: item for item in comp_table if "id" in item}
+    raw_papers = state.get("papers", [])
 
-    # Try to use VectorStore for semantic matching; fall back to comparison table
-    matched_ids = []
-    try:
-        from backend.data.vector_store import VectorStore
-        vs = VectorStore()
-        similar_results = vs.query_similarity(request.question, limit=15)
-        matched_ids = [r["id"] for r in similar_results if r["id"] in job_paper_ids]
-    except Exception as e:
-        logger.warning(f"VectorStore unavailable for QA (falling back to comparison table): {e}")
+    for idx, item in enumerate(comp_table):
+        if isinstance(item, dict) and "id" in item:
+            pid = item["id"]
+            if pid not in paper_map:
+                p_copy = dict(item)
+                p_copy["index"] = idx + 1
+                paper_map[pid] = p_copy
+                paper_order.append(pid)
 
-    if not matched_ids:
-        # Fallback: use all papers from comparison table (up to 10)
-        matched_ids = [item["id"] for item in comp_table[:10] if "id" in item]
-    
-    # Build context string from matched papers
-    context_str = ""
-    papers_referenced = []
-    for pid in matched_ids:
-        item = comp_map.get(pid)
-        if not item:
-            continue
-        papers_referenced.append({
-            "id": item["id"],
-            "title": item.get("title", "Untitled"),
-            "url": item.get("url") or item.get("pdf_url")
-        })
-        context_str += f"""
-Paper ID: {item['id']}
-Title: {item.get('title', 'Untitled')}
-Authors: {', '.join(item.get('authors', [])) if isinstance(item.get('authors'), list) else item.get('authors', '')}
-Year: {item.get('year')}
-Venue: {item.get('venue')}
-Proposed Method: {item.get('method', 'Not specified')}
-Evaluation Dataset: {item.get('dataset', 'Not specified')}
-Key Metric: {item.get('key_metric', 'Not specified')}
-Limitation: {item.get('limitation', 'Not specified')}
-"""
+    for idx, p in enumerate(raw_papers):
+        p_dict = p.model_dump() if hasattr(p, "model_dump") else (p if isinstance(p, dict) else {})
+        pid = p_dict.get("id")
+        if pid:
+            if pid not in paper_map:
+                p_dict["index"] = len(paper_order) + 1
+                paper_map[pid] = p_dict
+                paper_order.append(pid)
+            else:
+                # Merge missing attributes like abstract, url, etc.
+                for k, v in p_dict.items():
+                    if v and not paper_map[pid].get(k):
+                        paper_map[pid][k] = v
 
-    # Also include summaries if available for richer context
-    raw_summaries = state.get("summaries", [])
-    for s in raw_summaries:
-        sid = s.paper_id if hasattr(s, "paper_id") else s.get("paper_id", "")
-        stxt = s.summary_text if hasattr(s, "summary_text") else s.get("summary_text", "")
-        if sid in set(matched_ids) and stxt:
-            context_str += f"\nSummary for {sid}: {stxt}\n"
-
-    # If there are no papers at all, provide a helpful response without calling LLM
-    if not papers_referenced:
+    if not paper_map:
         return {
             "answer": (
-                "I don't have enough paper data from this research session to answer your question. "
-                "This can happen if the pipeline did not find papers or the comparison table is empty. "
+                "I don't have paper data from this research session to answer your question. "
                 "Please try running a new literature review query."
             ),
             "papers_referenced": []
         }
 
+    q_lower = request.question.lower().strip()
+
+    # 3. Paper Matching Algorithm (Explicit Title/Index/Author + Vector + Keyword)
+    matched_ids = []
+    matched_set = set()
+
+    # A. Index matching (e.g. "paper 1", "paper 2", "second paper", "#3", "paper #3")
+    index_match = re.search(r'(?:paper|source|ref|#)\s*(\d+)', q_lower)
+    if index_match:
+        target_idx = int(index_match.group(1))
+        for pid, p in paper_map.items():
+            if p.get("index") == target_idx:
+                matched_ids.append(pid)
+                matched_set.add(pid)
+                break
+
+    # B. Title & Author substring matching
+    for pid, p in paper_map.items():
+        if pid in matched_set:
+            continue
+        title = (p.get("title") or "").lower()
+        authors = p.get("authors") or []
+        if isinstance(authors, list):
+            authors_str = " ".join(authors).lower()
+        else:
+            authors_str = str(authors).lower()
+
+        # Check title substring or author match
+        if title and len(title) > 5:
+            # Match if question contains significant portion of title or vice versa
+            words = [w for w in title.split() if len(w) > 3]
+            if title in q_lower or (len(words) >= 2 and sum(1 for w in words if w in q_lower) >= max(2, len(words) // 2)):
+                matched_ids.append(pid)
+                matched_set.add(pid)
+                continue
+
+        if authors_str and any(a in q_lower for a in authors_str.split() if len(a) > 4):
+            matched_ids.append(pid)
+            matched_set.add(pid)
+
+    # C. Vector Store similarity search
+    try:
+        from backend.data.vector_store import VectorStore
+        vs = VectorStore()
+        similar_results = vs.query_similarity(request.question, limit=15)
+        for r in similar_results:
+            rid = r.get("id")
+            if rid in paper_map and rid not in matched_set:
+                matched_ids.append(rid)
+                matched_set.add(rid)
+    except Exception as e:
+        logger.warning(f"VectorStore query in QA: {e}")
+
+    # D. Keyword scoring across all remaining papers
+    q_words = [w for w in re.findall(r'\w+', q_lower) if len(w) > 3 and w not in {
+        'what', 'which', 'where', 'when', 'how', 'why', 'tell', 'explain', 'describe',
+        'show', 'paper', 'papers', 'about', 'this', 'that', 'these', 'those', 'using'
+    }]
+    if q_words:
+        scored = []
+        for pid, p in paper_map.items():
+            if pid in matched_set:
+                continue
+            text = f"{p.get('title','')} {p.get('abstract','')} {p.get('method','')} {p.get('dataset','')}".lower()
+            score = sum(1 for w in q_words if w in text)
+            if score > 0:
+                scored.append((score, pid))
+        scored.sort(reverse=True, key=lambda x: x[0])
+        for score, pid in scored:
+            matched_ids.append(pid)
+            matched_set.add(pid)
+
+    # E. Fallback: add remaining papers in session order up to limit
+    for pid in paper_order:
+        if pid not in matched_set:
+            matched_ids.append(pid)
+            matched_set.add(pid)
+
+    # Cap matched papers to 25 to fit within token context window cleanly
+    final_matched_ids = matched_ids[:25]
+
+    # 4. Build Rich Context String & References List
+    context_str = ""
+    papers_referenced = []
+    summaries_map = {}
+
+    raw_summaries = state.get("summaries", [])
+    for s in raw_summaries:
+        sid = s.paper_id if hasattr(s, "paper_id") else s.get("paper_id", "")
+        stxt = s.summary_text if hasattr(s, "summary_text") else s.get("summary_text", "")
+        if sid and stxt:
+            summaries_map[sid] = stxt
+
+    for pid in final_matched_ids:
+        item = paper_map[pid]
+        papers_referenced.append({
+            "id": item["id"],
+            "title": item.get("title", "Untitled"),
+            "url": item.get("url") or item.get("pdf_url")
+        })
+
+        authors_val = item.get("authors", [])
+        if isinstance(authors_val, list):
+            authors_str = ", ".join(authors_val[:4])
+        else:
+            authors_str = str(authors_val)
+
+        abstract_text = item.get("abstract") or "No full abstract available."
+        summary_text = summaries_map.get(pid, "")
+
+        context_str += f"""
+---
+Paper [{item.get('index', '?')}] ID: {item['id']}
+Title: {item.get('title', 'Untitled')}
+Authors: {authors_str} | Year: {item.get('year', 'Unknown')} | Venue: {item.get('venue', 'Unknown')}
+Proposed Method: {item.get('method', 'Not specified')}
+Evaluation Dataset: {item.get('dataset', 'Not specified')}
+Key Metric: {item.get('key_metric', 'Not specified')}
+Limitation: {item.get('limitation', 'Not specified')}
+Abstract: {abstract_text[:1200]}
+"""
+        if summary_text:
+            context_str += f"Summary: {summary_text}\n"
+
+    # 5. Call LLM with Refined Instructions
     from backend.clients.claude_client import ClaudeClient
     claude = ClaudeClient()
     
     system_prompt = (
-        "You are an advanced academic research assistant similar to Elicit. Your task is to answer user questions "
-        "objectively based ONLY on the provided research papers from the literature review. "
-        "Answer the question directly, referencing specific paper titles or Paper IDs in your explanation. "
-        "Keep the tone objective and academic. If the provided context does not contain enough information "
-        "to answer the question, state that clearly."
+        "You are an expert academic research assistant similar to Elicit. Your goal is to answer user questions "
+        "comprehensively and objectively based on the provided literature review papers.\n\n"
+        "GUIDELINES:\n"
+        "1. If the user asks about a SPECIFIC paper (e.g. 'explain paper X', 'tell me about title Y', 'what is paper 2 about?'), "
+        "provide a thorough, well-structured explanation of that paper's core idea, background, methodology, "
+        "datasets, key metrics/results, and limitations based on the provided context.\n"
+        "2. If the user asks a general question, synthesize the findings across papers and cite specific paper titles.\n"
+        "3. Always reference specific paper titles or Paper Numbers (e.g. Paper [1]) in your answer.\n"
+        "4. Be objective, academic, clear, and informative."
     )
     
     history_str = ""
     if request.history:
-        history_str = "\n\nChat History:\n"
-        for h in request.history:
+        history_str = "\n\nConversation History:\n"
+        for h in request.history[-6:]:
             role = "User" if h.get("role") == "user" else "Assistant"
             history_str += f"{role}: {h.get('content')}\n"
             
     prompt = f"""
-Here is the context representing the most relevant papers from the literature review on the topic:
+Here is the context representing the research papers from this literature review:
 {context_str}
 {history_str}
 Question: {request.question}
@@ -273,15 +393,13 @@ Question: {request.question}
 Answer:
 """
     try:
-        response = claude.complete(prompt=prompt, system=system_prompt, temperature=0.2)
+        response = claude.complete(prompt=prompt, system=system_prompt, max_tokens=2500, temperature=0.2)
     except Exception as e:
         logger.error(f"Error calling ClaudeClient in QA: {e}")
-        # Generate a basic fallback answer from the paper data itself
         paper_titles = [p["title"] for p in papers_referenced[:5]]
         response = (
-            f"I encountered an error while synthesizing a detailed answer, but here's what I can tell you "
-            f"from the {len(papers_referenced)} papers in this research session:\n\n"
-            f"The following papers are most relevant to your question:\n"
+            f"Here is what I can tell you from the {len(papers_referenced)} papers in this research session:\n\n"
+            f"Key papers in this collection:\n"
             + "\n".join(f"- {t}" for t in paper_titles)
             + "\n\nPlease check the Comparison Table tab for detailed method, dataset, and limitation "
             "information for each paper."
@@ -291,3 +409,4 @@ Answer:
         "answer": response,
         "papers_referenced": papers_referenced
     }
+

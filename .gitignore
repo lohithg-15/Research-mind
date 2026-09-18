@@ -30,6 +30,8 @@ build/
 backend/db/cache/
 backend/db/chroma/
 backend/db/exports/
+backend/db/*.db-shm
+backend/db/*.db-wal
 
 # Scratch / temporary
 scratch/

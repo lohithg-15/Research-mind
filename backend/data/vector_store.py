@@ -155,3 +155,27 @@ class VectorStore:
         # If not found or failed, but using fallback, try loading from metadata
         # or generating it just in case
         return None
+
+    def get_embeddings_batch(self, paper_ids: List[str]) -> Dict[str, List[float]]:
+        """
+        Retrieves embeddings for multiple paper IDs in a single ChromaDB call.
+        Returns a dict of {paper_id: embedding}. Missing IDs are simply
+        omitted from the result (not an error).
+        """
+        try:
+            res = self.collection.get(ids=paper_ids, include=["embeddings"])
+            result = {}
+            if res and res.get("ids") and res.get("embeddings") is not None:
+                ids = res["ids"]
+                embeddings = res["embeddings"]
+                for pid, emb in zip(ids, embeddings):
+                    if emb is None:
+                        continue
+                    if hasattr(emb, "tolist"):
+                        result[pid] = emb.tolist()
+                    else:
+                        result[pid] = list(emb)
+            return result
+        except Exception as e:
+            logger.error(f"Error retrieving batch embeddings from vector store: {e}")
+            return {}

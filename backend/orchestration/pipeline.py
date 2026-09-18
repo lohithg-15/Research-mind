@@ -1,6 +1,10 @@
+import os
+import sqlite3
 from typing import TypedDict, List, Dict, Any, Literal
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.sqlite import SqliteSaver
 from backend.data.models import PaperMeta, FieldRecord, Summary, GapClaim
+from backend.db.database import DB_DIR
 from backend.agents.planner import run_planner
 from backend.agents.search import run_search
 from backend.agents.extraction import run_extraction
@@ -42,8 +46,19 @@ workflow.add_edge("synthesis", "graph_gap")
 workflow.add_edge("graph_gap", "report")
 workflow.add_edge("report", END)
 
-# 4. Compile the state machine
-app = workflow.compile()
+# 4. Checkpointer: persists state after every node so a failed run can resume from the
+# last completed agent instead of rerunning the whole pipeline.
+# Installed versions: langgraph==1.2.11, langgraph-checkpoint-sqlite==3.1.1 — this exposes
+# SqliteSaver at langgraph.checkpoint.sqlite. SqliteSaver's constructor takes a raw
+# sqlite3.Connection (not a path); `from_conn_string` is a contextmanager that closes the
+# connection on exit, which doesn't fit a module-level singleton, so we open the connection
+# directly instead, mirroring the DB_DIR-relative path convention used in backend/db/database.py.
+CHECKPOINT_DB_PATH = os.path.join(DB_DIR, "langgraph_checkpoints.db")
+_checkpoint_conn = sqlite3.connect(CHECKPOINT_DB_PATH, check_same_thread=False)
+checkpointer = SqliteSaver(_checkpoint_conn)
+
+# 5. Compile the state machine
+app = workflow.compile(checkpointer=checkpointer)
 
 def create_initial_state(query: str, filters: Dict[str, Any] = None) -> PipelineState:
     """

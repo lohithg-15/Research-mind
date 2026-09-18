@@ -1,5 +1,6 @@
 import re
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any
 from backend.clients.arxiv_client import search_arxiv
 from backend.clients.s2_client import search_semantic_scholar
@@ -7,6 +8,9 @@ from backend.data.vector_store import VectorStore
 from backend.data.models import PaperMeta
 
 logger = logging.getLogger("researchmind.search")
+
+# Bounded: avoid hammering either API despite their own per-client backoff/retry logic
+MAX_SEARCH_WORKERS = 6
 
 def clean_title(title: str) -> str:
     """
@@ -55,21 +59,35 @@ def run_search(state: dict) -> dict:
     logger.info(f"Search Agent: Applying year filter {year_from}–{year_to}")
     
     raw_results = []
-    
-    # 1. Fetch papers from both sources
+
+    # 1. Fetch papers from both sources, in parallel: arXiv and Semantic Scholar are
+    # independent services, and different sub-queries against the same service are
+    # independent too, so all 2*N calls can run concurrently.
+    search_tasks = []
     for query in sub_queries:
-        try:
-            arxiv_results = search_arxiv(query, limit=15, year_from=year_from, year_to=year_to)
-            raw_results.extend(arxiv_results)
-        except Exception as e:
-            logger.error(f"Search Agent arXiv sub-query fail: {e}")
-            
-        try:
-            s2_results = search_semantic_scholar(query, limit=15, year_from=year_from, year_to=year_to)
-            raw_results.extend(s2_results)
-        except Exception as e:
-            logger.error(f"Search Agent Semantic Scholar sub-query fail: {e}")
-            
+        search_tasks.append(("arxiv", query))
+        search_tasks.append(("semantic_scholar", query))
+
+    def _run_one_search(source: str, query: str):
+        if source == "arxiv":
+            return source, query, search_arxiv(query, limit=15, year_from=year_from, year_to=year_to)
+        else:
+            return source, query, search_semantic_scholar(query, limit=15, year_from=year_from, year_to=year_to)
+
+    with ThreadPoolExecutor(max_workers=MAX_SEARCH_WORKERS) as executor:
+        futures = {executor.submit(_run_one_search, source, query): (source, query)
+                   for source, query in search_tasks}
+        for future in as_completed(futures):
+            source, query = futures[future]
+            try:
+                _, _, results = future.result()
+                raw_results.extend(results)
+            except Exception as e:
+                if source == "arxiv":
+                    logger.error(f"Search Agent arXiv sub-query fail: {e}")
+                else:
+                    logger.error(f"Search Agent Semantic Scholar sub-query fail: {e}")
+
     # 2. Deduplicate and merge results
     deduped_papers = []
     

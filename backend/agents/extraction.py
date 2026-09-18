@@ -3,6 +3,7 @@ import fitz
 import requests
 import json
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any, Tuple
 from backend.clients.claude_client import ClaudeClient
 from backend.data.models import PaperMeta, FieldRecord
@@ -363,6 +364,148 @@ Return ONLY a valid JSON object with exactly these keys:
 }}"""
 
 
+MAX_WORKERS = 8  # bounded to avoid hammering arXiv/S2/LLM rate limits
+
+
+def _process_single_paper(paper: PaperMeta, claude: ClaudeClient) -> FieldRecord:
+    """
+    Runs the full extraction pipeline for one paper: PDF download,
+    text extraction, LLM extraction, second-pass inference for blank
+    fields, grounding verification, and heuristic fallback on failure.
+    Returns a single FieldRecord. Never raises — all exceptions are
+    caught internally and produce a heuristic-fallback FieldRecord,
+    matching current behavior.
+    """
+    paper_text = ""
+    abstract_only = True
+
+    # 1. Attempt PDF retrieval (only for papers with full-text available)
+    if paper.pdf_url and paper.full_text_available:
+        logger.info(f"Attempting to download PDF for '{paper.title}' from {paper.pdf_url}")
+        try:
+            headers = {"User-Agent": "Mozilla/5.0 (compatible; ResearchMindBot/1.0)"}
+            response = requests.get(paper.pdf_url, headers=headers, timeout=20)
+
+            # Verify it is a valid PDF
+            if response.status_code == 200 and response.content.startswith(b"%PDF"):
+                extracted_pdf_text = extract_text_from_pdf(response.content)
+                if extracted_pdf_text.strip():
+                    paper_text = extracted_pdf_text
+                    abstract_only = False
+                    paper.full_text_available = True
+                    logger.info(f"Successfully extracted full text for: {paper.title}")
+                else:
+                    logger.warning(f"Extracted PDF text is empty for: {paper.title}")
+            else:
+                logger.warning(
+                    f"PDF download failed (status={response.status_code}) for: {paper.title}"
+                )
+        except Exception as e:
+            logger.error(f"Error downloading PDF for '{paper.title}': {e}")
+
+    # 2. Build prompt depending on mode
+    if abstract_only:
+        logger.info(f"Using abstract-only extraction for '{paper.title}'")
+        prompt = ABSTRACT_ONLY_PROMPT.format(
+            title=paper.title,
+            abstract=paper.abstract or "(No abstract available)"
+        )
+        paper.full_text_available = False
+    else:
+        prompt = FULL_TEXT_PROMPT.format(paper_text=paper_text[:12000])
+
+    # 3. LLM Extraction
+    try:
+        response_text = claude.complete(
+            prompt=prompt,
+            system=(
+                "You are an expert academic research analyst. "
+                "Extract specific, clear, informative answers from academic papers. "
+                "Use expert knowledge to interpret and infer where needed — do not refuse to answer."
+            ),
+            temperature=0.0
+        )
+
+    # 3. Parse JSON robustly (handles preamble text and nested fences)
+        try:
+            extracted = _parse_json_from_llm(response_text)
+        except Exception as parse_err:
+            raise ValueError(f"JSON parse failed: {parse_err}")
+
+        blank_fields = {
+            f: extracted.get(f, "")
+            for f in ["method", "dataset", "key_metric", "limitation"]
+            if _is_blank(extracted.get(f, ""))
+        }
+        if blank_fields and (paper.title or paper.abstract):
+            FIELD_QUESTIONS = {
+                "method":     'What is the main technique, model, or approach proposed by this paper?',
+                "dataset":    'What dataset, benchmark, or data domain does this paper use or evaluate on?',
+                "key_metric": 'What performance metric or result is reported or implied?',
+                "limitation": 'What is the most likely limitation or constraint of this approach?',
+            }
+            questions_text = "\n".join(
+                f'- {k.upper()}: {FIELD_QUESTIONS[k]}' for k in blank_fields
+            )
+            json_fields_text = "\n".join(
+                f'  "{k}": "..."' for k in blank_fields
+            )
+            inf_prompt = INFERENCE_PROMPT.format(
+                title=paper.title or "",
+                abstract=paper.abstract or "",
+                questions=questions_text,
+                json_fields=json_fields_text,
+            )
+            try:
+                inf_resp = claude.complete(
+                    prompt=inf_prompt,
+                    system="You are an expert academic researcher. Give specific, direct answers.",
+                    temperature=0.1
+                )
+                inf_extracted = _parse_json_from_llm(inf_resp)
+                for f in blank_fields:
+                    if f in inf_extracted and not _is_blank(inf_extracted[f]):
+                        extracted[f] = inf_extracted[f]
+                        logger.info(f"Second-pass filled '{f}' for '{paper.title}'")
+            except Exception as ie:
+                logger.warning(f"Second-pass inference failed for '{paper.title}': {ie}")
+
+        # 5. Verify Grounding
+        text_for_verify = paper_text if not abstract_only else f"{paper.title}\n{paper.abstract}"
+        status, notes = verify_grounding(extracted, text_for_verify, abstract_only)
+
+        record = FieldRecord(
+            paper_id=paper.id,
+            method=extracted.get("method", "Not specified"),
+            dataset=extracted.get("dataset", "Not specified"),
+            key_metric=extracted.get("key_metric", "Not specified"),
+            limitation=extracted.get("limitation", "Not specified"),
+            year=paper.year,
+            verification_status=status,
+            verification_notes=notes,
+            abstract_only=abstract_only
+        )
+        logger.info(f"Extracted fields for '{paper.title}'. Status: {status}")
+        return record
+
+    except Exception as e:
+        logger.error(f"Failed LLM extraction for paper '{paper.title}': {e}")
+        # ── Heuristic fallback: mine the abstract rather than returning "Not available" ──
+        heuristic = _heuristic_extract(paper.title or "", paper.abstract or "")
+        record = FieldRecord(
+            paper_id=paper.id,
+            method=heuristic["method"],
+            dataset=heuristic["dataset"],
+            key_metric=heuristic["key_metric"],
+            limitation=heuristic["limitation"],
+            year=paper.year,
+            verification_status="heuristic",
+            verification_notes=f"LLM failed ({e}); heuristic extraction used.",
+            abstract_only=abstract_only
+        )
+        return record
+
+
 def run_extraction(state: dict) -> dict:
     """
     Downloads PDFs, extracts text, queries Claude to extract methodology fields,
@@ -376,138 +519,19 @@ def run_extraction(state: dict) -> dict:
     state["agent_status"]["extraction"] = "running"
     logger.info(f"Extraction Agent: Processing {len(papers)} papers.")
 
-    extracted_records = []
     claude = ClaudeClient()
 
-    for paper in papers:
-        paper_text = ""
-        abstract_only = True
+    extracted_records = [None] * len(papers)  # preserve original order
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        future_to_idx = {
+            executor.submit(_process_single_paper, paper, claude): idx
+            for idx, paper in enumerate(papers)
+        }
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            extracted_records[idx] = future.result()
 
-        # 1. Attempt PDF retrieval (only for papers with full-text available)
-        if paper.pdf_url and paper.full_text_available:
-            logger.info(f"Attempting to download PDF for '{paper.title}' from {paper.pdf_url}")
-            try:
-                headers = {"User-Agent": "Mozilla/5.0 (compatible; ResearchMindBot/1.0)"}
-                response = requests.get(paper.pdf_url, headers=headers, timeout=20)
-
-                # Verify it is a valid PDF
-                if response.status_code == 200 and response.content.startswith(b"%PDF"):
-                    extracted_pdf_text = extract_text_from_pdf(response.content)
-                    if extracted_pdf_text.strip():
-                        paper_text = extracted_pdf_text
-                        abstract_only = False
-                        paper.full_text_available = True
-                        logger.info(f"Successfully extracted full text for: {paper.title}")
-                    else:
-                        logger.warning(f"Extracted PDF text is empty for: {paper.title}")
-                else:
-                    logger.warning(
-                        f"PDF download failed (status={response.status_code}) for: {paper.title}"
-                    )
-            except Exception as e:
-                logger.error(f"Error downloading PDF for '{paper.title}': {e}")
-
-        # 2. Build prompt depending on mode
-        if abstract_only:
-            logger.info(f"Using abstract-only extraction for '{paper.title}'")
-            prompt = ABSTRACT_ONLY_PROMPT.format(
-                title=paper.title,
-                abstract=paper.abstract or "(No abstract available)"
-            )
-            paper.full_text_available = False
-        else:
-            prompt = FULL_TEXT_PROMPT.format(paper_text=paper_text[:12000])
-
-        # 3. LLM Extraction
-        try:
-            response_text = claude.complete(
-                prompt=prompt,
-                system=(
-                    "You are an expert academic research analyst. "
-                    "Extract specific, clear, informative answers from academic papers. "
-                    "Use expert knowledge to interpret and infer where needed — do not refuse to answer."
-                ),
-                temperature=0.0
-            )
-
-        # 3. Parse JSON robustly (handles preamble text and nested fences)
-            try:
-                extracted = _parse_json_from_llm(response_text)
-            except Exception as parse_err:
-                raise ValueError(f"JSON parse failed: {parse_err}")
-
-            blank_fields = {
-                f: extracted.get(f, "")
-                for f in ["method", "dataset", "key_metric", "limitation"]
-                if _is_blank(extracted.get(f, ""))
-            }
-            if blank_fields and (paper.title or paper.abstract):
-                FIELD_QUESTIONS = {
-                    "method":     'What is the main technique, model, or approach proposed by this paper?',
-                    "dataset":    'What dataset, benchmark, or data domain does this paper use or evaluate on?',
-                    "key_metric": 'What performance metric or result is reported or implied?',
-                    "limitation": 'What is the most likely limitation or constraint of this approach?',
-                }
-                questions_text = "\n".join(
-                    f'- {k.upper()}: {FIELD_QUESTIONS[k]}' for k in blank_fields
-                )
-                json_fields_text = "\n".join(
-                    f'  "{k}": "..."' for k in blank_fields
-                )
-                inf_prompt = INFERENCE_PROMPT.format(
-                    title=paper.title or "",
-                    abstract=paper.abstract or "",
-                    questions=questions_text,
-                    json_fields=json_fields_text,
-                )
-                try:
-                    inf_resp = claude.complete(
-                        prompt=inf_prompt,
-                        system="You are an expert academic researcher. Give specific, direct answers.",
-                        temperature=0.1
-                    )
-                    inf_extracted = _parse_json_from_llm(inf_resp)
-                    for f in blank_fields:
-                        if f in inf_extracted and not _is_blank(inf_extracted[f]):
-                            extracted[f] = inf_extracted[f]
-                            logger.info(f"Second-pass filled '{f}' for '{paper.title}'")
-                except Exception as ie:
-                    logger.warning(f"Second-pass inference failed for '{paper.title}': {ie}")
-
-            # 5. Verify Grounding
-            text_for_verify = paper_text if not abstract_only else f"{paper.title}\n{paper.abstract}"
-            status, notes = verify_grounding(extracted, text_for_verify, abstract_only)
-
-            record = FieldRecord(
-                paper_id=paper.id,
-                method=extracted.get("method", "Not specified"),
-                dataset=extracted.get("dataset", "Not specified"),
-                key_metric=extracted.get("key_metric", "Not specified"),
-                limitation=extracted.get("limitation", "Not specified"),
-                year=paper.year,
-                verification_status=status,
-                verification_notes=notes,
-                abstract_only=abstract_only
-            )
-            extracted_records.append(record)
-            logger.info(f"Extracted fields for '{paper.title}'. Status: {status}")
-
-        except Exception as e:
-            logger.error(f"Failed LLM extraction for paper '{paper.title}': {e}")
-            # ── Heuristic fallback: mine the abstract rather than returning "Not available" ──
-            heuristic = _heuristic_extract(paper.title or "", paper.abstract or "")
-            record = FieldRecord(
-                paper_id=paper.id,
-                method=heuristic["method"],
-                dataset=heuristic["dataset"],
-                key_metric=heuristic["key_metric"],
-                limitation=heuristic["limitation"],
-                year=paper.year,
-                verification_status="heuristic",
-                verification_notes=f"LLM failed ({e}); heuristic extraction used.",
-                abstract_only=abstract_only
-            )
-            extracted_records.append(record)
+    extracted_records = [r for r in extracted_records if r is not None]
 
     state["extracted_fields"] = extracted_records
     state["agent_status"]["extraction"] = "done"

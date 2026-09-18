@@ -27,7 +27,10 @@ def generate():
     initial_state = create_initial_state("attention mechanisms")
     initial_state["sub_queries"] = ["attention mechanisms in transformers"]
     
-    final_state = app.invoke(initial_state)
+    # Fixed thread_id so regenerating the fallback dataset doesn't collide with real job
+    # checkpoints (this script shares the same compiled `app`/checkpointer as the API).
+    config = {"configurable": {"thread_id": "fallback-generation"}}
+    final_state = app.invoke(initial_state, config=config)
     
     # Convert Pydantic models to serializable dicts
     serializable_state = {

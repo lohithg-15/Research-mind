@@ -31,9 +31,10 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
         initial_state["job_id"] = job_id
         jobs[job_id]["state"] = initial_state
         jobs[job_id]["status"] = "running"
-        
-        # Invoke LangGraph
-        final_state = pipeline_app.invoke(initial_state)
+
+        # Invoke LangGraph, keyed by job_id so the checkpointer can resume this run later
+        config = {"configurable": {"thread_id": job_id}}
+        final_state = pipeline_app.invoke(initial_state, config=config)
         
         jobs[job_id]["state"] = final_state
         jobs[job_id]["status"] = "done"
@@ -80,6 +81,29 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
                 logger.error(f"Auto-save failed for job {job_id}: {save_err}")
     except Exception as e:
         logger.error(f"Error executing pipeline for job {job_id}: {e}")
+        jobs[job_id]["status"] = "error"
+        jobs[job_id]["error"] = str(e)
+
+def retry_pipeline(job_id: str):
+    """
+    Resumes a previously failed pipeline run from its last completed agent, using the
+    checkpoint the SqliteSaver persisted under this job_id's thread_id. Not wired to a
+    route yet; this is the resume primitive for a future retry endpoint.
+    """
+    logger.info(f"Resuming pipeline execution for job {job_id}")
+    config = {"configurable": {"thread_id": job_id}}
+    try:
+        jobs[job_id]["status"] = "running"
+
+        # Passing None as input is LangGraph's convention for "resume from the last
+        # checkpoint recorded for this thread_id" rather than starting a fresh run.
+        final_state = pipeline_app.invoke(None, config=config)
+
+        jobs[job_id]["state"] = final_state
+        jobs[job_id]["status"] = "done"
+        logger.info(f"Pipeline resume completed successfully for job {job_id}")
+    except Exception as e:
+        logger.error(f"Error resuming pipeline for job {job_id}: {e}")
         jobs[job_id]["status"] = "error"
         jobs[job_id]["error"] = str(e)
 

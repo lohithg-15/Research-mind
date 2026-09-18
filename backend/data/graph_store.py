@@ -62,24 +62,24 @@ class GraphStore:
         # 2. Add SIMILAR_TOPIC edges using ChromaDB embeddings
         try:
             vs = VectorStore()
-            embeddings = {}
-            for p in papers:
-                emb = vs.get_embedding(p.id)
-                if emb:
-                    embeddings[p.id] = emb
-                    
-            paper_list = list(papers)
-            for i in range(len(paper_list)):
-                for j in range(i + 1, len(paper_list)):
-                    p1, p2 = paper_list[i], paper_list[j]
-                    v1 = embeddings.get(p1.id)
-                    v2 = embeddings.get(p2.id)
-                    
-                    if v1 and v2:
-                        sim = compute_cosine_similarity(v1, v2)
+            paper_ids = [p.id for p in papers]
+            embeddings_map = vs.get_embeddings_batch(paper_ids)
+
+            valid_ids = [pid for pid in paper_ids if embeddings_map.get(pid)]
+            if len(valid_ids) >= 2:
+                emb_matrix = np.array([embeddings_map[pid] for pid in valid_ids])
+                norms = np.linalg.norm(emb_matrix, axis=1, keepdims=True)
+                norms[norms == 0] = 1e-10
+                normalized = emb_matrix / norms
+                sim_matrix = normalized @ normalized.T
+
+                for i in range(len(valid_ids)):
+                    for j in range(i + 1, len(valid_ids)):
+                        sim = float(sim_matrix[i, j])
                         if sim >= 0.6:
-                            G.add_edge(p1.id, p2.id, type="SIMILAR_TOPIC", weight=sim)
-                            G.add_edge(p2.id, p1.id, type="SIMILAR_TOPIC", weight=sim)
+                            p1_id, p2_id = valid_ids[i], valid_ids[j]
+                            G.add_edge(p1_id, p2_id, type="SIMILAR_TOPIC", weight=sim)
+                            G.add_edge(p2_id, p1_id, type="SIMILAR_TOPIC", weight=sim)
         except Exception as e:
             logger.error(f"Error computing topic similarity edges: {e}")
             

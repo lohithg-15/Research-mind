@@ -88,7 +88,9 @@ def test_full_pipeline_mocked(mock_complete, mock_fitz_open, mock_get, mock_s2, 
     
     # 5. Invoke pipeline
     initial_state = create_initial_state("attention mechanisms")
-    final_state = app.invoke(initial_state)
+    # pipeline.py now compiles with a checkpointer, which requires a thread_id in config
+    config = {"configurable": {"thread_id": "test-thread-1"}}
+    final_state = app.invoke(initial_state, config=config)
     
     # 6. Assert pipeline outputs are valid and populated
     assert final_state["sub_queries"] == ["attention mechanisms in deep learning", "transformers scaling laws"]

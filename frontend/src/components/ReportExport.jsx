@@ -4,6 +4,7 @@ import {
   Calendar, Database, BarChart2, AlertTriangle, ExternalLink,
   ChevronDown, ChevronUp, Hash, Lightbulb, Layers, Info, CheckCircle2, XCircle
 } from 'lucide-react';
+import { getPaperLink } from '../utils/paperLinks';
 
 /* ── helpers ─────────────────────────────────────────── */
 function renderMarkdown(text = '') {
@@ -41,14 +42,6 @@ function inlineFormat(text) {
       return <em key={i}>{p.slice(1, -1)}</em>;
     return p;
   });
-}
-
-function getPaperLink(paper) {
-  if (paper?.url) return paper.url;
-  if (paper?.arxiv_id) return `https://arxiv.org/abs/${paper.arxiv_id}`;
-  if (paper?.doi) return `https://doi.org/${paper.doi}`;
-  if (paper?.pdf_url) return paper.pdf_url;
-  return null;
 }
 
 /* ── sub-components ───────────────────────────────────── */
@@ -119,13 +112,6 @@ function StatsBanner({ papers = [], comparisonTable = [] }) {
 function CompactTable({ data = [] }) {
   if (!data.length) return <p className="rp-p">No comparison data available.</p>;
 
-  const getLink = (row) => {
-    if (row.url) return row.url;
-    if (row.arxiv_id) return `https://arxiv.org/abs/${row.arxiv_id}`;
-    if (row.doi) return `https://doi.org/${row.doi}`;
-    return null;
-  };
-
   const statusColor = (s) => ({
     verified:   'var(--accent-green)',
     unverified: 'var(--accent-amber)',
@@ -143,7 +129,7 @@ function CompactTable({ data = [] }) {
         </thead>
         <tbody>
           {data.map((row, i) => {
-            const link = getLink(row);
+            const link = getPaperLink(row);
             return (
               <tr key={row.id || i}>
                 <td style={{ color: 'var(--text-muted)', fontSize: '10px' }}>{i + 1}</td>

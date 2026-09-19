@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ChevronDown, ChevronUp, ExternalLink, BookOpen } from 'lucide-react';
+import { getPaperLink } from '../utils/paperLinks';
 
 /** Renders a muted dash when a value is empty or "not specified" */
 function CellValue({ value }) {
@@ -116,19 +117,6 @@ export default function ComparisonTable({ data }) {
     return sortDirection === 'asc'
       ? <ChevronUp   size={12} style={{ marginLeft: 3 }} />
       : <ChevronDown size={12} style={{ marginLeft: 3 }} />;
-  };
-
-  /**
-   * Resolves the best available link for a paper row:
-   * 1. Human-readable page (arXiv abstract page / S2 page / DOI page)
-   * 2. Open-access or arXiv PDF
-   */
-  const getPaperLink = (item) => {
-    if (item.url)      return item.url;
-    if (item.arxiv_id) return `https://arxiv.org/abs/${item.arxiv_id}`;
-    if (item.doi)      return `https://doi.org/${item.doi}`;
-    if (item.pdf_url)  return item.pdf_url;
-    return null;
   };
 
   const COLS = [

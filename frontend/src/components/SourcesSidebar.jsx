@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExternalLink, FileText } from 'lucide-react';
+import { getPaperLinkWithLabel } from '../utils/paperLinks';
 
 export default function SourcesSidebar({ papers = [], highlightedIds = [] }) {
   if (!papers || papers.length === 0) {
@@ -16,19 +17,6 @@ export default function SourcesSidebar({ papers = [], highlightedIds = [] }) {
     );
   }
 
-  /**
-   * Resolves the best available link for a paper:
-   * 1. Human-readable page (arXiv abstract / S2 / DOI)
-   * 2. PDF URL
-   */
-  const getPaperLink = (paper) => {
-    if (paper.url) return { href: paper.url, label: 'Open paper' };
-    if (paper.arxiv_id) return { href: `https://arxiv.org/abs/${paper.arxiv_id}`, label: 'arXiv' };
-    if (paper.doi) return { href: `https://doi.org/${paper.doi}`, label: 'DOI' };
-    if (paper.pdf_url) return { href: paper.pdf_url, label: 'PDF' };
-    return null;
-  };
-
   return (
     <aside className="sidebar-right">
       <div className="sources-header">
@@ -37,7 +25,7 @@ export default function SourcesSidebar({ papers = [], highlightedIds = [] }) {
       </div>
       {papers.map((paper, idx) => {
         const isHighlighted = highlightedIds.includes(paper.id) || highlightedIds.includes(paper.arxiv_id);
-        const linkInfo = getPaperLink(paper);
+        const linkInfo = getPaperLinkWithLabel(paper);
         const displayYear = paper.year || '—';
 
         // Show arXiv ID badge or a short ID badge

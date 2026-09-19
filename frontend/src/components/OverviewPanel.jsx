@@ -3,14 +3,7 @@ import {
   BookOpen, BarChart3, Target, Search, Database,
   Layers, ChevronDown, ChevronUp, ExternalLink, Hash
 } from 'lucide-react';
-
-function getPaperLink(paper) {
-  if (paper?.url) return paper.url;
-  if (paper?.arxiv_id) return `https://arxiv.org/abs/${paper.arxiv_id}`;
-  if (paper?.doi) return `https://doi.org/${paper.doi}`;
-  if (paper?.pdf_url) return paper.pdf_url;
-  return null;
-}
+import { getPaperLink } from '../utils/paperLinks';
 
 export default function OverviewPanel({ results, onTabChange }) {
   const [expandedAbstracts, setExpandedAbstracts] = useState({});

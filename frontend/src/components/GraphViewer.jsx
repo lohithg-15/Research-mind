@@ -117,12 +117,14 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
       if (node.type === 'Paper' && label?.length > 30) label = label.slice(0, 28) + '…';
       elements.push({
         data: {
-          id:        node.id,
+          id:            node.id,
           label,
-          type:      node.type || 'Paper',
-          fullTitle: node.title || node.name || node.label || node.id,
-          year:      node.year,
-          citations: node.citations,
+          type:          node.type || 'Paper',
+          fullTitle:     node.title || node.name || node.label || node.id,
+          year:          node.year,
+          citationCount: node.citation_count,
+          venue:         node.venue,
+          url:           node.url,
         },
       });
     });
@@ -132,7 +134,7 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
           id:     `edge-${idx}-${edge.source}-${edge.target}`,
           source: edge.source,
           target: edge.target,
-          label:  edge.type || '',
+          type:   edge.type || '',
         },
       });
     });
@@ -167,7 +169,14 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
         },
         {
           selector: 'node[type="Author"]',
-          style: { 'background-color': '#2dd4bf', 'border-color': 'rgba(45,212,191,0.45)', width: 18, height: 18 },
+          style: {
+            'background-color': '#2dd4bf', 'border-color': 'rgba(45,212,191,0.45)', width: 18, height: 18,
+            'text-opacity': 0,
+          },
+        },
+        {
+          selector: 'node[type="Author"]:active, node[type="Author"].author-hover, node[type="Author"].author-zoomed, node[type="Author"]:selected',
+          style: { 'text-opacity': 1 },
         },
         {
           selector: 'node[type="Topic"]',
@@ -188,12 +197,27 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
             'target-arrow-color': 'rgba(108,138,255,0.5)',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
-            label: 'data(label)',
-            'font-size': '7px',
-            color: 'rgba(155,163,184,0.7)',
-            'text-rotation': 'autorotate',
-            'text-margin-y': -6,
           },
+        },
+        {
+          selector: '.highlighted',
+          style: {
+            opacity: 1,
+            'border-width': 3,
+            'border-color': '#facc15',
+          },
+        },
+        {
+          selector: 'edge.highlighted',
+          style: {
+            'line-color': '#facc15',
+            'target-arrow-color': '#facc15',
+            width: 2.2,
+          },
+        },
+        {
+          selector: '.faded',
+          style: { opacity: 0.15 },
         },
       ],
       layout: {
@@ -202,15 +226,43 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
       },
     });
 
-    cyRef.current.on('tap', 'node', (evt) => {
+    const cy = cyRef.current;
+
+    cy.on('tap', 'node', (evt) => {
       const n = evt.target;
       setSelectedNode({
         id: n.data('id'), label: n.data('fullTitle'),
-        type: n.data('type'), year: n.data('year'), citations: n.data('citations'),
+        type: n.data('type'), year: n.data('year'),
+        citationCount: n.data('citationCount'),
+        venue: n.data('venue'), url: n.data('url'),
       });
+
+      const neighborhood = n.closedNeighborhood();
+      cy.elements().removeClass('highlighted faded');
+      neighborhood.addClass('highlighted');
+      cy.elements().difference(neighborhood).addClass('faded');
     });
-    cyRef.current.on('tap', (evt) => {
-      if (evt.target === cyRef.current) setSelectedNode(null);
+    cy.on('tap', (evt) => {
+      if (evt.target === cy) {
+        setSelectedNode(null);
+        cy.elements().removeClass('highlighted faded');
+      }
+    });
+
+    cy.on('mouseover', 'node[type="Author"]', (evt) => {
+      evt.target.addClass('author-hover');
+    });
+    cy.on('mouseout', 'node[type="Author"]', (evt) => {
+      evt.target.removeClass('author-hover');
+    });
+    const AUTHOR_LABEL_ZOOM_THRESHOLD = 1.5;
+    cy.on('zoom', () => {
+      const authors = cy.nodes('[type="Author"]');
+      if (cy.zoom() >= AUTHOR_LABEL_ZOOM_THRESHOLD) {
+        authors.addClass('author-zoomed');
+      } else {
+        authors.removeClass('author-zoomed');
+      }
     });
 
     if (onHighlightPapers) {
@@ -382,8 +434,25 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
                     <div className="gv2-node-popup">
                       <div className="gv2-node-type">{selectedNode.type}</div>
                       <div className="gv2-node-title">{selectedNode.label}</div>
-                      {selectedNode.year      && <div className="gv2-node-meta">📅 Published {selectedNode.year}</div>}
-                      {selectedNode.citations != null && <div className="gv2-node-meta">📎 {selectedNode.citations} citations</div>}
+                      {selectedNode.type === 'Paper' && (
+                        <>
+                          {selectedNode.year && <div className="gv2-node-meta">📅 Published {selectedNode.year}</div>}
+                          {selectedNode.venue && <div className="gv2-node-meta">🏛 {selectedNode.venue}</div>}
+                          {selectedNode.citationCount != null && (
+                            <div className="gv2-node-meta">📎 {selectedNode.citationCount} citations</div>
+                          )}
+                          {selectedNode.url && (
+                            <a
+                              className="gv2-node-link"
+                              href={selectedNode.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Open paper ↗
+                            </a>
+                          )}
+                        </>
+                      )}
                       <button className="gv2-node-close" onClick={() => setSelectedNode(null)}>✕</button>
                     </div>
                   )}

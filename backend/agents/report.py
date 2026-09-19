@@ -2,6 +2,7 @@ import os
 import uuid
 import logging
 import docx
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
@@ -12,6 +13,8 @@ from backend.clients.claude_client import ClaudeClient
 from backend.logging_utils import get_job_logger
 
 logger = logging.getLogger("researchmind.report")
+
+MAX_GAP_NARRATIVE_WORKERS = 5
 
 def generate_introduction(query: str, summaries: List[Summary], gap_claims: List[GapClaim], job_id: str = None) -> str:
     """
@@ -146,24 +149,20 @@ Return ONLY the synthesized text with the ### subsection headers. No markdown co
         return fallback
 
 
-def generate_gap_narratives(query: str, gap_claims: List[GapClaim], summaries: List[Summary], job_id: str = None) -> List[str]:
+def _process_single_gap_narrative(
+    gap: GapClaim,
+    query: str,
+    paper_titles: List[str],
+    gemini: ClaudeClient,
+    job_id: str = None,
+) -> str:
     """
-    Uses Gemini to write a rich explanatory narrative paragraph for each research gap.
-    Returns a list of narrative strings, one per gap_claim.
+    Generates the narrative paragraph for a single research gap.
+    Never raises — falls back to the gap's description, matching current behavior.
     """
-    if not gap_claims:
-        return []
-
     log = get_job_logger(logger, job_id)
-    log.info(f"Generating narrative paragraphs for {len(gap_claims)} research gaps...")
-    gemini = ClaudeClient()
-
-    paper_titles = [s.title for s in summaries]
-
-    narratives = []
-    for gap in gap_claims:
-        directions_text = "\n".join(f"- {d}" for d in gap.suggested_directions)
-        prompt = f"""
+    directions_text = "\n".join(f"- {d}" for d in gap.suggested_directions)
+    prompt = f"""
 You are writing Section 4 of an academic literature review report on '{query}'.
 
 Write a rich, explanatory narrative paragraph (120–180 words) for the following identified research gap.
@@ -186,17 +185,42 @@ Your paragraph MUST:
 
 Return ONLY the plain narrative paragraph text.
 """
-        try:
-            text = gemini.complete(
-                prompt=prompt,
-                system="You are an expert academic research writer specializing in research gap analysis.",
-                max_tokens=400,
-                temperature=0.2,
-            ).strip()
-            narratives.append(text)
-        except Exception as exc:
-            log.error(f"Failed to generate gap narrative for '{gap.topic_label}': {exc}")
-            narratives.append(gap.description)
+    try:
+        text = gemini.complete(
+            prompt=prompt,
+            system="You are an expert academic research writer specializing in research gap analysis.",
+            max_tokens=400,
+            temperature=0.2,
+        ).strip()
+        return text
+    except Exception as exc:
+        log.error(f"Failed to generate gap narrative for '{gap.topic_label}': {exc}")
+        return gap.description
+
+
+def generate_gap_narratives(query: str, gap_claims: List[GapClaim], summaries: List[Summary], job_id: str = None) -> List[str]:
+    """
+    Uses Gemini to write a rich explanatory narrative paragraph for each research gap.
+    Returns a list of narrative strings, one per gap_claim.
+    """
+    if not gap_claims:
+        return []
+
+    log = get_job_logger(logger, job_id)
+    log.info(f"Generating narrative paragraphs for {len(gap_claims)} research gaps...")
+    gemini = ClaudeClient()
+
+    paper_titles = [s.title for s in summaries]
+
+    narratives = [None] * len(gap_claims)  # preserve original order
+    with ThreadPoolExecutor(max_workers=MAX_GAP_NARRATIVE_WORKERS) as executor:
+        future_to_idx = {
+            executor.submit(_process_single_gap_narrative, gap, query, paper_titles, gemini, job_id): idx
+            for idx, gap in enumerate(gap_claims)
+        }
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            narratives[idx] = future.result()
 
     return narratives
 
@@ -523,13 +547,18 @@ def run_report(state: dict) -> dict:
     log.info("Report Agent: Commencing report compilation.")
 
     # 1. Generate all three LLM-written sections
-    log.info("Step 1/3 — Generating Introduction...")
-    introduction_text = generate_introduction(query, summaries, gap_claims, job_id=state.get("job_id"))
+    log.info("Step 1/2 — Generating Introduction and Thematic Synthesis...")
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        intro_future = executor.submit(
+            generate_introduction, query, summaries, gap_claims, job_id=state.get("job_id")
+        )
+        synthesis_future = executor.submit(
+            generate_thematic_synthesis, query, summaries, gap_claims, job_id=state.get("job_id")
+        )
+        introduction_text = intro_future.result()
+        synthesis_text = synthesis_future.result()
 
-    log.info("Step 2/3 — Generating Thematic Synthesis...")
-    synthesis_text = generate_thematic_synthesis(query, summaries, gap_claims, job_id=state.get("job_id"))
-
-    log.info("Step 3/3 — Generating Research Gap narratives...")
+    log.info("Step 2/2 — Generating Research Gap narratives...")
     gap_narratives = generate_gap_narratives(query, gap_claims, summaries, job_id=state.get("job_id"))
 
     # 2. Compile markdown draft (stored in state for frontend preview)

@@ -33,26 +33,50 @@ def fallback_clustering(papers: List[PaperMeta]) -> List[Dict[str, Any]]:
     logger.info("Using keyword-based fallback clustering.")
     # Group by key vocabulary in abstract
     keywords = ["attention", "transformer", "bert", "gpt", "optimization", "efficiency", "llm", "cnn", "classification"]
+    readable_labels = {
+        "attention": "Attention & Transformer Models",
+        "transformer": "Attention & Transformer Models",
+        "bert": "BERT & Transformer Models",
+        "gpt": "GPT & Large Language Models",
+        "optimization": "Optimization Algorithms",
+        "efficiency": "Model & Compute Efficiency",
+        "llm": "Large Language Models",
+        "cnn": "CNN-Based Vision Models",
+        "classification": "Classification Methods",
+    }
     clusters = {}
-    
+    papers_by_keyword = {}
+
     for paper in papers:
         found_keywords = []
         text = (paper.title + " " + paper.abstract).lower()
         for kw in keywords:
             if kw in text:
                 found_keywords.append(kw)
-                
+
         # Primary cluster label is the most frequent keyword, or 'General'
-        primary = found_keywords[0].capitalize() if found_keywords else "General Research"
+        primary_kw = found_keywords[0] if found_keywords else None
+        primary = readable_labels.get(primary_kw, "General Research")
         if primary not in clusters:
             clusters[primary] = []
+            papers_by_keyword[primary] = []
         clusters[primary].append(paper.id)
-        
+        papers_by_keyword[primary].append(paper)
+
     result = []
     for label, paper_ids in clusters.items():
+        cluster_papers = papers_by_keyword[label]
+        sample_titles = [p.title for p in cluster_papers[:3]]
+        if len(sample_titles) >= 2:
+            titles_str = ", ".join(f"'{t}'" for t in sample_titles[:-1])
+            description = f"Papers in this cluster include {titles_str}, and '{sample_titles[-1]}', discussing {label.lower()}."
+        elif sample_titles:
+            description = f"Papers in this cluster include '{sample_titles[0]}', discussing {label.lower()}."
+        else:
+            description = f"Papers discussing topics related to {label.lower()}."
         result.append({
             "topic_label": label,
-            "description": f"Papers discussing topics related to {label.lower()}.",
+            "description": description,
             "paper_ids": paper_ids
         })
     return result
@@ -179,13 +203,16 @@ JSON Schema:
         densities = [d[1] for d in cluster_densities]
         median_density = np.median(densities)
         log.info(f"Median citation density: {median_density:.2f}")
-        
+        corpus_lacks_signal = median_density < 0.5
+
         for idx, (cluster, density, paper_ids) in enumerate(cluster_densities):
             # Check if density is below or equal to median (handles small clusters/ties gracefully)
             if density <= median_density:
                 label = cluster["topic_label"]
                 desc = cluster["description"]
-                
+
+                cluster_paper_objs = [p for p in papers if p.id in paper_ids]
+
                 # Extract induced subgraph (papers in cluster, their authors, their topic node)
                 subgraph_nodes = list(paper_ids) + [label]
                 for pid in paper_ids:
@@ -205,16 +232,42 @@ JSON Schema:
                 subgraph_data = json_graph.node_link_data(subgraph)
                 
                 gap_id = f"GAP-{idx+1:02d}"
+
+                # Pull a distinctive noun phrase from an abstract to ground the suggestions in real content
+                phrase = None
+                for p in cluster_paper_objs:
+                    words = p.abstract.split()
+                    for w_idx in range(len(words) - 1):
+                        candidate = f"{words[w_idx]} {words[w_idx+1]}".strip(".,;:()")
+                        if len(candidate) > 8 and candidate[0].isalpha() and not candidate.lower().startswith(("this ", "the ", "these ", "our ", "we ")):
+                            phrase = candidate
+                            break
+                    if phrase:
+                        break
+
                 suggested_directions = [
-                    f"Integrate {label.lower()} with recent developments in transformer architectures.",
-                    f"Validate {label.lower()} models on broader, non-standard benchmark datasets.",
-                    f"Explore scaling properties and hardware efficiency constraints in {label.lower()} implementations."
+                    f"Integrate {label.lower()} with recent developments related to {phrase or 'adjacent research areas'}.",
+                    f"Validate {label.lower()} approaches on broader, non-standard benchmark datasets beyond those used in the current cluster.",
+                    f"Explore scaling properties and practical deployment constraints of {label.lower()} techniques, building on themes like {phrase or desc.lower()}."
                 ]
-                
+
+                if corpus_lacks_signal:
+                    description = (
+                        f"This cluster ('{label}') shows minimal citation activity ({density:.2f} citations/paper vs median "
+                        f"{median_density:.2f}), which may reflect either an under-explored area OR simply that these are "
+                        f"very recent papers that haven't had time to accumulate citations. Cross-check with the "
+                        f"topic-similarity connections in the graph below. Theme: {desc}"
+                    )
+                else:
+                    description = (
+                        f"Thematic area '{label}' shows low citation density ({density:.2f} citations/paper vs median "
+                        f"{median_density:.2f}), suggesting it is an under-explored research gap. Theme: {desc}"
+                    )
+
                 gap_claims.append(GapClaim(
                     gap_id=gap_id,
                     topic_label=label,
-                    description=f"Thematic area '{label}' shows low citation density ({density:.2f} citations/paper vs median {median_density:.2f}), suggesting it is an under-explored research gap. Theme: {desc}",
+                    description=description,
                     citation_density=density,
                     papers_in_cluster=paper_ids,
                     subgraph_snapshot=subgraph_data,

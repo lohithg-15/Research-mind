@@ -841,6 +841,12 @@ body {
   color: var(--black); line-height: 1.4; margin-bottom: 6px;
 }
 .gv2-node-meta { font-family: var(--font-ui); font-size: 11px; color: var(--gray-700); margin-top: 3px; }
+.gv2-node-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 8px; font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  color: #6c8aff; text-decoration: none; transition: var(--transition);
+}
+.gv2-node-link:hover { color: #8ea4ff; text-decoration: underline; }
 .gv2-node-close {
   position: absolute; top: 6px; right: 8px;
   background: none; border: none; color: var(--gray-600);

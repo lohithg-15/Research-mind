@@ -1,7 +1,7 @@
 import logging
 import networkx as nx
 from typing import List, Dict, Any
-from backend.data.models import PaperMeta
+from backend.data.models import PaperMeta, resolve_paper_url_from_meta
 from backend.data.vector_store import VectorStore
 import numpy as np
 
@@ -39,7 +39,11 @@ class GraphStore:
                 venue=p.venue,
                 abstract=p.abstract,
                 full_text_available=p.full_text_available,
-                citation_count=p.citation_count
+                citation_count=p.citation_count,
+                url=resolve_paper_url_from_meta(p),
+                doi=p.doi,
+                arxiv_id=p.arxiv_id,
+                authors=p.authors
             )
             
             # Add Authors & Authored_By edges

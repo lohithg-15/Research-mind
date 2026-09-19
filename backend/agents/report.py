@@ -9,14 +9,16 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from backend.data.models import PaperMeta, GapClaim, Summary
 from backend.clients.claude_client import ClaudeClient
+from backend.logging_utils import get_job_logger
 
 logger = logging.getLogger("researchmind.report")
 
-def generate_introduction(query: str, summaries: List[Summary], gap_claims: List[GapClaim]) -> str:
+def generate_introduction(query: str, summaries: List[Summary], gap_claims: List[GapClaim], job_id: str = None) -> str:
     """
     Uses Gemini to write a rich, multi-paragraph introduction for the report.
     """
-    logger.info("Generating report introduction...")
+    log = get_job_logger(logger, job_id)
+    log.info("Generating report introduction...")
     gemini = ClaudeClient()
     num_papers = len(summaries)
     num_gaps   = len(gap_claims)
@@ -51,7 +53,7 @@ Return ONLY the plain prose text.
         ).strip()
         return text
     except Exception as exc:
-        logger.error(f"Failed to generate introduction: {exc}")
+        log.error(f"Failed to generate introduction: {exc}")
         # Compact deterministic fallback
         return (
             f"This report presents an automated systematic literature survey and candidate research gap discovery "
@@ -66,11 +68,12 @@ Return ONLY the plain prose text.
         )
 
 
-def generate_thematic_synthesis(query: str, summaries: List[Summary], gap_claims: List[GapClaim]) -> str:
+def generate_thematic_synthesis(query: str, summaries: List[Summary], gap_claims: List[GapClaim], job_id: str = None) -> str:
     """
     Leverages Gemini to synthesize a deep, publication-grade academic survey of the literature.
     """
-    logger.info("Generating thematic academic synthesis of the literature...")
+    log = get_job_logger(logger, job_id)
+    log.info("Generating thematic academic synthesis of the literature...")
     gemini = ClaudeClient()
 
     papers_input = ""
@@ -136,14 +139,14 @@ Return ONLY the synthesized text with the ### subsection headers. No markdown co
         )
         return response.strip()
     except Exception as e:
-        logger.error(f"Failed to generate thematic synthesis: {e}")
+        log.error(f"Failed to generate thematic synthesis: {e}")
         fallback = "### 3.1 Literature Survey Overview\n"
         for s in summaries:
             fallback += f"**{s.title}**: {s.summary_text}\n\n"
         return fallback
 
 
-def generate_gap_narratives(query: str, gap_claims: List[GapClaim], summaries: List[Summary]) -> List[str]:
+def generate_gap_narratives(query: str, gap_claims: List[GapClaim], summaries: List[Summary], job_id: str = None) -> List[str]:
     """
     Uses Gemini to write a rich explanatory narrative paragraph for each research gap.
     Returns a list of narrative strings, one per gap_claim.
@@ -151,7 +154,8 @@ def generate_gap_narratives(query: str, gap_claims: List[GapClaim], summaries: L
     if not gap_claims:
         return []
 
-    logger.info(f"Generating narrative paragraphs for {len(gap_claims)} research gaps...")
+    log = get_job_logger(logger, job_id)
+    log.info(f"Generating narrative paragraphs for {len(gap_claims)} research gaps...")
     gemini = ClaudeClient()
 
     paper_titles = [s.title for s in summaries]
@@ -191,7 +195,7 @@ Return ONLY the plain narrative paragraph text.
             ).strip()
             narratives.append(text)
         except Exception as exc:
-            logger.error(f"Failed to generate gap narrative for '{gap.topic_label}': {exc}")
+            log.error(f"Failed to generate gap narrative for '{gap.topic_label}': {exc}")
             narratives.append(gap.description)
 
     return narratives
@@ -500,6 +504,13 @@ def run_report(state: dict) -> dict:
     Generates Gemini-written Introduction, Thematic Synthesis, and
     per-gap narrative paragraphs before assembling the final documents.
     """
+    log = get_job_logger(logger, state.get("job_id"))
+
+    if state.get("agent_status", {}).get("search") == "cancelled" or \
+       state.get("agent_status", {}).get("extraction") == "cancelled":
+        state["agent_status"]["report"] = "cancelled"
+        return state
+
     query = state.get("query", "")
     summaries: List[Summary] = state.get("summaries", [])
     comparison_table: List[Dict[str, Any]] = state.get("comparison_table", [])
@@ -509,17 +520,17 @@ def run_report(state: dict) -> dict:
         state["agent_status"] = {}
 
     state["agent_status"]["report"] = "running"
-    logger.info("Report Agent: Commencing report compilation.")
+    log.info("Report Agent: Commencing report compilation.")
 
     # 1. Generate all three LLM-written sections
-    logger.info("Step 1/3 — Generating Introduction...")
-    introduction_text = generate_introduction(query, summaries, gap_claims)
+    log.info("Step 1/3 — Generating Introduction...")
+    introduction_text = generate_introduction(query, summaries, gap_claims, job_id=state.get("job_id"))
 
-    logger.info("Step 2/3 — Generating Thematic Synthesis...")
-    synthesis_text = generate_thematic_synthesis(query, summaries, gap_claims)
+    log.info("Step 2/3 — Generating Thematic Synthesis...")
+    synthesis_text = generate_thematic_synthesis(query, summaries, gap_claims, job_id=state.get("job_id"))
 
-    logger.info("Step 3/3 — Generating Research Gap narratives...")
-    gap_narratives = generate_gap_narratives(query, gap_claims, summaries)
+    log.info("Step 3/3 — Generating Research Gap narratives...")
+    gap_narratives = generate_gap_narratives(query, gap_claims, summaries, job_id=state.get("job_id"))
 
     # 2. Compile markdown draft (stored in state for frontend preview)
     state["report_draft"] = {
@@ -555,7 +566,7 @@ def run_report(state: dict) -> dict:
         )
         state["report_draft"]["docx_path"] = docx_path
     except Exception as e:
-        logger.error(f"Failed to generate DOCX report: {e}")
+        log.error(f"Failed to generate DOCX report: {e}")
 
     try:
         generate_pdf(
@@ -566,8 +577,8 @@ def run_report(state: dict) -> dict:
         )
         state["report_draft"]["pdf_path"] = pdf_path
     except Exception as e:
-        logger.error(f"Failed to generate PDF report: {e}")
+        log.error(f"Failed to generate PDF report: {e}")
 
     state["agent_status"]["report"] = "done"
-    logger.info("Report Agent: All sections generated successfully.")
+    log.info("Report Agent: All sections generated successfully.")
     return state

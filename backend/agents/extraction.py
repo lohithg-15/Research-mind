@@ -7,6 +7,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any, Tuple
 from backend.clients.claude_client import ClaudeClient
 from backend.data.models import PaperMeta, FieldRecord
+from backend.logging_utils import get_job_logger
+from backend.api.jobs import is_cancelled
 
 logger = logging.getLogger("researchmind.extraction")
 
@@ -367,7 +369,7 @@ Return ONLY a valid JSON object with exactly these keys:
 MAX_WORKERS = 8  # bounded to avoid hammering arXiv/S2/LLM rate limits
 
 
-def _process_single_paper(paper: PaperMeta, claude: ClaudeClient) -> FieldRecord:
+def _process_single_paper(paper: PaperMeta, claude: ClaudeClient, job_id: str = None) -> FieldRecord:
     """
     Runs the full extraction pipeline for one paper: PDF download,
     text extraction, LLM extraction, second-pass inference for blank
@@ -376,12 +378,13 @@ def _process_single_paper(paper: PaperMeta, claude: ClaudeClient) -> FieldRecord
     caught internally and produce a heuristic-fallback FieldRecord,
     matching current behavior.
     """
+    log = get_job_logger(logger, job_id)
     paper_text = ""
     abstract_only = True
 
     # 1. Attempt PDF retrieval (only for papers with full-text available)
     if paper.pdf_url and paper.full_text_available:
-        logger.info(f"Attempting to download PDF for '{paper.title}' from {paper.pdf_url}")
+        log.info(f"Attempting to download PDF for '{paper.title}' from {paper.pdf_url}")
         try:
             headers = {"User-Agent": "Mozilla/5.0 (compatible; ResearchMindBot/1.0)"}
             response = requests.get(paper.pdf_url, headers=headers, timeout=20)
@@ -393,19 +396,19 @@ def _process_single_paper(paper: PaperMeta, claude: ClaudeClient) -> FieldRecord
                     paper_text = extracted_pdf_text
                     abstract_only = False
                     paper.full_text_available = True
-                    logger.info(f"Successfully extracted full text for: {paper.title}")
+                    log.info(f"Successfully extracted full text for: {paper.title}")
                 else:
-                    logger.warning(f"Extracted PDF text is empty for: {paper.title}")
+                    log.warning(f"Extracted PDF text is empty for: {paper.title}")
             else:
-                logger.warning(
+                log.warning(
                     f"PDF download failed (status={response.status_code}) for: {paper.title}"
                 )
         except Exception as e:
-            logger.error(f"Error downloading PDF for '{paper.title}': {e}")
+            log.error(f"Error downloading PDF for '{paper.title}': {e}")
 
     # 2. Build prompt depending on mode
     if abstract_only:
-        logger.info(f"Using abstract-only extraction for '{paper.title}'")
+        log.info(f"Using abstract-only extraction for '{paper.title}'")
         prompt = ABSTRACT_ONLY_PROMPT.format(
             title=paper.title,
             abstract=paper.abstract or "(No abstract available)"
@@ -466,9 +469,9 @@ def _process_single_paper(paper: PaperMeta, claude: ClaudeClient) -> FieldRecord
                 for f in blank_fields:
                     if f in inf_extracted and not _is_blank(inf_extracted[f]):
                         extracted[f] = inf_extracted[f]
-                        logger.info(f"Second-pass filled '{f}' for '{paper.title}'")
+                        log.info(f"Second-pass filled '{f}' for '{paper.title}'")
             except Exception as ie:
-                logger.warning(f"Second-pass inference failed for '{paper.title}': {ie}")
+                log.warning(f"Second-pass inference failed for '{paper.title}': {ie}")
 
         # 5. Verify Grounding
         text_for_verify = paper_text if not abstract_only else f"{paper.title}\n{paper.abstract}"
@@ -485,11 +488,11 @@ def _process_single_paper(paper: PaperMeta, claude: ClaudeClient) -> FieldRecord
             verification_notes=notes,
             abstract_only=abstract_only
         )
-        logger.info(f"Extracted fields for '{paper.title}'. Status: {status}")
+        log.info(f"Extracted fields for '{paper.title}'. Status: {status}")
         return record
 
     except Exception as e:
-        logger.error(f"Failed LLM extraction for paper '{paper.title}': {e}")
+        log.error(f"Failed LLM extraction for paper '{paper.title}': {e}")
         # ── Heuristic fallback: mine the abstract rather than returning "Not available" ──
         heuristic = _heuristic_extract(paper.title or "", paper.abstract or "")
         record = FieldRecord(
@@ -511,29 +514,47 @@ def run_extraction(state: dict) -> dict:
     Downloads PDFs, extracts text, queries Claude to extract methodology fields,
     and runs a verification pass. Uses separate prompts for full-text vs abstract-only mode.
     """
+    log = get_job_logger(logger, state.get("job_id"))
+
+    if state.get("agent_status", {}).get("search") == "cancelled" or \
+       state.get("agent_status", {}).get("extraction") == "cancelled":
+        state["agent_status"]["extraction"] = "cancelled"
+        return state
+
     papers: List[PaperMeta] = state.get("papers", [])
 
     if "agent_status" not in state:
         state["agent_status"] = {}
 
     state["agent_status"]["extraction"] = "running"
-    logger.info(f"Extraction Agent: Processing {len(papers)} papers.")
+    log.info(f"Extraction Agent: Processing {len(papers)} papers.")
 
     claude = ClaudeClient()
+    job_id = state.get("job_id")
 
     extracted_records = [None] * len(papers)  # preserve original order
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_to_idx = {
-            executor.submit(_process_single_paper, paper, claude): idx
+            executor.submit(_process_single_paper, paper, claude, job_id): idx
             for idx, paper in enumerate(papers)
         }
+        cancelled_mid_run = False
         for future in as_completed(future_to_idx):
+            if job_id and is_cancelled(job_id):
+                log.info(f"Job {job_id} cancelled during extraction; stopping early.")
+                executor.shutdown(wait=False, cancel_futures=True)
+                cancelled_mid_run = True
+                break
             idx = future_to_idx[future]
             extracted_records[idx] = future.result()
 
     extracted_records = [r for r in extracted_records if r is not None]
 
     state["extracted_fields"] = extracted_records
+    if cancelled_mid_run:
+        state["agent_status"]["extraction"] = "cancelled"
+        return state
+
     state["agent_status"]["extraction"] = "done"
-    logger.info(f"Extraction Agent done: {len(extracted_records)} records.")
+    log.info(f"Extraction Agent done: {len(extracted_records)} records.")
     return state

@@ -17,6 +17,32 @@ class PaperMeta(BaseModel):
     arxiv_id: Optional[str] = None
     source: str  # 'arxiv', 'semantic_scholar', or 'merged'
 
+def resolve_paper_url(
+    url: Optional[str] = None,
+    arxiv_id: Optional[str] = None,
+    doi: Optional[str] = None,
+    pdf_url: Optional[str] = None,
+) -> Optional[str]:
+    """
+    Resolves the best available human-readable link for a paper, in
+    priority order: explicit url > arXiv abstract page > DOI page >
+    raw PDF url > None. Centralizes logic previously duplicated across
+    synthesis.py and multiple frontend components.
+    """
+    if url:
+        return url
+    if arxiv_id:
+        return f"https://arxiv.org/abs/{arxiv_id}"
+    if doi:
+        return f"https://doi.org/{doi}"
+    if pdf_url:
+        return pdf_url
+    return None
+
+def resolve_paper_url_from_meta(paper: "PaperMeta") -> Optional[str]:
+    """Convenience wrapper for a full PaperMeta object."""
+    return resolve_paper_url(paper.url, paper.arxiv_id, paper.doi, paper.pdf_url)
+
 class FieldRecord(BaseModel):
     paper_id: str
     method: str

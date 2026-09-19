@@ -13,8 +13,26 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),
 # Set up logging configuration
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    format="%(asctime)s [%(levelname)s] %(name)s [job=%(job_id)s]: %(message)s"
 )
+
+
+class DefaultJobIdFilter(logging.Filter):
+    """Ensures records from loggers not wrapped in get_job_logger (e.g. uvicorn,
+    chromadb) still satisfy the %(job_id)s format placeholder above."""
+    def filter(self, record):
+        if not hasattr(record, "job_id"):
+            record.job_id = "-"
+        return True
+
+
+
+# Filters attached to a Logger only run for records that logger itself
+# originates, not ones a child logger (uvicorn, chromadb, ...) propagates
+# up for handling — so the filter must sit on the handler(s) instead.
+for _handler in logging.getLogger().handlers:
+    _handler.addFilter(DefaultJobIdFilter())
+
 logger = logging.getLogger("researchmind.api.main")
 
 app = FastAPI(

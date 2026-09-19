@@ -2,7 +2,8 @@ import logging
 import re
 from typing import List, Dict, Any
 from backend.clients.claude_client import ClaudeClient
-from backend.data.models import PaperMeta, FieldRecord, Summary
+from backend.data.models import PaperMeta, FieldRecord, Summary, resolve_paper_url_from_meta
+from backend.logging_utils import get_job_logger
 
 logger = logging.getLogger("researchmind.synthesis")
 
@@ -11,14 +12,21 @@ def run_synthesis(state: dict) -> dict:
     Produces source-grounded summaries for each paper and compiles
     the comparison table using extracted fields.
     """
+    log = get_job_logger(logger, state.get("job_id"))
+
+    if state.get("agent_status", {}).get("search") == "cancelled" or \
+       state.get("agent_status", {}).get("extraction") == "cancelled":
+        state["agent_status"]["synthesis"] = "cancelled"
+        return state
+
     papers: List[PaperMeta] = state.get("papers", [])
     extracted_fields: List[FieldRecord] = state.get("extracted_fields", [])
-    
+
     if "agent_status" not in state:
         state["agent_status"] = {}
-        
+
     state["agent_status"]["synthesis"] = "running"
-    logger.info("Synthesis Agent: Summarizing papers and compiling comparison table.")
+    log.info("Synthesis Agent: Summarizing papers and compiling comparison table.")
     
     # Map paper_id to its extracted record for fast lookup
     records_map = {r.paper_id: r for r in extracted_fields}
@@ -84,7 +92,7 @@ Return ONLY the summary text with attributions. Do not add intro, markdown forma
             ))
             
         except Exception as e:
-            logger.error(f"Failed to generate summary for '{paper.title}': {e}")
+            log.error(f"Failed to generate summary for '{paper.title}': {e}")
             summaries.append(Summary(
                 paper_id=paper.id,
                 title=paper.title,
@@ -102,10 +110,7 @@ Return ONLY the summary text with attributions. Do not add intro, markdown forma
             "arxiv_id": paper.arxiv_id,
             "doi": paper.doi,
             "pdf_url": paper.pdf_url,
-            "url": paper.url or (
-                f"https://arxiv.org/abs/{paper.arxiv_id}" if paper.arxiv_id
-                else (f"https://doi.org/{paper.doi}" if paper.doi else None)
-            ),
+            "url": resolve_paper_url_from_meta(paper),
             "method": record.method if record else "Not specified",
             "dataset": record.dataset if record else "Not specified",
             "key_metric": record.key_metric if record else "Not specified",
@@ -117,5 +122,5 @@ Return ONLY the summary text with attributions. Do not add intro, markdown forma
     state["summaries"] = summaries
     state["comparison_table"] = comparison_table
     state["agent_status"]["synthesis"] = "done"
-    logger.info("Synthesis Agent successfully completed.")
+    log.info("Synthesis Agent successfully completed.")
     return state

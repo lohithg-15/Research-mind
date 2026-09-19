@@ -4,9 +4,10 @@ import threading
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Dict, Any, Optional, List
-from backend.api.jobs import jobs
+from backend.api.jobs import jobs, is_cancelled, clear_cancellation, request_cancellation
 from backend.api.deps import get_optional_user
 from backend.orchestration.pipeline import app as pipeline_app, create_initial_state
+from backend.logging_utils import get_job_logger
 
 logger = logging.getLogger("researchmind.api.query")
 router = APIRouter()
@@ -25,7 +26,12 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
     Executes the LangGraph pipeline in the background and updates the job state.
     If the job has a user_id, auto-saves the results to the database on completion.
     """
-    logger.info(f"Starting pipeline execution for job {job_id}")
+    log = get_job_logger(logger, job_id)
+    if is_cancelled(job_id):
+        jobs[job_id]["status"] = "cancelled"
+        clear_cancellation(job_id)
+        return
+    log.info(f"Starting pipeline execution for job {job_id}")
     try:
         initial_state = create_initial_state(query, filters)
         initial_state["job_id"] = job_id
@@ -35,10 +41,15 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
         # Invoke LangGraph, keyed by job_id so the checkpointer can resume this run later
         config = {"configurable": {"thread_id": job_id}}
         final_state = pipeline_app.invoke(initial_state, config=config)
-        
+
+        if is_cancelled(job_id):
+            jobs[job_id]["status"] = "cancelled"
+            clear_cancellation(job_id)
+            return
+
         jobs[job_id]["state"] = final_state
         jobs[job_id]["status"] = "done"
-        logger.info(f"Pipeline execution completed successfully for job {job_id}")
+        log.info(f"Pipeline execution completed successfully for job {job_id}")
 
         # Auto-save for authenticated users
         user_id = jobs[job_id].get("user_id")
@@ -78,9 +89,9 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
                     results=results_to_save,
                 )
             except Exception as save_err:
-                logger.error(f"Auto-save failed for job {job_id}: {save_err}")
+                log.error(f"Auto-save failed for job {job_id}: {save_err}")
     except Exception as e:
-        logger.error(f"Error executing pipeline for job {job_id}: {e}")
+        log.error(f"Error executing pipeline for job {job_id}: {e}")
         jobs[job_id]["status"] = "error"
         jobs[job_id]["error"] = str(e)
 
@@ -130,8 +141,24 @@ def submit_query(
     
     # Run the pipeline in a background task
     background_tasks.add_task(execute_pipeline, job_id, request.query, request.filters)
-    
+
     return {"job_id": job_id}
+
+@router.post("/jobs/{job_id}/cancel")
+def cancel_job(job_id: str):
+    """
+    Requests cancellation of a running job. Cooperative: the pipeline
+    checks this flag at safe points between agents and between
+    per-item work inside search/extraction, and stops early if set.
+    Does not interrupt an in-flight individual API/LLM call.
+    """
+    if job_id not in jobs:
+        raise HTTPException(status_code=404, detail="Job not found.")
+    if jobs[job_id]["status"] in ("done", "error", "cancelled"):
+        return {"status": jobs[job_id]["status"], "message": "Job already finished; nothing to cancel."}
+
+    request_cancellation(job_id)
+    return {"status": "cancelling", "job_id": job_id}
 
 @router.get("/results/{job_id}")
 def get_results(job_id: str):

@@ -6,6 +6,8 @@ from backend.clients.arxiv_client import search_arxiv
 from backend.clients.s2_client import search_semantic_scholar
 from backend.data.vector_store import VectorStore
 from backend.data.models import PaperMeta
+from backend.logging_utils import get_job_logger
+from backend.api.jobs import is_cancelled
 
 logger = logging.getLogger("researchmind.search")
 
@@ -41,22 +43,23 @@ def run_search(state: dict) -> dict:
     Retrieves academic literature based on sub-queries, deduplicates, ranks, 
     populates local vector DB with paper text, and updates pipeline state.
     """
+    log = get_job_logger(logger, state.get("job_id"))
     sub_queries = state.get("sub_queries", [])
     if not sub_queries:
         sub_queries = [state.get("query", "")]
-        
+
     if "agent_status" not in state:
         state["agent_status"] = {}
-        
+
     state["agent_status"]["search"] = "running"
-    logger.info(f"Search Agent: Retrieving papers for sub-queries: {sub_queries}")
+    log.info(f"Search Agent: Retrieving papers for sub-queries: {sub_queries}")
 
     # Extract year range filters from pipeline state
     filters = state.get("filters", {}) or {}
     year_range = filters.get("year_range", [None, None]) or [None, None]
     year_from = year_range[0] if len(year_range) > 0 else None
     year_to   = year_range[1] if len(year_range) > 1 else None
-    logger.info(f"Search Agent: Applying year filter {year_from}–{year_to}")
+    log.info(f"Search Agent: Applying year filter {year_from}–{year_to}")
     
     raw_results = []
 
@@ -84,9 +87,16 @@ def run_search(state: dict) -> dict:
                 raw_results.extend(results)
             except Exception as e:
                 if source == "arxiv":
-                    logger.error(f"Search Agent arXiv sub-query fail: {e}")
+                    log.error(f"Search Agent arXiv sub-query fail: {e}")
                 else:
-                    logger.error(f"Search Agent Semantic Scholar sub-query fail: {e}")
+                    log.error(f"Search Agent Semantic Scholar sub-query fail: {e}")
+
+    job_id = state.get("job_id")
+    if job_id and is_cancelled(job_id):
+        log.info(f"Job {job_id} cancelled during search; stopping early.")
+        state["agent_status"]["search"] = "cancelled"
+        state["papers"] = []
+        return state
 
     # 2. Deduplicate and merge results
     deduped_papers = []
@@ -110,7 +120,7 @@ def run_search(state: dict) -> dict:
         if duplicate_index is not None:
             # Merge matching paper details
             existing = deduped_papers[duplicate_index]
-            logger.info(f"Merging duplicates for paper: '{existing.title}'")
+            log.info(f"Merging duplicates for paper: '{existing.title}'")
             
             # Enrich fields if missing
             if not existing.doi and raw.get("doi"):
@@ -155,10 +165,10 @@ def run_search(state: dict) -> dict:
         papers_dict_list = [p.model_dump() for p in deduped_papers]
         vs.add_papers(papers_dict_list)
     except Exception as e:
-        logger.error(f"Failed to store paper embeddings in ChromaDB: {e}")
-        
+        log.error(f"Failed to store paper embeddings in ChromaDB: {e}")
+
     state["papers"] = deduped_papers
     state["agent_status"]["search"] = "done"
-    logger.info(f"Search Agent finished: merged into {len(deduped_papers)} unique papers.")
+    log.info(f"Search Agent finished: merged into {len(deduped_papers)} unique papers.")
     
     return state

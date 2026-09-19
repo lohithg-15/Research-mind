@@ -8,6 +8,7 @@ from typing import List, Dict, Any
 from backend.clients.claude_client import ClaudeClient
 from backend.data.models import PaperMeta, GapClaim
 from backend.data.graph_store import GraphStore
+from backend.logging_utils import get_job_logger
 
 logger = logging.getLogger("researchmind.graph_gap")
 
@@ -60,22 +61,29 @@ def run_graph_gap(state: dict) -> dict:
     """
     Builds the NetworkX MultiDiGraph and executes the gap detection heuristic.
     """
+    log = get_job_logger(logger, state.get("job_id"))
+
+    if state.get("agent_status", {}).get("search") == "cancelled" or \
+       state.get("agent_status", {}).get("extraction") == "cancelled":
+        state["agent_status"]["graph_gap"] = "cancelled"
+        return state
+
     papers: List[PaperMeta] = state.get("papers", [])
-    
+
     if "agent_status" not in state:
         state["agent_status"] = {}
-        
+
     state["agent_status"]["graph_gap"] = "running"
-    
+
     # 1. Enforce minimum corpus size
     if len(papers) < 15:
-        logger.warning(f"Corpus size {len(papers)} is below the minimum of 15 papers. Skipping gap detection.")
+        log.warning(f"Corpus size {len(papers)} is below the minimum of 15 papers. Skipping gap detection.")
         state["gap_claims"] = []
         state["graph_ref"] = None
         state["agent_status"]["graph_gap"] = "done"
         return state
-        
-    logger.info(f"Graph/Gap Agent: Building network graph for {len(papers)} papers.")
+
+    log.info(f"Graph/Gap Agent: Building network graph for {len(papers)} papers.")
     
     # 2. Build the NetworkX Graph via GraphStore
     gs = GraphStore()
@@ -126,7 +134,7 @@ JSON Schema:
         if not isinstance(clusters, list):
             raise ValueError("LLM response is not a list")
     except Exception as e:
-        logger.error(f"Failed to cluster papers using Claude: {e}")
+        log.error(f"Failed to cluster papers using Claude: {e}")
         clusters = fallback_clustering(papers)
         
     # Add Topic nodes and BELONGS_TO edges
@@ -170,7 +178,7 @@ JSON Schema:
     if cluster_densities:
         densities = [d[1] for d in cluster_densities]
         median_density = np.median(densities)
-        logger.info(f"Median citation density: {median_density:.2f}")
+        log.info(f"Median citation density: {median_density:.2f}")
         
         for idx, (cluster, density, paper_ids) in enumerate(cluster_densities):
             # Check if density is below or equal to median (handles small clusters/ties gracefully)
@@ -212,7 +220,7 @@ JSON Schema:
                     subgraph_snapshot=subgraph_data,
                     suggested_directions=suggested_directions
                 ))
-                logger.info(f"Flagged gap: {gap_id} in topic '{label}' with density {density:.2f}")
+                log.info(f"Flagged gap: {gap_id} in topic '{label}' with density {density:.2f}")
                 
     state["gap_claims"] = gap_claims
     

@@ -150,7 +150,7 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
           selector: 'node',
           style: {
             label: 'data(label)',
-            color: 'rgba(240,242,247,0.75)',
+            color: '#1a1a1a',
             'font-family': 'IBM Plex Sans, sans-serif',
             'font-size': '9px',
             'text-valign': 'bottom',

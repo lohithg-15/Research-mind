@@ -1,6 +1,7 @@
 import logging
 import datetime
 import json
+import random
 import numpy as np
 import networkx as nx
 from networkx.readwrite import json_graph
@@ -175,115 +176,170 @@ JSON Schema:
             if pid in paper_ids_set:
                 G.add_edge(pid, label, type="BELONGS_TO", membership_score=1.0)
                 
-    # 5. Gap Detection Heuristic
-    # Compute citation density for each cluster (recent CITES edges, last 3 years)
+    # 5. Gap Detection — age-adjusted pace + bridge-strength + bootstrap threshold
     current_year = datetime.datetime.now().year
-    cluster_densities = []
+    paper_by_id = {p.id: p for p in papers}
 
+    # Build per-cluster data structures
+    cluster_data = []
     for cluster in clusters:
         label = cluster["topic_label"]
-        paper_ids = [pid for pid in cluster["paper_ids"] if pid in paper_ids_set]
+        desc = cluster.get("description", "")
+        pid_list = [pid for pid in cluster["paper_ids"] if pid in paper_ids_set]
+        if not pid_list:
+            continue
+        cluster_data.append({
+            "label": label,
+            "desc": desc,
+            "paper_ids": set(pid_list),
+        })
 
-        if not paper_ids:
+    gap_claims = []
+
+    if not cluster_data:
+        state["gap_claims"] = gap_claims
+        state["graph_ref"] = json_graph.node_link_data(G)
+        state["agent_status"]["graph_gap"] = "done"
+        return state
+
+    # Collect all SIMILAR_TOPIC edges once
+    similar_edges = [(u, v) for u, v, d in G.edges(data=True) if d.get("type") == "SIMILAR_TOPIC"]
+
+    def _pace(pid_set):
+        total_cites = sum(
+            1 for pid in pid_set
+            for _, __, ed in G.in_edges(pid, data=True)
+            if ed.get("type") == "CITES"
+        )
+        age_sum = sum(max(1, current_year - paper_by_id[pid].year) for pid in pid_set if pid in paper_by_id)
+        return total_cites / max(1, age_sum)
+
+    def _within(pid_set):
+        return sum(1 for u, v in similar_edges if u in pid_set and v in pid_set)
+
+    def _between(ids_a, ids_b):
+        return sum(1 for u, v in similar_edges if (u in ids_a and v in ids_b) or (u in ids_b and v in ids_a))
+
+    def _isolation(idx, cluster_list, within_counts):
+        if len(cluster_list) == 1:
+            return 0.0
+        bridges = [
+            _between(cluster_list[idx]["paper_ids"], cluster_list[j]["paper_ids"])
+            / (within_counts[idx] + within_counts[j] + 1)
+            for j in range(len(cluster_list)) if j != idx
+        ]
+        return min(bridges)
+
+    def _gap_scores(cluster_list):
+        paces = np.array([_pace(cd["paper_ids"]) for cd in cluster_list])
+        within_counts = [_within(cd["paper_ids"]) for cd in cluster_list]
+        isolations = np.array([_isolation(i, cluster_list, within_counts) for i in range(len(cluster_list))])
+
+        def _norm(arr):
+            mn, mx = arr.min(), arr.max()
+            return np.zeros_like(arr, dtype=float) if mx == mn else (arr - mn) / (mx - mn)
+
+        return _norm(isolations) - _norm(paces), paces, isolations
+
+    real_scores, real_paces, real_isolations = _gap_scores(cluster_data)
+
+    # Bootstrap null: shuffle paper IDs across clusters 100×, same sizes
+    all_pids = []
+    sizes = []
+    for cd in cluster_data:
+        all_pids.extend(list(cd["paper_ids"]))
+        sizes.append(len(cd["paper_ids"]))
+
+    pooled_null = []
+    for _ in range(100):
+        shuffled = all_pids.copy()
+        random.shuffle(shuffled)
+        offset = 0
+        shuf_clusters = []
+        for sz in sizes:
+            shuf_clusters.append({"paper_ids": set(shuffled[offset:offset + sz])})
+            offset += sz
+        null_scores, _, _ = _gap_scores(shuf_clusters)
+        pooled_null.extend(null_scores.tolist())
+
+    threshold = np.percentile(pooled_null, 90) if pooled_null else 0.0
+    log.info(f"Bootstrap 90th-percentile gap threshold: {threshold:.4f}")
+
+    all_pace_near_zero = bool(np.all(real_paces < 0.01))
+
+    for idx, cd in enumerate(cluster_data):
+        if real_scores[idx] < threshold:
             continue
 
-        # Compute density: count in-corpus CITES edges targeting papers in cluster, filtered by year
-        total_citations = 0
+        label = cd["label"]
+        desc = cd["desc"]
+        paper_ids = list(cd["paper_ids"])
+        pace = float(real_paces[idx])
+        isolation = float(real_isolations[idx])
+
+        cluster_paper_objs = [paper_by_id[pid] for pid in paper_ids if pid in paper_by_id]
+
+        # Induced subgraph: cluster papers + their authors + topic node
+        subgraph_nodes = set(paper_ids)
+        subgraph_nodes.add(label)
         for pid in paper_ids:
-            # Count incoming CITES edges with year_of_citation >= current_year - 3
-            for source, target, edge_data in G.in_edges(pid, data=True):
-                if edge_data.get("type") == "CITES":
-                    year_of_citation = edge_data.get("year_of_citation", 0)
-                    if year_of_citation >= current_year - 3:
-                        total_citations += 1
+            p = paper_by_id.get(pid)
+            if p:
+                subgraph_nodes.update(p.authors)
+        subgraph_nodes = [n for n in subgraph_nodes if G.has_node(n)]
+        subgraph_data = json_graph.node_link_data(G.subgraph(subgraph_nodes))
 
-        density = total_citations / len(paper_ids)
-        cluster_densities.append((cluster, density, paper_ids))
-        
-    # Flag clusters below the median density
-    gap_claims = []
-    if cluster_densities:
-        densities = [d[1] for d in cluster_densities]
-        median_density = np.median(densities)
-        log.info(f"Median citation density: {median_density:.2f}")
-        corpus_lacks_signal = median_density < 0.5
+        gap_id = f"GAP-{idx+1:02d}"
 
-        for idx, (cluster, density, paper_ids) in enumerate(cluster_densities):
-            # Check if density is below or equal to median (handles small clusters/ties gracefully)
-            if density <= median_density:
-                label = cluster["topic_label"]
-                desc = cluster["description"]
+        # Pull a distinctive noun phrase from an abstract
+        phrase = None
+        for p in cluster_paper_objs:
+            words = p.abstract.split()
+            for w_idx in range(len(words) - 1):
+                candidate = f"{words[w_idx]} {words[w_idx+1]}".strip(".,;:()")
+                if len(candidate) > 8 and candidate[0].isalpha() and not candidate.lower().startswith(("this ", "the ", "these ", "our ", "we ")):
+                    phrase = candidate
+                    break
+            if phrase:
+                break
 
-                cluster_paper_objs = [p for p in papers if p.id in paper_ids]
+        suggested_directions = [
+            f"Integrate {label.lower()} with recent developments related to {phrase or 'adjacent research areas'}.",
+            f"Validate {label.lower()} approaches on broader, non-standard benchmark datasets beyond those used in the current cluster.",
+            f"Explore scaling properties and practical deployment constraints of {label.lower()} techniques, building on themes like {phrase or desc.lower()}."
+        ]
 
-                # Extract induced subgraph (papers in cluster, their authors, their topic node)
-                subgraph_nodes = list(paper_ids) + [label]
-                for pid in paper_ids:
-                    # Add authors of these papers
-                    for author in papers:
-                        if author.id == pid:
-                            subgraph_nodes.extend(author.authors)
-                            
-                # Deduplicate node list
-                subgraph_nodes = list(set(subgraph_nodes))
-                
-                # Filter nodes present in G
-                subgraph_nodes = [node for node in subgraph_nodes if G.has_node(node)]
-                subgraph = G.subgraph(subgraph_nodes)
-                
-                # Convert subgraph to node-link JSON format
-                subgraph_data = json_graph.node_link_data(subgraph)
-                
-                gap_id = f"GAP-{idx+1:02d}"
+        if all_pace_near_zero:
+            description = (
+                f"Cluster '{label}' shows minimal age-adjusted citation activity ({pace:.2f}/year) across all "
+                f"clusters — corpus may be too recent to have accumulated meaningful citation signal. "
+                f"Isolation score: {isolation:.2f}. Theme: {desc}"
+            )
+        else:
+            description = (
+                f"Cluster '{label}' shows low age-adjusted citation activity ({pace:.2f}/year) and "
+                f"weak connectivity to other topic clusters (bridge strength {isolation:.2f}), a "
+                f"combination that exceeds the 90th percentile of what random cluster reshuffling "
+                f"would produce — suggesting a genuine structural gap rather than noise."
+            )
 
-                # Pull a distinctive noun phrase from an abstract to ground the suggestions in real content
-                phrase = None
-                for p in cluster_paper_objs:
-                    words = p.abstract.split()
-                    for w_idx in range(len(words) - 1):
-                        candidate = f"{words[w_idx]} {words[w_idx+1]}".strip(".,;:()")
-                        if len(candidate) > 8 and candidate[0].isalpha() and not candidate.lower().startswith(("this ", "the ", "these ", "our ", "we ")):
-                            phrase = candidate
-                            break
-                    if phrase:
-                        break
+        if embeddings_degraded:
+            description = (
+                "Note: topic-similarity signal is degraded — embedding model unavailable, results may be less reliable. "
+                + description
+            )
 
-                suggested_directions = [
-                    f"Integrate {label.lower()} with recent developments related to {phrase or 'adjacent research areas'}.",
-                    f"Validate {label.lower()} approaches on broader, non-standard benchmark datasets beyond those used in the current cluster.",
-                    f"Explore scaling properties and practical deployment constraints of {label.lower()} techniques, building on themes like {phrase or desc.lower()}."
-                ]
-
-                if corpus_lacks_signal:
-                    description = (
-                        f"This cluster ('{label}') shows minimal citation activity ({density:.2f} citations/paper vs median "
-                        f"{median_density:.2f}), which may reflect either an under-explored area OR simply that these are "
-                        f"very recent papers that haven't had time to accumulate citations. Cross-check with the "
-                        f"topic-similarity connections in the graph below. Theme: {desc}"
-                    )
-                else:
-                    description = (
-                        f"Thematic area '{label}' shows low citation density ({density:.2f} citations/paper vs median "
-                        f"{median_density:.2f}), suggesting it is an under-explored research gap. Theme: {desc}"
-                    )
-
-                if embeddings_degraded:
-                    description = (
-                        "Note: topic-similarity signal is degraded — embedding model unavailable, results may be less reliable. "
-                        + description
-                    )
-
-                gap_claims.append(GapClaim(
-                    gap_id=gap_id,
-                    topic_label=label,
-                    description=description,
-                    citation_density=density,
-                    papers_in_cluster=paper_ids,
-                    subgraph_snapshot=subgraph_data,
-                    suggested_directions=suggested_directions,
-                    signal_degraded=embeddings_degraded
-                ))
-                log.info(f"Flagged gap: {gap_id} in topic '{label}' with density {density:.2f}")
+        gap_claims.append(GapClaim(
+            gap_id=gap_id,
+            topic_label=label,
+            description=description,
+            citation_density=pace,
+            papers_in_cluster=paper_ids,
+            subgraph_snapshot=subgraph_data,
+            suggested_directions=suggested_directions,
+            signal_degraded=embeddings_degraded
+        ))
+        log.info(f"Flagged gap: {gap_id} in topic '{label}' with pace {pace:.2f}, isolation {isolation:.2f}")
                 
     state["gap_claims"] = gap_claims
     

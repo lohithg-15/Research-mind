@@ -693,7 +693,7 @@ body {
   padding: 14px 16px; border-radius: var(--radius-md);
   border: 1px solid var(--border); background: transparent;
 }
-.gv2-card--explain { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.07); }
+.gv2-card--explain { background: rgba(0,0,0,0.02); border-color: var(--border); }
 .gv2-card-label {
   display: flex; align-items: center; gap: 5px;
   font-family: var(--font-label); font-size: 9px; font-weight: 700;
@@ -724,7 +724,7 @@ body {
 }
 .gv2-meter-track {
   position: relative; height: 8px; border-radius: 99px;
-  background: rgba(255,255,255,0.06); overflow: visible;
+  background: rgba(0,0,0,0.07); overflow: visible;
 }
 .gv2-meter-fill { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 .gv2-meter-thumb {
@@ -779,7 +779,7 @@ body {
 }
 .gv2-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .gv2-dot--hex { border-radius: 2px; transform: rotate(30deg); }
-.gv2-edge-line { width: 18px; height: 1px; background: rgba(255,255,255,0.25); display: inline-block; flex-shrink: 0; }
+.gv2-edge-line { width: 18px; height: 1px; background: rgba(0,0,0,0.25); display: inline-block; flex-shrink: 0; }
 .gv2-legend-note {
   margin-left: auto; font-family: var(--font-label); font-size: 9px;
   color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.07em; font-style: italic;
@@ -807,17 +807,17 @@ body {
 }
 .gv2-zoom-btn {
   width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
-  background: rgba(17,17,17,0.9); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); color: var(--gray-700);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-primary);
   cursor: pointer; transition: var(--transition);
 }
-.gv2-zoom-btn:hover { border-color: var(--gray-700); color: var(--black); }
+.gv2-zoom-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
 .gv2-tip {
   position: absolute; bottom: 10px; left: 10px; right: 46px;
   display: flex; align-items: center; gap: 7px;
-  background: rgba(17,17,17,0.88); border: 1px solid var(--border);
+  background: var(--bg-elevated); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 6px 10px;
-  font-family: var(--font-ui); font-size: 11px; color: var(--gray-700);
+  font-family: var(--font-ui); font-size: 11px; color: var(--text-secondary);
   z-index: 5; backdrop-filter: blur(8px);
 }
 .gv2-tip-close {
@@ -827,7 +827,7 @@ body {
 .gv2-tip-close:hover { color: var(--black); }
 .gv2-node-popup {
   position: absolute; top: 10px; left: 10px;
-  background: rgba(17,17,17,0.95); border: 1px solid var(--border-strong);
+  background: var(--bg-elevated); border: 1px solid var(--border-strong);
   border-radius: var(--radius-md); padding: 10px 12px;
   min-width: 165px; max-width: 230px; z-index: 10; backdrop-filter: blur(12px);
   animation: fade-in-up 0.18s var(--ease) both;

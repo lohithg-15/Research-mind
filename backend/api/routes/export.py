@@ -2,7 +2,7 @@ import os
 import logging
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
-from backend.api.jobs import jobs
+from backend.api.jobs import get_or_restore_job
 
 logger = logging.getLogger("researchmind.api.export")
 router = APIRouter()
@@ -12,10 +12,9 @@ def export_report(job_id: str, format: str = Query("pdf", pattern="^(pdf|docx)$"
     """
     Downloads the compiled literature review report as a PDF or DOCX file.
     """
-    if job_id not in jobs:
+    job = get_or_restore_job(job_id)
+    if job is None:
         raise HTTPException(status_code=404, detail="Job not found.")
-        
-    job = jobs[job_id]
     if job["status"] != "done":
         raise HTTPException(status_code=400, detail=f"Job status is {job['status']}. Report not ready for export.")
         

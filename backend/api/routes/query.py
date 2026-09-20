@@ -4,7 +4,7 @@ import threading
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Dict, Any, Optional, List
-from backend.api.jobs import jobs, is_cancelled, clear_cancellation, request_cancellation
+from backend.api.jobs import jobs, is_cancelled, clear_cancellation, request_cancellation, get_or_restore_job
 from backend.api.deps import get_optional_user
 from backend.orchestration.pipeline import app as pipeline_app, create_initial_state
 from backend.logging_utils import get_job_logger
@@ -165,10 +165,10 @@ def get_results(job_id: str):
     """
     Fetches the comparison table, gap claims, and citation graph for a completed job.
     """
-    if job_id not in jobs:
+    job = get_or_restore_job(job_id)
+    if job is None:
         raise HTTPException(status_code=404, detail="Job not found.")
-        
-    job = jobs[job_id]
+
     if job["status"] == "pending" or job["status"] == "running":
         return {
             "status": job["status"],
@@ -224,30 +224,12 @@ def answer_question(request: QARequest):
     Supports explicit paper matching (by title, author, paper number/index, or keyword)
     as well as semantic vector search across all session literature.
     """
-    import json
     import re
 
     # 1. Job Lookup (In-memory or SQLite Database recovery)
-    if request.job_id not in jobs:
-        try:
-            from backend.db.database import get_connection
-            conn = get_connection()
-            row = conn.execute("SELECT query, results FROM research_sessions WHERE id = ?", (request.job_id,)).fetchone()
-            conn.close()
-            if row and row["results"]:
-                saved_results = json.loads(row["results"])
-                jobs[request.job_id] = {
-                    "status": "done",
-                    "state": saved_results,
-                    "error": None
-                }
-            else:
-                raise HTTPException(status_code=404, detail="Job not found.")
-        except Exception as db_err:
-            logger.error(f"Error restoring job {request.job_id} from DB: {db_err}")
-            raise HTTPException(status_code=404, detail="Job not found.")
-        
-    job = jobs[request.job_id]
+    job = get_or_restore_job(request.job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found.")
     if job["status"] != "done":
         raise HTTPException(status_code=400, detail="Job is not completed yet.")
         

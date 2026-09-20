@@ -15,3 +15,23 @@ def is_cancelled(job_id: str) -> bool:
 
 def clear_cancellation(job_id: str):
     cancelled_jobs.discard(job_id)
+
+def get_or_restore_job(job_id: str) -> dict | None:
+    """Return the in-memory job dict, restoring it from SQLite on a cache miss."""
+    if job_id in jobs:
+        return jobs[job_id]
+    try:
+        import json
+        from backend.db.database import get_connection
+        conn = get_connection()
+        row = conn.execute(
+            "SELECT query, results FROM research_sessions WHERE id = ?", (job_id,)
+        ).fetchone()
+        conn.close()
+        if row and row["results"]:
+            saved_results = json.loads(row["results"])
+            jobs[job_id] = {"status": "done", "state": saved_results, "error": None}
+            return jobs[job_id]
+    except Exception:
+        pass
+    return None

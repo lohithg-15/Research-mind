@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.api.routes import query, export, auth, history
-from backend.api.jobs import jobs
+from backend.api.jobs import get_or_restore_job
 from backend.db.database import init_db
 
 # Load environment variables from backend/.env before anything else
@@ -67,10 +67,9 @@ def get_job_status(job_id: str):
     """
     Polls the live execution progress of the 6 agents in the pipeline.
     """
-    if job_id not in jobs:
+    job = get_or_restore_job(job_id)
+    if job is None:
         raise HTTPException(status_code=404, detail="Job not found.")
-        
-    job = jobs[job_id]
     state = job["state"]
     
     # Extract agent status list from state if initialized

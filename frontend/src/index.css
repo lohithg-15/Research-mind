@@ -778,7 +778,12 @@ body {
   font-family: var(--font-ui); font-size: 11px; color: var(--gray-700);
 }
 .gv2-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.gv2-dot--sm { width: 5px; height: 5px; }
+.gv2-dot--lg { width: 13px; height: 13px; }
 .gv2-dot--hex { border-radius: 2px; transform: rotate(30deg); }
+.gv2-legend-size { gap: 4px; }
+.gv2-legend-size .gv2-dot { opacity: 0.85; }
+.gv2-legend-size > :last-child { margin-left: 3px; }
 .gv2-edge-line { width: 18px; height: 1px; background: rgba(0,0,0,0.25); display: inline-block; flex-shrink: 0; }
 .gv2-legend-note {
   margin-left: auto; font-family: var(--font-label); font-size: 9px;
@@ -787,8 +792,9 @@ body {
 
 /* Canvas */
 .gv2-canvas-wrap { display: flex; flex-direction: column; gap: 0; }
+.gv2-graph-stage { position: relative; }
 .gv2-canvas {
-  height: 420px; background: var(--bg-elevated);
+  height: 420px; background: #fbfcfd;
   border: 1px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0;
   overflow: hidden;
 }
@@ -800,6 +806,32 @@ body {
   font-style: italic; line-height: 1.5;
 }
 
+/* Fullscreen overlay — the cytoscape container is resized, never remounted */
+.gv2-canvas-wrap--fs {
+  position: fixed; inset: 0; z-index: 9000;
+  background: #fbfcfd;
+  padding: 14px;
+  margin: 0;
+}
+.gv2-canvas-wrap--fs .gv2-legend-strip {
+  margin-right: 190px;  /* clear the exit button */
+  background: var(--white);
+}
+.gv2-canvas-wrap--fs .gv2-graph-stage { flex: 1; min-height: 0; }
+.gv2-canvas-wrap--fs .gv2-canvas { height: 100%; }
+.gv2-fs-exit {
+  position: absolute; top: 14px; right: 14px; z-index: 9010;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  height: 44px; min-width: 44px; padding: 0 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong); background: var(--white);
+  color: var(--black); cursor: pointer;
+  font-family: var(--font-label); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  box-shadow: var(--shadow-md); transition: var(--transition);
+}
+.gv2-fs-exit:hover { background: var(--gray-50); border-color: var(--black); }
+
 /* Zoom / tip / popup */
 .gv2-zoom-controls {
   position: absolute; top: 10px; right: 10px;
@@ -807,15 +839,16 @@ body {
 }
 .gv2-zoom-btn {
   width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
-  background: var(--bg-elevated); border: 1px solid var(--border);
+  background: var(--white); border: 1px solid var(--border);
   border-radius: var(--radius-sm); color: var(--text-primary);
   cursor: pointer; transition: var(--transition);
 }
 .gv2-zoom-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+.gv2-zoom-btn.is-active { border-color: var(--black); background: var(--gray-50); }
 .gv2-tip {
   position: absolute; bottom: 10px; left: 10px; right: 46px;
   display: flex; align-items: center; gap: 7px;
-  background: var(--bg-elevated); border: 1px solid var(--border);
+  background: rgba(255,255,255,0.92); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 6px 10px;
   font-family: var(--font-ui); font-size: 11px; color: var(--text-secondary);
   z-index: 5; backdrop-filter: blur(8px);
@@ -827,14 +860,14 @@ body {
 .gv2-tip-close:hover { color: var(--black); }
 .gv2-node-popup {
   position: absolute; top: 10px; left: 10px;
-  background: var(--bg-elevated); border: 1px solid var(--border-strong);
+  background: rgba(255,255,255,0.96); border: 1px solid var(--border-strong);
   border-radius: var(--radius-md); padding: 10px 12px;
   min-width: 165px; max-width: 230px; z-index: 10; backdrop-filter: blur(12px);
   animation: fade-in-up 0.18s var(--ease) both;
 }
 .gv2-node-type {
   font-family: var(--font-label); font-size: 8px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em; color: #6c8aff; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 0.1em; color: #4a7080; margin-bottom: 4px;
 }
 .gv2-node-title {
   font-family: var(--font-ui); font-size: 12px; font-weight: 500;
@@ -844,9 +877,9 @@ body {
 .gv2-node-link {
   display: inline-flex; align-items: center; gap: 4px;
   margin-top: 8px; font-family: var(--font-ui); font-size: 11px; font-weight: 600;
-  color: #6c8aff; text-decoration: none; transition: var(--transition);
+  color: #4a7080; text-decoration: none; transition: var(--transition);
 }
-.gv2-node-link:hover { color: #8ea4ff; text-decoration: underline; }
+.gv2-node-link:hover { color: var(--black); text-decoration: underline; }
 .gv2-node-close {
   position: absolute; top: 6px; right: 8px;
   background: none; border: none; color: var(--gray-600);

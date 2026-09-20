@@ -1,10 +1,41 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from 'cytoscape';
 import {
-  Network, Info, ZoomIn, ZoomOut, Maximize2,
+  Network, Info, ZoomIn, ZoomOut, Maximize2, Minimize2, Crosshair, X,
   ArrowRight, Lightbulb, AlertTriangle, CheckCircle,
   AlertCircle, XCircle, BookOpen, TrendingDown, Eye,
 } from 'lucide-react';
+
+/* ─────────────────────────────────────────────
+   Graph visual language
+   One accent (selection) + a muted 3-tone palette.
+───────────────────────────────────────────────*/
+const GRAPH_BG      = '#fbfcfd';
+const C_PAPER       = '#4a7080';  // muted teal-slate
+const C_AUTHOR      = '#c3cbd1';  // pale neutral — deliberately recessive
+const C_TOPIC       = '#8b8fa6';  // muted slate-violet
+const C_ACCENT      = '#facc15';  // selection ring (kept from previous version)
+const C_ACCENT_EDGE = '#eab308';  // same hue, darkened so it reads on a white canvas
+
+/* Paper node size: log(citations), normalised against the loudest node in this
+   subgraph so hierarchy stays visible even in low-citation corpora, clamped so
+   a single 10k-citation outlier can't swallow the canvas. */
+const PAPER_MIN_SIZE = 20;
+const PAPER_MAX_SIZE = 56;
+
+function paperScale(citationCount, maxCitations) {
+  const c = Number(citationCount);
+  if (!Number.isFinite(c) || c <= 0) return 0;
+  const ceiling = Math.max(maxCitations, 10);
+  const t = Math.log(1 + c) / Math.log(1 + ceiling);
+  return Math.min(1, Math.max(0, t));
+}
+
+/* Labels are the main source of clutter — truncate hard. */
+function truncate(text, max) {
+  const s = String(text ?? '');
+  return s.length > max ? `${s.slice(0, max - 1)}…` : s;
+}
 
 /* ─────────────────────────────────────────────
    Gap risk level — plain English interpretation
@@ -97,6 +128,7 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
   const [selectedNode, setSelectedNode]   = useState(null);
   const [showGraph, setShowGraph]         = useState(false);
   const [showTip, setShowTip]             = useState(true);
+  const [isFullscreen, setIsFullscreen]   = useState(false);
 
   const currentGap = gapClaims?.[activeIdx];
   const level      = getGapLevel(currentGap?.citation_density);
@@ -112,19 +144,29 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
     const nodes    = snapshot.nodes || [];
     const edges    = snapshot.edges || snapshot.links || [];
 
+    const maxCitations = nodes.reduce((max, n) => {
+      const c = Number(n.citation_count);
+      return Number.isFinite(c) && c > max ? c : max;
+    }, 0);
+
     nodes.forEach((node) => {
-      let label = node.title || node.name || node.label || node.id;
-      if (node.type === 'Paper' && label?.length > 30) label = label.slice(0, 28) + '…';
+      const type      = node.type || 'Paper';
+      const fullTitle = node.title || node.name || node.label || node.id;
+      const t         = type === 'Paper' ? paperScale(node.citation_count, maxCitations) : 0;
+
       elements.push({
         data: {
           id:            node.id,
-          label,
-          type:          node.type || 'Paper',
-          fullTitle:     node.title || node.name || node.label || node.id,
+          label:         truncate(fullTitle, type === 'Paper' ? 20 : 18),
+          type,
+          fullTitle,
           year:          node.year,
           citationCount: node.citation_count,
           venue:         node.venue,
           url:           node.url,
+          /* size + fill weight drive the visual hierarchy for Paper nodes */
+          size:          Math.round(PAPER_MIN_SIZE + (PAPER_MAX_SIZE - PAPER_MIN_SIZE) * t),
+          fill:          Number((0.42 + 0.53 * t).toFixed(3)),
         },
       });
     });
@@ -146,83 +188,167 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
       boxSelectionEnabled: false,
       autounselectify: false,
       style: [
+        /* ── Nodes: labels off by default, revealed on hover / selection / zoom ── */
         {
           selector: 'node',
           style: {
             label: 'data(label)',
-            color: '#1a1a1a',
+            color: '#2a3138',
             'font-family': 'IBM Plex Sans, sans-serif',
-            'font-size': '9px',
-            'text-valign': 'bottom',
-            'text-margin-y': 6,
-            'background-color': '#3a3f54',
-            width: 22, height: 22,
-            'text-wrap': 'wrap',
-            'text-max-width': 90,
-            'border-width': 1.5,
-            'border-color': 'rgba(255,255,255,0.10)',
+            'font-size': '9.5px',
+            'text-valign': 'top',
+            'text-halign': 'center',
+            'text-margin-y': -4,
+            'text-wrap': 'none',
+            'text-opacity': 0,
+            'text-background-color': GRAPH_BG,
+            'text-background-opacity': 0.88,
+            'text-background-padding': 2,
+            'text-background-shape': 'roundrectangle',
+            'background-color': C_PAPER,
+            'background-opacity': 0.85,
+            width: 20, height: 20,
+            'border-width': 1,
+            'border-color': '#ffffff',
+            'border-opacity': 0.9,
+            'overlay-opacity': 0,
+            'transition-property': 'background-opacity, border-color, border-width',
+            'transition-duration': '140ms',
           },
         },
         {
           selector: 'node[type="Paper"]',
-          style: { 'background-color': '#6c8aff', 'border-color': 'rgba(108,138,255,0.55)', width: 26, height: 26 },
-        },
-        {
-          selector: 'node[type="Author"]',
           style: {
-            'background-color': '#2dd4bf', 'border-color': 'rgba(45,212,191,0.45)', width: 18, height: 18,
-            'text-opacity': 0,
+            'background-color': C_PAPER,
+            'background-opacity': 'data(fill)',
+            width: 'data(size)',
+            height: 'data(size)',
           },
         },
         {
-          selector: 'node[type="Author"]:active, node[type="Author"].author-hover, node[type="Author"].author-zoomed, node[type="Author"]:selected',
-          style: { 'text-opacity': 1 },
+          /* Authors recede to small unlabeled dots — this is what un-clutters the map */
+          selector: 'node[type="Author"]',
+          style: {
+            'background-color': C_AUTHOR,
+            'background-opacity': 0.9,
+            'border-width': 0,
+            width: 8, height: 8,
+            'font-size': '9px',
+          },
         },
         {
           selector: 'node[type="Topic"]',
           style: {
-            'background-color': '#a78bfa', 'border-color': 'rgba(167,139,250,0.55)',
-            shape: 'hexagon', width: 32, height: 32, 'font-size': '10px',
+            'background-color': C_TOPIC,
+            'background-opacity': 0.8,
+            shape: 'hexagon', width: 26, height: 26,
+            'font-family': 'Syne, sans-serif',
+            'font-size': '9px',
+            'font-weight': 700,
+            'text-transform': 'uppercase',
+            'text-opacity': 1,          // few in number, and they anchor the map
+            'text-margin-y': -5,
+          },
+        },
+
+        /* ── Edges: hair-thin and near-invisible until a neighborhood is picked ── */
+        {
+          selector: 'edge',
+          style: {
+            width: 1,
+            'line-color': '#1f2933',
+            'line-opacity': 0.13,
+            'target-arrow-shape': 'none',   // only CITES is directional
+            'curve-style': 'bezier',
+            'overlay-opacity': 0,
+          },
+        },
+        {
+          /* co-authorship is combinatorially dense — push it furthest back */
+          selector: 'edge[type="CO_AUTHORED_WITH"], edge[type="AUTHORED_BY"]',
+          style: { 'line-opacity': 0.07 },
+        },
+        {
+          selector: 'edge[type="CITES"]',
+          style: {
+            'line-opacity': 0.22,
+            'target-arrow-shape': 'triangle',
+            'target-arrow-color': '#1f2933',
+            'arrow-scale': 0.55,
+          },
+        },
+
+        /* ── Label reveal ── */
+        {
+          selector: 'node[type="Paper"].zoom-label, node.highlighted, node.hovered',
+          style: { 'text-opacity': 1 },
+        },
+        {
+          selector: 'node.hovered',
+          style: {
+            'z-index': 30,
+            'font-size': '10.5px',
+            'border-width': 2,
+            'border-color': C_ACCENT_EDGE,
+            'border-opacity': 1,
+            'background-opacity': 1,
+          },
+        },
+
+        /* ── Selection: the single accent in the whole palette ── */
+        {
+          selector: 'node.highlighted',
+          style: {
+            'z-index': 20,
+            'border-width': 2.5,
+            'border-color': C_ACCENT,
+            'border-opacity': 1,
+            'background-opacity': 1,
           },
         },
         {
           selector: 'node:selected',
-          style: { 'border-color': '#000000', 'border-width': 2.5 },
-        },
-        {
-          selector: 'edge',
           style: {
-            width: 1.4,
-            'line-color': 'rgba(255,255,255,0.10)',
-            'target-arrow-color': 'rgba(108,138,255,0.5)',
-            'target-arrow-shape': 'triangle',
-            'curve-style': 'bezier',
-          },
-        },
-        {
-          selector: '.highlighted',
-          style: {
-            opacity: 1,
-            'border-width': 3,
-            'border-color': '#facc15',
+            'border-width': 4,
+            'border-color': C_ACCENT,
+            'border-opacity': 1,
+            'z-index': 40,
           },
         },
         {
           selector: 'edge.highlighted',
           style: {
-            'line-color': '#facc15',
-            'target-arrow-color': '#facc15',
-            width: 2.2,
+            'line-color': C_ACCENT_EDGE,
+            'line-opacity': 0.95,
+            'target-arrow-color': C_ACCENT_EDGE,
+            width: 1.8,
+            'z-index': 15,
           },
         },
+
+        /* ── Everything outside the picked neighborhood drops away. Last in the
+              stylesheet so it wins over .zoom-label. ── */
         {
-          selector: '.faded',
-          style: { opacity: 0.15 },
+          selector: 'node.faded',
+          style: { opacity: 0.22, 'text-opacity': 0 },
+        },
+        {
+          selector: 'edge.faded',
+          style: { 'line-opacity': 0.07, opacity: 0.5 },
         },
       ],
       layout: {
-        name: 'cose', animate: true, animationDuration: 700,
-        padding: 40, nodeRepulsion: () => 6500, idealEdgeLength: () => 80,
+        name: 'cose',
+        animate: true,
+        animationDuration: 700,
+        padding: 60,
+        nodeRepulsion: () => 18000,
+        idealEdgeLength: () => 150,
+        edgeElasticity: () => 60,
+        nodeOverlap: 24,
+        componentSpacing: 160,
+        gravity: 0.6,
+        nodeDimensionsIncludeLabels: false,  // labels are hidden by default
       },
     });
 
@@ -249,21 +375,20 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
       }
     });
 
-    cy.on('mouseover', 'node[type="Author"]', (evt) => {
-      evt.target.addClass('author-hover');
-    });
-    cy.on('mouseout', 'node[type="Author"]', (evt) => {
-      evt.target.removeClass('author-hover');
-    });
-    const AUTHOR_LABEL_ZOOM_THRESHOLD = 1.5;
-    cy.on('zoom', () => {
-      const authors = cy.nodes('[type="Author"]');
-      if (cy.zoom() >= AUTHOR_LABEL_ZOOM_THRESHOLD) {
-        authors.addClass('author-zoomed');
-      } else {
-        authors.removeClass('author-zoomed');
-      }
-    });
+    /* hover reveals a single label at a time — never a wall of text */
+    cy.on('mouseover', 'node', (evt) => evt.target.addClass('hovered'));
+    cy.on('mouseout',  'node', (evt) => evt.target.removeClass('hovered'));
+
+    /* Once the user zooms in there is physical room for paper titles, so let
+       them back in. Authors stay unlabeled at every zoom level. */
+    const PAPER_LABEL_ZOOM_THRESHOLD = 1.15;
+    const syncZoomLabels = () => {
+      const papers = cy.nodes('[type="Paper"]');
+      if (cy.zoom() >= PAPER_LABEL_ZOOM_THRESHOLD) papers.addClass('zoom-label');
+      else papers.removeClass('zoom-label');
+    };
+    cy.on('zoom', syncZoomLabels);
+    cy.one('layoutstop', syncZoomLabels);
 
     if (onHighlightPapers) {
       onHighlightPapers(nodes.filter(n => n.type === 'Paper').map(n => n.id));
@@ -271,10 +396,37 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
     return () => { if (cyRef.current) { cyRef.current.destroy(); cyRef.current = null; } };
   }, [gapClaims, activeIdx, showGraph]);
 
+  /* Fullscreen: the cytoscape instance is never rebuilt — the same container
+     element just changes size, so selection/highlight classes survive. */
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    const frame = requestAnimationFrame(() => {
+      cy.resize();
+      cy.fit(undefined, isFullscreen ? 70 : 40);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [isFullscreen]);
+
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (e) => { if (e.key === 'Escape') setIsFullscreen(false); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isFullscreen]);
+
+  /* never leave a fullscreen overlay behind when the graph is hidden */
+  useEffect(() => { if (!showGraph) setIsFullscreen(false); }, [showGraph]);
+
   /* zoom helpers */
   const zoomIn  = () => cyRef.current?.zoom({ level: cyRef.current.zoom() * 1.25, renderedPosition: { x: containerRef.current.clientWidth / 2, y: containerRef.current.clientHeight / 2 } });
   const zoomOut = () => cyRef.current?.zoom({ level: cyRef.current.zoom() * 0.8,  renderedPosition: { x: containerRef.current.clientWidth / 2, y: containerRef.current.clientHeight / 2 } });
-  const fitView = () => cyRef.current?.fit(undefined, 30);
+  const fitView = () => cyRef.current?.fit(undefined, isFullscreen ? 70 : 40);
 
   /* ── Empty state ── */
   if (!gapClaims || gapClaims.length === 0) {
@@ -397,34 +549,59 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
             </button>
 
             {showGraph && (
-              <div className="gv2-canvas-wrap fade-in">
+              <div className={`gv2-canvas-wrap fade-in${isFullscreen ? ' gv2-canvas-wrap--fs' : ''}`}>
+
+                {/* exit fullscreen — large tap target, top-right of the overlay */}
+                {isFullscreen && (
+                  <button
+                    className="gv2-fs-exit"
+                    onClick={() => setIsFullscreen(false)}
+                    title="Exit fullscreen (Esc)"
+                  >
+                    <X size={16} />
+                    Exit fullscreen
+                  </button>
+                )}
 
                 {/* legend strip */}
                 <div className="gv2-legend-strip">
-                  <span className="gv2-legend-item"><span className="gv2-dot" style={{ background: '#6c8aff' }} />Paper</span>
-                  <span className="gv2-legend-item"><span className="gv2-dot" style={{ background: '#2dd4bf' }} />Author</span>
-                  <span className="gv2-legend-item"><span className="gv2-dot gv2-dot--hex" style={{ background: '#a78bfa' }} />Topic</span>
+                  <span className="gv2-legend-item"><span className="gv2-dot" style={{ background: C_PAPER }} />Paper</span>
+                  <span className="gv2-legend-item"><span className="gv2-dot gv2-dot--sm" style={{ background: C_AUTHOR }} />Author</span>
+                  <span className="gv2-legend-item"><span className="gv2-dot gv2-dot--hex" style={{ background: C_TOPIC }} />Topic</span>
                   <span className="gv2-legend-item gv2-legend-edge"><span className="gv2-edge-line" />Citation link</span>
+                  <span className="gv2-legend-item gv2-legend-size">
+                    <span className="gv2-dot gv2-dot--sm" style={{ background: C_PAPER }} />
+                    <span className="gv2-dot" style={{ background: C_PAPER }} />
+                    <span className="gv2-dot gv2-dot--lg" style={{ background: C_PAPER }} />
+                    More cited
+                  </span>
                   <span className="gv2-legend-note">
                     Fewer links between papers = bigger gap
                   </span>
                 </div>
 
-                <div style={{ position: 'relative' }}>
+                <div className="gv2-graph-stage">
                   <div ref={containerRef} className="gv2-canvas" />
 
                   {/* zoom controls */}
                   <div className="gv2-zoom-controls">
                     <button className="gv2-zoom-btn" onClick={zoomIn}  title="Zoom in"><ZoomIn  size={13} /></button>
                     <button className="gv2-zoom-btn" onClick={zoomOut} title="Zoom out"><ZoomOut size={13} /></button>
-                    <button className="gv2-zoom-btn" onClick={fitView} title="Fit all"><Maximize2 size={13} /></button>
+                    <button className="gv2-zoom-btn" onClick={fitView} title="Fit all"><Crosshair size={13} /></button>
+                    <button
+                      className={`gv2-zoom-btn${isFullscreen ? ' is-active' : ''}`}
+                      onClick={() => setIsFullscreen(v => !v)}
+                      title={isFullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen'}
+                    >
+                      {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                    </button>
                   </div>
 
                   {/* tip banner */}
                   {showTip && (
                     <div className="gv2-tip">
                       <Info size={11} style={{ flexShrink: 0 }} />
-                      <span>Click any node for details &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Drag to pan</span>
+                      <span>Hover a node to read its label &nbsp;·&nbsp; Click to isolate its neighbourhood &nbsp;·&nbsp; Scroll to zoom</span>
                       <button className="gv2-tip-close" onClick={() => setShowTip(false)}>✕</button>
                     </div>
                   )}
@@ -459,8 +636,9 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
                 </div>
 
                 <p className="gv2-canvas-caption">
-                  Each node is a paper, author, or topic. Lines show citation relationships.
-                  Isolated clusters with few connections indicate the research gap.
+                  Each circle is a paper — the bigger it is, the more often it has been cited.
+                  Small grey dots are authors. Lines show citation relationships, and isolated
+                  clusters with few connections are where the research gap sits.
                 </p>
               </div>
             )}

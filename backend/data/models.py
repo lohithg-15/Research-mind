@@ -68,3 +68,4 @@ class GapClaim(BaseModel):
     papers_in_cluster: List[str]  # Paper IDs in this gap cluster
     subgraph_snapshot: Dict[str, Any]  # NetworkX node-link JSON export format
     suggested_directions: List[str] = Field(default_factory=list)
+    signal_degraded: bool = False

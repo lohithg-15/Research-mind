@@ -112,6 +112,9 @@ def run_graph_gap(state: dict) -> dict:
     # 2. Build the NetworkX Graph via GraphStore
     gs = GraphStore()
     G = gs.build_graph(papers)
+    embeddings_degraded = G.graph.get("embeddings_degraded", False)
+    if embeddings_degraded:
+        log.warning("Embeddings are degraded (fallback hash vectors in use); topic-similarity signal is unreliable.")
     paper_ids_set = {p.id for p in papers}
         
     # 4. Perform Topic Clustering using Claude
@@ -264,6 +267,12 @@ JSON Schema:
                         f"{median_density:.2f}), suggesting it is an under-explored research gap. Theme: {desc}"
                     )
 
+                if embeddings_degraded:
+                    description = (
+                        "Note: topic-similarity signal is degraded — embedding model unavailable, results may be less reliable. "
+                        + description
+                    )
+
                 gap_claims.append(GapClaim(
                     gap_id=gap_id,
                     topic_label=label,
@@ -271,7 +280,8 @@ JSON Schema:
                     citation_density=density,
                     papers_in_cluster=paper_ids,
                     subgraph_snapshot=subgraph_data,
-                    suggested_directions=suggested_directions
+                    suggested_directions=suggested_directions,
+                    signal_degraded=embeddings_degraded
                 ))
                 log.info(f"Flagged gap: {gap_id} in topic '{label}' with density {density:.2f}")
                 

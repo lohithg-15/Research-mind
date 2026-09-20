@@ -66,6 +66,7 @@ class GraphStore:
         # 2. Add SIMILAR_TOPIC edges using ChromaDB embeddings
         try:
             vs = VectorStore()
+            G.graph["embeddings_degraded"] = vs.embeddings_degraded
             paper_ids = [p.id for p in papers]
             embeddings_map = vs.get_embeddings_batch(paper_ids)
 
@@ -86,5 +87,7 @@ class GraphStore:
                             G.add_edge(p2_id, p1_id, type="SIMILAR_TOPIC", weight=sim)
         except Exception as e:
             logger.error(f"Error computing topic similarity edges: {e}")
-            
+            if "embeddings_degraded" not in G.graph:
+                G.graph["embeddings_degraded"] = False
+
         return G

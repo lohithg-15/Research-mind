@@ -201,12 +201,17 @@ def get_results(job_id: str):
             summaries_list.append(s)
 
     # Extract results
+    graph_ref = state.get("graph_ref")
+    embeddings_degraded = bool(
+        (graph_ref or {}).get("graph", {}).get("embeddings_degraded", False)
+    )
     return {
         "status": "done",
+        "embeddings_degraded": embeddings_degraded,
         "papers": papers_list,
         "comparison_table": state.get("comparison_table", []),
         "gap_claims": [g.model_dump() for g in state.get("gap_claims", [])],
-        "graph_ref": state.get("graph_ref"),
+        "graph_ref": graph_ref,
         "summaries": summaries_list,
         "sub_queries": state.get("sub_queries", []),
         "report_draft": state.get("report_draft", {}),

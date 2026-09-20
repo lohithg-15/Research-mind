@@ -31,9 +31,13 @@ class VectorStore:
             )
             self._use_fallback_embeddings = False
         except Exception as e:
-            logger.warning(f"Could not load default embedding function ({e}). Falling back to simple TF-IDF/Hash embeddings.")
+            logger.warning(f"Embedding model unavailable ({e}); falling back to hash-seeded random vectors — semantic similarity is degraded.")
             self.collection = self.client.get_or_create_collection(name="researchmind_papers")
             self._use_fallback_embeddings = True
+
+    @property
+    def embeddings_degraded(self) -> bool:
+        return self._use_fallback_embeddings
 
     def _generate_fallback_embedding(self, text: str) -> List[float]:
         """

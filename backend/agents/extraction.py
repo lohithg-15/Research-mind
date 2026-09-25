@@ -3,6 +3,8 @@ import fitz
 import requests
 import json
 import logging
+import difflib
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any, Tuple
 from backend.clients.claude_client import ClaudeClient
@@ -37,6 +39,58 @@ def extract_text_from_pdf(pdf_bytes: bytes) -> str:
     except Exception as e:
         logger.error(f"Error extracting text from PDF: {e}")
         return ""
+
+
+def _normalize_for_matching(s: str) -> str:
+    """
+    Normalize text for fuzzy quote matching:
+    - NFKC unicode normalization
+    - Strip "--- PAGE N ---" markers
+    - De-hyphenate line-wrapped words
+    - Unify quote chars to "
+    - Unify dashes to -
+    - Collapse whitespace
+    - Lowercase
+    """
+    s = unicodedata.normalize('NFKC', s)
+    s = re.sub(r'--- PAGE \d+ ---', '', s)
+    s = re.sub(r'-\s*\n\s*', '', s)
+    s = re.sub(r'[""''`´]', '"', s)
+    s = re.sub(r'[–—]', '-', s)
+    s = re.sub(r'\s+', ' ', s)
+    return s.lower()
+
+
+def _fuzzy_contains(quote: str, text: str, threshold: float = 0.85) -> float:
+    """
+    Check if quote appears in text with fuzzy matching.
+    Returns the best match ratio (0.0 to 1.0).
+
+    Strategy:
+    1. Normalize both
+    2. Try fast exact substring check
+    3. Else slide a window over text and use SequenceMatcher to find best ratio
+    """
+    norm_quote = _normalize_for_matching(quote)
+    norm_text = _normalize_for_matching(text)
+
+    if not norm_quote or not norm_text:
+        return 0.0
+
+    if norm_quote in norm_text:
+        return 1.0
+
+    quote_len = len(norm_quote)
+    window_size = quote_len
+    step = max(quote_len // 4, 20)
+
+    best_ratio = 0.0
+    for i in range(0, len(norm_text) - window_size + 1, step):
+        window = norm_text[i:i + window_size]
+        ratio = difflib.SequenceMatcher(None, norm_quote, window).ratio()
+        best_ratio = max(best_ratio, ratio)
+
+    return best_ratio
 
 
 def verify_grounding(extracted: Dict[str, str], text: str, abstract_only: bool) -> Tuple[str, str]:
@@ -79,22 +133,23 @@ def verify_grounding(extracted: Dict[str, str], text: str, abstract_only: bool) 
                 field_statuses[f] = "unverified"
                 notes.append(f"Field '{f}': value '{val}' not grounded in abstract text.")
         else:
-            # Full-text: check exact quote presence
+            # Full-text: check quote presence with fuzzy matching to handle PDF noise
             quote = extracted.get(f"{f}_quote", "").strip()
             if not quote:
                 field_statuses[f] = "unverified"
                 notes.append(f"Field '{f}': no supporting quote (inferred/unverified).")
                 continue
 
-            clean_quote = re.sub(r'\s+', '', quote.lower()).strip()
-            clean_text = re.sub(r'\s+', '', clean_text_lower).strip()
-
-            if clean_quote in clean_text:
+            ratio = _fuzzy_contains(quote, text)
+            if ratio >= 0.85:
                 field_statuses[f] = "verified"
-                notes.append(f"Field '{f}' verified.")
+                notes.append(f"Field '{f}' verified (match ratio: {ratio:.2f}).")
+            elif ratio >= 0.5:
+                field_statuses[f] = "unverified"
+                notes.append(f"Field '{f}': partial match (ratio: {ratio:.2f}).")
             else:
                 field_statuses[f] = "failed"
-                notes.append(f"Field '{f}' quote not found in full text.")
+                notes.append(f"Field '{f}' quote not found in full text (ratio: {ratio:.2f}).")
 
     # Compute overall status:
     # - "verified" if ALL checked (non-empty) fields are verified

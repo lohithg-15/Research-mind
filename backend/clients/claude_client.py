@@ -362,18 +362,6 @@ class ClaudeClient:
         if "paper text" in p and "method" in p and "dataset" in p:
             return self._mock_extract_from_prompt(prompt, full_text=True)
 
-        # Second-pass inference prompt
-        if "answer the following questions" in p or ("method" in p and "dataset" in p and "limitation" in p):
-            return self._mock_extract_from_prompt(prompt)
-
-        # Summary
-        if "write a concise, factual 3-sentence summary" in p:
-            return (
-                "This work introduces a novel deep learning approach for the target task [Source: Method]. "
-                "The method is evaluated on standard benchmarks and achieves competitive results [Source: Key Metric]. "
-                "Future work will address generalization limitations identified in this study [Source: Limitation]."
-            )
-
         # Thematic synthesis / report sections
         if "thematic synthesis" in p or "academic literature review" in p:
             return (
@@ -401,6 +389,18 @@ class ClaudeClient:
                 "Recent advances in this research domain have demonstrated significant progress. "
                 "This report synthesises key findings from the surveyed literature and identifies "
                 "areas where further investigation is needed."
+            )
+
+        # Second-pass inference prompt
+        if "answer the following questions" in p or ("method" in p and "dataset" in p and "limitation" in p and "title:" in p):
+            return self._mock_extract_from_prompt(prompt)
+
+        # Summary
+        if "write a concise, factual 3-sentence summary" in p:
+            return (
+                "This work introduces a novel deep learning approach for the target task [Source: Method]. "
+                "The method is evaluated on standard benchmarks and achieves competitive results [Source: Key Metric]. "
+                "Future work will address generalization limitations identified in this study [Source: Limitation]."
             )
 
         return json.dumps({

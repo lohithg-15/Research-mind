@@ -65,6 +65,10 @@ export default function App() {
   const [error,       setError]       = useState(null);   // errors not persisted
   const [activeTab,   setActiveTab]   = useState(saved?.activeTab   ?? 'overview');
   const [highlighted, setHighlighted] = useState([]);
+  const [mockMode,    setMockMode]    = useState(saved?.mockMode    ?? false);
+  const [startedAt,   setStartedAt]   = useState(saved?.startedAt   ?? null);
+  const [finishedAt,  setFinishedAt]  = useState(saved?.finishedAt  ?? null);
+  const [now,         setNow]         = useState(Date.now());
 
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -82,12 +86,30 @@ export default function App() {
     saveSession({
       query, yearMin, yearMax, venueType, keywords,
       jobId, jobStatus, agentStatus, results, activeTab,
+      mockMode, startedAt, finishedAt,
     });
-  }, [query, yearMin, yearMax, venueType, keywords, jobId, jobStatus, agentStatus, results, activeTab]);
+  }, [query, yearMin, yearMax, venueType, keywords, jobId, jobStatus, agentStatus, results, activeTab, mockMode, startedAt, finishedAt]);
 
   /* ─── If we reload mid-job (running), re-attach polling ─── */
   const isRunning = jobId && (jobStatus === 'pending' || jobStatus === 'running');
   const isDone    = results && results.status === 'done';
+
+  /* ─── Elapsed timer tick while running ─── */
+  useEffect(() => {
+    if (!isRunning) return;
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [isRunning]);
+
+  const formatElapsed = (secs) => {
+    if (secs == null || isNaN(secs) || secs < 0) return null;
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+  const elapsed = startedAt != null
+    ? formatElapsed((finishedAt ?? now / 1000) - startedAt)
+    : null;
 
   /* ─── Fetch final results ─── */
   const fetchResults = useCallback(async (jid, q) => {
@@ -112,6 +134,9 @@ export default function App() {
         setJobStatus(data.status);
         setAgentStatus(data.agent_status || {});
         setError(data.error || null);
+        setMockMode(!!data.mock_mode);
+        if (data.started_at != null) setStartedAt(data.started_at);
+        if (data.finished_at != null) setFinishedAt(data.finished_at);
         if (data.status === 'done')  { clearInterval(interval); fetchResults(jobId, query); }
         if (data.status === 'error') { clearInterval(interval); }
       } catch (err) {
@@ -130,6 +155,9 @@ export default function App() {
     setActiveTab('overview');
     setHighlighted([]);
     setActiveSessionId(null);
+    setMockMode(false);
+    setStartedAt(null);
+    setFinishedAt(null);
 
     try {
       const headers = {
@@ -179,6 +207,9 @@ export default function App() {
     setActiveTab('overview');
     setHighlighted([]);
     setActiveSessionId(null);
+    setMockMode(false);
+    setStartedAt(null);
+    setFinishedAt(null);
   };
 
   /* ─── Load a saved session from history ─── */
@@ -196,6 +227,9 @@ export default function App() {
     setActiveTab('overview');
     setError(null);
     setHighlighted([]);
+    setMockMode(false);
+    setStartedAt(null);
+    setFinishedAt(null);
 
     // Restore filters if available
     if (session.filters) {
@@ -227,23 +261,36 @@ export default function App() {
   /* ─── Status badge ─── */
   const StatusBadge = () => {
     if (!jobId) return null;
+    const elapsedSuffix = elapsed ? ` · ${elapsed}` : '';
+    const mockBadge = mockMode ? (
+      <span className="status-badge status-badge-error">Mock mode</span>
+    ) : null;
     if (isRunning) return (
-      <span className="status-badge status-badge-running">
-        <span className="status-badge-dot pulse" />
-        Pipeline running
-      </span>
+      <>
+        <span className="status-badge status-badge-running">
+          <span className="status-badge-dot pulse" />
+          Pipeline running{elapsedSuffix}
+        </span>
+        {mockBadge}
+      </>
     );
     if (jobStatus === 'done') return (
-      <span className="status-badge status-badge-done">
-        <span className="status-badge-dot" />
-        Pipeline complete
-      </span>
+      <>
+        <span className="status-badge status-badge-done">
+          <span className="status-badge-dot" />
+          Pipeline complete{elapsedSuffix}
+        </span>
+        {mockBadge}
+      </>
     );
     if (jobStatus === 'error') return (
-      <span className="status-badge status-badge-error">
-        <span className="status-badge-dot" />
-        Pipeline error
-      </span>
+      <>
+        <span className="status-badge status-badge-error">
+          <span className="status-badge-dot" />
+          Pipeline error{elapsedSuffix}
+        </span>
+        {mockBadge}
+      </>
     );
     return null;
   };

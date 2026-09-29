@@ -89,10 +89,14 @@ def get_job_status(job_id: str):
         if job["status"] == "running":
             agent_status["planner"] = "running"
             
+    from backend.clients.claude_client import mock_used
     return {
         "status": job["status"],
         "agent_status": agent_status,
-        "error": job["error"]
+        "error": job["error"],
+        "mock_mode": job.get("mock_mode") or mock_used(),
+        "started_at": job.get("started_at"),
+        "finished_at": job.get("finished_at"),
     }
 
 @app.get("/health")

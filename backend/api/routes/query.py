@@ -1,4 +1,5 @@
 import uuid
+import time
 import logging
 import threading
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
@@ -32,6 +33,9 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
         clear_cancellation(job_id)
         return
     log.info(f"Starting pipeline execution for job {job_id}")
+    from backend.clients.claude_client import reset_mock, mock_used
+    reset_mock()
+    jobs[job_id]["started_at"] = time.time()
     try:
         initial_state = create_initial_state(query, filters)
         initial_state["job_id"] = job_id
@@ -44,11 +48,15 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
 
         if is_cancelled(job_id):
             jobs[job_id]["status"] = "cancelled"
+            jobs[job_id]["finished_at"] = time.time()
+            jobs[job_id]["mock_mode"] = mock_used()
             clear_cancellation(job_id)
             return
 
         jobs[job_id]["state"] = final_state
         jobs[job_id]["status"] = "done"
+        jobs[job_id]["finished_at"] = time.time()
+        jobs[job_id]["mock_mode"] = mock_used()
         log.info(f"Pipeline execution completed successfully for job {job_id}")
 
         # Auto-save for authenticated users
@@ -94,6 +102,8 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
         log.error(f"Error executing pipeline for job {job_id}: {e}")
         jobs[job_id]["status"] = "error"
         jobs[job_id]["error"] = str(e)
+        jobs[job_id]["finished_at"] = time.time()
+        jobs[job_id]["mock_mode"] = mock_used()
 
 def retry_pipeline(job_id: str):
     """
@@ -137,6 +147,9 @@ def submit_query(
         "state": None,
         "error": None,
         "user_id": user["user_id"] if user else None,
+        "mock_mode": False,
+        "started_at": None,
+        "finished_at": None,
     }
     
     # Run the pipeline in a background task
@@ -215,6 +228,7 @@ def get_results(job_id: str):
         "summaries": summaries_list,
         "sub_queries": state.get("sub_queries", []),
         "report_draft": state.get("report_draft", {}),
+        "mock_mode": job.get("mock_mode", False),
     }
 
 @router.post("/qa")

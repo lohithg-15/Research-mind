@@ -10,11 +10,22 @@ is missing or on API failure.
 import os
 import json
 import logging
+import threading
 
 logger = logging.getLogger("researchmind.gemini")
 
 # Model to use — gemini-3.6-flash is the latest fast model
 _GEMINI_MODEL = "gemini-3.6-flash"
+
+_lock = threading.Lock()
+MOCK_HITS = 0
+
+def reset_mock():
+    global MOCK_HITS
+    MOCK_HITS = 0
+
+def mock_used():
+    return MOCK_HITS > 0
 
 
 class ClaudeClient:
@@ -338,6 +349,9 @@ class ClaudeClient:
 
 
     def _mock_response(self, prompt: str) -> str:
+        global MOCK_HITS
+        with _lock:
+            MOCK_HITS += 1
         p = prompt.lower()
 
         # Planner

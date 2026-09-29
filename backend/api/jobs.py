@@ -30,7 +30,10 @@ def get_or_restore_job(job_id: str) -> dict | None:
         conn.close()
         if row and row["results"]:
             saved_results = json.loads(row["results"])
-            jobs[job_id] = {"status": "done", "state": saved_results, "error": None}
+            jobs[job_id] = {
+                "status": "done", "state": saved_results, "error": None,
+                "mock_mode": False, "started_at": None, "finished_at": None,
+            }
             return jobs[job_id]
     except Exception:
         pass

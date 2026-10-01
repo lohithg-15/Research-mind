@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
   BookOpen, User, LogOut, Clock, Plus, Menu, X,
@@ -26,11 +26,26 @@ export default function Navbar() {
   const params     = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
   const jobId = params.jobId;
   const currentTab = params.tab;
   const isInWorkspace = !!jobId && !!currentTab;
   const isOnProgress  = location.pathname.endsWith('/progress');
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -99,7 +114,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <div
               className="user-menu-wrap"
-              onMouseLeave={() => setUserMenuOpen(false)}
+              ref={userMenuRef}
             >
               <button
                 className="user-avatar"

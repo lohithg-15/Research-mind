@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowRight, BookOpen, GitFork, FileText, Zap } from 'lucide-react';
+import { Sparkles, ArrowRight, BookOpen, GitFork, FileText, Zap, ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useResearch } from '../context/ResearchContext';
 
@@ -21,9 +21,14 @@ const FEATURES = [
 export default function LandingPage() {
   const navigate = useNavigate();
   const { submitQuery, clearResearch } = useResearch();
-  const [localQuery, setLocalQuery] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [localError, setLocalError] = useState('');
+  const [localQuery,  setLocalQuery]  = useState('');
+  const [yearMin,     setYearMin]     = useState(2015);
+  const [yearMax,     setYearMax]     = useState(new Date().getFullYear());
+  const [venueType,   setVenueType]   = useState('any');
+  const [keywords,    setKeywords]    = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [submitting,  setSubmitting]  = useState(false);
+  const [localError,  setLocalError]  = useState('');
 
   const handleSubmit = async (q) => {
     const text = (q ?? localQuery).trim();
@@ -33,8 +38,10 @@ export default function LandingPage() {
     try {
       clearResearch();
       const jid = await submitQuery(text, {
-        yearMin: 2015, yearMax: new Date().getFullYear(),
-        venueType: 'any', keywords: '',
+        yearMin: Number(yearMin),
+        yearMax: Number(yearMax),
+        venueType,
+        keywords,
       });
       navigate(`/research/${jid}/progress`);
     } catch (err) {
@@ -91,8 +98,86 @@ export default function LandingPage() {
                 }
               </button>
             </div>
+
+            {/* Filter Toggle Button */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+              <button
+                type="button"
+                className="filters-toggle-btn"
+                onClick={() => setShowFilters(v => !v)}
+                aria-expanded={showFilters}
+                aria-controls="landing-advanced-filters"
+              >
+                <SlidersHorizontal size={13} />
+                <span>{showFilters ? 'Hide Filters' : 'Advanced Filters'}</span>
+                {showFilters ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+              </button>
+            </div>
+
+            {/* Expandable Advanced Filters Panel */}
+            {showFilters && (
+              <div id="landing-advanced-filters" className="advanced-filters" style={{ marginTop: '12px', textAlign: 'left' }}>
+                <div className="filter-grid">
+                  <div className="filter-group">
+                    <label className="filter-label" htmlFor="landing-year-min">Year From</label>
+                    <input
+                      id="landing-year-min"
+                      type="number"
+                      className="filter-input"
+                      value={yearMin}
+                      onChange={e => setYearMin(e.target.value)}
+                      min="1900"
+                      max={yearMax}
+                      disabled={submitting}
+                    />
+                  </div>
+                  <div className="filter-group">
+                    <label className="filter-label" htmlFor="landing-year-max">Year To</label>
+                    <input
+                      id="landing-year-max"
+                      type="number"
+                      className="filter-input"
+                      value={yearMax}
+                      onChange={e => setYearMax(e.target.value)}
+                      min={yearMin}
+                      max={new Date().getFullYear() + 2}
+                      disabled={submitting}
+                    />
+                  </div>
+                  <div className="filter-group">
+                    <label className="filter-label" htmlFor="landing-venue-type">Publication Type</label>
+                    <select
+                      id="landing-venue-type"
+                      className="filter-select"
+                      value={venueType}
+                      onChange={e => setVenueType(e.target.value)}
+                      disabled={submitting}
+                    >
+                      <option value="any">Any</option>
+                      <option value="conference">Conference</option>
+                      <option value="journal">Journal</option>
+                      <option value="arxiv">arXiv preprint</option>
+                      <option value="workshop">Workshop</option>
+                    </select>
+                  </div>
+                  <div className="filter-group" style={{ gridColumn: '1 / -1' }}>
+                    <label className="filter-label" htmlFor="landing-keywords">Keywords (comma-separated)</label>
+                    <input
+                      id="landing-keywords"
+                      type="text"
+                      className="filter-input"
+                      placeholder="e.g. transformer, attention, self-supervised"
+                      value={keywords}
+                      onChange={e => setKeywords(e.target.value)}
+                      disabled={submitting}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {localError && (
-              <p className="landing-error" role="alert">{localError}</p>
+              <p className="landing-error" role="alert" style={{ marginTop: '10px' }}>{localError}</p>
             )}
           </form>
 

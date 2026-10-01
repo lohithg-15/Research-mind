@@ -158,7 +158,8 @@ export default function ComparisonTable({ data }) {
         style={{
           overflowX: 'auto',
           overflowY: 'auto',
-          maxWidth: 'calc(100vw - 226px - 218px - 48px)',
+          width: '100%',
+          maxWidth: '100%',
           maxHeight: 'calc(100vh - 220px)',   /* fixed height = scrollbar always visible */
           display: 'block',
           WebkitOverflowScrolling: 'touch',

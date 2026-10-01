@@ -547,7 +547,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
 }
-.rm-table { border-collapse: collapse; font-size: 12px; min-width: 900px; }
+.rm-table { border-collapse: collapse; font-size: 12px; width: 100%; min-width: 900px; }
 .rm-table thead tr { background: var(--gray-100); }
 .rm-table th {
   padding: 10px 14px; text-align: left;
@@ -2580,12 +2580,17 @@ body {
 
 /* Mobile workspace tabs row */
 .navbar-mobile-tabs {
-  display: flex; align-items: center;
-  overflow-x: auto; gap: 2px;
-  padding: 6px 16px;
-  border-top: 1px solid var(--border);
-  scrollbar-width: none;
-  height: var(--mobile-tabs-h);
+  display: none;
+}
+@media (max-width: 768px) {
+  .navbar-mobile-tabs {
+    display: flex; align-items: center;
+    overflow-x: auto; gap: 2px;
+    padding: 6px 16px;
+    border-top: 1px solid var(--border);
+    scrollbar-width: none;
+    height: var(--mobile-tabs-h);
+  }
 }
 .navbar-mobile-tabs::-webkit-scrollbar { display: none; }
 

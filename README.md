@@ -796,6 +796,7 @@ All models are defined in [`backend/data/models.py`](backend/data/models.py) usi
 | `papers_in_cluster` | `List[str]` | — | Paper IDs belonging to this gap cluster |
 | `subgraph_snapshot` | `Dict[str, Any]` | — | NetworkX `node_link_data()` JSON of the induced subgraph |
 | `suggested_directions` | `List[str]` | `[]` | 3 auto-generated future research direction statements |
+| `signal_degraded` | `bool` | `False` | `True` if semantic topic similarity was computed using fallback vectors |
 
 ---
 
@@ -822,16 +823,17 @@ Each agent is a plain Python function `run_<agent>(state: dict) -> dict` registe
 
 ### Agent 2 — Search (`search.py`)
 
-**Purpose**: Retrieves papers from arXiv and Semantic Scholar for each sub-query, deduplicates, merges, and stores in ChromaDB.
+**Purpose**: Retrieves papers from arXiv and Semantic Scholar for each sub-query in parallel, deduplicates, merges, and stores in ChromaDB.
 
 | Aspect | Detail |
 |---|---|
-| **Sources** | arXiv (XML API) + Semantic Scholar (REST v1) — queried **in sequence per sub-query** |
+| **Sources** | arXiv (XML API) + Semantic Scholar (REST v1) — queried **concurrently across all sub-queries** via `ThreadPoolExecutor(max_workers=6)` |
 | **Per-source limit** | 15 papers per sub-query per source |
 | **Year filtering** | Passed to both APIs + client-side belt-and-suspenders filter |
 | **Deduplication** | 3-tier matching: ① DOI exact match → ② arXiv ID exact match → ③ **Jaccard title similarity ≥ 0.8** |
 | **Merge strategy** | On duplicate: enriches the existing record with missing DOI, arXiv ID, PDF URL, citation count, citations list. Sets `source: "merged"` |
 | **Vector store** | After dedup, all papers are added to ChromaDB as `"{title}. {abstract}"` documents |
+| **Cancellation** | Checks `is_cancelled(job_id)` cooperatively before and after fetch |
 | **Input** | `state["sub_queries"]`, `state["filters"]` |
 | **Output** | `state["papers"]` (list of `PaperMeta` objects) |
 
@@ -847,9 +849,9 @@ is_duplicate = jaccard >= 0.8
 
 ### Agent 3 — Extraction (`extraction.py`)
 
-**Purpose**: Extracts structured methodology fields (method, dataset, key metric, limitation) from each paper using LLM + verification.
+**Purpose**: Extracts structured methodology fields (method, dataset, key metric, limitation) from each paper using parallel LLM calls + fuzzy grounding verification.
 
-This is the most complex agent with a **4-stage extraction pipeline**:
+All papers are processed concurrently using `ThreadPoolExecutor(max_workers=5)` with order preservation. Each paper goes through a **4-stage extraction pipeline**:
 
 **Stage 1 — PDF Download** (full-text papers only):
 - Downloads PDF from `paper.pdf_url` with 20s timeout and `ResearchMindBot/1.0` User-Agent
@@ -871,7 +873,7 @@ This is the most complex agent with a **4-stage extraction pipeline**:
 
 | Mode | Verification Method | Pass Status | Fail Status |
 |---|---|---|---|
-| **Full-text** | Exact quote substring match (whitespace-normalised) | `verified` | `failed` |
+| **Full-text** | Exact & **fuzzy substring match** (`_fuzzy_in_text` sliding window against whitespace-normalized text) | `verified` | `failed` |
 | **Abstract-only** | Keyword presence (≥4-char words, excluding stop words) | `verified` | `unverified` |
 
 **Heuristic Fallback** (when LLM fails entirely):
@@ -886,14 +888,14 @@ This is the most complex agent with a **4-stage extraction pipeline**:
 
 ### Agent 4 — Synthesis (`synthesis.py`)
 
-**Purpose**: Generates per-paper summaries with source attributions and compiles the comparison table.
+**Purpose**: Generates per-paper summaries with source attributions and compiles the comparison table using parallel execution (`ThreadPoolExecutor(max_workers=6)`).
 
 | Aspect | Detail |
 |---|---|
 | **Summary prompt** | Asks for a 3-sentence factual summary with mandatory `[Source: Abstract]`, `[Source: Method]`, etc. attribution tags |
 | **Attribution parsing** | Regex `\[Source:\s*([^\]]+)\]` extracts source labels from each sentence → stored as `{"sentence": "...", "source": "Method"}` |
 | **Comparison table** | Flattened dict per paper: `id`, `title`, `authors`, `year`, `venue`, `method`, `dataset`, `key_metric`, `limitation`, `verification_status`, `url` |
-| **URL resolution** | Priority: `paper.url` → `arxiv.org/abs/{arxiv_id}` → `doi.org/{doi}` → `None` |
+| **URL resolution** | Centralized via `resolve_paper_url_from_meta(paper)`: `url` → arXiv abs → DOI → PDF |
 | **Input** | `state["papers"]`, `state["extracted_fields"]` |
 | **Output** | `state["summaries"]`, `state["comparison_table"]` |
 
@@ -901,15 +903,17 @@ This is the most complex agent with a **4-stage extraction pipeline**:
 
 ### Agent 5 — Graph/Gap (`graph_gap.py`)
 
-**Purpose**: Builds the citation and topic-similarity network, clusters papers thematically, and identifies research gaps.
+**Purpose**: Builds the citation and topic-similarity network, clusters papers thematically, and identifies research gaps using age-adjusted citation pace and structural isolation with bootstrap null significance testing.
 
 **Step 1 — Minimum Corpus Check**: Skips gap detection entirely if `len(papers) < 15`.
 
 **Step 2 — Graph Construction** (via `GraphStore.build_graph()`):
+- Batch embedding retrieval (`vs.get_embeddings_batch(paper_ids)`) + vectorized cosine similarity matrix calculation.
+- Tracks `embeddings_degraded` if vector embeddings use the hash-fallback generator.
 
 | Node Type | Attributes | Created From |
 |---|---|---|
-| `Paper` | `title`, `year`, `venue`, `abstract`, `citation_count` | Each `PaperMeta` object |
+| `Paper` | `title`, `year`, `venue`, `abstract`, `citation_count`, `url`, `doi`, `arxiv_id`, `authors` | Each `PaperMeta` object |
 | `Author` | `name` | Each author in `PaperMeta.authors` |
 | `Topic` | `label`, `description` | LLM clustering output |
 
@@ -923,25 +927,27 @@ This is the most complex agent with a **4-stage extraction pipeline**:
 
 **Step 3 — Topic Clustering**: LLM groups papers into 3–5 thematic clusters (JSON output). Fallback: keyword-based clustering using 9 predefined keywords.
 
-**Step 4 — Gap Detection Heuristic**:
-```
-For each cluster:
-    density = total_citations / num_papers
-
-median_density = numpy.median(all_densities)
-
-Gaps = clusters where density <= median_density
-```
+**Step 4 — Advanced Gap Detection & Bootstrap Significance**:
+1. **Age-Adjusted Citation Pace**: For each cluster, computes $\text{pace} = \frac{\sum \text{citations}}{\text{total paper years}}$.
+2. **Cluster Isolation Score**: Measures internal citation density vs. cross-cluster bridging citations.
+3. **Gap Score**: Computes $\text{gap\_score} = \text{norm}(\text{isolation}) - \text{norm}(\text{pace})$.
+4. **Bootstrap Null Hypothesis**: Shuffles paper IDs across clusters 100 times to construct an empirical null distribution. Gaps are flagged only when their score exceeds the **90th percentile threshold** of the null distribution.
+5. **Distinctive Phrase Extraction**: Mines distinctive noun phrases from abstracts to generate targeted future research directions.
 
 Each gap produces a `GapClaim` with:
 - Induced subgraph (papers + authors + topic node) serialised via `json_graph.node_link_data()`
 - 3 auto-generated suggested research directions
+- `signal_degraded` indicator (set when embedding model is unavailable)
 
 ---
 
 ### Agent 6 — Report (`report.py`)
 
-**Purpose**: Generates publication-grade report documents (PDF + DOCX) with three LLM-written sections.
+**Purpose**: Generates publication-grade report documents (PDF + DOCX) with parallelized LLM-written sections.
+
+**Parallel Generation**:
+- **Introduction & Thematic Synthesis** are generated concurrently via `ThreadPoolExecutor(max_workers=2)`.
+- **Gap Narratives** are generated concurrently per gap via `ThreadPoolExecutor(max_workers=4)`.
 
 **Three LLM-Generated Sections**:
 

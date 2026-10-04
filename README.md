@@ -13,14 +13,16 @@ ResearchMind is an agentic AI system that automates systematic academic literatu
 | 🤖 **6-Agent LangGraph Pipeline** | Planner → Search → Extraction → Synthesis → Graph/Gap → Report |
 | 🔍 **Multi-source Search** | Queries arXiv and Semantic Scholar in parallel |
 | 🕸️ **Citation Graph Analysis** | NetworkX MultiDiGraph with gap detection via citation density |
-| 📊 **Interactive Dashboard** | Vite + React 19 UI with glassmorphic dark-mode styling |
+| 📊 **Multi-Page SPA** | Vite 8 + React 19 + React Router 6 with glassmorphic dark-mode styling |
 | 📄 **Export Reports** | One-click PDF (ReportLab) and DOCX (python-docx) export |
 | 💬 **QA Research Assistant** | Chat-based Q&A over collected papers (similar to Elicit) |
 | 🛡️ **Offline Resilience** | Committed fallback dataset + local file-based cache |
 | 🧪 **Mock Mode** | Runs fully without API keys using simulated Gemini responses |
-| 🔐 **JWT User Authentication** | Secure Register and Login modal with JWT tokens & 7-day session persistence |
-| 📜 **GPT-Style Research History** | ChatGPT-style dark sidebar; auto-saves research sessions to SQLite DB for logged-in users |
+| 🔐 **JWT User Authentication** | Dedicated Login & Signup pages with JWT tokens & 7-day session persistence |
+| 📜 **Research History** | Full-page history view; auto-saves research sessions to SQLite DB for logged-in users |
 | 🔁 **Session Persistence** | Browser localStorage saves active progress across page reloads |
+| 🧭 **URL-Based Routing** | Deep-linkable pages — every research tab, paper, and progress view has its own URL |
+| 📱 **Responsive Design** | Mobile-friendly navbar with hamburger menu and scrollable tab bar |
 
 ---
 
@@ -50,7 +52,7 @@ User Query
 | **Graph** | NetworkX (MultiDiGraph) |
 | **Backend API** | FastAPI + Uvicorn |
 | **Database & Auth** | SQLite (`researchmind.db`) + JWT (`python-jose`, `bcrypt`) |
-| **Frontend** | Vite 8 + React 19 (glassmorphic dark-mode UI) |
+| **Frontend** | Vite 8 + React 19 + React Router 6 (glassmorphic dark-mode UI) |
 | **PDF Export** | ReportLab |
 | **DOCX Export** | python-docx |
 | **PDF Parsing** | PyMuPDF |
@@ -98,74 +100,99 @@ All 6 agents share a single [`PipelineState`](backend/orchestration/pipeline.py)
 Research-Mind/
 ├── backend/
 │   ├── __init__.py
-│   ├── api/                        # FastAPI server & routes
+│   ├── logging_utils.py               # Job-scoped logger adapter (prefixes logs with [job=...])
+│   ├── api/                           # FastAPI server & routes
 │   │   ├── __init__.py
-│   │   ├── deps.py                 # JWT auth dependency helpers
-│   │   ├── main.py                 # FastAPI app, CORS, /health, /status endpoints
-│   │   ├── jobs.py                 # In-memory jobs dictionary (shared state)
+│   │   ├── deps.py                    # JWT auth dependency helpers
+│   │   ├── main.py                    # FastAPI app, CORS, /health, /status endpoints
+│   │   ├── jobs.py                    # In-memory jobs dictionary (shared state)
 │   │   └── routes/
 │   │       ├── __init__.py
-│   │       ├── auth.py             # POST /auth/register, /auth/login, GET /auth/me
-│   │       ├── history.py          # GET /history, GET /history/{id}, DELETE /history/{id}
-│   │       ├── query.py            # POST /query, GET /results, POST /qa endpoints
-│   │       └── export.py           # GET /export/{job_id} — PDF/DOCX download
-│   ├── agents/                     # 6-agent pipeline stages
+│   │       ├── auth.py                # POST /auth/register, /auth/login, GET /auth/me
+│   │       ├── history.py             # GET /history, GET /history/{id}, DELETE /history/{id}
+│   │       ├── query.py               # POST /query, GET /results, POST /qa endpoints
+│   │       └── export.py              # GET /export/{job_id} — PDF/DOCX download
+│   ├── agents/                        # 6-agent pipeline stages
 │   │   ├── __init__.py
-│   │   ├── planner.py              # Sub-query decomposition via LLM
-│   │   ├── search.py               # arXiv + Semantic Scholar parallel retrieval
-│   │   ├── extraction.py           # Field extraction, PDF parsing & deduplication
-│   │   ├── synthesis.py            # Summarization & comparison table generation
-│   │   ├── graph_gap.py            # Citation graph construction + gap detection
-│   │   └── report.py               # PDF/DOCX report generation
+│   │   ├── planner.py                 # Sub-query decomposition via LLM
+│   │   ├── search.py                  # arXiv + Semantic Scholar parallel retrieval
+│   │   ├── extraction.py              # Field extraction, PDF parsing & deduplication
+│   │   ├── synthesis.py               # Summarization & comparison table generation
+│   │   ├── graph_gap.py               # Citation graph construction + gap detection
+│   │   └── report.py                  # PDF/DOCX report generation
 │   ├── orchestration/
-│   │   └── pipeline.py             # LangGraph StateGraph wiring & PipelineState
-│   ├── clients/                    # External API clients
+│   │   └── pipeline.py                # LangGraph StateGraph wiring & PipelineState
+│   ├── clients/                       # External API clients
 │   │   ├── __init__.py
-│   │   ├── arxiv_client.py         # arXiv API search & XML parsing
-│   │   ├── claude_client.py        # Gemini LLM client (named for backward compat)
-│   │   └── s2_client.py            # Semantic Scholar API client
-│   ├── data/                       # Data layer — models, stores & caching
+│   │   ├── arxiv_client.py            # arXiv API search & XML parsing
+│   │   ├── claude_client.py           # Gemini LLM client (named for backward compat)
+│   │   └── s2_client.py               # Semantic Scholar API client
+│   ├── data/                          # Data layer — models, stores & caching
 │   │   ├── __init__.py
-│   │   ├── models.py               # Pydantic models (PaperMeta, FieldRecord, etc.)
-│   │   ├── cache.py                # File-based JSON cache + exponential backoff
-│   │   ├── vector_store.py         # ChromaDB vector store wrapper
-│   │   └── graph_store.py          # NetworkX graph builder (CITES, SIMILAR_TOPIC)
-│   ├── db/                         # Database module & runtime data directory
-│   │   ├── __init__.py             # Package init
-│   │   ├── database.py             # SQLite database init & query functions
-│   │   ├── cache/                  # Cached API responses
-│   │   ├── chroma/                 # ChromaDB persistent storage
-│   │   └── exports/                # Generated PDF/DOCX report files
-│   ├── .env.example                # Environment variable template
-│   └── requirements.txt            # Python dependencies
+│   │   ├── models.py                  # Pydantic models (PaperMeta, FieldRecord, etc.)
+│   │   ├── cache.py                   # File-based JSON cache + exponential backoff
+│   │   ├── vector_store.py            # ChromaDB vector store wrapper
+│   │   └── graph_store.py             # NetworkX graph builder (CITES, SIMILAR_TOPIC)
+│   ├── db/                            # Database module & runtime data directory
+│   │   ├── __init__.py                # Package init
+│   │   ├── database.py                # SQLite database init & query functions
+│   │   ├── cache/                     # Cached API responses
+│   │   ├── chroma/                    # ChromaDB persistent storage
+│   │   └── exports/                   # Generated PDF/DOCX report files
+│   ├── .env.example                   # Environment variable template
+│   └── requirements.txt               # Python dependencies
 ├── frontend/
-│   ├── index.html                  # HTML entry point
-│   ├── package.json                # Node dependencies & scripts
-│   ├── vite.config.js              # Vite build configuration
-│   ├── .oxlintrc.json              # Oxlint linter configuration
+│   ├── index.html                     # HTML entry point
+│   ├── package.json                   # Node dependencies & scripts
+│   ├── vite.config.js                 # Vite build configuration
+│   ├── .oxlintrc.json                 # Oxlint linter configuration
 │   ├── public/
-│   │   ├── favicon.svg             # Browser tab icon
-│   │   └── icons.svg               # SVG icon sprite sheet
+│   │   ├── favicon.svg                # Browser tab icon
+│   │   └── icons.svg                  # SVG icon sprite sheet
 │   └── src/
-│       ├── main.jsx                # React DOM entry point
-│       ├── App.jsx                 # Main dashboard, tab routing & API calls
-│       ├── App.css                 # App-level overrides
-│       ├── index.css               # Design system & glassmorphic styles
+│       ├── main.jsx                   # React DOM entry point (renders <AppRouter>)
+│       ├── router.jsx                 # React Router — all page routes & provider hierarchy
+│       ├── App.jsx                    # Legacy dashboard (still functional, not route-mounted)
+│       ├── App.css                    # App-level overrides
+│       ├── index.css                  # Design system & glassmorphic styles
 │       ├── context/
-│       │   └── AuthContext.jsx     # JWT authentication state & functions
-│       └── components/
-│           ├── AuthModal.jsx       # Login & Registration modal dialog
-│           ├── HistorySidebar.jsx  # ChatGPT-style research session history sidebar
-│           ├── QueryForm.jsx       # Research query input & filters
-│           ├── ProgressTracker.jsx # Live agent status tracker
-│           ├── OverviewPanel.jsx   # Results overview & gap cards
-│           ├── ComparisonTable.jsx # Sortable/searchable paper matrix
-│           ├── GraphViewer.jsx     # Interactive Cytoscape citation graph
-│           ├── SourcesSidebar.jsx  # Source paper detail sidebar
-│           ├── ReportExport.jsx    # PDF/DOCX export interface
-│           └── QAAssistant.jsx     # Chat-based Q&A over research papers
+│       │   ├── AuthContext.jsx        # JWT authentication state, login/register/logout
+│       │   └── ResearchContext.jsx    # Research state: query, polling, results, job lifecycle
+│       ├── utils/
+│       │   └── paperLinks.js          # Shared paper URL resolution (arXiv/DOI/S2)
+│       ├── components/
+│       │   ├── Navbar.jsx             # Top navigation bar + workspace tab strip
+│       │   ├── ProtectedRoute.jsx     # Auth guard — redirects to /login if unauthenticated
+│       │   ├── AuthModal.jsx          # Login & Registration modal dialog
+│       │   ├── HistorySidebar.jsx     # ChatGPT-style research session history sidebar
+│       │   ├── QueryForm.jsx          # Research query input & filters
+│       │   ├── ProgressTracker.jsx    # Live agent status tracker
+│       │   ├── OverviewPanel.jsx      # Results overview & gap cards
+│       │   ├── ComparisonTable.jsx    # Sortable/searchable paper matrix
+│       │   ├── GraphViewer.jsx        # Interactive Cytoscape citation graph
+│       │   ├── SourcesSidebar.jsx     # Source paper detail sidebar
+│       │   ├── ReportExport.jsx       # PDF/DOCX export interface
+│       │   └── QAAssistant.jsx        # Chat-based Q&A over research papers
+│       └── pages/
+│           ├── LandingPage.jsx        # Hero section + search bar + feature cards
+│           ├── LoginPage.jsx          # Standalone email/password login page
+│           ├── SignupPage.jsx         # Standalone email/password registration page
+│           ├── NewResearchPage.jsx    # Dedicated research topic form with filters
+│           ├── ProgressPage.jsx       # 6-stage progress tracker with animated bar
+│           ├── WorkspacePage.jsx      # Tab container — lazy-loads workspace tabs
+│           ├── PaperDetailPage.jsx    # Full paper view (abstract, method, dataset, etc.)
+│           ├── HistoryPage.jsx        # Full-page history view with search + date groups
+│           ├── NotFoundPage.jsx       # 404 page
+│           └── tabs/
+│               ├── PapersTab.jsx      # Filterable, sortable paper card grid
+│               ├── OverviewTab.jsx    # Summary statistics and gap highlights
+│               ├── ComparisonTab.jsx  # Comparison table wrapper
+│               ├── GapsTab.jsx        # Research gap cards with evidence expansion
+│               ├── GraphTab.jsx       # Cytoscape citation graph wrapper
+│               ├── AssistantTab.jsx   # QA chat assistant wrapper
+│               └── ReportsTab.jsx     # Report export wrapper
 ├── tests/
-│   ├── unit/                       # Unit tests for each agent
+│   ├── unit/                          # Unit tests for each agent
 │   │   ├── test_planner.py
 │   │   ├── test_search.py
 │   │   ├── test_extraction.py
@@ -173,16 +200,16 @@ Research-Mind/
 │   │   ├── test_graph_gap.py
 │   │   └── test_report.py
 │   └── integration/
-│       └── test_pipeline.py        # Full LangGraph pipeline integration test
-├── fallback_dataset/               # Committed offline data
-│   ├── cache/                      # Pre-fetched search result cache files
+│       └── test_pipeline.py           # Full LangGraph pipeline integration test
+├── fallback_dataset/                  # Committed offline data
+│   ├── cache/                         # Pre-fetched search result cache files
 │   ├── results_attention_mechanisms.json  # Pre-computed pipeline output
-│   └── generate_fallback.py        # Script to regenerate fallback data
-├── docs/                           # Project documentation
-│   ├── PRD_ResearchMind.docx       # Product Requirements Document
-│   ├── SRS_ResearchMind.docx       # Software Requirements Specification
-│   ├── TEST_PLAN_ResearchMind.docx # Test Plan
-│   ├── BUILD_GUIDE_ResearchMind.docx   # Build & Deployment Guide
+│   └── generate_fallback.py           # Script to regenerate fallback data
+├── docs/                              # Project documentation
+│   ├── PRD_ResearchMind.docx          # Product Requirements Document
+│   ├── SRS_ResearchMind.docx          # Software Requirements Specification
+│   ├── TEST_PLAN_ResearchMind.docx    # Test Plan
+│   ├── BUILD_GUIDE_ResearchMind.docx  # Build & Deployment Guide
 │   └── ANTIGRAVITY_BUILD_PROMPT_ResearchMind.md  # Original build prompt
 └── .gitignore
 ```
@@ -263,7 +290,8 @@ This installs the following core packages:
 |---|---|---|
 | `fastapi` | ≥0.100 | REST API framework |
 | `uvicorn` | ≥0.22 | ASGI server for FastAPI |
-| `langgraph` | ≥0.1 | Multi-agent workflow orchestration |
+| `langgraph` | ≥1.2 | Multi-agent workflow orchestration |
+| `langgraph-checkpoint-sqlite` | ≥3.1.1 | SQLite-backed LangGraph checkpointing |
 | `chromadb` | ≥0.4 | Vector store for semantic paper search |
 | `google-genai` | ≥2.0 | Google Gemini LLM client |
 | `networkx` | ≥3.1 | Citation graph construction & analysis |
@@ -274,6 +302,8 @@ This installs the following core packages:
 | `requests` | ≥2.31 | HTTP client for arXiv/Semantic Scholar APIs |
 | `numpy` | ≥1.24 | Numerical operations for graph analysis |
 | `python-dotenv` | ≥1.0 | `.env` file loading |
+| `python-jose[cryptography]` | ≥3.3 | JWT token creation & verification |
+| `bcrypt` | ≥4.0 | Password hashing |
 | `pytest` | ≥7.3 | Test runner |
 
 > **Tip**: If you encounter dependency conflicts, try:
@@ -393,6 +423,7 @@ Expected response:
 | `POST` | `/auth/login` | No | Authenticate user, returns JWT token |
 | `GET` | `/auth/me` | **Yes** | Get current authenticated user details |
 | `POST` | `/query` | Optional | Submit research topic to start 6-agent pipeline (saves to history if authenticated) |
+| `POST` | `/jobs/{job_id}/cancel` | No | Request cooperative cancellation of a running research job |
 | `GET` | `/status/{job_id}` | No | Poll live execution progress of each agent |
 | `GET` | `/results/{job_id}` | No | Fetch final results (papers, gaps, graph, report) |
 | `GET` | `/history` | **Yes** | List all saved research sessions for current user |
@@ -463,7 +494,7 @@ curl -X POST http://localhost:8000/qa \
 
 ## 🖥️ Frontend Setup
 
-The frontend is a **Vite 8 + React 19** single-page application with a glassmorphic dark-mode UI. It communicates with the backend over HTTP on `localhost:8000`.
+The frontend is a **Vite 8 + React 19 + React Router 6** multi-page single-page application with a glassmorphic dark-mode UI. It communicates with the backend over HTTP on `localhost:8000`.
 
 ---
 
@@ -507,6 +538,7 @@ This installs the following packages:
 |---|---|---|
 | `react` | ^19.2 | Core UI library |
 | `react-dom` | ^19.2 | DOM renderer for React |
+| `react-router-dom` | ^6.30 | Client-side routing (page navigation, URL params, protected routes) |
 | `cytoscape` | ^3.30 | Interactive citation/similarity graph rendering |
 | `lucide-react` | ^0.400 | Icon library (Search, BookOpen, GitFork, etc.) |
 
@@ -548,10 +580,11 @@ Open **[http://localhost:5173](http://localhost:5173)** in your browser. The app
 ### Step 5 — Verify the App is Working
 
 1. Open `http://localhost:5173` in your browser
-2. You should see the ResearchMind dark-mode dashboard
-3. Enter a topic (e.g. `"attention mechanisms"`) in the query box
-4. Click **Run Review** — the progress tracker should show each agent status updating in real time
-5. Once complete, explore the **Overview**, **Comparison Table**, **Gap Evidence**, **Report**, and **Ask Assistant** tabs
+2. You should see the ResearchMind **Landing Page** with a hero search bar
+3. Enter a topic (e.g. `"attention mechanisms"`) in the search box or click an example query
+4. Click **Start Research** — you will be redirected to the **Progress Page** showing each agent status updating in real time
+5. Once complete, you are automatically redirected to the **Papers** tab in the research workspace
+6. Explore the **Papers**, **Overview**, **Comparison**, **Gaps**, **Graph**, **Assistant**, and **Reports** tabs via the navbar
 
 If the dashboard loads but queries fail, check that the backend server is running at `http://localhost:8000/health`.
 
@@ -570,114 +603,139 @@ Run these from inside the `frontend/` directory:
 
 ---
 
-### How the Frontend Connects to the Backend
+## 🧭 Frontend Routing & Page Architecture
 
-The frontend calls the backend API directly from the browser. The base URL is hardcoded to `http://localhost:8000` in `App.jsx`:
+The frontend uses **React Router v6** with the following route structure. The entry point (`main.jsx`) renders `<AppRouter>` from `router.jsx`, which wraps all routes in the `AuthProvider` → `ResearchProvider` context hierarchy.
 
-```js
-// Submits a research query and starts the pipeline job
-const res = await fetch('http://localhost:8000/query', { ... });
+### Route Map
 
-// Polls agent progress every 2 seconds
-const res = await fetch(`http://localhost:8000/status/${jobId}`);
+| Route | Page | Auth | Description |
+|---|---|---|---|
+| `/` | `LandingPage` | No | Hero section with search bar, example queries, and feature grid |
+| `/login` | `LoginPage` | No | Standalone email/password login page |
+| `/signup` | `SignupPage` | No | Standalone email/password registration page |
+| `/research/new` | `NewResearchPage` | No | Dedicated research form with topic textarea + advanced filters |
+| `/research/:jobId/progress` | `ProgressPage` | No | 6-stage progress tracker with percentage bar and auto-redirect on completion |
+| `/research/:jobId/:tab` | `WorkspacePage` | No | Tab container — lazy-loads the active workspace tab |
+| `/research/:jobId/paper/:paperId` | `PaperDetailPage` | No | Full paper view with abstract, extracted fields, and metadata |
+| `/research/:jobId` | — | No | Redirects to `/research/:jobId/papers` |
+| `/history` | `HistoryPage` | **Yes** | Full-page history view with search, date grouping, and delete |
+| `*` | `NotFoundPage` | No | 404 catch-all |
 
-// Fetches final results when pipeline completes
-const res = await fetch(`http://localhost:8000/results/${jobId}`);
+### Workspace Tabs (via Navbar)
 
-// QA Assistant — asks questions about collected papers
-const res = await fetch('http://localhost:8000/qa', { ... });
+When inside a research workspace (`/research/:jobId/:tab`), the Navbar displays an integrated tab strip with 7 tabs:
 
-// Report export — download PDF or DOCX
-window.open(`http://localhost:8000/export/${jobId}?format=pdf`);
-```
+| Tab Key | Label | Component (Lazy-Loaded) | Description |
+|---|---|---|---|
+| `papers` | Papers | `PapersTab` | Filterable & sortable paper card grid with search, source badges, expandable abstracts, and click-through to `PaperDetailPage` |
+| `overview` | Overview | `OverviewTab` | Summary stat cards (paper count, gap count, sub-queries) and gap highlights |
+| `comparison` | Comparison | `ComparisonTab` | Sortable/searchable paper comparison matrix |
+| `gaps` | Gaps | `GapsTab` | Research gap cards with risk levels, evidence expansion, and supporting papers |
+| `graph` | Graph | `GraphTab` | Interactive Cytoscape.js citation & similarity graph |
+| `assistant` | Assistant | `AssistantTab` | Chat-based QA over collected papers |
+| `reports` | Reports | `ReportsTab` | PDF/DOCX report preview and one-click export |
 
-The backend is configured with CORS `allow_origins=["*"]`, so no proxy or extra configuration is needed during local development.
+All workspace tab components are **lazy-loaded** via `React.lazy()` in `WorkspacePage.jsx` to optimise initial bundle size.
 
 ---
 
-### Frontend Troubleshooting
+## 🔐 Authentication System
 
-| Problem | Likely Cause | Fix |
+### Flow
+
+1. **Register** — `POST /auth/register` creates a new user in SQLite, hashes the password with `bcrypt`, and returns a JWT token.
+2. **Login** — `POST /auth/login` validates credentials and returns a JWT token.
+3. **Token storage** — The frontend stores the JWT in `localStorage` under `researchmind_token` and the user object under `researchmind_user`.
+4. **Auth headers** — `AuthContext.authHeaders()` returns `{ Authorization: "Bearer <token>" }` for authenticated API calls.
+5. **Protected routes** — The `ProtectedRoute` component redirects unauthenticated users to `/login` with a `from` redirect state.
+6. **Session persistence** — Research queries sent with a valid JWT are automatically saved to the user's history in SQLite.
+
+### Context Providers
+
+The app uses two React Context providers, nested as:
+
+```
+<BrowserRouter>
+  <AuthProvider>       ← JWT state: token, user, login, register, logout
+    <ResearchProvider> ← Research state: query, job, polling, results
+      <Routes>
+        ...
+      </Routes>
+    </ResearchProvider>
+  </AuthProvider>
+</BrowserRouter>
+```
+
+| Provider | File | Key State | Key Actions |
+|---|---|---|---|
+| `AuthProvider` | `AuthContext.jsx` | `token`, `user`, `isAuthenticated`, `loading`, `error` | `login()`, `register()`, `logout()`, `authHeaders()` |
+| `ResearchProvider` | `ResearchContext.jsx` | `query`, `jobId`, `jobStatus`, `agentStatus`, `results`, `papers`, `mockMode`, `startedAt`, `finishedAt` | `submitQuery()`, `restoreJob()`, `loadSession()`, `clearResearch()` |
+
+### Deep Linking & Session Restoration
+
+- **URL-driven state**: `WorkspacePage` and `ProgressPage` read the `jobId` from URL params and call `restoreJob(jobId)` on mount. This fetches the job's status from the backend and re-attaches polling if the job is still running.
+- **localStorage session**: `ResearchContext` persists all key state fields to `localStorage` under `researchmind_session` on every change, enabling page-reload recovery.
+- **Polling re-attach**: If the page is reloaded while a job is `pending` or `running`, polling automatically re-starts via `useEffect` on mount.
+
+---
+
+## 🖼️ Frontend Components
+
+### Pages
+
+| Page | File | Key Features |
 |---|---|---|
-| `npm: command not found` | Node.js not installed | Install Node.js 18+ from [nodejs.org](https://nodejs.org) |
-| `npm install` fails with peer dep errors | Running without `--legacy-peer-deps` | Always use `npm install --legacy-peer-deps` |
-| `ENOENT: no such file or directory, package.json` | Running npm from project root | `cd frontend` first, then run npm commands |
-| Port 5173 already in use | Another Vite instance running | Stop the other server or run `npm run dev -- --port 5174` |
-| App loads but shows "Failed to fetch" | Backend not running | Start the backend on port 8000 first |
-| Graph not rendering | `cytoscape` not installed | Re-run `npm install --legacy-peer-deps` |
-| Blank white screen | Build/JSX error | Open browser DevTools → Console for error details |
+| `LandingPage` | `LandingPage.jsx` | Animated hero section, inline search box with "Start Research" button, collapsible advanced filters, clickable example query chips, feature grid |
+| `LoginPage` | `LoginPage.jsx` | Email + password form, error feedback, link to registration, redirect-after-login support |
+| `SignupPage` | `SignupPage.jsx` | Email + password + confirm password form, error feedback, link to login |
+| `NewResearchPage` | `NewResearchPage.jsx` | Multi-line topic textarea, collapsible advanced filters (year range, venue type, keywords), submit with loading spinner |
+| `ProgressPage` | `ProgressPage.jsx` | 6-stage pipeline stages with status icons (pending/running/done/error), animated progress bar, percentage display, auto-redirect to workspace on completion, error recovery actions |
+| `WorkspacePage` | `WorkspacePage.jsx` | Lazy-loads active tab via `React.lazy()`, validates tab param, auto-redirects running jobs to progress, shows loading/error states, restores job from URL on deep-link |
+| `PaperDetailPage` | `PaperDetailPage.jsx` | Full paper view: title, source link, metadata rows (authors, year, venue, arXiv ID, DOI, citations, source), abstract, extracted fields (method, dataset, key metric, limitation), summary, verification/PDF tags |
+| `HistoryPage` | `HistoryPage.jsx` | Searchable list of saved sessions grouped by date (Today/Yesterday/Last 7 days/Older), delete with confirmation overlay, load-and-navigate to results |
+| `NotFoundPage` | `NotFoundPage.jsx` | 404 error page with navigation back to home |
 
----
+### Navbar
 
-## 🧪 Running Tests
+The `Navbar` component (`Navbar.jsx`) provides:
 
-Run the full test suite (unit + integration):
+- **Logo** — Links to `/` (landing page)
+- **Workspace tab strip** — Conditionally rendered inside research workspaces; 7 tabs as `<Link>` elements with active state
+- **Right cluster** — "New Research" button, "History" link (authenticated only), Sign In/Sign Up links or user avatar with dropdown menu
+- **Mobile hamburger** — Slide-out menu for small screens
+- **Mobile tab bar** — Horizontal scrollable tab strip below the navbar on mobile
 
-```bash
-python -m pytest
-```
-
-Run only unit tests:
-
-```bash
-python -m pytest tests/unit/
-```
-
-Run only integration tests:
-
-```bash
-python -m pytest tests/integration/
-```
-
-### Test Coverage
-
-| Test File | Agent / Module Tested |
-|---|---|
-| `test_planner.py` | Sub-query decomposition |
-| `test_search.py` | arXiv + Semantic Scholar search |
-| `test_extraction.py` | Field extraction & deduplication |
-| `test_synthesis.py` | Summarization & comparison table |
-| `test_graph_gap.py` | Citation graph & gap detection |
-| `test_report.py` | PDF/DOCX report generation |
-| `test_pipeline.py` | Full end-to-end LangGraph pipeline |
-
----
-
-## 🛡️ Offline Resilience & Demo Mode
-
-ResearchMind is designed to remain usable even without live API access:
-
-- **Local Caching**: The search agent caches all API responses under `backend/db/cache/`. Repeated queries are served from the cache instantly. Cache keys are MD5 hashes of the request parameters.
-- **Exponential Backoff**: API clients automatically retry on 429 (rate limit) and network errors with exponential backoff (up to 5 retries).
-- **Committed Fallback Dataset**: If the system is fully offline or rate-limited, it automatically falls back to:
-  - `fallback_dataset/cache/` — pre-fetched paper search results
-  - `fallback_dataset/results_attention_mechanisms.json` — a complete pre-computed pipeline result for the query *"attention mechanisms"*
-- **Fallback Embeddings**: If ChromaDB's default embedding model fails to download, the vector store falls back to hash-based 384-dimensional embeddings for similarity computation.
-
----
-
-## 🗺️ Frontend Components
+### Reusable Components
 
 | Component | File | Key Technical Details |
 |---|---|---|
 | `AuthModal` | `AuthModal.jsx` | Glassmorphic modal with login/registration tab toggles, error feedback, and JWT authentication handling. |
 | `HistorySidebar` | `HistorySidebar.jsx` | White glassmorphic sidebar with close `X` button, date-grouped research sessions, search bar, and session deletion. |
-| `QueryForm` | `QueryForm.jsx` | Controlled inputs for topic, year range (number inputs), venue type (`<select>`), and comma-separated keywords. Submits via `App.jsx` `handleSubmit()`. |
+| `QueryForm` | `QueryForm.jsx` | Controlled inputs for topic, year range (number inputs), venue type (`<select>`), and comma-separated keywords. |
 | `ProgressTracker` | `ProgressTracker.jsx` | Renders each of the 6 agent statuses (`pending`/`running`/`done`/`error`) with colour-coded badges and pulse animation for `running`. |
 | `OverviewPanel` | `OverviewPanel.jsx` | Summary stat cards (paper count, gap count, sub-queries) and gap claim tiles with description + citation density. |
 | `ComparisonTable` | `ComparisonTable.jsx` | Sortable by any column, full-text search across all fields, renders verification status badges, and links to paper URLs. |
 | `GraphViewer` | `GraphViewer.jsx` | Cytoscape.js with `cose` (force-directed) layout. Renders gap subgraph snapshots from `gap_claims[].subgraph_snapshot`. Supports pan, zoom, click-to-highlight. |
-| `SourcesSidebar` | `SourcesSidebar.jsx` | Right sidebar listing all papers with clickable links to arXiv/DOI/Semantic Scholar pages. Highlights papers selected in GraphViewer. |
-| `ReportExport` | `ReportExport.jsx` | Renders the Markdown report draft (`report_draft.text`) inline and provides one-click download buttons that call `GET /export/{job_id}?format=pdf\|docx`. |
+| `SourcesSidebar` | `SourcesSidebar.jsx` | Right sidebar listing all papers with clickable links to arXiv/DOI/Semantic Scholar pages. |
+| `ReportExport` | `ReportExport.jsx` | Renders the Markdown report draft inline and provides one-click download buttons that call `GET /export/{job_id}?format=pdf|docx`. |
 | `QAAssistant` | `QAAssistant.jsx` | Chat UI that sends `POST /qa` requests with `{job_id, question, history}`. Displays LLM answers with cited paper references. Maintains conversation history in component state. |
+| `ProtectedRoute` | `ProtectedRoute.jsx` | Wrapper component that checks `isAuthenticated` from `AuthContext` and redirects to `/login` if not authenticated. |
+
+### Utility Modules
+
+| Module | File | Purpose |
+|---|---|---|
+| `paperLinks` | `utils/paperLinks.js` | Centralised paper URL resolution: `getPaperLink(paper)` returns the best URL (explicit URL → arXiv → DOI → PDF). `getPaperLinkWithLabel(paper)` returns `{href, label}` for display. |
 
 ### Frontend State Management
 
-- **No external state library** — uses React 19 `useState` + `useEffect` hooks exclusively.
-- **Session persistence**: All key state fields (`query`, `jobId`, `results`, `activeTab`, etc.) are serialised to `localStorage` under the key `researchmind_session` on every state change.
-- **Page reload recovery**: On mount, `loadSession()` restores state from `localStorage`. If a job was `running`, polling re-attaches automatically via `useEffect`.
-- **Polling**: `setInterval` at **2000 ms** in a `useEffect` hook. Polls `GET /status/{jobId}`. Auto-clears interval on `done` or `error`.
-- **Tab system**: 5 tabs — Overview, Comparison Table, Gap Evidence, Report, Ask Assistant — rendered conditionally via `activeTab` state.
+- **Context-based architecture** — Uses `AuthContext` for authentication and `ResearchContext` for research state. No external state library.
+- **React 19** — Uses `useState`, `useEffect`, `useCallback`, `useRef`, `useMemo`, and `useContext` hooks.
+- **Session persistence**: All key state fields are serialised to `localStorage` under the key `researchmind_session` on every state change.
+- **Page reload recovery**: On mount, `ResearchContext` restores state from `localStorage`. If a job was `running`, polling re-attaches automatically.
+- **Polling**: `setInterval` at **2000 ms** in a `useEffect` hook inside `ResearchContext`. Polls `GET /status/{jobId}`. Auto-clears interval on `done` or `error`.
+- **Lazy loading**: All workspace tabs are lazy-loaded via `React.lazy()` with a `<Suspense>` fallback for optimised initial load.
 
 ---
 
@@ -755,7 +813,7 @@ Each agent is a plain Python function `run_<agent>(state: dict) -> dict` registe
 |---|---|
 | **LLM Call** | Single call to Gemini. System prompt: `"You are an expert research planner."` Temperature: `0.0` |
 | **Prompt Strategy** | Asks for distinct facets, methodologies, and research angles. Returns raw JSON array of strings. |
-| **Output Parsing** | Strips ```` ```json ```` fences → `json.loads()` → validates is `list` → casts all elements to `str` |
+| **Output Parsing** | Strips ` ```json ` fences → `json.loads()` → validates is `list` → casts all elements to `str` |
 | **Fallback** | On any exception (LLM failure, parse error), sets `sub_queries = [original_topic]` |
 | **Input** | `state["query"]`, `state["filters"]` |
 | **Output** | `state["sub_queries"]` |
@@ -917,7 +975,7 @@ The LLM client is [`claude_client.py`](backend/clients/claude_client.py) — nam
 | **Model** | `gemini-3.6-flash` |
 | **API Interface** | `client.complete(prompt, system, max_tokens=2000, temperature=0.0) → str` |
 | **System prompt** | Concatenated into the user prompt as `"System instructions: {system}\n\n{prompt}"` (Gemini basic API workaround) |
-| **Post-processing** | Auto-strips ```` ```json ```` and ```` ``` ```` fences from responses |
+| **Post-processing** | Auto-strips ` ```json ` and ` ``` ` fences from responses |
 | **Error handling** | Any API exception → falls back to mock response |
 
 ### Mock Mode
@@ -993,19 +1051,26 @@ Activated when `GEMINI_API_KEY` is missing, set to placeholder, or on API failur
 - **SIMILAR_TOPIC threshold**: Cosine similarity ≥ 0.6 between ChromaDB embedding vectors
 - **Serialisation**: `networkx.readwrite.json_graph.node_link_data(G)` → JSON-serialisable dict
 
+### Logging (`logging_utils.py`)
+
+- **`get_job_logger(base_logger, job_id)`** — wraps a module logger with a `LoggerAdapter` that prefixes every log line with `[job=<job_id>]` for traceable pipeline execution. Falls back to `[job=-]` if `job_id` is `None`.
+
 ---
 
 ## 📡 API Route Internals
 
-### Job Lifecycle
+### Job Lifecycle & Persistence
 
-Jobs are stored in an **in-memory Python dictionary** (`backend/api/jobs.py`):
+Active jobs are tracked in an in-memory dictionary with SQLite fallback restoration (`backend/api/jobs.py`):
 
 ```python
-jobs = {}  # job_id → {"status": str, "state": dict, "error": str}
+jobs = {}  # job_id → {"status": str, "state": dict, "error": str, "mock_mode": bool, ...}
 ```
 
-**Lifecycle**: `POST /query` → creates job with `status: "pending"` → `BackgroundTasks.add_task(execute_pipeline)` → status transitions through `"running"` → `"done"` / `"error"`.
+- **Lifecycle**: `POST /query` → creates job with `status: "pending"` → `BackgroundTasks.add_task(execute_pipeline)` → status transitions through `"running"` → `"done"` / `"error"` / `"cancelled"`.
+- **Cancellation**: `POST /jobs/{job_id}/cancel` sets a cancellation flag checked cooperatively by agents at safe boundaries.
+- **SQLite Restoration (`get_or_restore_job`)**: If a job is not found in memory (e.g. after server restart or direct URL navigation), the backend attempts to restore completed session results directly from the `research_sessions` table in SQLite.
+- **LangGraph Checkpointing**: State is persisted after each node execution using SQLite-backed checkpointer (`SqliteSaver` in `backend/db/langgraph_checkpoints.db`).
 
 ### `/results/{job_id}` Serialisation
 
@@ -1030,6 +1095,53 @@ Returns `FileResponse` with:
 
 ---
 
+## 🧪 Running Tests
+
+Run the full test suite (unit + integration):
+
+```bash
+python -m pytest
+```
+
+Run only unit tests:
+
+```bash
+python -m pytest tests/unit/
+```
+
+Run only integration tests:
+
+```bash
+python -m pytest tests/integration/
+```
+
+### Test Coverage
+
+| Test File | Agent / Module Tested |
+|---|---|
+| `test_planner.py` | Sub-query decomposition |
+| `test_search.py` | arXiv + Semantic Scholar search |
+| `test_extraction.py` | Field extraction & deduplication |
+| `test_synthesis.py` | Summarization & comparison table |
+| `test_graph_gap.py` | Citation graph & gap detection |
+| `test_report.py` | PDF/DOCX report generation |
+| `test_pipeline.py` | Full end-to-end LangGraph pipeline |
+
+---
+
+## 🛡️ Offline Resilience & Demo Mode
+
+ResearchMind is designed to remain usable even without live API access:
+
+- **Local Caching**: The search agent caches all API responses under `backend/db/cache/`. Repeated queries are served from the cache instantly. Cache keys are MD5 hashes of the request parameters.
+- **Exponential Backoff**: API clients automatically retry on 429 (rate limit) and network errors with exponential backoff (up to 5 retries).
+- **Committed Fallback Dataset**: If the system is fully offline or rate-limited, it automatically falls back to:
+  - `fallback_dataset/cache/` — pre-fetched paper search results
+  - `fallback_dataset/results_attention_mechanisms.json` — a complete pre-computed pipeline result for the query *"attention mechanisms"*
+- **Fallback Embeddings**: If ChromaDB's default embedding model fails to download, the vector store falls back to hash-based 384-dimensional embeddings for similarity computation.
+
+---
+
 ## 📚 Documentation
 
 The `docs/` directory contains the following project documents:
@@ -1040,6 +1152,7 @@ The `docs/` directory contains the following project documents:
 | `SRS_ResearchMind.docx` | Software Requirements Specification |
 | `TEST_PLAN_ResearchMind.docx` | Test Plan & test case definitions |
 | `BUILD_GUIDE_ResearchMind.docx` | Build & deployment guide |
+| `ANTIGRAVITY_BUILD_PROMPT_ResearchMind.md` | Original build prompt used to scaffold the project |
 
 ---
 
@@ -1122,7 +1235,6 @@ sequenceDiagram
 | Limitation | Impact | Possible Future Improvement |
 |---|---|---|
 | **In-memory job store** | Active job status stored in memory; completed sessions auto-persisted to SQLite for authenticated users | Full persistent task queue via Redis/Celery |
-| **Authentication & Auth** | Implemented! Supports optional JWT Auth + per-user SQLite session history | Add multi-tenant RBAC and OAuth2 (Google/GitHub login) |
 | **CORS `allow_origins=["*"]`** | Insecure for production deployment | Restrict to specific frontend origin |
 | **No WebSocket** | Frontend polls every 2s instead of receiving push updates | Add WebSocket channel for real-time agent status |
 | **Sequential agent execution** | All 6 agents run in strict sequence; no parallelism within the pipeline | Use LangGraph branching for parallel Search + Extraction |
@@ -1131,6 +1243,7 @@ sequenceDiagram
 | **Embedding fallback quality** | Hash-based vectors provide random similarity, not semantic | Bundle a lightweight local embedding model |
 | **No Docker** | Manual Python venv + Node.js setup required | Add `Dockerfile` + `docker-compose.yml` |
 | **Gemini-only LLM** | Locked to Google Gemini; no provider switching | Add OpenAI / Anthropic / Ollama adapters |
+| **Hardcoded API base URL** | Frontend API base is hardcoded to `http://localhost:8000` | Use environment variable or Vite proxy |
 
 ---
 

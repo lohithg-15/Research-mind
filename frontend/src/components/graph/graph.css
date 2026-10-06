@@ -1,0 +1,39 @@
+.rm-graph-paper { background: var(--rm-accent); }
+.rm-graph-author { background: var(--rm-border-strong); }
+.rm-graph-topic { background: var(--rm-info); }
+.rm-risk-header { border-color: var(--rm-border); background: var(--rm-bg-subtle); }
+.rm-risk-critical { border-color: var(--rm-danger); background: rgba(214,69,93,.10); }
+.rm-risk-significant, .rm-risk-moderate { border-color: var(--rm-warn); background: rgba(217,139,31,.10); }
+.rm-risk-covered { border-color: var(--rm-success); background: rgba(47,158,107,.08); }
+.rm-risk-icon, .rm-risk-label { color: var(--rm-text-muted); }
+.rm-risk-critical .rm-risk-icon, .rm-risk-critical .rm-risk-label { color: var(--rm-danger); }
+.rm-risk-significant .rm-risk-icon, .rm-risk-significant .rm-risk-label, .rm-risk-moderate .rm-risk-icon, .rm-risk-moderate .rm-risk-label { color: var(--rm-warn); }
+.rm-risk-covered .rm-risk-icon, .rm-risk-covered .rm-risk-label { color: var(--rm-success); }
+.rm-meter-fill { background: var(--rm-accent); }
+.rm-meter-thumb { border-color: var(--rm-accent); }
+.rm-meter-text { color: var(--rm-accent); }
+.rm-meter-0 { width: 3%; }
+.rm-meter-10 { width: 10%; }
+.rm-meter-20 { width: 20%; }
+.rm-meter-30 { width: 30%; }
+.rm-meter-40 { width: 40%; }
+.rm-meter-50 { width: 50%; }
+.rm-meter-60 { width: 60%; }
+.rm-meter-70 { width: 70%; }
+.rm-meter-80 { width: 80%; }
+.rm-meter-90 { width: 90%; }
+.rm-meter-100 { width: 100%; }
+.rm-meter-thumb-0 { left: 1%; }
+.rm-meter-thumb-10 { left: 10%; }
+.rm-meter-thumb-20 { left: 20%; }
+.rm-meter-thumb-30 { left: 30%; }
+.rm-meter-thumb-40 { left: 40%; }
+.rm-meter-thumb-50 { left: 50%; }
+.rm-meter-thumb-60 { left: 60%; }
+.rm-meter-thumb-70 { left: 70%; }
+.rm-meter-thumb-80 { left: 80%; }
+.rm-meter-thumb-90 { left: 90%; }
+.rm-meter-thumb-100 { left: 100%; }
+.rm-graph-inspector { position: absolute; top: 16px; right: 16px; width: 320px; max-width: calc(100% - 32px); padding: 16px; border: 1px solid var(--rm-border); border-radius: var(--rm-radius-md); background: var(--rm-bg); box-shadow: var(--rm-shadow-pop); z-index: 20; }
+.rm-graph-inspector-close { position: absolute; top: 8px; right: 8px; border: 0; background: transparent; color: var(--rm-text-muted); cursor: pointer; }
+.gv2-legend-toggle { border: 0; background: transparent; color: var(--rm-text-secondary); font-weight: 700; cursor: pointer; }

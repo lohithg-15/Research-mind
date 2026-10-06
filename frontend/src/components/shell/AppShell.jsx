@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
 import TopBar from './TopBar';
 import Sidebar, { SIDEBAR_LS_KEY } from './Sidebar';
-import WorkspaceTabsBar from './WorkspaceTabsBar';
 import CommandPalette from './CommandPalette';
 import './shell.css';
 
 export default function AppShell({ children }) {
-  const { jobId, tab } = useParams();
-  const isInWorkspace = !!jobId && !!tab;
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -38,13 +34,11 @@ export default function AppShell({ children }) {
   const mainClasses = [
     'rm-app-shell-main',
     sidebarExpanded ? 'rm-app-shell-main--expanded' : '',
-    isInWorkspace ? 'rm-app-shell-main--worktabs' : '',
   ].filter(Boolean).join(' ');
 
   return (
     <>
       <TopBar onToggleMobileSidebar={() => setMobileSidebarOpen(v => !v)} />
-      {isInWorkspace && <WorkspaceTabsBar sidebarExpanded={sidebarExpanded} />}
       <Sidebar
         expanded={sidebarExpanded}
         onToggleExpanded={toggleSidebarExpanded}

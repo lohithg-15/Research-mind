@@ -1,8 +1,10 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Loader2, AlertCircle, RotateCcw } from 'lucide-react';
+import { Loader2, AlertCircle, RotateCcw, Download, Share2, Files, LayoutDashboard, Table2, GitFork, Network, MessageSquare, FileText } from 'lucide-react';
 import AppShell from '../components/shell/AppShell';
 import { useResearch } from '../context/ResearchContext';
+import Tabs from '../components/ui/Tabs';
+import './workspace.css';
 
 /* Lazy-load heavy tabs */
 const PapersTab     = lazy(() => import('./tabs/PapersTab'));
@@ -28,21 +30,26 @@ const VALID_TABS = Object.keys(TAB_COMPONENTS);
 function TabFallback() {
   return (
     <div className="panel-empty">
-      <Loader2 size={28} className="spin" style={{ color: 'var(--text-muted)' }} />
+      <Loader2 size={28} className="spin rm-workspace-muted" />
       <p className="panel-empty-title">Loading…</p>
     </div>
   );
 }
 
+const WORKSPACE_TABS = [
+  { key: 'papers', label: 'Papers', Icon: Files },
+  { key: 'overview', label: 'Overview', Icon: LayoutDashboard },
+  { key: 'comparison', label: 'Comparison', Icon: Table2 },
+  { key: 'gaps', label: 'Gaps', Icon: GitFork },
+  { key: 'graph', label: 'Graph', Icon: Network },
+  { key: 'assistant', label: 'Assistant', Icon: MessageSquare },
+  { key: 'reports', label: 'Reports', Icon: FileText },
+];
+
 export default function WorkspacePage() {
   const { jobId, tab } = useParams();
   const navigate = useNavigate();
   const { isDone, isRunning, error, restoreJob, results } = useResearch();
-
-  // Validate tab param
-  if (!VALID_TABS.includes(tab)) {
-    return <Navigate to={`/research/${jobId}/papers`} replace />;
-  }
 
   // Restore job from URL on mount (deep link / refresh)
   useEffect(() => {
@@ -56,13 +63,28 @@ export default function WorkspacePage() {
     }
   }, [isRunning, isDone, jobId, navigate]);
 
+  if (!VALID_TABS.includes(tab)) {
+    return <Navigate to={`/research/${jobId}/papers`} replace />;
+  }
+
   const TabComponent = TAB_COMPONENTS[tab];
 
   const isLoading = !isDone && !error;
 
   return (
     <AppShell>
-      <main className="workspace-main">
+      <main className="workspace-main rm-workspace">
+        <header className="rm-workspace-header">
+          <div>
+            <p className="rm-eyebrow">Research workspace</p>
+            <h1 className="rm-workspace-title">{results?.query || 'Untitled research'}</h1>
+          </div>
+          <div className="rm-workspace-actions">
+            <button type="button" className="rm-btn rm-btn-secondary rm-btn-sm"><Download size={14} /> Export</button>
+            <button type="button" className="rm-btn rm-btn-ghost rm-btn-sm"><Share2 size={14} /> Share</button>
+          </div>
+        </header>
+        <Tabs tabs={WORKSPACE_TABS} activeKey={tab} onChange={key => navigate(`/research/${jobId}/${key}`)} className="rm-workspace-tabs" />
         {/* Error state */}
         {error && (
           <div className="workspace-error">
@@ -84,7 +106,7 @@ export default function WorkspacePage() {
         {/* Loading state (restoring from deep link) */}
         {isLoading && !error && (
           <div className="panel-empty workspace-loading">
-            <Loader2 size={32} className="spin" />
+            <Loader2 size={32} className="spin rm-workspace-muted" />
             <p className="panel-empty-title">Loading research…</p>
             <p className="panel-empty-desc">Restoring your session</p>
           </div>

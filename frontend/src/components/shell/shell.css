@@ -55,39 +55,6 @@
   margin-bottom: var(--rm-space-1);
 }
 
-/* Temporary workspace tabs row under TopBar (Phase 1 only) */
-.rm-topbar-worktabs {
-  position: fixed;
-  top: var(--rm-topbar-h);
-  left: var(--rm-rail-w);
-  right: 0;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  gap: var(--rm-space-4);
-  padding: 0 var(--rm-space-5);
-  background: var(--rm-bg);
-  border-bottom: 1px solid var(--rm-border);
-  z-index: 400;
-  overflow-x: auto;
-}
-.rm-topbar-worktabs.rm-topbar-worktabs--expanded { left: var(--rm-sidebar-w); }
-.rm-topbar-worktab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: var(--rm-space-2) 0;
-  font-size: var(--rm-font-size-small);
-  font-weight: 600;
-  color: var(--rm-text-muted);
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-  transition: var(--rm-transition);
-}
-.rm-topbar-worktab:hover { color: var(--rm-text); }
-.rm-topbar-worktab.rm-topbar-worktab--active { color: var(--rm-accent); border-bottom-color: var(--rm-accent); }
-
 /* ─── Sidebar ─── */
 .rm-sidebar {
   position: fixed;

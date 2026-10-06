@@ -35,9 +35,9 @@ function PaperCard({ paper, jobId }) {
             <span className="paper-card-pdf">Full PDF</span>
           )}
         </div>
-        <h2 className="paper-card-title">
+        <button type="button" className="paper-card-title rm-paper-title-button" onClick={() => navigate(`/research/${jobId}/paper/${encodeURIComponent(paper.id || paper.arxiv_id || paper.title)}`)}>
           {paper.title || 'Untitled'}
-        </h2>
+        </button>
         {(authors || paper.venue) && (
           <p className="paper-card-authors">
             {authors}
@@ -61,7 +61,7 @@ function PaperCard({ paper, jobId }) {
 
       <div className="paper-card-actions">
         <button
-          className="btn-secondary btn-sm"
+          className="rm-btn rm-btn-secondary rm-btn-sm"
           onClick={() => navigate(`/research/${jobId}/paper/${encodeURIComponent(paper.id || paper.arxiv_id || paper.title)}`)}
           id={`view-paper-${paper.id}`}
         >
@@ -73,7 +73,7 @@ function PaperCard({ paper, jobId }) {
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost btn-sm"
+            className="rm-btn rm-btn-ghost rm-btn-sm"
             title="Open source"
           >
             <ExternalLink size={12} />
@@ -87,7 +87,7 @@ function PaperCard({ paper, jobId }) {
 
 export default function PapersTab() {
   const { jobId } = useParams();
-  const { results, papers } = useResearch();
+  const { papers } = useResearch();
 
   const [sortKey,      setSortKey]      = useState('year-desc');
   const [drawerOpen,   setDrawerOpen]   = useState(false);
@@ -132,7 +132,7 @@ export default function PapersTab() {
   }, [filtered, sortKey]);
 
   return (
-    <div className="tab-content fade-in">
+    <div className="tab-content fade-in rm-papers">
       {/* Toolbar */}
       <div className="papers-toolbar">
         <div className="papers-toolbar-left">
@@ -144,14 +144,14 @@ export default function PapersTab() {
         <div className="papers-toolbar-right">
           <input
             type="text"
-            className="papers-search"
+            className="rm-input papers-search"
             placeholder="Search papers…"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             aria-label="Search papers"
           />
           <select
-            className="filter-select sort-select"
+            className="rm-input filter-select sort-select"
             value={sortKey}
             onChange={e => setSortKey(e.target.value)}
             aria-label="Sort papers"
@@ -161,7 +161,7 @@ export default function PapersTab() {
             ))}
           </select>
           <button
-            className={`btn-secondary btn-sm ${drawerOpen ? 'active' : ''}`}
+            className={`rm-btn rm-btn-secondary rm-btn-sm ${drawerOpen ? 'active' : ''}`}
             onClick={() => setDrawerOpen(v => !v)}
             aria-expanded={drawerOpen}
             aria-controls="filter-drawer"

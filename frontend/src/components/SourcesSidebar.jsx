@@ -10,7 +10,7 @@ export default function SourcesSidebar({ papers = [], highlightedIds = [] }) {
           <span>Sources</span>
           <span className="sources-count">0</span>
         </div>
-        <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '12px' }}>
+        <div className="rm-sources-empty">
           No sources yet. Run a review to populate.
         </div>
       </aside>
@@ -41,50 +41,32 @@ export default function SourcesSidebar({ papers = [], highlightedIds = [] }) {
             className={`source-item ${isHighlighted ? 'highlighted' : ''}`}
           >
             {/* Paper icon + title */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', minWidth: 0 }}>
-              <FileText size={11} style={{ flexShrink: 0, marginTop: 2, color: 'var(--text-muted)' }} />
-              <div style={{ minWidth: 0 }}>
+            <div className="rm-source-row">
+              <FileText size={11} className="rm-source-icon" />
+              <div className="rm-source-body">
                 {linkInfo ? (
                   <a
                     href={linkInfo.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     title={paper.title || idBadge}
-                    style={{
-                      color: 'var(--text-primary)',
-                      textDecoration: 'none',
-                      fontSize: '11px',
-                      lineHeight: '1.4',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent-blue)'; e.currentTarget.style.textDecoration = 'underline'; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.textDecoration = 'none'; }}
+                    className="rm-source-title"
                   >
                     {paper.title || idBadge}
                   </a>
                 ) : (
                   <span
                     title={paper.title || idBadge}
-                    style={{
-                      fontSize: '11px',
-                      lineHeight: '1.4',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
+                    className="rm-source-title"
                   >
                     {paper.title || idBadge}
                   </span>
                 )}
 
                 {/* Year + ID row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
+                <div className="rm-source-meta">
                   <span className="source-year">{displayYear}</span>
-                  <span className="source-id" style={{ fontSize: '9px' }}>{idBadge}</span>
+                  <span className="source-id">{idBadge}</span>
                   {linkInfo && (
                     <a
                       href={linkInfo.href}
@@ -92,15 +74,7 @@ export default function SourcesSidebar({ papers = [], highlightedIds = [] }) {
                       rel="noopener noreferrer"
                       title={`Open on ${linkInfo.label}`}
                       onClick={e => e.stopPropagation()}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '2px',
-                        color: 'var(--accent-blue)',
-                        fontSize: '9px',
-                        textDecoration: 'none',
-                        opacity: 0.8,
-                      }}
+                      className="rm-source-link"
                     >
                       <ExternalLink size={9} />
                       {linkInfo.label}

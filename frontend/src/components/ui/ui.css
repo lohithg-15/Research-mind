@@ -20,7 +20,7 @@
 .rm-btn-md { height: 40px; padding: 0 var(--rm-space-4); font-size: var(--rm-font-size-body); }
 .rm-btn-lg { height: 48px; padding: 0 var(--rm-space-6); font-size: var(--rm-font-size-h3); }
 
-.rm-btn-primary { background: var(--rm-accent); color: #fff; }
+.rm-btn-primary { background: var(--rm-accent); color: var(--rm-bg); }
 .rm-btn-primary:hover:not(:disabled) { background: var(--rm-accent-hover); }
 
 .rm-btn-secondary { background: var(--rm-accent-soft); color: var(--rm-accent); }
@@ -29,8 +29,8 @@
 .rm-btn-ghost { background: transparent; color: var(--rm-text); }
 .rm-btn-ghost:hover:not(:disabled) { background: var(--rm-bg-subtle); }
 
-.rm-btn-danger { background: var(--rm-danger); color: #fff; }
-.rm-btn-danger:hover:not(:disabled) { background: #B83A4D; }
+.rm-btn-danger { background: var(--rm-danger); color: var(--rm-bg); }
+.rm-btn-danger:hover:not(:disabled) { background: var(--rm-accent-hover); }
 
 .rm-btn-icon-only { padding: 0; width: 40px; }
 .rm-btn-icon-only.rm-btn-sm { width: 32px; }
@@ -56,7 +56,7 @@
 .rm-pill.rm-pill-active {
   background: var(--rm-accent);
   border-color: var(--rm-accent);
-  color: #fff;
+  color: var(--rm-bg);
 }
 
 /* ─── Badge ─── */
@@ -145,7 +145,7 @@
   bottom: calc(100% + 8px);
   transform: translateX(-50%);
   background: var(--rm-text);
-  color: #fff;
+  color: var(--rm-bg);
   font-size: var(--rm-font-size-micro);
   padding: 4px 8px;
   border-radius: var(--rm-radius-sm);
@@ -254,7 +254,7 @@
   align-items: center;
   gap: var(--rm-space-2);
   background: var(--rm-text);
-  color: #fff;
+  color: var(--rm-bg);
   padding: var(--rm-space-3) var(--rm-space-4);
   border-radius: var(--rm-radius-sm);
   box-shadow: var(--rm-shadow-pop);
@@ -359,10 +359,11 @@
   height: 28px;
   border-radius: var(--rm-radius-sm);
   background: linear-gradient(135deg, var(--rm-accent) 0%, var(--rm-accent-hover) 100%);
-  color: #fff;
+  color: var(--rm-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   flex-shrink: 0;
 }
+

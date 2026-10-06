@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Clock, Plus, Trash2, Search, Loader2, BookOpen,
+  Plus, Trash2, Search, Loader2, BookOpen,
   Calendar, AlertCircle,
 } from 'lucide-react';
 import AppShell from '../components/shell/AppShell';
@@ -96,7 +96,7 @@ export default function HistoryPage() {
 
   return (
     <AppShell>
-      <main className="history-main">
+      <main className="rm-history-page">
         <div className="history-page-header">
           <div>
             <h1 className="history-page-title">Research History</h1>
@@ -105,7 +105,7 @@ export default function HistoryPage() {
             </p>
           </div>
           <button
-            className="btn-primary"
+            className="rm-btn rm-btn-primary rm-btn-md"
             onClick={() => navigate('/research/new')}
             id="history-new-research-btn"
           >
@@ -115,11 +115,11 @@ export default function HistoryPage() {
         </div>
 
         {/* Search */}
-        <div className="history-search-wrap" style={{ maxWidth: 400, marginBottom: 24 }}>
+        <div className="rm-history-search-wrap">
           <Search size={13} className="history-search-icon" />
           <input
             type="text"
-            className="history-search"
+            className="rm-input"
             placeholder="Search history…"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
@@ -145,11 +145,11 @@ export default function HistoryPage() {
 
         {/* Empty */}
         {!loading && sessions.length === 0 && (
-          <div className="panel-empty">
-            <BookOpen size={32} style={{ color: 'var(--text-muted)' }} />
+          <div className="rm-empty">
+            <BookOpen size={32} />
             <p className="panel-empty-title">No saved research yet</p>
             <p className="panel-empty-desc">Run a research query to save it here.</p>
-            <button className="btn-primary" onClick={() => navigate('/research/new')}>
+            <button className="rm-btn rm-btn-primary rm-btn-md" onClick={() => navigate('/research/new')}>
               <Plus size={13} />
               Start Research
             </button>

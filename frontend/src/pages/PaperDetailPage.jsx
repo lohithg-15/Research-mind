@@ -38,7 +38,7 @@ export default function PaperDetailPage() {
       <AppShell>
         <main className="paper-detail-main">
           <div className="panel-empty">
-            <BookOpen size={32} style={{ color: 'var(--text-muted)' }} />
+            <BookOpen size={32} className="rm-muted-icon" />
             <p className="panel-empty-title">Paper not found</p>
             <p className="panel-empty-desc">This paper may not be in the current research session.</p>
             <button className="btn-secondary" onClick={() => navigate(`/research/${jobId}/papers`)}>

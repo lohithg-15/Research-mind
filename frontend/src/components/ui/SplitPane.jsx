@@ -44,14 +44,14 @@ export default function SplitPane({
 
   return (
     <div className={`rm-split-pane ${className}`.trim()} ref={containerRef}>
-      <div style={{ width: leftWidth, flexShrink: 0, minWidth: 0 }}>{left}</div>
+      <div className="rm-split-left" data-width={leftWidth}>{left}</div>
       <div
         className="rm-split-pane-handle"
         onPointerDown={startDragging}
         role="separator"
         aria-orientation="vertical"
       />
-      <div style={{ flex: 1, minWidth: 0 }}>{right}</div>
+      <div className="rm-split-right">{right}</div>
     </div>
   );
 }

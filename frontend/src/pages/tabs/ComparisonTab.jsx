@@ -6,7 +6,7 @@ export default function ComparisonTab() {
   const { results } = useResearch();
 
   return (
-    <div className="tab-content fade-in" style={{ padding: '0' }}>
+    <div className="tab-content fade-in rm-comparison">
       <ComparisonTable data={results?.comparison_table} />
     </div>
   );

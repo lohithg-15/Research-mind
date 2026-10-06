@@ -128,7 +128,7 @@ export default function Sidebar({ expanded, onToggleExpanded, mobileOpen, onClos
                       className="rm-sidebar-recent-item"
                       title={session.title || session.query}
                     >
-                      <FileText size={12} style={{ marginRight: 6 }} />
+                      <FileText size={12} className="rm-icon-gap" />
                       {session.title || session.query}
                     </Link>
                   ))}

@@ -92,7 +92,7 @@ export default function GapsTab() {
     return (
       <div className="tab-content fade-in">
         <div className="panel-empty">
-          <GitFork size={32} style={{ color: 'var(--text-muted)' }} />
+          <GitFork size={32} className="rm-muted-icon" />
           <p className="panel-empty-title">No research gaps detected</p>
           <p className="panel-empty-desc">The pipeline did not identify significant gaps for this topic.</p>
         </div>

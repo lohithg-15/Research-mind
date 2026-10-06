@@ -258,7 +258,7 @@ export default function PapersTab() {
       {/* Empty state */}
       {sorted.length === 0 && (
         <div className="panel-empty">
-          <FileSearch size={32} style={{ color: 'var(--text-muted)' }} />
+          <FileSearch size={32} className="rm-muted-icon" />
           <p className="panel-empty-title">No papers match these filters</p>
           <p className="panel-empty-desc">Try adjusting or clearing the filters.</p>
         </div>

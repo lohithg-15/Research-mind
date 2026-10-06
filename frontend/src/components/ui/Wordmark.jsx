@@ -6,7 +6,7 @@ export default function Wordmark({ iconOnly = false, size = 18, className = '' }
     return <span className="rm-wordmark-icon" aria-label="ResearchMind">R</span>;
   }
   return (
-    <span className={`rm-wordmark ${className}`.trim()} style={{ fontSize: size }}>
+    <span className={`rm-wordmark rm-wordmark-${size} ${className}`.trim()}>
       RESEARCHMIND
     </span>
   );

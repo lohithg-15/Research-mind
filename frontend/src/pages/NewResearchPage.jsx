@@ -119,7 +119,7 @@ export default function NewResearchPage() {
           <div className="rm-newresearch-toolbar">
             <Button variant="ghost" size="sm" icon={<Plus size={14} />} aria-label="Add attachment" />
 
-            <div style={{ position: 'relative' }} ref={filtersRef}>
+            <div className="rm-relative" ref={filtersRef}>
               <Button
                 variant="ghost"
                 size="sm"

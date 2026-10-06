@@ -23,8 +23,8 @@ export default function QAAssistant({ jobId, isDone }) {
 
   if (!isDone) {
     return (
-      <div className="panel-empty" style={{ minHeight: '350px' }}>
-        <AlertCircle size={32} style={{ color: 'var(--gray-700)' }} />
+      <div className="rm-empty rm-assistant-empty">
+        <AlertCircle size={32} />
         <p className="panel-empty-title">Assistant Unavailable</p>
         <p className="panel-empty-desc">
           The literature review must complete successfully before you can query the papers. Please submit a query and wait for it to finish.
@@ -100,7 +100,7 @@ export default function QAAssistant({ jobId, isDone }) {
       {messages.length === 0 && (
         <div className="qa-welcome">
           <div className="qa-welcome-badge">
-            <Sparkles size={11} style={{ marginRight: 5 }} />
+            <Sparkles size={11} className="rm-icon-gap" />
             ResearchMind Co-Pilot
           </div>
           <h2 className="qa-welcome-title">Ask about this research space</h2>
@@ -126,14 +126,14 @@ export default function QAAssistant({ jobId, isDone }) {
       {messages.length > 0 && (
         <div className="qa-messages-list">
           {messages.map((msg, idx) => (
-            <div key={idx} className={`qa-message-row ${msg.role}`}>
+            <div key={idx} className={`rm-chat-row rm-chat-${msg.role}`}>
               <div className="qa-message-avatar">
                 {msg.role === 'user' ? 'U' : 'AI'}
               </div>
               <div className="qa-message-bubble">
                 <div className="qa-message-content">
                   {msg.content.split('\n').map((para, pIdx) => (
-                    <p key={pIdx} style={{ marginBottom: para ? '8px' : '0px' }}>
+                    <p key={pIdx} className={para ? 'rm-chat-paragraph' : 'rm-chat-paragraph rm-chat-paragraph-empty'}>
                       {para}
                     </p>
                   ))}
@@ -168,7 +168,7 @@ export default function QAAssistant({ jobId, isDone }) {
               <div className="qa-message-avatar">AI</div>
               <div className="qa-message-bubble">
                 <div className="qa-loading-loader">
-                  <Loader2 size={16} className="spin" style={{ marginRight: 8, color: 'var(--gray-700)' }} />
+                  <Loader2 size={16} className="spin" />
                   Assistant is reading literature and synthesizing response...
                 </div>
               </div>
@@ -177,7 +177,7 @@ export default function QAAssistant({ jobId, isDone }) {
 
           {error && (
             <div className="qa-error-banner">
-              <AlertCircle size={14} style={{ marginRight: 6 }} />
+              <AlertCircle size={14} className="rm-icon-gap" />
               <span>{error}</span>
             </div>
           )}

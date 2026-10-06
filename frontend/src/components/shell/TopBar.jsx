@@ -62,7 +62,7 @@ export default function TopBar({ onToggleMobileSidebar }) {
             <button className="rm-btn rm-btn-ghost rm-btn-icon-only rm-btn-sm" aria-label="Notifications">
               <Bell size={16} />
             </button>
-            <div style={{ position: 'relative' }} ref={userMenuRef}>
+            <div className="rm-relative" ref={userMenuRef}>
               <button
                 className="rm-topbar-avatar"
                 onClick={() => setUserMenuOpen(v => !v)}

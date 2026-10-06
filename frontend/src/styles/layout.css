@@ -1,0 +1,62 @@
+﻿/* ResearchMind layout.css - app shell grid */
+.app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+.app-topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-4);
+  z-index: var(--z-topbar);
+}
+.app-body {
+  display: flex;
+  padding-top: var(--topbar-h);
+  min-height: calc(100vh - var(--topbar-h));
+}
+.app-sidebar {
+  position: fixed;
+  top: var(--topbar-h);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  z-index: var(--z-sidebar);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition-md);
+  overflow: hidden;
+}
+.app-sidebar.collapsed { width: var(--sidebar-w-col); }
+.app-main {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  transition: margin-left var(--transition-md);
+  min-width: 0;
+}
+.app-main.sidebar-collapsed { margin-left: var(--sidebar-w-col); }
+.page-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.page-content { flex: 1; width: 100%; max-width: var(--content-max-w); margin: 0 auto; padding: var(--sp-6); }
+.page-content--full { max-width: 100%; padding: 0; }
+
+/* Workspace layout */
+.workspace-shell { display: flex; flex-direction: column; height: calc(100vh - var(--topbar-h)); overflow: hidden; }
+.workspace-header { flex-shrink: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 var(--sp-6); }
+.workspace-tabs-bar { display: flex; align-items: center; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.workspace-tabs-bar::-webkit-scrollbar { display: none; }
+.workspace-body { flex: 1; overflow: auto; min-height: 0; }
+
+@media (max-width: 767px) {
+  .app-sidebar { transform: translateX(-100%); }
+  .app-sidebar.mobile-open { transform: translateX(0); width: var(--sidebar-w); }
+  .app-main { margin-left: 0 !important; }
+}

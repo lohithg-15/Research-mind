@@ -1,0 +1,24 @@
+/* ════════════════════════════════════════════
+   ResearchMind — New Design System Entry Point
+   This file is imported from main.jsx BEFORE
+   the legacy index.css.
+   Phase 5: legacy index.css will be deleted.
+════════════════════════════════════════════ */
+
+/* 1. Design tokens (CSS variables, fonts) */
+@import './tokens.css';
+
+/* 2. Base reset + typography */
+@import './base.css';
+
+/* 3. Layout grid */
+@import './layout.css';
+
+/* 4. Shared component styles */
+@import './components.css';
+
+/* 5. App shell (top bar + sidebar) */
+@import './appshell.css';
+
+/* 6. Workspace */
+@import './workspace.css';

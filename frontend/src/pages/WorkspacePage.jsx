@@ -1,8 +1,15 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Loader2, AlertCircle, RotateCcw } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
+import {
+  Loader2, AlertCircle, RotateCcw,
+  Files, LayoutDashboard, Table2, GitFork,
+  Network, MessageSquare, FileText,
+} from 'lucide-react';
+import AppShell from '../components/AppShell';
+import Spinner from '../components/ui/Spinner';
+import EmptyState from '../components/ui/EmptyState';
 import { useResearch } from '../context/ResearchContext';
+import '../styles/workspace.css';
 
 /* Lazy-load heavy tabs */
 const PapersTab     = lazy(() => import('./tabs/PapersTab'));
@@ -12,6 +19,16 @@ const GapsTab       = lazy(() => import('./tabs/GapsTab'));
 const GraphTab      = lazy(() => import('./tabs/GraphTab'));
 const AssistantTab  = lazy(() => import('./tabs/AssistantTab'));
 const ReportsTab    = lazy(() => import('./tabs/ReportsTab'));
+
+const WORKSPACE_TABS = [
+  { key: 'papers',     label: 'Papers',     Icon: Files           },
+  { key: 'overview',   label: 'Overview',   Icon: LayoutDashboard },
+  { key: 'comparison', label: 'Comparison', Icon: Table2          },
+  { key: 'gaps',       label: 'Gaps',       Icon: GitFork         },
+  { key: 'graph',      label: 'Graph',      Icon: Network         },
+  { key: 'assistant',  label: 'Assistant',  Icon: MessageSquare   },
+  { key: 'reports',    label: 'Reports',    Icon: FileText        },
+];
 
 const TAB_COMPONENTS = {
   papers:     PapersTab,
@@ -27,9 +44,9 @@ const VALID_TABS = Object.keys(TAB_COMPONENTS);
 
 function TabFallback() {
   return (
-    <div className="panel-empty">
-      <Loader2 size={28} className="spin" style={{ color: 'var(--text-muted)' }} />
-      <p className="panel-empty-title">Loading…</p>
+    <div className="workspace-loading">
+      <Spinner size="lg" />
+      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>Loading…</p>
     </div>
   );
 }
@@ -37,7 +54,7 @@ function TabFallback() {
 export default function WorkspacePage() {
   const { jobId, tab } = useParams();
   const navigate = useNavigate();
-  const { isDone, isRunning, error, restoreJob, results } = useResearch();
+  const { isDone, isRunning, error, restoreJob, results, query } = useResearch();
 
   // Validate tab param
   if (!VALID_TABS.includes(tab)) {
@@ -57,24 +74,50 @@ export default function WorkspacePage() {
   }, [isRunning, isDone, jobId, navigate]);
 
   const TabComponent = TAB_COMPONENTS[tab];
-
   const isLoading = !isDone && !error;
 
   return (
-    <div className="page-shell">
-      <Navbar />
+    <AppShell>
+      {/* Workspace header strip */}
+      <div style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
+        {/* Title row */}
+        <div className="workspace-header-row">
+          <p className="workspace-query-title" title={query || ''}>
+            {query || 'Research Workspace'}
+          </p>
+          <div className="workspace-header-actions">
+            {/* Export and share buttons will be added in Phase 3 */}
+          </div>
+        </div>
 
-      <main className="workspace-main">
+        {/* Tab bar */}
+        <nav className="workspace-tab-strip" aria-label="Workspace tabs">
+          {WORKSPACE_TABS.map(({ key, label, Icon }) => (
+            <Link
+              key={key}
+              to={`/research/${jobId}/${key}`}
+              className={['workspace-tab-btn', tab === key && 'active'].filter(Boolean).join(' ')}
+              aria-current={tab === key ? 'page' : undefined}
+            >
+              <Icon size={13} aria-hidden="true" />
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      {/* Content area */}
+      <div style={{ minHeight: 'calc(100vh - var(--topbar-h) - 97px)' }}>
         {/* Error state */}
         {error && (
           <div className="workspace-error">
-            <AlertCircle size={20} />
-            <div>
+            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
               <p className="workspace-error-title">Error loading results</p>
               <p className="workspace-error-msg">{error}</p>
             </div>
             <button
-              className="btn-secondary"
+              className="btn btn-secondary btn-sm"
               onClick={() => restoreJob(jobId)}
             >
               <RotateCcw size={13} />
@@ -83,12 +126,16 @@ export default function WorkspacePage() {
           </div>
         )}
 
-        {/* Loading state (restoring from deep link) */}
+        {/* Loading state */}
         {isLoading && !error && (
-          <div className="panel-empty workspace-loading">
-            <Loader2 size={32} className="spin" />
-            <p className="panel-empty-title">Loading research…</p>
-            <p className="panel-empty-desc">Restoring your session</p>
+          <div className="workspace-loading">
+            <Spinner size="lg" />
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', fontWeight: 500 }}>
+              Loading research…
+            </p>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-disabled)' }}>
+              Restoring your session
+            </p>
           </div>
         )}
 
@@ -98,7 +145,7 @@ export default function WorkspacePage() {
             <TabComponent />
           </Suspense>
         )}
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

@@ -1,7 +1,12 @@
+/* Phase 1 patch: Updated Navbar to use new teal tokens.
+   This component is replaced by AppShell in Phase 2-3,
+   but still used by LandingPage, LoginPage, SignupPage,
+   NewResearchPage, ProgressPage until their Phase 2 rewrite. */
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
-  BookOpen, User, LogOut, Clock, Plus, Menu, X,
+  Plus, Clock, Menu, X,
   LayoutDashboard, Table2, GitFork, Network,
   MessageSquare, FileText, Files,
 } from 'lucide-react';
@@ -9,13 +14,13 @@ import { useAuth } from '../context/AuthContext';
 import { useResearch } from '../context/ResearchContext';
 
 const WORKSPACE_TABS = [
-  { key: 'papers',     label: 'Papers',     Icon: Files },
+  { key: 'papers',     label: 'Papers',     Icon: Files           },
   { key: 'overview',   label: 'Overview',   Icon: LayoutDashboard },
-  { key: 'comparison', label: 'Comparison', Icon: Table2 },
-  { key: 'gaps',       label: 'Gaps',       Icon: GitFork },
-  { key: 'graph',      label: 'Graph',      Icon: Network },
-  { key: 'assistant',  label: 'Assistant',  Icon: MessageSquare },
-  { key: 'reports',    label: 'Reports',    Icon: FileText },
+  { key: 'comparison', label: 'Comparison', Icon: Table2          },
+  { key: 'gaps',       label: 'Gaps',       Icon: GitFork         },
+  { key: 'graph',      label: 'Graph',      Icon: Network         },
+  { key: 'assistant',  label: 'Assistant',  Icon: MessageSquare   },
+  { key: 'reports',    label: 'Reports',    Icon: FileText        },
 ];
 
 export default function Navbar() {
@@ -28,10 +33,9 @@ export default function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
 
-  const jobId = params.jobId;
-  const currentTab = params.tab;
+  const jobId       = params.jobId;
+  const currentTab  = params.tab;
   const isInWorkspace = !!jobId && !!currentTab;
-  const isOnProgress  = location.pathname.endsWith('/progress');
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -40,48 +44,53 @@ export default function Navbar() {
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
-    setUserMenuOpen(false);
-    setMenuOpen(false);
+    logout(); navigate('/'); setUserMenuOpen(false); setMenuOpen(false);
   };
-
   const handleNewResearch = () => {
-    clearResearch();
-    navigate('/research/new');
-    setMenuOpen(false);
+    clearResearch(); navigate('/research/new'); setMenuOpen(false);
   };
-
   const userInitial = user?.email ? user.email[0].toUpperCase() : '?';
 
   return (
-    <header className="navbar">
-      <div className="navbar-inner">
-        {/* Logo */}
-        <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
-          <div className="navbar-logo-icon">
-            <BookOpen size={15} color="#fff" />
-          </div>
-          <span className="navbar-brand">ResearchMind</span>
+    <header
+      style={{
+        position: 'sticky', top: 0, zIndex: 'var(--z-topbar)',
+        background: 'var(--bg)', borderBottom: '1px solid var(--border)',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex', alignItems: 'center', gap: 'var(--sp-3)',
+          padding: '0 var(--sp-6)', height: 'var(--topbar-h)',
+          maxWidth: '100%',
+        }}
+      >
+        {/* Wordmark */}
+        <Link
+          to="/"
+          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
+          onClick={() => setMenuOpen(false)}
+        >
+          <span className="topbar-brand">ResearchMind</span>
         </Link>
 
-        {/* Desktop workspace tabs (only inside a job) */}
+        {/* Workspace tabs (desktop) */}
         {isInWorkspace && (
-          <nav className="navbar-tabs" aria-label="Workspace tabs">
+          <nav
+            style={{ display: 'flex', alignItems: 'stretch', gap: 0, flex: 1, overflow: 'hidden' }}
+            aria-label="Workspace tabs"
+          >
             {WORKSPACE_TABS.map(({ key, label, Icon }) => (
               <Link
                 key={key}
                 to={`/research/${jobId}/${key}`}
-                className={`navbar-tab ${currentTab === key ? 'active' : ''}`}
+                className={['workspace-tab-btn', currentTab === key && 'active'].filter(Boolean).join(' ')}
                 aria-current={currentTab === key ? 'page' : undefined}
+                style={{ textDecoration: 'none' }}
               >
                 <Icon size={13} />
                 {label}
@@ -90,49 +99,39 @@ export default function Navbar() {
           </nav>
         )}
 
-        {/* Spacer */}
-        <div className="navbar-spacer" />
+        <div style={{ flex: 1 }} />
 
         {/* Desktop right cluster */}
-        <div className="navbar-right desktop-only">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)' }}>
           <button
-            className="navbar-btn navbar-btn-outline"
+            className="btn btn-secondary btn-sm"
             onClick={handleNewResearch}
-            title="Start a new research session"
           >
             <Plus size={13} />
             New Research
           </button>
 
           {isAuthenticated && (
-            <Link to="/history" className="navbar-btn navbar-btn-ghost">
+            <Link to="/history" className="btn btn-ghost btn-sm">
               <Clock size={13} />
               History
             </Link>
           )}
 
           {isAuthenticated ? (
-            <div
-              className="user-menu-wrap"
-              ref={userMenuRef}
-            >
+            <div style={{ position: 'relative' }} ref={userMenuRef}>
               <button
-                className="user-avatar"
+                className="topbar-avatar"
                 onClick={() => setUserMenuOpen(v => !v)}
-                title={user?.email}
                 aria-label="User menu"
+                aria-expanded={userMenuOpen}
               >
                 {userInitial}
               </button>
               {userMenuOpen && (
                 <div className="user-dropdown">
                   <div className="user-dropdown-email">{user?.email}</div>
-                  <div className="user-dropdown-divider" />
-                  <button
-                    className="user-dropdown-item"
-                    onClick={handleLogout}
-                  >
-                    <LogOut size={13} />
+                  <button className="user-dropdown-item danger" onClick={handleLogout}>
                     Sign out
                   </button>
                 </div>
@@ -140,71 +139,44 @@ export default function Navbar() {
             </div>
           ) : (
             <>
-              <Link to="/login"  className="navbar-btn navbar-btn-ghost">Sign in</Link>
-              <Link to="/signup" className="navbar-btn navbar-btn-primary">Sign up</Link>
+              <Link to="/login"  className="btn btn-ghost btn-sm">Sign in</Link>
+              <Link to="/signup" className="btn btn-primary btn-sm">Sign up</Link>
             </>
           )}
-        </div>
 
-        {/* Mobile hamburger */}
-        <button
-          className="navbar-hamburger mobile-only"
-          onClick={() => setMenuOpen(v => !v)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          {/* Mobile hamburger */}
+          <button
+            style={{ display: 'none' }}
+            className="btn btn-icon"
+            onClick={() => setMenuOpen(v => !v)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile workspace tabs row */}
+      {/* Mobile workspace tabs */}
       {isInWorkspace && (
-        <nav className="navbar-mobile-tabs mobile-only" aria-label="Workspace tabs">
+        <nav
+          style={{
+            display: 'flex', overflowX: 'auto', borderBottom: '1px solid var(--border)',
+            padding: '0 var(--sp-4)', scrollbarWidth: 'none',
+          }}
+          aria-label="Workspace tabs mobile"
+        >
           {WORKSPACE_TABS.map(({ key, label, Icon }) => (
             <Link
               key={key}
               to={`/research/${jobId}/${key}`}
-              className={`navbar-mobile-tab ${currentTab === key ? 'active' : ''}`}
+              className={['workspace-tab-btn', currentTab === key && 'active'].filter(Boolean).join(' ')}
+              style={{ textDecoration: 'none', fontSize: 'var(--text-xs)' }}
             >
               <Icon size={12} />
               <span>{label}</span>
             </Link>
           ))}
         </nav>
-      )}
-
-      {/* Mobile slide-out menu */}
-      {menuOpen && (
-        <div className="navbar-mobile-menu mobile-only">
-          <button
-            className="navbar-btn navbar-btn-outline"
-            onClick={handleNewResearch}
-          >
-            <Plus size={13} />
-            New Research
-          </button>
-          {isAuthenticated && (
-            <Link to="/history" className="navbar-btn navbar-btn-ghost" onClick={() => setMenuOpen(false)}>
-              <Clock size={13} />
-              History
-            </Link>
-          )}
-          <div className="navbar-mobile-divider" />
-          {isAuthenticated ? (
-            <>
-              <div className="navbar-mobile-email">{user?.email}</div>
-              <button className="navbar-btn navbar-btn-ghost" onClick={handleLogout}>
-                <LogOut size={13} />
-                Sign out
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login"  className="navbar-btn navbar-btn-ghost"   onClick={() => setMenuOpen(false)}>Sign in</Link>
-              <Link to="/signup" className="navbar-btn navbar-btn-primary"  onClick={() => setMenuOpen(false)}>Sign up</Link>
-            </>
-          )}
-        </div>
       )}
     </header>
   );

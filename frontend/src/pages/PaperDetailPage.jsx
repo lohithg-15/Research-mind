@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, BookOpen, Users, Calendar, Hash, Tag } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import AppShell from '../components/shell/AppShell';
 import { useResearch } from '../context/ResearchContext';
 import { getPaperLink } from '../utils/paperLinks';
 
@@ -35,8 +35,7 @@ export default function PaperDetailPage() {
 
   if (!paper) {
     return (
-      <div className="page-shell">
-        <Navbar />
+      <AppShell>
         <main className="paper-detail-main">
           <div className="panel-empty">
             <BookOpen size={32} style={{ color: 'var(--text-muted)' }} />
@@ -48,13 +47,12 @@ export default function PaperDetailPage() {
             </button>
           </div>
         </main>
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="page-shell">
-      <Navbar />
+    <AppShell>
       <main className="paper-detail-main">
         {/* Back */}
         <button
@@ -163,6 +161,6 @@ export default function PaperDetailPage() {
           </div>
         </article>
       </main>
-    </div>
+    </AppShell>
   );
 }

@@ -1,0 +1,44 @@
+.rm-queryform-title {
+  display: flex;
+  align-items: center;
+  gap: var(--rm-space-2);
+  font-size: var(--rm-font-size-h2);
+  margin: 0 0 var(--rm-space-4);
+  color: var(--rm-text);
+}
+.rm-queryform-row {
+  display: flex;
+  gap: var(--rm-space-3);
+  flex-wrap: wrap;
+}
+.rm-queryform-row .rm-input { flex: 1; min-width: 260px; }
+
+.rm-queryform-filters-toggle { margin-top: var(--rm-space-3); }
+
+.rm-queryform-filters {
+  margin-top: var(--rm-space-4);
+  padding: var(--rm-space-4);
+  background: var(--rm-bg-subtle);
+  border-radius: var(--rm-radius-sm);
+  display: flex;
+  gap: var(--rm-space-5);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.rm-queryform-filter-field {
+  display: flex;
+  align-items: center;
+  gap: var(--rm-space-2);
+}
+.rm-queryform-filter-icon { color: var(--rm-text-muted); }
+.rm-queryform-filter-label { font-size: var(--rm-font-size-small); color: var(--rm-text-secondary); }
+.rm-queryform-year-input { width: 80px; }
+
+.rm-queryform-error {
+  margin-top: var(--rm-space-3);
+  padding: var(--rm-space-2) var(--rm-space-3);
+  background: rgba(214, 69, 93, 0.1);
+  border-radius: var(--rm-radius-sm);
+  color: var(--rm-danger);
+  font-size: var(--rm-font-size-small);
+}

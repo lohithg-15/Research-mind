@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Search, Calendar, Filter } from 'lucide-react';
+import Card from './ui/Card';
+import Button from './ui/Button';
+import Input from './ui/Input';
+import './QueryForm.css';
 
 export default function QueryForm({ onJobSubmitted, isLoading }) {
   const [query, setQuery] = useState('');
@@ -42,62 +46,55 @@ export default function QueryForm({ onJobSubmitted, isLoading }) {
   };
 
   return (
-    <div className="glass-card">
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Search size={20} className="animate-pulse-glow" style={{ color: 'var(--color-primary)' }} />
+    <Card className="rm-queryform">
+      <h2 className="rm-queryform-title">
+        <Search size={18} />
         Discover Literature Gaps
       </h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: '260px', position: 'relative' }}>
-            <input
-              type="text"
-              className="premium-input"
-              placeholder="e.g. transformers in NLP, quantum computing error correction..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              disabled={isLoading}
-              style={{ paddingRight: '40px' }}
-            />
-          </div>
-          <button type="submit" className="premium-btn" disabled={isLoading}>
-            {isLoading ? 'Processing...' : 'Analyze Topic'}
-          </button>
+        <div className="rm-queryform-row">
+          <Input
+            type="text"
+            placeholder="e.g. transformers in NLP, quantum computing error correction..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            disabled={isLoading}
+          />
+          <Button type="submit" loading={isLoading}>
+            {isLoading ? 'Processing…' : 'Analyze topic'}
+          </Button>
         </div>
 
-        <div style={{ marginTop: '12px' }}>
-          <button
-            type="button"
-            className="premium-btn premium-btn-secondary"
-            onClick={() => setShowFilters(!showFilters)}
-            style={{ padding: '8px 16px', fontSize: '12px' }}
-          >
-            <Filter size={14} />
-            {showFilters ? 'Hide Filters' : 'Show Year Range'}
-          </button>
-        </div>
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          icon={<Filter size={14} />}
+          className="rm-queryform-filters-toggle"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          {showFilters ? 'Hide filters' : 'Show year range'}
+        </Button>
 
         {showFilters && (
-          <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Calendar size={16} style={{ color: 'var(--text-muted)' }} />
-              <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>From Year:</span>
-              <input
+          <div className="rm-queryform-filters">
+            <div className="rm-queryform-filter-field">
+              <Calendar size={14} className="rm-queryform-filter-icon" />
+              <span className="rm-queryform-filter-label">From year:</span>
+              <Input
                 type="number"
-                className="premium-input"
-                style={{ width: '80px', padding: '6px' }}
+                className="rm-queryform-year-input"
                 value={yearMin}
                 onChange={(e) => setYearMin(e.target.value)}
                 min="1900"
                 max={yearMax}
               />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>To Year:</span>
-              <input
+            <div className="rm-queryform-filter-field">
+              <span className="rm-queryform-filter-label">To year:</span>
+              <Input
                 type="number"
-                className="premium-input"
-                style={{ width: '80px', padding: '6px' }}
+                className="rm-queryform-year-input"
                 value={yearMax}
                 onChange={(e) => setYearMax(e.target.value)}
                 min={yearMin}
@@ -108,11 +105,11 @@ export default function QueryForm({ onJobSubmitted, isLoading }) {
         )}
 
         {error && (
-          <div style={{ marginTop: '12px', padding: '10px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '6px', color: 'var(--color-danger)', fontSize: '13px' }}>
+          <div className="rm-queryform-error" role="alert">
             {error}
           </div>
         )}
       </form>
-    </div>
+    </Card>
   );
 }

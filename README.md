@@ -1,1268 +1,278 @@
 # 🧠 ResearchMind
 
-> **Agentic AI Literature Review & Research Gap Discovery**
+**Agentic literature review and research-gap discovery.**
 
-ResearchMind is an agentic AI system that automates systematic academic literature reviews. It builds a **citation and topic-similarity network** from live arXiv/Semantic Scholar data, identifies **research gaps** (areas with below-median citation density), and presents a fully inspectable citation subgraph behind every finding — ensuring transparency and auditability at every step.
+Give ResearchMind a topic. It searches arXiv and Semantic Scholar, reads the papers, extracts structured facts from each one, builds a graph of how the papers relate, and flags clusters of work that look under-connected and under-cited. Every flagged gap ships with the exact subgraph that produced it, so you can inspect the evidence instead of trusting a label.
+
+> New here? Go straight to **[SETUP.md](SETUP.md)** to run it locally.
 
 ---
 
-## ✨ Key Features
+## Contents
 
-| Feature | Description |
+- [What it does](#what-it-does)
+- [How it works](#how-it-works)
+- [How gaps are detected](#how-gaps-are-detected)
+- [Tech stack](#tech-stack)
+- [Project structure](#project-structure)
+- [API reference](#api-reference)
+- [Data models](#data-models)
+- [Frontend](#frontend)
+- [Resilience and mock mode](#resilience-and-mock-mode)
+- [Testing](#testing)
+- [Known limitations](#known-limitations)
+
+---
+
+## What it does
+
+| Capability | Details |
 |---|---|
-| 🤖 **6-Agent LangGraph Pipeline** | Planner → Search → Extraction → Synthesis → Graph/Gap → Report |
-| 🔍 **Multi-source Search** | Queries arXiv and Semantic Scholar in parallel |
-| 🕸️ **Citation Graph Analysis** | NetworkX MultiDiGraph with gap detection via citation density |
-| 📊 **Multi-Page SPA** | Vite 8 + React 19 + React Router 6 with glassmorphic dark-mode styling |
-| 📄 **Export Reports** | One-click PDF (ReportLab) and DOCX (python-docx) export |
-| 💬 **QA Research Assistant** | Chat-based Q&A over collected papers (similar to Elicit) |
-| 🛡️ **Offline Resilience** | Committed fallback dataset + local file-based cache |
-| 🧪 **Mock Mode** | Runs fully without API keys using simulated Gemini responses |
-| 🔐 **JWT User Authentication** | Dedicated Login & Signup pages with JWT tokens & 7-day session persistence |
-| 📜 **Research History** | Full-page history view; auto-saves research sessions to SQLite DB for logged-in users |
-| 🔁 **Session Persistence** | Browser localStorage saves active progress across page reloads |
-| 🧭 **URL-Based Routing** | Deep-linkable pages — every research tab, paper, and progress view has its own URL |
-| 📱 **Responsive Design** | Mobile-friendly navbar with hamburger menu and scrollable tab bar |
+| **Multi-source search** | Queries arXiv and Semantic Scholar in parallel, then deduplicates by DOI, arXiv ID and title similarity. |
+| **Grounded extraction** | For each paper, extracts *method, dataset, key metric, limitation*. Reads the full PDF when available, falls back to the abstract. Each record carries a verification status. |
+| **Source-attributed summaries** | Three-sentence summaries where each sentence is tagged `[Source: Method]`, `[Source: Dataset]`, etc. |
+| **Comparison table** | One row per paper with the extracted fields and a verification badge. |
+| **Graph + gap detection** | Paper, author and topic graph (NetworkX). Gaps are scored statistically against a bootstrap null, and each carries a `subgraph_snapshot`. |
+| **Interactive graph view** | Cytoscape.js viewer in the browser. |
+| **Q&A assistant** | Ask questions about the collected papers, by paper number, title, author or topic. |
+| **Report export** | LLM-written introduction, thematic synthesis and gap narratives, exported as **PDF** and **DOCX**. |
+| **Accounts and history** | Optional JWT login. Signed-in users get their sessions saved to SQLite and can reopen them later. |
+| **Cancel and resume** | Jobs can be cancelled cooperatively via the API. LangGraph checkpoints every step to SQLite so a run can be resumed. |
+| **Mock mode** | Runs end to end with no LLM key, using deterministic simulated responses. |
 
 ---
 
-## 🏗️ Architecture
+## How it works
 
-### Agent Pipeline (LangGraph)
+A single LangGraph `StateGraph` runs six agents in a fixed sequence, all sharing one `PipelineState` dictionary.
 
 ```
-User Query
-    │
-    ▼
-┌─────────┐    ┌────────┐    ┌────────────┐    ┌───────────┐    ┌───────────┐    ┌────────┐
-│ Planner │───▶│ Search │───▶│ Extraction │───▶│ Synthesis │───▶│ Graph/Gap │───▶│ Report │
-└─────────┘    └────────┘    └────────────┘    └───────────┘    └───────────┘    └────────┘
- Sub-queries   arXiv +        Field records     Summaries +       NetworkX +       PDF/DOCX
- & filters     Semantic       & metadata        Comparison        Gap claims       Draft
-               Scholar                          table
+ Query ─▶ Planner ─▶ Search ─▶ Extraction ─▶ Synthesis ─▶ Graph/Gap ─▶ Report
+          │           │          │              │             │             │
+          sub-queries papers     per-paper      summaries +   NetworkX      markdown +
+          (2–4)       + vectors  fields +       comparison    graph + gap   PDF + DOCX
+                      (Chroma)   verification   table         claims
 ```
 
-### Tech Stack
+| # | Agent | File | What it does |
+|---|---|---|---|
+| 1 | **Planner** | `agents/planner.py` | Asks the LLM to split the topic into 2–4 specific sub-queries. Falls back to `[topic]` on any failure. |
+| 2 | **Search** | `agents/search.py` | Runs every sub-query against arXiv and Semantic Scholar (15 results each, up to 6 threads). Applies the year filter, merges duplicates, and stores title + abstract embeddings in ChromaDB. |
+| 3 | **Extraction** | `agents/extraction.py` | Downloads each PDF, extracts text with PyMuPDF, and sends the first 12,000 characters to the LLM along with a request for supporting quotes. Quotes are fuzzy-matched against the source text. Papers without a usable PDF use an abstract-only prompt. If the LLM fails, a regex heuristic fills the fields. Up to 8 papers in parallel. |
+| 4 | **Synthesis** | `agents/synthesis.py` | Writes a source-attributed summary per paper and assembles the comparison table. Up to 8 in parallel. |
+| 5 | **Graph/Gap** | `agents/graph_gap.py` | Builds the graph, clusters papers into 3–5 topics with the LLM (keyword fallback if that fails), and scores each cluster for gap-likeness. **Needs at least 15 papers**, otherwise it is skipped and no gaps or graph are returned. |
+| 6 | **Report** | `agents/report.py` | Generates the introduction, thematic synthesis and per-gap narratives, then writes a Markdown draft plus PDF (ReportLab) and DOCX (python-docx) files to `backend/db/exports/`. |
+
+Cancellation is cooperative. The flag is checked between agents and between per-paper tasks. It does not interrupt an LLM or network call already in flight.
+
+### Pipeline state
+
+| Field | Written by | Description |
+|---|---|---|
+| `query`, `filters` | API | Topic and filters (`year_range`, plus `venue_type` / `keywords` from the UI) |
+| `sub_queries` | Planner | 2–4 search strings |
+| `papers` | Search | Deduplicated `PaperMeta` list |
+| `extracted_fields` | Extraction | `FieldRecord` per paper |
+| `summaries` | Synthesis | `Summary` per paper |
+| `comparison_table` | Synthesis | Flat rows for the UI |
+| `graph_ref` | Graph/Gap | Graph as node-link JSON (`null` if under 15 papers) |
+| `gap_claims` | Graph/Gap | `GapClaim` list |
+| `report_draft` | Report | `text`, `synthesis_text`, `introduction_text`, `pdf_path`, `docx_path` |
+| `agent_status` | All | `pending` → `running` → `done` / `error` / `cancelled`, per agent |
+
+---
+
+## How gaps are detected
+
+The gap logic lives in `backend/agents/graph_gap.py`.
+
+**Graph.** `GraphStore` builds a `MultiDiGraph` with:
+
+- Nodes: `Paper`, `Author`, `Topic`
+- Edges: `AUTHORED_BY`, `CO_AUTHORED_WITH`, `CITES` (only between papers in the corpus), `SIMILAR_TOPIC` (cosine similarity ≥ 0.6 on ChromaDB embeddings), and `BELONGS_TO` (paper → topic cluster)
+
+**Scoring.** For each topic cluster:
+
+- **Pace** is the number of in-corpus `CITES` edges pointing at the cluster's papers, divided by the sum of those papers' ages in years. This is an age-adjusted citation rate.
+- **Isolation** is the weakest bridge to any other cluster: `SIMILAR_TOPIC` edges between the two clusters, divided by `(within_A + within_B + 1)`.
+- **Gap score** is `normalize(isolation) − normalize(pace)`. A high score means low citation pace and weak connection to the rest of the field.
+
+**Significance.** Paper IDs are shuffled across clusters 100 times (preserving cluster sizes) to build a null distribution. A cluster is flagged only if its score is at or above the **90th percentile** of that null.
+
+**Evidence.** Each `GapClaim` includes `subgraph_snapshot`, the induced subgraph of the cluster's papers, their authors and the topic node, so the claim can be audited.
+
+**Honesty flags.** If the embedding model could not load, similarity edges come from a hash-based fallback and the gap is marked `signal_degraded` with a warning in its description. If the whole corpus has near-zero citation pace, the description says the corpus may be too recent for a meaningful signal.
+
+---
+
+## Tech stack
 
 | Layer | Technology |
 |---|---|
-| **Orchestration** | LangGraph (StateGraph) |
-| **LLM** | Google Gemini (`gemini-3.6-flash`) |
-| **Vector Store** | ChromaDB (with hash-based fallback embeddings) |
-| **Graph** | NetworkX (MultiDiGraph) |
-| **Backend API** | FastAPI + Uvicorn |
-| **Database & Auth** | SQLite (`researchmind.db`) + JWT (`python-jose`, `bcrypt`) |
-| **Frontend** | Vite 8 + React 19 + React Router 6 (glassmorphic dark-mode UI) |
-| **PDF Export** | ReportLab |
-| **DOCX Export** | python-docx |
-| **PDF Parsing** | PyMuPDF |
+| Orchestration | LangGraph `StateGraph` + `SqliteSaver` checkpointer |
+| LLM | Google Gemini via `google-genai` (model set in `backend/clients/claude_client.py`) |
+| Vector store | ChromaDB (persistent), default embedding function with hash-vector fallback |
+| Graph | NetworkX |
+| API | FastAPI + Uvicorn |
+| Database / auth | SQLite, JWT (`python-jose`), `bcrypt` |
+| PDF parsing | PyMuPDF |
+| Exports | ReportLab (PDF), python-docx (DOCX) |
+| Frontend | React 19, React Router 6, Vite 8, Cytoscape.js, lucide-react |
+| Tests | pytest |
+
+> **Naming note:** `claude_client.py` and the `ClaudeClient` class are historical names. The client now wraps **Gemini**. The class name was kept so agent imports didn't change. `ANTHROPIC_API_KEY` in `.env.example` is not read by any code.
 
 ---
 
-### Data Flow Diagram
-
-```mermaid
-flowchart LR
-    Q["User Query"] --> P["Planner"]
-    P -->|"sub_queries"| S["Search"]
-    S -->|"papers"| E["Extraction"]
-    E -->|"extracted_fields"| SY["Synthesis"]
-    SY -->|"summaries + comparison_table"| G["Graph / Gap"]
-    G -->|"graph_ref + gap_claims"| R["Report"]
-    R -->|"report_draft"| FE["Frontend"]
-    S -.->|"embeds papers"| VS[("ChromaDB")]
-    VS -.->|"embeddings"| G
-```
-
-### PipelineState — Central Data Contract
-
-All 6 agents share a single [`PipelineState`](backend/orchestration/pipeline.py) `TypedDict`. Each agent receives the full state, mutates its designated fields, and returns the updated state to LangGraph.
-
-| Field | Type | Written By | Read By | Description |
-|---|---|---|---|---|
-| `query` | `str` | User | Planner, Report | Original free-text research topic |
-| `filters` | `Dict[str, Any]` | User | Planner, Search | Year range, venue type, keywords |
-| `sub_queries` | `List[str]` | Planner | Search | 2–4 decomposed facet sub-queries |
-| `papers` | `List[PaperMeta]` | Search | Extraction, Synthesis, Graph/Gap | Deduplicated paper metadata objects |
-| `extracted_fields` | `List[FieldRecord]` | Extraction | Synthesis | Method / dataset / metric / limitation per paper |
-| `summaries` | `List[Summary]` | Synthesis | Report | Per-paper summaries with `[Source: X]` attributions |
-| `comparison_table` | `List[Dict]` | Synthesis | Report, Frontend | Flattened paper comparison matrix |
-| `graph_ref` | `Any` (JSON) | Graph/Gap | Frontend | NetworkX MultiDiGraph serialised as node-link JSON |
-| `gap_claims` | `List[GapClaim]` | Graph/Gap | Report, Frontend | Research gaps with induced subgraph snapshots |
-| `report_draft` | `Dict[str, Any]` | Report | Frontend, Export | Keys: `text` (Markdown), `pdf_path`, `docx_path`, `synthesis_text`, `introduction_text` |
-| `agent_status` | `Dict[str, Literal]` | All agents | API `/status`, Frontend | Per-agent: `pending` → `running` → `done` / `error` |
-
----
-
-## 📁 Repository Structure
+## Project structure
 
 ```
-Research-Mind/
+Research-mind/
 ├── backend/
-│   ├── __init__.py
-│   ├── logging_utils.py               # Job-scoped logger adapter (prefixes logs with [job=...])
-│   ├── api/                           # FastAPI server & routes
-│   │   ├── __init__.py
-│   │   ├── deps.py                    # JWT auth dependency helpers
-│   │   ├── main.py                    # FastAPI app, CORS, /health, /status endpoints
-│   │   ├── jobs.py                    # In-memory jobs dictionary (shared state)
-│   │   └── routes/
-│   │       ├── __init__.py
-│   │       ├── auth.py                # POST /auth/register, /auth/login, GET /auth/me
-│   │       ├── history.py             # GET /history, GET /history/{id}, DELETE /history/{id}
-│   │       ├── query.py               # POST /query, GET /results, POST /qa endpoints
-│   │       └── export.py              # GET /export/{job_id} — PDF/DOCX download
-│   ├── agents/                        # 6-agent pipeline stages
-│   │   ├── __init__.py
-│   │   ├── planner.py                 # Sub-query decomposition via LLM
-│   │   ├── search.py                  # arXiv + Semantic Scholar parallel retrieval
-│   │   ├── extraction.py              # Field extraction, PDF parsing & deduplication
-│   │   ├── synthesis.py               # Summarization & comparison table generation
-│   │   ├── graph_gap.py               # Citation graph construction + gap detection
-│   │   └── report.py                  # PDF/DOCX report generation
-│   ├── orchestration/
-│   │   └── pipeline.py                # LangGraph StateGraph wiring & PipelineState
-│   ├── clients/                       # External API clients
-│   │   ├── __init__.py
-│   │   ├── arxiv_client.py            # arXiv API search & XML parsing
-│   │   ├── claude_client.py           # Gemini LLM client (named for backward compat)
-│   │   └── s2_client.py               # Semantic Scholar API client
-│   ├── data/                          # Data layer — models, stores & caching
-│   │   ├── __init__.py
-│   │   ├── models.py                  # Pydantic models (PaperMeta, FieldRecord, etc.)
-│   │   ├── cache.py                   # File-based JSON cache + exponential backoff
-│   │   ├── vector_store.py            # ChromaDB vector store wrapper
-│   │   └── graph_store.py             # NetworkX graph builder (CITES, SIMILAR_TOPIC)
-│   ├── db/                            # Database module & runtime data directory
-│   │   ├── __init__.py                # Package init
-│   │   ├── database.py                # SQLite database init & query functions
-│   │   ├── cache/                     # Cached API responses
-│   │   ├── chroma/                    # ChromaDB persistent storage
-│   │   └── exports/                   # Generated PDF/DOCX report files
-│   ├── .env.example                   # Environment variable template
-│   └── requirements.txt               # Python dependencies
+│   ├── .env.example               # Copy to .env and fill in
+│   ├── requirements.txt
+│   ├── logging_utils.py           # [job=<id>] log prefixing
+│   ├── agents/                    # planner, search, extraction, synthesis, graph_gap, report
+│   ├── api/
+│   │   ├── main.py                # FastAPI app, CORS, /status, /health
+│   │   ├── deps.py                # JWT create/decode, auth dependencies
+│   │   ├── jobs.py                # In-memory job store, cancellation flags, restore-from-DB
+│   │   └── routes/                # query.py, auth.py, history.py, export.py
+│   ├── clients/
+│   │   ├── claude_client.py       # Gemini wrapper + mock mode
+│   │   ├── arxiv_client.py
+│   │   └── s2_client.py
+│   ├── data/
+│   │   ├── models.py              # Pydantic models
+│   │   ├── cache.py               # File cache with TTL + backoff decorator
+│   │   ├── vector_store.py        # ChromaDB wrapper
+│   │   └── graph_store.py         # NetworkX graph builder
+│   ├── db/
+│   │   ├── database.py            # SQLite schema (users, research_sessions)
+│   │   └── …                      # Created at runtime: researchmind.db, chroma/, cache/, exports/
+│   └── orchestration/pipeline.py  # LangGraph wiring + PipelineState
 ├── frontend/
-│   ├── index.html                     # HTML entry point
-│   ├── package.json                   # Node dependencies & scripts
-│   ├── vite.config.js                 # Vite build configuration
-│   ├── .oxlintrc.json                 # Oxlint linter configuration
-│   ├── public/
-│   │   ├── favicon.svg                # Browser tab icon
-│   │   └── icons.svg                  # SVG icon sprite sheet
-│   └── src/
-│       ├── main.jsx                   # React DOM entry point (renders <AppRouter>)
-│       ├── router.jsx                 # React Router — all page routes & provider hierarchy
-│       ├── App.jsx                    # Legacy dashboard (still functional, not route-mounted)
-│       ├── App.css                    # App-level overrides
-│       ├── index.css                  # Design system & glassmorphic styles
-│       ├── context/
-│       │   ├── AuthContext.jsx        # JWT authentication state, login/register/logout
-│       │   └── ResearchContext.jsx    # Research state: query, polling, results, job lifecycle
-│       ├── utils/
-│       │   └── paperLinks.js          # Shared paper URL resolution (arXiv/DOI/S2)
-│       ├── components/
-│       │   ├── Navbar.jsx             # Top navigation bar + workspace tab strip
-│       │   ├── ProtectedRoute.jsx     # Auth guard — redirects to /login if unauthenticated
-│       │   ├── AuthModal.jsx          # Login & Registration modal dialog
-│       │   ├── HistorySidebar.jsx     # ChatGPT-style research session history sidebar
-│       │   ├── QueryForm.jsx          # Research query input & filters
-│       │   ├── ProgressTracker.jsx    # Live agent status tracker
-│       │   ├── OverviewPanel.jsx      # Results overview & gap cards
-│       │   ├── ComparisonTable.jsx    # Sortable/searchable paper matrix
-│       │   ├── GraphViewer.jsx        # Interactive Cytoscape citation graph
-│       │   ├── SourcesSidebar.jsx     # Source paper detail sidebar
-│       │   ├── ReportExport.jsx       # PDF/DOCX export interface
-│       │   └── QAAssistant.jsx        # Chat-based Q&A over research papers
-│       └── pages/
-│           ├── LandingPage.jsx        # Hero section + search bar + feature cards
-│           ├── LoginPage.jsx          # Standalone email/password login page
-│           ├── SignupPage.jsx         # Standalone email/password registration page
-│           ├── NewResearchPage.jsx    # Dedicated research topic form with filters
-│           ├── ProgressPage.jsx       # 6-stage progress tracker with animated bar
-│           ├── WorkspacePage.jsx      # Tab container — lazy-loads workspace tabs
-│           ├── PaperDetailPage.jsx    # Full paper view (abstract, method, dataset, etc.)
-│           ├── HistoryPage.jsx        # Full-page history view with search + date groups
-│           ├── NotFoundPage.jsx       # 404 page
-│           └── tabs/
-│               ├── PapersTab.jsx      # Filterable, sortable paper card grid
-│               ├── OverviewTab.jsx    # Summary statistics and gap highlights
-│               ├── ComparisonTab.jsx  # Comparison table wrapper
-│               ├── GapsTab.jsx        # Research gap cards with evidence expansion
-│               ├── GraphTab.jsx       # Cytoscape citation graph wrapper
-│               ├── AssistantTab.jsx   # QA chat assistant wrapper
-│               └── ReportsTab.jsx     # Report export wrapper
+│   ├── src/
+│   │   ├── router.jsx             # Routes (the real entry point)
+│   │   ├── context/               # AuthContext, ResearchContext
+│   │   ├── pages/                 # Landing, Login, Signup, NewResearch, Progress, Workspace, PaperDetail, History
+│   │   │   └── tabs/              # Papers, Overview, Comparison, Gaps, Graph, Assistant, Reports
+│   │   └── components/            # Navbar, GraphViewer, ComparisonTable, QAAssistant, ReportExport, …
+│   └── package.json
+├── fallback_dataset/              # Committed cache snapshot for offline demos
 ├── tests/
-│   ├── unit/                          # Unit tests for each agent
-│   │   ├── test_planner.py
-│   │   ├── test_search.py
-│   │   ├── test_extraction.py
-│   │   ├── test_synthesis.py
-│   │   ├── test_graph_gap.py
-│   │   └── test_report.py
-│   └── integration/
-│       └── test_pipeline.py           # Full LangGraph pipeline integration test
-├── fallback_dataset/                  # Committed offline data
-│   ├── cache/                         # Pre-fetched search result cache files
-│   ├── results_attention_mechanisms.json  # Pre-computed pipeline output
-│   └── generate_fallback.py           # Script to regenerate fallback data
-├── docs/                              # Project documentation
-│   ├── PRD_ResearchMind.docx          # Product Requirements Document
-│   ├── SRS_ResearchMind.docx          # Software Requirements Specification
-│   ├── TEST_PLAN_ResearchMind.docx    # Test Plan
-│   ├── BUILD_GUIDE_ResearchMind.docx  # Build & Deployment Guide
-│   └── ANTIGRAVITY_BUILD_PROMPT_ResearchMind.md  # Original build prompt
-└── .gitignore
+│   ├── unit/                      # 8 test modules
+│   └── integration/test_pipeline.py
+└── docs/                          # PRD, SRS, build guide, test plan
 ```
+
+`frontend/src/App.jsx`, `components/QueryForm.jsx` and `src/__graphtest_data.json` are not used by the current router and look like leftovers from an earlier single-page version.
 
 ---
 
-## ⚙️ Prerequisites
+## API reference
 
-- **Python** 3.10 or higher
-- **Node.js** 18.x or higher (npm 9+)
+Base URL: `http://localhost:8000`. Interactive docs at `/docs`.
 
----
-
-## 🚀 Backend Setup
-
-This section walks through every step required to get the ResearchMind backend running locally, from environment activation to verifying the server is live.
-
----
-
-### Step 1 — Verify Prerequisites
-
-Before starting, confirm the correct versions are installed:
-
-```bash
-python --version     # Must be 3.10 or higher
-pip --version        # Should be bundled with Python
-```
-
-If Python is not installed, download it from [python.org](https://www.python.org/downloads/). Make sure to check **"Add Python to PATH"** during installation on Windows.
-
----
-
-### Step 2 — Create & Activate the Virtual Environment
-
-Create a Python virtual environment at the project root:
-
-```bash
-python -m venv venv
-```
-
-Then activate it:
-
-**Windows (PowerShell):**
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-> If you get an execution policy error, run this first:
-> ```powershell
-> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-> ```
-
-**Windows (Command Prompt):**
-```cmd
-.\venv\Scripts\activate.bat
-```
-
-**macOS / Linux:**
-```bash
-source venv/bin/activate
-```
-
-Once activated, your terminal prompt will show `(venv)` as a prefix, confirming the environment is active. All `pip install` and `python` commands from this point will use the isolated environment.
-
----
-
-### Step 3 — Install Python Dependencies
-
-With the venv active, install all required packages:
-
-```bash
-pip install -r backend/requirements.txt
-```
-
-This installs the following core packages:
-
-| Package | Version | Purpose |
-|---|---|---|
-| `fastapi` | ≥0.100 | REST API framework |
-| `uvicorn` | ≥0.22 | ASGI server for FastAPI |
-| `langgraph` | ≥1.2 | Multi-agent workflow orchestration |
-| `langgraph-checkpoint-sqlite` | ≥3.1.1 | SQLite-backed LangGraph checkpointing |
-| `chromadb` | ≥0.4 | Vector store for semantic paper search |
-| `google-genai` | ≥2.0 | Google Gemini LLM client |
-| `networkx` | ≥3.1 | Citation graph construction & analysis |
-| `pymupdf` | ≥1.22 | PDF text extraction from arXiv papers |
-| `reportlab` | ≥4.0 | PDF report generation |
-| `python-docx` | ≥1.0 | DOCX report generation |
-| `pydantic` | ≥2.0 | Data validation & Pydantic models |
-| `requests` | ≥2.31 | HTTP client for arXiv/Semantic Scholar APIs |
-| `numpy` | ≥1.24 | Numerical operations for graph analysis |
-| `python-dotenv` | ≥1.0 | `.env` file loading |
-| `python-jose[cryptography]` | ≥3.3 | JWT token creation & verification |
-| `bcrypt` | ≥4.0 | Password hashing |
-| `pytest` | ≥7.3 | Test runner |
-
-> **Tip**: If you encounter dependency conflicts, try:
-> ```bash
-> pip install -r backend/requirements.txt --upgrade
-> ```
-
----
-
-### Step 4 — Configure Environment Variables
-
-The backend requires a `.env` file inside the `backend/` folder. This file holds all API keys and server configuration. **Never commit this file to Git** — it is already listed in `.gitignore`.
-
-**Create your `.env` from the provided template:**
-
-```bash
-# On macOS / Linux / Git Bash on Windows:
-cp backend/.env.example backend/.env
-
-# On Windows PowerShell:
-Copy-Item backend\.env.example backend\.env
-```
-
-**Open `backend/.env` and fill in your values:**
-
-```env
-# ── Server Configuration ──────────────────────────────────────────
-PORT=8000
-HOST=0.0.0.0
-
-# ── LLM Provider ──────────────────────────────────────────────────
-# Google Gemini (recommended — free tier available)
-GEMINI_API_KEY=your-gemini-api-key-here
-
-# ── Semantic Scholar API (optional, but strongly recommended) ──────
-# Without this key, the API applies aggressive rate limits (1 req/s).
-# Get a free key at: https://www.semanticscholar.org/product/api
-SEMANTIC_SCHOLAR_API_KEY=your-semantic-scholar-api-key-here
-
-# ── JWT Authentication Configuration ──────────────────────────────
-JWT_SECRET_KEY=change-this-to-a-secure-random-secret-key-in-production
-JWT_ALGORITHM=HS256
-JWT_EXPIRE_MINUTES=10080
-```
-
-#### LLM Provider
-
-The backend uses **Google Gemini** as its LLM provider. The client (`claude_client.py`) is named for backward compatibility but internally calls the Gemini API.
-
-| Condition | Mode | Model Used |
-|---|---|---|
-| `GEMINI_API_KEY` set and valid | **Live Mode** | `gemini-3.6-flash` |
-| Key missing or placeholder | **Mock Mode** | Simulated deterministic responses |
-
-**Getting API Keys:**
-- **Gemini (Free Tier available):** [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
-- **Semantic Scholar:** [semanticscholar.org/product/api](https://www.semanticscholar.org/product/api)
-
-#### 🧪 Mock Mode (No API Keys Required)
-
-If the Gemini key is left as the placeholder string (e.g. `your-gemini-api-key-here`), the backend enters **Mock Mode** automatically. In this mode:
-
-- The LLM pipeline returns pre-scripted, realistic-looking extraction and synthesis responses.
-- The arXiv and Semantic Scholar search APIs still run live (no key required for basic arXiv access).
-- The full 6-agent pipeline executes end-to-end, including citation graph building and gap detection.
-- PDF and DOCX reports are generated normally.
-
-Mock Mode is ideal for **demonstrations, CI testing, and local development** without incurring any API costs.
-
----
-
-### Step 5 — Start the Backend Server
-
-From the **project root** (not from inside `backend/`), run:
-
-```bash
-python -m uvicorn backend.api.main:app --reload --port 8000
-```
-
-**What each flag does:**
-- `backend.api.main:app` — Python module path to the FastAPI `app` instance
-- `--reload` — Auto-restarts the server when source files change (development mode)
-- `--port 8000` — Binds to port 8000 (must match the frontend's API base URL)
-
-**Expected startup output:**
-```
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process
-INFO:     Started server process
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-```
-
----
-
-### Step 6 — Verify the Server is Running
-
-Open your browser or run `curl` to check the health endpoint:
-
-```bash
-curl http://localhost:8000/health
-```
-
-Expected response:
-```json
-{"status": "healthy"}
-```
-
----
-
-## 📡 API Endpoints
-
-| Method | URL | Auth Required | Description |
+| Method | Path | Auth | Description |
 |---|---|---|---|
-| `GET` | `/health` | No | Health check — confirms server is up |
-| `POST` | `/auth/register` | No | Create user account, returns JWT token |
-| `POST` | `/auth/login` | No | Authenticate user, returns JWT token |
-| `GET` | `/auth/me` | **Yes** | Get current authenticated user details |
-| `POST` | `/query` | Optional | Submit research topic to start 6-agent pipeline (saves to history if authenticated) |
-| `POST` | `/jobs/{job_id}/cancel` | No | Request cooperative cancellation of a running research job |
-| `GET` | `/status/{job_id}` | No | Poll live execution progress of each agent |
-| `GET` | `/results/{job_id}` | No | Fetch final results (papers, gaps, graph, report) |
-| `GET` | `/history` | **Yes** | List all saved research sessions for current user |
-| `GET` | `/history/{id}` | **Yes** | Get full details of a specific saved session |
-| `DELETE` | `/history/{id}` | **Yes** | Delete a saved research session |
-| `POST` | `/qa` | No | Ask a question about papers from a completed job |
-| `GET` | `/export/{job_id}?format=pdf` | No | Download the generated PDF report |
-| `GET` | `/export/{job_id}?format=docx` | No | Download the generated DOCX report |
-| `GET` | `/docs` | No | Interactive Swagger UI — explore & test all routes |
-| `GET` | `/redoc` | No | ReDoc API documentation |
+| `POST` | `/query` | optional | Start a job. Body: `{"query": "...", "filters": {"year_range": [2018, 2025]}}`. Returns `{"job_id": "..."}`. Results auto-save to history if you send a valid token. |
+| `GET` | `/status/{job_id}` | – | Job status, per-agent status, `mock_mode`, timestamps, error. |
+| `GET` | `/results/{job_id}` | – | Papers, comparison table, gap claims, graph, summaries, sub-queries, report draft. Returns a "still processing" message while running. |
+| `POST` | `/jobs/{job_id}/cancel` | – | Request cooperative cancellation. |
+| `POST` | `/qa` | – | Ask a question about a finished job. Body: `{"job_id", "question", "history"?}`. |
+| `GET` | `/export/{job_id}?format=pdf\|docx` | – | Download the generated report. |
+| `POST` | `/auth/register` | – | `{email, password}` (min 6 chars) → `{token, user_id, email}`. |
+| `POST` | `/auth/login` | – | Same response shape. |
+| `GET` | `/auth/me` | required | Current user. |
+| `GET` | `/history` | required | List saved sessions. |
+| `GET` | `/history/{id}` | required | Full saved results for one session. |
+| `DELETE` | `/history/{id}` | required | Delete a session. |
+| `GET` | `/health` | – | `{"status": "healthy"}` |
 
-### Request/Response Examples
+Authenticated requests send `Authorization: Bearer <token>`.
 
-**Submit a query:**
-```bash
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "attention mechanisms", "filters": {"year_range": [2020, 2026]}}'
-```
-
-Response:
-```json
-{"job_id": "a1b2c3d4-..."}
-```
-
-**Poll status:**
-```bash
-curl http://localhost:8000/status/a1b2c3d4-...
-```
-
-Response:
-```json
-{
-  "status": "running",
-  "agent_status": {
-    "planner": "done",
-    "search": "running",
-    "extraction": "pending",
-    "synthesis": "pending",
-    "graph_gap": "pending",
-    "report": "pending"
-  },
-  "error": null
-}
-```
-
-**Ask a question (QA Assistant):**
-```bash
-curl -X POST http://localhost:8000/qa \
-  -H "Content-Type: application/json" \
-  -d '{"job_id": "a1b2c3d4-...", "question": "What datasets are most commonly used?"}'
-```
+**Job lifecycle:** `pending` → `running` → `done` | `error` | `cancelled`. The frontend polls `/status`, then loads `/results`.
 
 ---
 
-### Backend Troubleshooting
+## Data models
 
-| Problem | Likely Cause | Fix |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'backend'` | Running uvicorn from inside `backend/` | Run from the **project root** with `python -m uvicorn backend.api.main:app` |
-| `Address already in use` on port 8000 | Another process using port 8000 | Change port: `--port 8001` or kill the process using `netstat -ano \| findstr :8000` |
-| `chromadb` import error | Missing binary dependency | Run `pip install chromadb --upgrade` |
-| `pymupdf` install fails on Windows | Build tools missing | Install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) |
-| Uvicorn not found | venv not activated | Re-run the activation command in Step 2 |
-| LLM key not picked up | `.env` file in wrong location | Ensure `.env` is inside `backend/` (not the project root) |
+Defined in `backend/data/models.py`.
+
+- **`PaperMeta`**: `id`, `title`, `authors`, `year`, `venue`, `abstract`, `pdf_url`, `url`, `full_text_available`, `citation_count`, `citations`, `doi`, `arxiv_id`, `source` (`arxiv`, `semantic_scholar` or `merged`)
+- **`FieldRecord`**: `paper_id`, `method`, `dataset`, `key_metric`, `limitation`, `year`, `verification_status` (`verified`, `unverified`, `failed`, `heuristic`), `verification_notes`, `abstract_only`
+- **`Summary`**: `paper_id`, `title`, `summary_text`, `attributions[]` (sentence → source tag)
+- **`GapClaim`**: `gap_id`, `topic_label`, `description`, `citation_density` (the pace value), `papers_in_cluster`, `subgraph_snapshot`, `suggested_directions`, `signal_degraded`
+
+### Database
+
+SQLite file `backend/db/researchmind.db`, created on startup:
+
+- `users(id, email UNIQUE, hashed_password, created_at)`
+- `research_sessions(id, user_id → users, query, filters, results, title, created_at)`
+
+LangGraph checkpoints live in a separate `backend/db/langgraph_checkpoints.db`.
 
 ---
 
-## 🖥️ Frontend Setup
+## Frontend
 
-The frontend is a **Vite 8 + React 19 + React Router 6** multi-page single-page application with a glassmorphic dark-mode UI. It communicates with the backend over HTTP on `localhost:8000`.
+Routes (`frontend/src/router.jsx`):
+
+| Path | Page |
+|---|---|
+| `/` | Landing |
+| `/login`, `/signup` | Auth |
+| `/research/new` | Query form with year, venue-type and keyword filters |
+| `/research/:jobId/progress` | Live per-agent progress |
+| `/research/:jobId/:tab` | Workspace. Tabs: `papers`, `overview`, `comparison`, `gaps`, `graph`, `assistant`, `reports` |
+| `/research/:jobId/paper/:paperId` | Single paper detail |
+| `/history` | Saved sessions (login required) |
+
+Each URL is deep-linkable. Reloading a workspace restores the job from the backend. Research state is also persisted in the browser's `localStorage`, so a page reload keeps your place.
 
 ---
 
-### Step 1 — Verify Node.js
+## Resilience and mock mode
+
+- **No LLM key:** `ClaudeClient` switches to a deterministic mock that parses the paper text in the prompt and returns plausible fields. `/status` and `/results` report `mock_mode: true` (the current UI stores the flag but does not display a banner, so check the API or backend logs). Use this for UI work and tests.
+- **LLM failure mid-run:** each call falls back to the mock response rather than crashing the pipeline, and extraction falls back to a regex heuristic marked `verification_status: "heuristic"`.
+- **Rate limits and network errors:** arXiv and Semantic Scholar calls retry with exponential backoff.
+- **File cache:** search results are cached in `backend/db/cache/` (arXiv: 30 days, Semantic Scholar: 3 days).
+- **Offline demo data:** if a search is not in the local cache, `fallback_dataset/cache/` is checked next. It holds a committed snapshot for a small set of queries (the demo topic is "attention mechanisms") and never expires. Regenerate it with `fallback_dataset/generate_fallback.py`.
+- **Embeddings unavailable:** if ChromaDB cannot load its embedding model (for example, no internet on first run), the app uses hash-seeded vectors and flags results as degraded.
+
+---
+
+## Testing
 
 ```bash
-node --version     # Must be 18.x or higher
-npm --version      # Must be 9.x or higher
+python -m pytest tests -q        # run from the repository root
 ```
 
-If Node is not installed, download it from [nodejs.org](https://nodejs.org/en/download) (choose the **LTS** version).
+25 tests cover caching, cancellation, extraction and grounding, graph/gap logic, planner, search and dedup, synthesis, report generation, and a mocked end-to-end pipeline run. No API keys or network are required.
 
 ---
 
-### Step 2 — Navigate to the Frontend Directory
+## Known limitations
 
-All frontend commands must be run from inside the `frontend/` folder:
+Worth knowing before you deploy or extend this.
 
-```bash
-cd frontend
-```
-
-> **Important**: Do not run `npm install` from the project root — there is no `package.json` there. All npm commands belong inside `frontend/`.
-
----
-
-### Step 3 — Install Node Dependencies
-
-```bash
-npm install --legacy-peer-deps
-```
-
-**Why `--legacy-peer-deps`?**
-The project uses React 19 (latest), but some third-party packages declare peer dependency ranges that don't yet include React 19. The `--legacy-peer-deps` flag tells npm to use the older, more permissive peer resolution algorithm instead of throwing an error — the packages still work correctly at runtime.
-
-This installs the following packages:
-
-**Runtime Dependencies:**
-
-| Package | Version | Purpose |
-|---|---|---|
-| `react` | ^19.2 | Core UI library |
-| `react-dom` | ^19.2 | DOM renderer for React |
-| `react-router-dom` | ^6.30 | Client-side routing (page navigation, URL params, protected routes) |
-| `cytoscape` | ^3.30 | Interactive citation/similarity graph rendering |
-| `lucide-react` | ^0.400 | Icon library (Search, BookOpen, GitFork, etc.) |
-
-**Dev Dependencies:**
-
-| Package | Version | Purpose |
-|---|---|---|
-| `vite` | ^8.1 | Lightning-fast build tool & dev server |
-| `@vitejs/plugin-react` | ^6.0 | Vite plugin for React JSX transform |
-| `@types/react` | ^19.2 | TypeScript types for React |
-| `@types/react-dom` | ^19.2 | TypeScript types for React DOM |
-| `oxlint` | ^1.71 | Fast JavaScript/JSX linter |
-
-After install, a `node_modules/` folder will be created inside `frontend/`. This folder is excluded from Git via `.gitignore`.
+- **Jobs live in memory.** A server restart loses running and unsaved jobs. Only sessions saved by logged-in users can be restored.
+- **Gaps need at least 15 papers.** Narrow topics or tight year filters can fall below this and return no graph.
+- **Citation signal is only in-corpus.** `CITES` edges are kept only when both papers are in the retrieved set, so pace is a relative signal within the corpus, not a global citation count. arXiv records carry no citation data; it comes from Semantic Scholar.
+- **Gaps are heuristic.** A flagged cluster is a lead worth investigating, not proof that nobody has worked on it.
+- **Filters:** only `year_range` is applied in search code. `venue_type` and `keywords` are passed to the planner prompt as context, which influences the sub-queries but does not hard-filter results.
+- **Security defaults are for local use.** CORS allows all origins, and `JWT_SECRET_KEY` falls back to a hardcoded dev value if unset. Set a real secret and restrict CORS before exposing the API.
+- **API URL is hardcoded.** The frontend calls `http://localhost:8000` in several files (see SETUP.md).
+- **Cancel has no button in the current UI.** `POST /jobs/{id}/cancel` works, but only the legacy `App.jsx` called it.
+- **Resume primitive is not exposed.** `retry_pipeline()` exists in `routes/query.py` but no endpoint calls it yet.
+- **Embedding model download.** ChromaDB's default embedding model downloads on first use. Offline first runs fall back to degraded hash vectors.
+- **Fallback embeddings are not stable across restarts**, because they are seeded with Python's per-process randomized `hash()`.
 
 ---
 
-### Step 4 — Start the Development Server
+## Further reading
 
-```bash
-npm run dev
-```
-
-**Expected output:**
-```
-  VITE v8.x.x  ready in xxx ms
-
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: http://192.168.x.x:5173/
-  ➜  press h + enter to show help
-```
-
-Open **[http://localhost:5173](http://localhost:5173)** in your browser. The app supports **Hot Module Replacement (HMR)** — changes to `.jsx` or `.css` files are reflected in the browser instantly without a full page reload.
-
-> **The backend must also be running** on `http://localhost:8000` for the frontend to process research queries. Start the backend first (see Backend Setup → Step 5).
-
----
-
-### Step 5 — Verify the App is Working
-
-1. Open `http://localhost:5173` in your browser
-2. You should see the ResearchMind **Landing Page** with a hero search bar
-3. Enter a topic (e.g. `"attention mechanisms"`) in the search box or click an example query
-4. Click **Start Research** — you will be redirected to the **Progress Page** showing each agent status updating in real time
-5. Once complete, you are automatically redirected to the **Papers** tab in the research workspace
-6. Explore the **Papers**, **Overview**, **Comparison**, **Gaps**, **Graph**, **Assistant**, and **Reports** tabs via the navbar
-
-If the dashboard loads but queries fail, check that the backend server is running at `http://localhost:8000/health`.
-
----
-
-### Available npm Scripts
-
-Run these from inside the `frontend/` directory:
-
-| Script | Command | Description |
-|---|---|---|
-| **Development** | `npm run dev` | Starts Vite dev server with HMR at `localhost:5173` |
-| **Production Build** | `npm run build` | Bundles the app into `frontend/dist/` for deployment |
-| **Preview Build** | `npm run preview` | Serves the production build locally for testing |
-| **Lint** | `npm run lint` | Runs `oxlint` to check for code quality issues |
-
----
-
-## 🧭 Frontend Routing & Page Architecture
-
-The frontend uses **React Router v6** with the following route structure. The entry point (`main.jsx`) renders `<AppRouter>` from `router.jsx`, which wraps all routes in the `AuthProvider` → `ResearchProvider` context hierarchy.
-
-### Route Map
-
-| Route | Page | Auth | Description |
-|---|---|---|---|
-| `/` | `LandingPage` | No | Hero section with search bar, example queries, and feature grid |
-| `/login` | `LoginPage` | No | Standalone email/password login page |
-| `/signup` | `SignupPage` | No | Standalone email/password registration page |
-| `/research/new` | `NewResearchPage` | No | Dedicated research form with topic textarea + advanced filters |
-| `/research/:jobId/progress` | `ProgressPage` | No | 6-stage progress tracker with percentage bar and auto-redirect on completion |
-| `/research/:jobId/:tab` | `WorkspacePage` | No | Tab container — lazy-loads the active workspace tab |
-| `/research/:jobId/paper/:paperId` | `PaperDetailPage` | No | Full paper view with abstract, extracted fields, and metadata |
-| `/research/:jobId` | — | No | Redirects to `/research/:jobId/papers` |
-| `/history` | `HistoryPage` | **Yes** | Full-page history view with search, date grouping, and delete |
-| `*` | `NotFoundPage` | No | 404 catch-all |
-
-### Workspace Tabs (via Navbar)
-
-When inside a research workspace (`/research/:jobId/:tab`), the Navbar displays an integrated tab strip with 7 tabs:
-
-| Tab Key | Label | Component (Lazy-Loaded) | Description |
-|---|---|---|---|
-| `papers` | Papers | `PapersTab` | Filterable & sortable paper card grid with search, source badges, expandable abstracts, and click-through to `PaperDetailPage` |
-| `overview` | Overview | `OverviewTab` | Summary stat cards (paper count, gap count, sub-queries) and gap highlights |
-| `comparison` | Comparison | `ComparisonTab` | Sortable/searchable paper comparison matrix |
-| `gaps` | Gaps | `GapsTab` | Research gap cards with risk levels, evidence expansion, and supporting papers |
-| `graph` | Graph | `GraphTab` | Interactive Cytoscape.js citation & similarity graph |
-| `assistant` | Assistant | `AssistantTab` | Chat-based QA over collected papers |
-| `reports` | Reports | `ReportsTab` | PDF/DOCX report preview and one-click export |
-
-All workspace tab components are **lazy-loaded** via `React.lazy()` in `WorkspacePage.jsx` to optimise initial bundle size.
-
----
-
-## 🔐 Authentication System
-
-### Flow
-
-1. **Register** — `POST /auth/register` creates a new user in SQLite, hashes the password with `bcrypt`, and returns a JWT token.
-2. **Login** — `POST /auth/login` validates credentials and returns a JWT token.
-3. **Token storage** — The frontend stores the JWT in `localStorage` under `researchmind_token` and the user object under `researchmind_user`.
-4. **Auth headers** — `AuthContext.authHeaders()` returns `{ Authorization: "Bearer <token>" }` for authenticated API calls.
-5. **Protected routes** — The `ProtectedRoute` component redirects unauthenticated users to `/login` with a `from` redirect state.
-6. **Session persistence** — Research queries sent with a valid JWT are automatically saved to the user's history in SQLite.
-
-### Context Providers
-
-The app uses two React Context providers, nested as:
-
-```
-<BrowserRouter>
-  <AuthProvider>       ← JWT state: token, user, login, register, logout
-    <ResearchProvider> ← Research state: query, job, polling, results
-      <Routes>
-        ...
-      </Routes>
-    </ResearchProvider>
-  </AuthProvider>
-</BrowserRouter>
-```
-
-| Provider | File | Key State | Key Actions |
-|---|---|---|---|
-| `AuthProvider` | `AuthContext.jsx` | `token`, `user`, `isAuthenticated`, `loading`, `error` | `login()`, `register()`, `logout()`, `authHeaders()` |
-| `ResearchProvider` | `ResearchContext.jsx` | `query`, `jobId`, `jobStatus`, `agentStatus`, `results`, `papers`, `mockMode`, `startedAt`, `finishedAt` | `submitQuery()`, `restoreJob()`, `loadSession()`, `clearResearch()` |
-
-### Deep Linking & Session Restoration
-
-- **URL-driven state**: `WorkspacePage` and `ProgressPage` read the `jobId` from URL params and call `restoreJob(jobId)` on mount. This fetches the job's status from the backend and re-attaches polling if the job is still running.
-- **localStorage session**: `ResearchContext` persists all key state fields to `localStorage` under `researchmind_session` on every change, enabling page-reload recovery.
-- **Polling re-attach**: If the page is reloaded while a job is `pending` or `running`, polling automatically re-starts via `useEffect` on mount.
-
----
-
-## 🖼️ Frontend Components
-
-### Pages
-
-| Page | File | Key Features |
-|---|---|---|
-| `LandingPage` | `LandingPage.jsx` | Animated hero section, inline search box with "Start Research" button, collapsible advanced filters, clickable example query chips, feature grid |
-| `LoginPage` | `LoginPage.jsx` | Email + password form, error feedback, link to registration, redirect-after-login support |
-| `SignupPage` | `SignupPage.jsx` | Email + password + confirm password form, error feedback, link to login |
-| `NewResearchPage` | `NewResearchPage.jsx` | Multi-line topic textarea, collapsible advanced filters (year range, venue type, keywords), submit with loading spinner |
-| `ProgressPage` | `ProgressPage.jsx` | 6-stage pipeline stages with status icons (pending/running/done/error), animated progress bar, percentage display, auto-redirect to workspace on completion, error recovery actions |
-| `WorkspacePage` | `WorkspacePage.jsx` | Lazy-loads active tab via `React.lazy()`, validates tab param, auto-redirects running jobs to progress, shows loading/error states, restores job from URL on deep-link |
-| `PaperDetailPage` | `PaperDetailPage.jsx` | Full paper view: title, source link, metadata rows (authors, year, venue, arXiv ID, DOI, citations, source), abstract, extracted fields (method, dataset, key metric, limitation), summary, verification/PDF tags |
-| `HistoryPage` | `HistoryPage.jsx` | Searchable list of saved sessions grouped by date (Today/Yesterday/Last 7 days/Older), delete with confirmation overlay, load-and-navigate to results |
-| `NotFoundPage` | `NotFoundPage.jsx` | 404 error page with navigation back to home |
-
-### Navbar
-
-The `Navbar` component (`Navbar.jsx`) provides:
-
-- **Logo** — Links to `/` (landing page)
-- **Workspace tab strip** — Conditionally rendered inside research workspaces; 7 tabs as `<Link>` elements with active state
-- **Right cluster** — "New Research" button, "History" link (authenticated only), Sign In/Sign Up links or user avatar with dropdown menu
-- **Mobile hamburger** — Slide-out menu for small screens
-- **Mobile tab bar** — Horizontal scrollable tab strip below the navbar on mobile
-
-### Reusable Components
-
-| Component | File | Key Technical Details |
-|---|---|---|
-| `AuthModal` | `AuthModal.jsx` | Glassmorphic modal with login/registration tab toggles, error feedback, and JWT authentication handling. |
-| `HistorySidebar` | `HistorySidebar.jsx` | White glassmorphic sidebar with close `X` button, date-grouped research sessions, search bar, and session deletion. |
-| `QueryForm` | `QueryForm.jsx` | Controlled inputs for topic, year range (number inputs), venue type (`<select>`), and comma-separated keywords. |
-| `ProgressTracker` | `ProgressTracker.jsx` | Renders each of the 6 agent statuses (`pending`/`running`/`done`/`error`) with colour-coded badges and pulse animation for `running`. |
-| `OverviewPanel` | `OverviewPanel.jsx` | Summary stat cards (paper count, gap count, sub-queries) and gap claim tiles with description + citation density. |
-| `ComparisonTable` | `ComparisonTable.jsx` | Sortable by any column, full-text search across all fields, renders verification status badges, and links to paper URLs. |
-| `GraphViewer` | `GraphViewer.jsx` | Cytoscape.js with `cose` (force-directed) layout. Renders gap subgraph snapshots from `gap_claims[].subgraph_snapshot`. Supports pan, zoom, click-to-highlight. |
-| `SourcesSidebar` | `SourcesSidebar.jsx` | Right sidebar listing all papers with clickable links to arXiv/DOI/Semantic Scholar pages. |
-| `ReportExport` | `ReportExport.jsx` | Renders the Markdown report draft inline and provides one-click download buttons that call `GET /export/{job_id}?format=pdf|docx`. |
-| `QAAssistant` | `QAAssistant.jsx` | Chat UI that sends `POST /qa` requests with `{job_id, question, history}`. Displays LLM answers with cited paper references. Maintains conversation history in component state. |
-| `ProtectedRoute` | `ProtectedRoute.jsx` | Wrapper component that checks `isAuthenticated` from `AuthContext` and redirects to `/login` if not authenticated. |
-
-### Utility Modules
-
-| Module | File | Purpose |
-|---|---|---|
-| `paperLinks` | `utils/paperLinks.js` | Centralised paper URL resolution: `getPaperLink(paper)` returns the best URL (explicit URL → arXiv → DOI → PDF). `getPaperLinkWithLabel(paper)` returns `{href, label}` for display. |
-
-### Frontend State Management
-
-- **Context-based architecture** — Uses `AuthContext` for authentication and `ResearchContext` for research state. No external state library.
-- **React 19** — Uses `useState`, `useEffect`, `useCallback`, `useRef`, `useMemo`, and `useContext` hooks.
-- **Session persistence**: All key state fields are serialised to `localStorage` under the key `researchmind_session` on every state change.
-- **Page reload recovery**: On mount, `ResearchContext` restores state from `localStorage`. If a job was `running`, polling re-attaches automatically.
-- **Polling**: `setInterval` at **2000 ms** in a `useEffect` hook inside `ResearchContext`. Polls `GET /status/{jobId}`. Auto-clears interval on `done` or `error`.
-- **Lazy loading**: All workspace tabs are lazy-loaded via `React.lazy()` with a `<Suspense>` fallback for optimised initial load.
-
----
-
-## 🔧 Pydantic Data Models — Full Schema Reference
-
-All models are defined in [`backend/data/models.py`](backend/data/models.py) using Pydantic v2 `BaseModel`.
-
-### `PaperMeta` — Paper Metadata
-
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `id` | `str` | — | Unique identifier (DOI preferred, else arXiv ID or S2 paperId) |
-| `title` | `str` | — | Paper title (whitespace-normalised) |
-| `authors` | `List[str]` | `[]` | Author names |
-| `year` | `int` | — | Publication year |
-| `venue` | `str` | `"Unknown"` | Venue / conference / journal name |
-| `abstract` | `str` | — | Paper abstract |
-| `pdf_url` | `Optional[str]` | `None` | Direct PDF download URL |
-| `url` | `Optional[str]` | `None` | Human-readable paper page (arXiv abs, S2 page, DOI link) |
-| `full_text_available` | `bool` | `False` | Whether full-text PDF was successfully downloaded |
-| `citation_count` | `int` | `0` | Total citation count (from Semantic Scholar) |
-| `citations` | `List[str]` | `[]` | IDs of papers cited by this paper (for CITES edges) |
-| `doi` | `Optional[str]` | `None` | Digital Object Identifier |
-| `arxiv_id` | `Optional[str]` | `None` | arXiv paper identifier (version-stripped, e.g. `2103.00020`) |
-| `source` | `str` | — | Origin: `"arxiv"`, `"semantic_scholar"`, or `"merged"` |
-
-### `FieldRecord` — Extracted Research Fields
-
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `paper_id` | `str` | — | Links back to `PaperMeta.id` |
-| `method` | `str` | — | Algorithm / model architecture / technique proposed |
-| `dataset` | `str` | — | Dataset(s) used for training or evaluation |
-| `key_metric` | `str` | — | Main quantitative result with number |
-| `limitation` | `str` | — | Acknowledged weakness or constraint |
-| `year` | `int` | — | Publication year (denormalised for convenience) |
-| `verification_status` | `Literal` | `"unverified"` | `"verified"` / `"unverified"` / `"failed"` / `"heuristic"` |
-| `verification_notes` | `Optional[str]` | `None` | Detailed grounding check results |
-| `abstract_only` | `bool` | `False` | `True` if extraction used abstract only (no full-text PDF) |
-
-### `Summary` — Per-Paper Summary
-
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `paper_id` | `str` | — | Links back to `PaperMeta.id` |
-| `title` | `str` | — | Paper title (denormalised) |
-| `summary_text` | `str` | — | 3-sentence summary with `[Source: X]` attribution tags |
-| `attributions` | `List[Dict]` | `[]` | Parsed `{"sentence": "...", "source": "Method"}` objects |
-
-### `GapClaim` — Identified Research Gap
-
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `gap_id` | `str` | — | Identifier, e.g. `"GAP-01"` |
-| `topic_label` | `str` | — | Thematic cluster name |
-| `description` | `str` | — | Human-readable gap description with citation density comparison |
-| `citation_density` | `float` | — | Average citations/paper in this cluster |
-| `papers_in_cluster` | `List[str]` | — | Paper IDs belonging to this gap cluster |
-| `subgraph_snapshot` | `Dict[str, Any]` | — | NetworkX `node_link_data()` JSON of the induced subgraph |
-| `suggested_directions` | `List[str]` | `[]` | 3 auto-generated future research direction statements |
-| `signal_degraded` | `bool` | `False` | `True` if semantic topic similarity was computed using fallback vectors |
-
----
-
-## 🧠 Agent Technical Deep-Dive
-
-Each agent is a plain Python function `run_<agent>(state: dict) -> dict` registered as a LangGraph node. The agents are wired in a **linear chain** with no conditional branching.
-
----
-
-### Agent 1 — Planner (`planner.py`)
-
-**Purpose**: Decomposes the user's research topic into 2–4 distinct sub-queries to maximise retrieval diversity.
-
-| Aspect | Detail |
-|---|---|
-| **LLM Call** | Single call to Gemini. System prompt: `"You are an expert research planner."` Temperature: `0.0` |
-| **Prompt Strategy** | Asks for distinct facets, methodologies, and research angles. Returns raw JSON array of strings. |
-| **Output Parsing** | Strips ` ```json ` fences → `json.loads()` → validates is `list` → casts all elements to `str` |
-| **Fallback** | On any exception (LLM failure, parse error), sets `sub_queries = [original_topic]` |
-| **Input** | `state["query"]`, `state["filters"]` |
-| **Output** | `state["sub_queries"]` |
-
----
-
-### Agent 2 — Search (`search.py`)
-
-**Purpose**: Retrieves papers from arXiv and Semantic Scholar for each sub-query in parallel, deduplicates, merges, and stores in ChromaDB.
-
-| Aspect | Detail |
-|---|---|
-| **Sources** | arXiv (XML API) + Semantic Scholar (REST v1) — queried **concurrently across all sub-queries** via `ThreadPoolExecutor(max_workers=6)` |
-| **Per-source limit** | 15 papers per sub-query per source |
-| **Year filtering** | Passed to both APIs + client-side belt-and-suspenders filter |
-| **Deduplication** | 3-tier matching: ① DOI exact match → ② arXiv ID exact match → ③ **Jaccard title similarity ≥ 0.8** |
-| **Merge strategy** | On duplicate: enriches the existing record with missing DOI, arXiv ID, PDF URL, citation count, citations list. Sets `source: "merged"` |
-| **Vector store** | After dedup, all papers are added to ChromaDB as `"{title}. {abstract}"` documents |
-| **Cancellation** | Checks `is_cancelled(job_id)` cooperatively before and after fetch |
-| **Input** | `state["sub_queries"]`, `state["filters"]` |
-| **Output** | `state["papers"]` (list of `PaperMeta` objects) |
-
-**Title similarity algorithm** (Jaccard):
-```python
-words1 = set(re.findall(r'\w+', title1.lower()))
-words2 = set(re.findall(r'\w+', title2.lower()))
-jaccard = len(words1 & words2) / len(words1 | words2)
-is_duplicate = jaccard >= 0.8
-```
-
----
-
-### Agent 3 — Extraction (`extraction.py`)
-
-**Purpose**: Extracts structured methodology fields (method, dataset, key metric, limitation) from each paper using parallel LLM calls + fuzzy grounding verification.
-
-All papers are processed concurrently using `ThreadPoolExecutor(max_workers=5)` with order preservation. Each paper goes through a **4-stage extraction pipeline**:
-
-**Stage 1 — PDF Download** (full-text papers only):
-- Downloads PDF from `paper.pdf_url` with 20s timeout and `ResearchMindBot/1.0` User-Agent
-- Validates response starts with `%PDF` magic bytes
-- Extracts text via PyMuPDF: **first 4 pages + last 2 pages** (balances context size vs. token cost)
-
-**Stage 2 — LLM Extraction** (two separate prompts):
-
-| Mode | Trigger | Prompt Length | Fields Extracted |
-|---|---|---|---|
-| **Full-text** | PDF downloaded successfully | First 12,000 chars of extracted text | `method`, `dataset`, `key_metric`, `limitation` + supporting quotes |
-| **Abstract-only** | No PDF available | Title + Abstract | `method`, `dataset`, `key_metric`, `limitation` (no quotes) |
-
-**Stage 3 — Second-pass Inference** (for blank fields):
-- If any field returns `"Not available"`, `"N/A"`, `"None"`, or is <5 chars, a **targeted follow-up LLM call** asks specific questions only for the blank fields
-- Uses temperature `0.1` (slightly creative) to encourage inference
-
-**Stage 4 — Grounding Verification**:
-
-| Mode | Verification Method | Pass Status | Fail Status |
-|---|---|---|---|
-| **Full-text** | Exact & **fuzzy substring match** (`_fuzzy_in_text` sliding window against whitespace-normalized text) | `verified` | `failed` |
-| **Abstract-only** | Keyword presence (≥4-char words, excluding stop words) | `verified` | `unverified` |
-
-**Heuristic Fallback** (when LLM fails entirely):
-- Rule-based regex extraction from title + abstract
-- Scans for **15+ method keywords** (transformer, bert, gpt, cnn, etc.)
-- Scans for **25+ named datasets** (ImageNet, CIFAR, SQuAD, etc.) and **14 task domain keywords**
-- Extracts metrics via regex patterns (`\d+%`, `accuracy \d+`, `BLEU \d+`, etc.)
-- Extracts limitations via patterns (`limited to`, `cannot`, `future work`, etc.)
-- Sets `verification_status = "heuristic"`
-
----
-
-### Agent 4 — Synthesis (`synthesis.py`)
-
-**Purpose**: Generates per-paper summaries with source attributions and compiles the comparison table using parallel execution (`ThreadPoolExecutor(max_workers=6)`).
-
-| Aspect | Detail |
-|---|---|
-| **Summary prompt** | Asks for a 3-sentence factual summary with mandatory `[Source: Abstract]`, `[Source: Method]`, etc. attribution tags |
-| **Attribution parsing** | Regex `\[Source:\s*([^\]]+)\]` extracts source labels from each sentence → stored as `{"sentence": "...", "source": "Method"}` |
-| **Comparison table** | Flattened dict per paper: `id`, `title`, `authors`, `year`, `venue`, `method`, `dataset`, `key_metric`, `limitation`, `verification_status`, `url` |
-| **URL resolution** | Centralized via `resolve_paper_url_from_meta(paper)`: `url` → arXiv abs → DOI → PDF |
-| **Input** | `state["papers"]`, `state["extracted_fields"]` |
-| **Output** | `state["summaries"]`, `state["comparison_table"]` |
-
----
-
-### Agent 5 — Graph/Gap (`graph_gap.py`)
-
-**Purpose**: Builds the citation and topic-similarity network, clusters papers thematically, and identifies research gaps using age-adjusted citation pace and structural isolation with bootstrap null significance testing.
-
-**Step 1 — Minimum Corpus Check**: Skips gap detection entirely if `len(papers) < 15`.
-
-**Step 2 — Graph Construction** (via `GraphStore.build_graph()`):
-- Batch embedding retrieval (`vs.get_embeddings_batch(paper_ids)`) + vectorized cosine similarity matrix calculation.
-- Tracks `embeddings_degraded` if vector embeddings use the hash-fallback generator.
-
-| Node Type | Attributes | Created From |
-|---|---|---|
-| `Paper` | `title`, `year`, `venue`, `abstract`, `citation_count`, `url`, `doi`, `arxiv_id`, `authors` | Each `PaperMeta` object |
-| `Author` | `name` | Each author in `PaperMeta.authors` |
-| `Topic` | `label`, `description` | LLM clustering output |
-
-| Edge Type | Direction | Condition |
-|---|---|---|
-| `AUTHORED_BY` | Paper → Author | Always created |
-| `CO_AUTHORED_WITH` | Author ↔ Author | Between co-authors on the same paper |
-| `CITES` | Paper → Paper | Only if cited paper is **within the corpus** |
-| `SIMILAR_TOPIC` | Paper ↔ Paper | Cosine similarity of ChromaDB embeddings **≥ 0.6** |
-| `BELONGS_TO` | Paper → Topic | From LLM clustering assignment |
-
-**Step 3 — Topic Clustering**: LLM groups papers into 3–5 thematic clusters (JSON output). Fallback: keyword-based clustering using 9 predefined keywords.
-
-**Step 4 — Advanced Gap Detection & Bootstrap Significance**:
-1. **Age-Adjusted Citation Pace**: For each cluster, computes $\text{pace} = \frac{\sum \text{citations}}{\text{total paper years}}$.
-2. **Cluster Isolation Score**: Measures internal citation density vs. cross-cluster bridging citations.
-3. **Gap Score**: Computes $\text{gap\_score} = \text{norm}(\text{isolation}) - \text{norm}(\text{pace})$.
-4. **Bootstrap Null Hypothesis**: Shuffles paper IDs across clusters 100 times to construct an empirical null distribution. Gaps are flagged only when their score exceeds the **90th percentile threshold** of the null distribution.
-5. **Distinctive Phrase Extraction**: Mines distinctive noun phrases from abstracts to generate targeted future research directions.
-
-Each gap produces a `GapClaim` with:
-- Induced subgraph (papers + authors + topic node) serialised via `json_graph.node_link_data()`
-- 3 auto-generated suggested research directions
-- `signal_degraded` indicator (set when embedding model is unavailable)
-
----
-
-### Agent 6 — Report (`report.py`)
-
-**Purpose**: Generates publication-grade report documents (PDF + DOCX) with parallelized LLM-written sections.
-
-**Parallel Generation**:
-- **Introduction & Thematic Synthesis** are generated concurrently via `ThreadPoolExecutor(max_workers=2)`.
-- **Gap Narratives** are generated concurrently per gap via `ThreadPoolExecutor(max_workers=4)`.
-
-**Three LLM-Generated Sections**:
-
-| Section | Prompt Details | Length Target |
-|---|---|---|
-| **Introduction** | Motivates topic importance, states objectives, describes methodology, outlines report structure | 5–7 sentences, 2 paragraphs |
-| **Thematic Synthesis** | 4 mandatory subsections: Methodological Landscape → Datasets & Benchmarks → Limitations & Challenges → Critical Assessment. Must cite papers inline. | 1000–1400 words |
-| **Gap Narratives** | One paragraph per gap explaining why it exists, its significance, and connecting suggested directions to concrete methodologies | 120–180 words per gap |
-
-**Report Structure**:
-1. Introduction (LLM-generated)
-2. Comparison Matrix (data-driven table)
-3. Thematic Literature Survey & Synthesis (LLM-generated, 4 subsections)
-4. Identified Research Gaps (LLM-generated narratives + citation density + directions)
-
-**Output Formats**:
-- **PDF** (ReportLab): Custom paragraph styles (`DocTitle`, `Heading1Style`, `Heading2Style`, `BodyStyle`), styled tables with alternating row backgrounds, page breaks between sections
-- **DOCX** (python-docx): `Light Shading Accent 1` table style, proper heading hierarchy, bullet lists for future directions
-- **Markdown** (in-memory): Stored in `state["report_draft"]["text"]` for frontend preview
-
----
-
-## 🔌 LLM Client Architecture
-
-The LLM client is [`claude_client.py`](backend/clients/claude_client.py) — named for backward compatibility but wrapping **Google Gemini**.
-
-| Aspect | Detail |
-|---|---|
-| **Class** | `ClaudeClient` |
-| **Provider** | `google.genai.Client` (from `google-genai` SDK) |
-| **Model** | `gemini-3.6-flash` |
-| **API Interface** | `client.complete(prompt, system, max_tokens=2000, temperature=0.0) → str` |
-| **System prompt** | Concatenated into the user prompt as `"System instructions: {system}\n\n{prompt}"` (Gemini basic API workaround) |
-| **Post-processing** | Auto-strips ` ```json ` and ` ``` ` fences from responses |
-| **Error handling** | Any API exception → falls back to mock response |
-
-### Mock Mode
-
-Activated when `GEMINI_API_KEY` is missing, set to placeholder, or on API failure.
-
-| Prompt Pattern Detected | Mock Response |
-|---|---|
-| `"decompose the following research topic"` | JSON array of 3 sub-queries |
-| `"title:"` + `"abstract:"` + `"method"` | JSON with method/dataset/metric/limitation |
-| `"paper text"` + `"method"` + `"dataset"` | JSON with fields + supporting quotes |
-| `"write a concise, factual 3-sentence summary"` | 3-sentence summary with `[Source: X]` tags |
-| `"thematic synthesis"` / `"academic literature review"` | 4-subsection synthesis text |
-| `"introduction"` / `"narrative"` / `"gap"` | Generic academic prose |
-| Anything else | Generic JSON fallback |
-
----
-
-## 🌐 External API Client Internals
-
-### arXiv Client (`arxiv_client.py`)
-
-| Aspect | Detail |
-|---|---|
-| **API endpoint** | `http://export.arxiv.org/api/query` (Atom XML) |
-| **Query fields** | `ti:{query}+OR+abs:{query}` (title + abstract scope — avoids matching on author names/comments) |
-| **Date filtering** | `submittedDate:[YYYYMMDD TO YYYYMMDD]` appended to query |
-| **Sort** | `sortBy=relevance&sortOrder=descending` |
-| **Parsing** | `xml.etree.ElementTree` with `atom:` namespace |
-| **ID extraction** | Regex on `http://arxiv.org/abs/2103.00020v1` → `2103.00020` (version stripped) |
-| **Caching** | MD5 hash of `(prefix, query, limit, year_from, year_to)` → JSON file in `backend/db/cache/` |
-| **Retry** | `@exponential_backoff(max_retries=3, base_delay=2.0)` |
-
-### Semantic Scholar Client (`s2_client.py`)
-
-| Aspect | Detail |
-|---|---|
-| **API endpoint** | `https://api.semanticscholar.org/graph/v1/paper/search` (REST JSON) |
-| **Fields requested** | `title,authors,year,venue,abstract,externalIds,citationCount,citations,openAccessPdf,url` |
-| **Auth** | Optional `x-api-key` header (from `SEMANTIC_SCHOLAR_API_KEY` env var) |
-| **Year filter** | `year` param: `"2020-2026"`, `"2020-"`, or `"-2026"` |
-| **ID strategy** | DOI preferred → falls back to S2 `paperId` |
-| **PDF URL priority** | `openAccessPdf.url` → arXiv PDF → `None` |
-| **Caching** | Same MD5-based file cache as arXiv |
-| **Retry** | `@exponential_backoff(max_retries=5, base_delay=3.0)` — explicit 429 detection |
-
----
-
-## 💾 Data Layer Architecture
-
-### File-Based Cache (`cache.py`)
-
-- **Location**: `backend/db/cache/` (auto-created)
-- **Key generation**: `MD5(json.dumps({args, sorted_kwargs}))` → filename `{prefix}_{hash}.json`
-- **Two-tier lookup**: Local cache → `fallback_dataset/cache/` (committed offline data)
-- **`@exponential_backoff` decorator**: Configurable `max_retries`, `base_delay`, `backoff_factor`. Only retries on rate-limit (429), connection, timeout, 502, and 503 errors. Non-retryable errors are raised immediately.
-
-### ChromaDB Vector Store (`vector_store.py`)
-
-- **Client**: `chromadb.PersistentClient` at `backend/db/chroma/`
-- **Collection**: `researchmind_papers`
-- **Document format**: `"{title}. {abstract}"` per paper
-- **Metadata stored**: `title`, `year`, `full_text_available`
-- **Embedding function**: ChromaDB `DefaultEmbeddingFunction()` (tested on init)
-- **Fallback embeddings**: If default function fails to download, generates **hash-seeded 384-dimensional unit vectors** via `numpy.random.RandomState(abs(hash(text)))` → normalised to unit length
-- **APIs**: `add_papers(papers)`, `query_similarity(query, limit=5)`, `get_embedding(paper_id)`
-
-### NetworkX Graph Store (`graph_store.py`)
-
-- **Graph type**: `nx.MultiDiGraph` (directed, allows multiple edge types between same nodes)
-- **Node types**: `Paper` (with metadata attributes), `Author` (with `name`)
-- **Edge construction**: See Agent 5 deep-dive above for all 5 edge types and their conditions
-- **SIMILAR_TOPIC threshold**: Cosine similarity ≥ 0.6 between ChromaDB embedding vectors
-- **Serialisation**: `networkx.readwrite.json_graph.node_link_data(G)` → JSON-serialisable dict
-
-### Logging (`logging_utils.py`)
-
-- **`get_job_logger(base_logger, job_id)`** — wraps a module logger with a `LoggerAdapter` that prefixes every log line with `[job=<job_id>]` for traceable pipeline execution. Falls back to `[job=-]` if `job_id` is `None`.
-
----
-
-## 📡 API Route Internals
-
-### Job Lifecycle & Persistence
-
-Active jobs are tracked in an in-memory dictionary with SQLite fallback restoration (`backend/api/jobs.py`):
-
-```python
-jobs = {}  # job_id → {"status": str, "state": dict, "error": str, "mock_mode": bool, ...}
-```
-
-- **Lifecycle**: `POST /query` → creates job with `status: "pending"` → `BackgroundTasks.add_task(execute_pipeline)` → status transitions through `"running"` → `"done"` / `"error"` / `"cancelled"`.
-- **Cancellation**: `POST /jobs/{job_id}/cancel` sets a cancellation flag checked cooperatively by agents at safe boundaries.
-- **SQLite Restoration (`get_or_restore_job`)**: If a job is not found in memory (e.g. after server restart or direct URL navigation), the backend attempts to restore completed session results directly from the `research_sessions` table in SQLite.
-- **LangGraph Checkpointing**: State is persisted after each node execution using SQLite-backed checkpointer (`SqliteSaver` in `backend/db/langgraph_checkpoints.db`).
-
-### `/results/{job_id}` Serialisation
-
-The results endpoint serialises Pydantic models to plain dicts via `model_dump()` before returning JSON. Returns `papers`, `comparison_table`, `gap_claims`, `graph_ref`, `summaries`, `sub_queries`, and `report_draft`.
-
-### `/qa` — QA Assistant Flow
-
-1. Queries ChromaDB for **top 15** papers most similar to the user's question
-2. Filters results to only papers belonging to the current job's paper set
-3. Falls back to first 8 comparison table entries if vector search returns no matches
-4. Builds a context string with paper metadata (title, authors, year, method, dataset, etc.)
-5. Sends to Gemini with system prompt: `"You are an advanced academic research assistant similar to Elicit"`
-6. Supports **conversation history** via optional `history` array in request body
-7. Returns `{"answer": "...", "papers_referenced": [{id, title, url}]}`
-
-### `/export/{job_id}` — Report Download
-
-Returns `FileResponse` with:
-- **PDF**: `application/pdf` media type
-- **DOCX**: `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
-- **Filename**: `ResearchMind_Report_{job_id[:8]}.{format}`
-
----
-
-## 🧪 Running Tests
-
-Run the full test suite (unit + integration):
-
-```bash
-python -m pytest
-```
-
-Run only unit tests:
-
-```bash
-python -m pytest tests/unit/
-```
-
-Run only integration tests:
-
-```bash
-python -m pytest tests/integration/
-```
-
-### Test Coverage
-
-| Test File | Agent / Module Tested |
-|---|---|
-| `test_planner.py` | Sub-query decomposition |
-| `test_search.py` | arXiv + Semantic Scholar search |
-| `test_extraction.py` | Field extraction & deduplication |
-| `test_synthesis.py` | Summarization & comparison table |
-| `test_graph_gap.py` | Citation graph & gap detection |
-| `test_report.py` | PDF/DOCX report generation |
-| `test_pipeline.py` | Full end-to-end LangGraph pipeline |
-
----
-
-## 🛡️ Offline Resilience & Demo Mode
-
-ResearchMind is designed to remain usable even without live API access:
-
-- **Local Caching**: The search agent caches all API responses under `backend/db/cache/`. Repeated queries are served from the cache instantly. Cache keys are MD5 hashes of the request parameters.
-- **Exponential Backoff**: API clients automatically retry on 429 (rate limit) and network errors with exponential backoff (up to 5 retries).
-- **Committed Fallback Dataset**: If the system is fully offline or rate-limited, it automatically falls back to:
-  - `fallback_dataset/cache/` — pre-fetched paper search results
-  - `fallback_dataset/results_attention_mechanisms.json` — a complete pre-computed pipeline result for the query *"attention mechanisms"*
-- **Fallback Embeddings**: If ChromaDB's default embedding model fails to download, the vector store falls back to hash-based 384-dimensional embeddings for similarity computation.
-
----
-
-## 📚 Documentation
-
-The `docs/` directory contains the following project documents:
-
-| Document | Description |
-|---|---|
-| `PRD_ResearchMind.docx` | Product Requirements Document |
-| `SRS_ResearchMind.docx` | Software Requirements Specification |
-| `TEST_PLAN_ResearchMind.docx` | Test Plan & test case definitions |
-| `BUILD_GUIDE_ResearchMind.docx` | Build & deployment guide |
-| `ANTIGRAVITY_BUILD_PROMPT_ResearchMind.md` | Original build prompt used to scaffold the project |
-
----
-
-## ⚠️ Error Handling & Graceful Degradation
-
-ResearchMind implements a **multi-layered degradation chain** to ensure the pipeline never crashes, even under adverse conditions:
-
-```
-Gemini API (live)
-    │ fails
-    ▼
-Gemini API (retry with backoff)
-    │ fails
-    ▼
-Second-pass LLM Inference (targeted questions for blank fields)
-    │ fails
-    ▼
-Heuristic Regex Extraction (rule-based from title + abstract)
-    │ if no data
-    ▼
-Mock Mode (deterministic simulated responses)
-```
-
-| Layer | Component | Degradation Behaviour |
-|---|---|---|
-| **LLM** | `ClaudeClient` | API failure → falls back to pattern-matched mock responses automatically |
-| **Extraction** | `extraction.py` | LLM fails → second-pass inference → heuristic regex → `verification_status: "heuristic"` |
-| **Search** | `arxiv_client.py` | Network error → exponential backoff (3 retries) → empty result list |
-| **Search** | `s2_client.py` | 429 rate limit → exponential backoff (5 retries, 3s base) → empty result list |
-| **Cache** | `cache.py` | Local cache miss → fallback dataset cache → live API call |
-| **Embeddings** | `vector_store.py` | Default embedding model download fails → hash-based 384-dim fallback vectors |
-| **Clustering** | `graph_gap.py` | LLM clustering fails → keyword-based fallback clustering |
-| **Gap Detection** | `graph_gap.py` | Corpus < 15 papers → skips gap detection entirely (returns empty `gap_claims`) |
-| **Report** | `report.py` | LLM intro/synthesis/narrative fails → deterministic template text |
-| **JSON parsing** | `extraction.py` | Handles markdown fences, preamble text, nested objects via `_parse_json_from_llm()` |
-
----
-
-## 🔄 Concurrency Model & Job Lifecycle
-
-| Aspect | Detail |
-|---|---|
-| **Task runner** | FastAPI `BackgroundTasks` (built-in, in-process) |
-| **Worker model** | Single-process, single-thread per job (no Celery, no Redis, no task queue) |
-| **Job storage** | In-memory Python `dict` — **lost on server restart** |
-| **Concurrent jobs** | Supported (each `POST /query` creates a new background task with a unique `job_id`) |
-| **Progress tracking** | Each agent updates `state["agent_status"][agent_name]` → polled by frontend via `GET /status/{job_id}` |
-| **Pipeline invocation** | `pipeline_app.invoke(initial_state)` — synchronous LangGraph execution within the background task |
-| **CORS** | `allow_origins=["*"]` — open for local development |
-
-```mermaid
-sequenceDiagram
-    participant FE as Frontend
-    participant API as FastAPI
-    participant BG as BackgroundTask
-    participant LG as LangGraph
-    
-    FE->>API: POST /query {query, filters}
-    API->>BG: add_task(execute_pipeline)
-    API-->>FE: {job_id}
-    
-    loop Every 2 seconds
-        FE->>API: GET /status/{job_id}
-        API-->>FE: {status, agent_status}
-    end
-    
-    BG->>LG: pipeline_app.invoke(initial_state)
-    LG->>LG: Planner → Search → Extraction → Synthesis → Graph/Gap → Report
-    LG-->>BG: final_state
-    BG->>API: jobs[job_id] = {status: "done", state: final_state}
-    
-    FE->>API: GET /results/{job_id}
-    API-->>FE: {papers, comparison_table, gap_claims, graph_ref, report_draft}
-```
-
----
-
-## ⚡ Known Limitations & Constraints
-
-| Limitation | Impact | Possible Future Improvement |
-|---|---|---|
-| **In-memory job store** | Active job status stored in memory; completed sessions auto-persisted to SQLite for authenticated users | Full persistent task queue via Redis/Celery |
-| **CORS `allow_origins=["*"]`** | Insecure for production deployment | Restrict to specific frontend origin |
-| **No WebSocket** | Frontend polls every 2s instead of receiving push updates | Add WebSocket channel for real-time agent status |
-| **Sequential agent execution** | All 6 agents run in strict sequence; no parallelism within the pipeline | Use LangGraph branching for parallel Search + Extraction |
-| **No pagination** | arXiv and S2 results limited to 15 per sub-query per source | Add configurable limits and pagination |
-| **PDF extraction scope** | Only first 4 + last 2 pages of each PDF are extracted | Configurable page ranges or full-text extraction |
-| **Embedding fallback quality** | Hash-based vectors provide random similarity, not semantic | Bundle a lightweight local embedding model |
-| **No Docker** | Manual Python venv + Node.js setup required | Add `Dockerfile` + `docker-compose.yml` |
-| **Gemini-only LLM** | Locked to Google Gemini; no provider switching | Add OpenAI / Anthropic / Ollama adapters |
-| **Hardcoded API base URL** | Frontend API base is hardcoded to `http://localhost:8000` | Use environment variable or Vite proxy |
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is developed as an academic research tool. See [LICENSE](LICENSE) for details.
+`docs/` contains the original PRD, SRS, build guide, test plan and the AI-agent build prompt this project was generated from. Where they disagree with the code (for example, the earlier "below-median citation density" gap rule), this README reflects the code.

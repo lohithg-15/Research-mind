@@ -36,3 +36,9 @@ backend/db/*.db-wal
 # Scratch / temporary
 scratch/
 pytest-cache-files-*/
+
+
+#CLAUDE
+.claude/
+CLAUDE.md
+docs/ui-spec.md

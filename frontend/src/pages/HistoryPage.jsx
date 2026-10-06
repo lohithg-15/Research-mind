@@ -4,7 +4,7 @@ import {
   Clock, Plus, Trash2, Search, Loader2, BookOpen,
   Calendar, AlertCircle,
 } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import AppShell from '../components/shell/AppShell';
 import { useAuth } from '../context/AuthContext';
 import { useResearch } from '../context/ResearchContext';
 
@@ -95,8 +95,7 @@ export default function HistoryPage() {
   const grouped = groupByDate(filtered);
 
   return (
-    <div className="page-shell">
-      <Navbar />
+    <AppShell>
       <main className="history-main">
         <div className="history-page-header">
           <div>
@@ -225,6 +224,6 @@ export default function HistoryPage() {
           );
         })}
       </main>
-    </div>
+    </AppShell>
   );
 }

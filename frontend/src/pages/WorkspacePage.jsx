@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { Loader2, AlertCircle, RotateCcw } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import AppShell from '../components/shell/AppShell';
 import { useResearch } from '../context/ResearchContext';
 
 /* Lazy-load heavy tabs */
@@ -61,9 +61,7 @@ export default function WorkspacePage() {
   const isLoading = !isDone && !error;
 
   return (
-    <div className="page-shell">
-      <Navbar />
-
+    <AppShell>
       <main className="workspace-main">
         {/* Error state */}
         {error && (
@@ -99,6 +97,6 @@ export default function WorkspacePage() {
           </Suspense>
         )}
       </main>
-    </div>
+    </AppShell>
   );
 }

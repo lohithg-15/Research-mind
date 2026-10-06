@@ -1,0 +1,89 @@
+.rm-progress-main {
+  padding: var(--rm-space-6);
+  height: calc(100vh - var(--rm-topbar-h));
+  box-sizing: border-box;
+}
+.rm-progress-split { height: 100%; }
+
+.rm-progress-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rm-space-4);
+  padding-right: var(--rm-space-5);
+  overflow-y: auto;
+  height: 100%;
+}
+
+.rm-progress-bubble {
+  align-self: flex-end;
+  max-width: 70%;
+  background: var(--rm-accent);
+  color: #fff;
+  padding: var(--rm-space-3) var(--rm-space-4);
+  border-radius: var(--rm-radius-lg);
+  border-bottom-right-radius: var(--rm-radius-sm);
+  font-size: var(--rm-font-size-body);
+}
+
+.rm-progress-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rm-space-2);
+  margin-bottom: var(--rm-space-4);
+}
+.rm-progress-card-title {
+  font-size: var(--rm-font-size-h3);
+  font-weight: 700;
+  color: var(--rm-text);
+  margin: 0;
+}
+.rm-progress-card-timer {
+  margin-left: auto;
+  font-family: var(--rm-font-mono);
+  font-size: var(--rm-font-size-small);
+  color: var(--rm-text-muted);
+}
+
+.rm-progress-error-box {
+  display: flex;
+  gap: var(--rm-space-2);
+  margin-top: var(--rm-space-4);
+  padding: var(--rm-space-3);
+  border-radius: var(--rm-radius-sm);
+  background: rgba(214, 69, 93, 0.1);
+  color: var(--rm-danger);
+}
+.rm-progress-error-title { font-weight: 700; margin: 0; font-size: var(--rm-font-size-small); }
+.rm-progress-error-msg { margin: 2px 0 0; font-size: var(--rm-font-size-small); }
+
+.rm-progress-actions {
+  display: flex;
+  gap: var(--rm-space-3);
+  margin-top: var(--rm-space-4);
+}
+.rm-progress-note {
+  margin-top: var(--rm-space-4);
+  font-size: var(--rm-font-size-small);
+  color: var(--rm-text-muted);
+}
+
+.rm-progress-sources {
+  height: 100%;
+  overflow-y: auto;
+  padding-left: var(--rm-space-5);
+  border-left: 1px solid var(--rm-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--rm-space-3);
+}
+.rm-progress-sources-title {
+  font-size: var(--rm-font-size-h3);
+  font-weight: 700;
+  color: var(--rm-text);
+  margin: 0 0 var(--rm-space-2);
+}
+.rm-progress-source-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rm-space-1);
+}

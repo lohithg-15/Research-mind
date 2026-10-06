@@ -1,41 +1,58 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  CheckCircle2, Loader2, AlertCircle, Circle,
-  RotateCcw, Plus, XCircle,
-} from 'lucide-react';
-import Navbar from '../components/Navbar';
+import { Loader2, AlertCircle, RotateCcw, Plus, XCircle, FileSearch } from 'lucide-react';
+import AppShell from '../components/shell/AppShell';
 import { useResearch } from '../context/ResearchContext';
+import Card from '../components/ui/Card';
+import Button from '../components/ui/Button';
+import StepTimeline from '../components/ui/StepTimeline';
+import SplitPane from '../components/ui/SplitPane';
+import Skeleton from '../components/ui/Skeleton';
+import EmptyState from '../components/ui/EmptyState';
+import './ProgressPage.css';
 
-/* Plain-language stage labels for the progress page */
 const STAGES = [
-  { key: 'planner',    label: 'Planning',              desc: 'Decomposing your topic into sub-queries' },
-  { key: 'search',     label: 'Searching Papers',      desc: 'Retrieving from arXiv & Semantic Scholar' },
-  { key: 'extraction', label: 'Extracting Information',desc: 'Reading papers and extracting key fields' },
-  { key: 'synthesis',  label: 'Synthesizing',          desc: 'Generating summaries and comparison table' },
-  { key: 'graph_gap',  label: 'Finding Gaps',          desc: 'Building citation graph and detecting gaps' },
-  { key: 'report',     label: 'Generating Report',     desc: 'Compiling publication-grade draft' },
+  { key: 'planner',    label: 'Planner',    description: 'Decomposing your topic into sub-queries' },
+  { key: 'search',     label: 'Search',     description: 'Retrieving from arXiv & Semantic Scholar' },
+  { key: 'extraction', label: 'Extraction', description: 'Reading papers and extracting key fields' },
+  { key: 'synthesis',  label: 'Synthesis',  description: 'Generating summaries and comparison table' },
+  { key: 'graph_gap',  label: 'Graph & Gap', description: 'Building citation graph and detecting gaps' },
+  { key: 'report',     label: 'Report',     description: 'Compiling publication-grade draft' },
 ];
+
+function formatElapsed(startedAt) {
+  if (!startedAt) return '0:00';
+  const secs = Math.max(0, Math.floor((Date.now() - startedAt * 1000) / 1000));
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
 
 export default function ProgressPage() {
   const { jobId } = useParams();
   const navigate  = useNavigate();
   const {
     query, agentStatus, jobStatus, isDone, isRunning,
-    error, restoreJob, clearResearch,
+    error, startedAt, restoreJob, clearResearch,
   } = useResearch();
 
-  // Re-attach polling if this page is loaded directly (deep link / refresh)
+  const [elapsed, setElapsed] = useState(() => formatElapsed(startedAt));
+
   useEffect(() => {
     if (jobId) restoreJob(jobId);
   }, [jobId]); // eslint-disable-line
 
-  // Auto-navigate to results when done
   useEffect(() => {
     if (isDone && jobId) {
       navigate(`/research/${jobId}/papers`, { replace: true });
     }
   }, [isDone, jobId, navigate]);
+
+  useEffect(() => {
+    if (!isRunning) return;
+    const id = setInterval(() => setElapsed(formatElapsed(startedAt)), 1000);
+    return () => clearInterval(id);
+  }, [isRunning, startedAt]);
 
   const isError = jobStatus === 'error';
 
@@ -43,111 +60,98 @@ export default function ProgressPage() {
     const s = agentStatus?.[key];
     if (s === 'done')    return 'done';
     if (s === 'running') return 'running';
-    if (s === 'error')   return 'error';
+    if (s === 'error')   return 'failed';
     return 'pending';
   };
 
-  const doneCount = STAGES.filter(s => getStageState(s.key) === 'done').length;
-  const progress  = Math.round((doneCount / STAGES.length) * 100);
+  const steps = STAGES.map(s => ({ ...s, status: getStageState(s.key) }));
+  const searchDone = getStageState('search') === 'done' || getStageState('extraction') !== 'pending';
 
   return (
-    <div className="page-shell">
-      <Navbar />
-      <main className="progress-main">
-        <div className="progress-card">
-          {/* Header */}
-          <div className="progress-header">
-            {isError
-              ? <XCircle size={32} className="progress-icon error" />
-              : isRunning
-              ? <Loader2 size={32} className="progress-icon spin" />
-              : <CheckCircle2 size={32} className="progress-icon done" />
-            }
-            <h1 className="progress-title">
-              {isError ? 'Research Failed' : isRunning ? 'Running Research…' : 'Almost done…'}
-            </h1>
-            {query && (
-              <p className="progress-query">"{query}"</p>
-            )}
-          </div>
+    <AppShell>
+      <main className="rm-progress-main">
+        <SplitPane
+          className="rm-progress-split"
+          storageKey="rm_progress_split"
+          defaultLeft={560}
+          left={
+            <div className="rm-progress-left">
+              {query && <div className="rm-progress-bubble">{query}</div>}
 
-          {/* Progress bar */}
-          {!isError && (
-            <div className="progress-bar-wrap" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-              <div className="progress-bar-track">
-                <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
-              </div>
-              <span className="progress-bar-pct">{progress}%</span>
-            </div>
-          )}
-
-          {/* Stage list */}
-          <div className="progress-stages">
-            {STAGES.map((stage, idx) => {
-              const state = getStageState(stage.key);
-              return (
-                <div key={stage.key} className={`progress-stage ${state}`}>
-                  <div className="progress-stage-icon">
-                    {state === 'done'    && <CheckCircle2 size={16} />}
-                    {state === 'running' && <Loader2 size={16} className="spin" />}
-                    {state === 'error'   && <AlertCircle size={16} />}
-                    {state === 'pending' && <span className="stage-num">{idx + 1}</span>}
-                  </div>
-                  <div className="progress-stage-body">
-                    <span className="progress-stage-label">{stage.label}</span>
-                    <span className="progress-stage-desc">{stage.desc}</span>
-                  </div>
-                  <span className={`progress-stage-badge ${state}`}>
-                    {state === 'running' ? 'Running' : state === 'done' ? 'Done' : state === 'error' ? 'Error' : ''}
-                  </span>
+              <Card>
+                <div className="rm-progress-card-header">
+                  {isError
+                    ? <XCircle size={20} color="var(--rm-danger)" />
+                    : isRunning
+                    ? <Loader2 size={20} className="rm-spinner" color="var(--rm-accent)" />
+                    : <Loader2 size={20} color="var(--rm-success)" />
+                  }
+                  <h1 className="rm-progress-card-title">
+                    {isError ? 'Research failed' : 'Working on your request'}
+                  </h1>
+                  {!isError && <span className="rm-progress-card-timer">{elapsed}</span>}
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Error state */}
-          {isError && (
-            <div className="progress-error-box">
-              <AlertCircle size={16} />
-              <div>
-                <p className="progress-error-title">Something went wrong</p>
-                <p className="progress-error-msg">
-                  {error || 'The research pipeline encountered an error. Please try again.'}
-                </p>
-              </div>
+                <StepTimeline steps={steps} />
+
+                {isError && (
+                  <div className="rm-progress-error-box">
+                    <AlertCircle size={16} />
+                    <div>
+                      <p className="rm-progress-error-title">Something went wrong</p>
+                      <p className="rm-progress-error-msg">
+                        {error || 'The research pipeline encountered an error. Please try again.'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="rm-progress-actions">
+                  {isError ? (
+                    <>
+                      <Button variant="secondary" icon={<RotateCcw size={14} />} onClick={() => navigate('/research/new')}>
+                        Try again
+                      </Button>
+                      <Button icon={<Plus size={14} />} onClick={() => { clearResearch(); navigate('/research/new'); }}>
+                        New research
+                      </Button>
+                    </>
+                  ) : (
+                    <Button variant="ghost" onClick={() => { clearResearch(); navigate('/research/new'); }}>
+                      Cancel
+                    </Button>
+                  )}
+                </div>
+
+                {isRunning && (
+                  <p className="rm-progress-note">
+                    This typically takes 30–120 seconds. You can leave this page and come back — progress is saved.
+                  </p>
+                )}
+              </Card>
             </div>
-          )}
-
-          {/* Actions */}
-          {isError && (
-            <div className="progress-actions">
-              <button
-                className="btn-secondary"
-                onClick={() => navigate('/research/new')}
-                id="progress-retry-btn"
-              >
-                <RotateCcw size={14} />
-                Try Again
-              </button>
-              <button
-                className="btn-primary"
-                onClick={() => { clearResearch(); navigate('/research/new'); }}
-                id="progress-new-btn"
-              >
-                <Plus size={14} />
-                New Research
-              </button>
+          }
+          right={
+            <div className="rm-progress-sources">
+              <h2 className="rm-progress-sources-title">Sources</h2>
+              {!searchDone ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <div className="rm-progress-source-card" key={i}>
+                    <Skeleton height="14px" width="70%" />
+                    <Skeleton height="12px" width="40%" />
+                  </div>
+                ))
+              ) : (
+                <EmptyState
+                  icon={<FileSearch size={20} />}
+                  title="Sources retrieved"
+                  description="Papers will appear in the Papers tab once the report is ready."
+                />
+              )}
             </div>
-          )}
-
-          {/* Waiting message */}
-          {isRunning && (
-            <p className="progress-note">
-              This typically takes 30–120 seconds. You can leave this page and come back — progress is saved.
-            </p>
-          )}
-        </div>
+          }
+        />
       </main>
-    </div>
+    </AppShell>
   );
 }

@@ -1,0 +1,49 @@
+.rm-authmodal { padding: var(--rm-space-6); }
+.rm-authmodal-header { margin-bottom: var(--rm-space-4); }
+.rm-authmodal-title {
+  font-size: var(--rm-font-size-h1);
+  font-weight: 800;
+  color: var(--rm-text);
+  margin: 0;
+}
+.rm-authmodal-subtitle {
+  margin: var(--rm-space-1) 0 0;
+  color: var(--rm-text-secondary);
+  font-size: var(--rm-font-size-small);
+}
+.rm-authmodal-tabs { margin-bottom: var(--rm-space-4); }
+
+.rm-authmodal-error {
+  display: flex;
+  align-items: center;
+  gap: var(--rm-space-2);
+  padding: var(--rm-space-2) var(--rm-space-3);
+  margin-bottom: var(--rm-space-3);
+  border-radius: var(--rm-radius-sm);
+  background: rgba(214, 69, 93, 0.1);
+  color: var(--rm-danger);
+  font-size: var(--rm-font-size-small);
+}
+
+.rm-authmodal-form { display: flex; flex-direction: column; gap: var(--rm-space-4); }
+.rm-authmodal-field { display: flex; flex-direction: column; gap: var(--rm-space-1); }
+.rm-authmodal-label { font-size: var(--rm-font-size-small); font-weight: 600; color: var(--rm-text); }
+.rm-authmodal-input-wrap { position: relative; display: flex; align-items: center; }
+.rm-authmodal-input-icon { position: absolute; left: var(--rm-space-3); color: var(--rm-text-muted); pointer-events: none; }
+.rm-authmodal-input-wrap .rm-input { padding-left: var(--rm-space-8); }
+
+.rm-authmodal-footer {
+  margin-top: var(--rm-space-5);
+  text-align: center;
+  font-size: var(--rm-font-size-small);
+  color: var(--rm-text-secondary);
+}
+.rm-authmodal-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--rm-accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+.rm-authmodal-link:hover { color: var(--rm-accent-hover); }

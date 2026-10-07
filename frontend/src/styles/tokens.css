@@ -65,6 +65,10 @@
   --rm-font-size-small: 13px;
   --rm-font-size-micro: 12px;
 
+  /* Graph surface */
+  --rm-graph-bg: #FBFAFB;
+  --rm-graph-dot: #E6E0E4;
+
   --rm-focus-ring: 0 0 0 2px rgba(148, 68, 91, 0.4);
   --rm-transition: 150ms ease;
 }

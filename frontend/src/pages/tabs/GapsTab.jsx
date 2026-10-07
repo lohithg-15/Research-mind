@@ -1,124 +1,88 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GitFork, FileSearch, ChevronDown, ChevronUp } from 'lucide-react';
+import { GitFork, FileSearch, ChevronDown, ChevronUp, Network } from 'lucide-react';
 import { useResearch } from '../../context/ResearchContext';
+import { getGapLevel } from '../../components/graph/gapLevel';
+import Card from '../../components/ui/Card';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import EmptyState from '../../components/ui/EmptyState';
+import './gaps.css';
 
-function GapCard({ gap, idx, jobId, navigate }) {
+function GapCard({ gap, idx, jobId }) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const papers    = gap.supporting_papers || gap.papers || [];
-  const gapText   = gap.gap || gap.claim || gap.description || 'Research gap identified';
-  const evidence  = gap.evidence || gap.explanation || '';
-  const density   = gap.citation_density ?? gap.density ?? null;
-
-  const riskLabel =
-    density == null        ? null :
-    density < 1            ? 'Critical Gap' :
-    density < 3            ? 'Significant Gap' :
-    density < 6            ? 'Moderate Gap' :
-                             'Minor Gap';
-
-  const riskClass =
-    density == null        ? '' :
-    density < 1            ? 'risk-critical' :
-    density < 3            ? 'risk-significant' :
-    density < 6            ? 'risk-moderate' :
-                             'risk-minor';
+  const papers = gap.supporting_papers || gap.papers || [];
+  const claim = gap.gap || gap.claim || gap.description || 'Research gap identified';
+  const evidence = gap.evidence || gap.explanation || '';
+  const density = gap.citation_density ?? gap.density ?? null;
+  const level = getGapLevel(density);
+  const confidence = typeof gap.confidence === 'number'
+    ? Math.round((gap.confidence <= 1 ? gap.confidence * 100 : gap.confidence) / 5) * 5
+    : Math.round(Math.max(0, 100 - level.pct) / 5) * 5;
+  const paperTitle = p => (typeof p === 'string' ? p : p.title || 'Paper');
+  const graphTarget = gap.gap_id != null ? gap.gap_id : idx;
 
   return (
-    <article className="gap-card">
-      <div className="gap-card-header">
-        <div className="gap-card-number">{idx + 1}</div>
-        <div className="gap-card-content">
-          <p className="gap-card-text">{gapText}</p>
-          {riskLabel && (
-            <span className={`gap-card-risk ${riskClass}`}>{riskLabel}</span>
-          )}
+    <Card className="rm-gap-card">
+      <div className="rm-gap-top">
+        <span className="rm-gap-index">Gap {idx + 1}</span>
+        {density != null && <Badge tone={level.tone}>{level.label}</Badge>}
+      </div>
+      <p className="rm-gap-claim">{claim}</p>
+      <div className="rm-gap-conf">
+        <div className="rm-gap-conf-label"><span>Confidence</span><span>{confidence}%</span></div>
+        <div className="rm-gap-bar" role="progressbar" aria-valuenow={confidence} aria-valuemin={0} aria-valuemax={100} aria-label="Confidence">
+          <div className={`rm-gap-bar-fill rm-w-${confidence}`} />
         </div>
       </div>
-
-      {(evidence || papers.length > 0) && (
-        <div className="gap-card-footer">
-          {papers.length > 0 && (
-            <span className="gap-card-papers">
-              {papers.length} supporting paper{papers.length !== 1 ? 's' : ''}
-            </span>
-          )}
-          {evidence && (
-            <button
-              className="gap-card-toggle"
-              onClick={() => setOpen(v => !v)}
-              aria-expanded={open}
-            >
-              {open ? <><ChevronUp size={11} /> Hide evidence</> : <><ChevronDown size={11} /> View evidence</>}
+      {open && evidence && <p className="rm-gap-evidence">{evidence}</p>}
+      {open && papers.length > 0 && (
+        <div className="rm-gap-chips">
+          {papers.slice(0, 6).map((p, i) => (
+            <button type="button" key={i} className="rm-gap-chip" title={paperTitle(p)} onClick={() => navigate(`/research/${jobId}/papers`)}>
+              <FileSearch size={11} /><span>{paperTitle(p)}</span>
             </button>
-          )}
+          ))}
         </div>
       )}
-
-      {open && evidence && (
-        <div className="gap-card-evidence">
-          <p>{evidence}</p>
-          {papers.length > 0 && (
-            <div className="gap-card-paper-list">
-              {papers.slice(0, 5).map((p, pIdx) => (
-                <button
-                  key={pIdx}
-                  className="gap-card-paper-link"
-                  onClick={() => navigate(`/research/${jobId}/papers`)}
-                  title={typeof p === 'string' ? p : p.title}
-                >
-                  <FileSearch size={10} />
-                  {typeof p === 'string' ? p.slice(0, 60) : (p.title || 'Paper').slice(0, 60)}
-                  {(typeof p === 'string' ? p : p.title || '').length > 60 ? '…' : ''}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </article>
+      <div className="rm-gap-foot">
+        {(evidence || papers.length > 0) && (
+          <Button variant="ghost" size="sm" onClick={() => setOpen(v => !v)} aria-expanded={open} icon={open ? <ChevronUp size={13} /> : <ChevronDown size={13} />}>
+            {open ? 'Hide evidence' : `View evidence${papers.length ? ` (${papers.length})` : ''}`}
+          </Button>
+        )}
+        <Button variant="secondary" size="sm" icon={<Network size={13} />} onClick={() => navigate(`/research/${jobId}/graph?gap=${encodeURIComponent(graphTarget)}`)}>
+          Highlight in graph
+        </Button>
+      </div>
+    </Card>
   );
 }
 
 export default function GapsTab() {
   const { results } = useResearch();
   const { jobId } = useParams();
-  const navigate  = useNavigate();
-
   const gaps = results?.gap_claims || [];
 
   if (gaps.length === 0) {
     return (
-      <div className="tab-content fade-in">
-        <div className="panel-empty">
-          <GitFork size={32} className="rm-muted-icon" />
-          <p className="panel-empty-title">No research gaps detected</p>
-          <p className="panel-empty-desc">The pipeline did not identify significant gaps for this topic.</p>
-        </div>
+      <div className="rm-tab-content">
+        <EmptyState icon={<GitFork size={20} />} title="No research gaps detected" description="The pipeline did not identify significant gaps for this topic." />
       </div>
     );
   }
 
   return (
-    <div className="tab-content fade-in">
-      <div className="tab-section-header">
-        <h2 className="tab-section-title">Research Gaps</h2>
-        <span className="tab-section-count">{gaps.length} gap{gaps.length !== 1 ? 's' : ''} identified</span>
+    <div className="rm-tab-content">
+      <div className="rm-gaps-head">
+        <h2>Research gaps</h2>
+        <Badge tone="accent">{gaps.length} identified</Badge>
       </div>
-      <p className="tab-section-desc">
-        Each gap represents an underexplored area in the literature. Click "View evidence" to see supporting papers and reasoning.
-      </p>
-      <div className="gaps-list">
-        {gaps.map((gap, idx) => (
-          <GapCard
-            key={idx}
-            gap={gap}
-            idx={idx}
-            jobId={jobId}
-            navigate={navigate}
-          />
-        ))}
+      <p className="rm-gaps-desc">Each gap is an underexplored area in the literature. Expand a card to see its supporting papers and reasoning.</p>
+      <div className="rm-gaps-list">
+        {gaps.map((gap, idx) => <GapCard key={gap.gap_id ?? idx} gap={gap} idx={idx} jobId={jobId} />)}
       </div>
     </div>
   );

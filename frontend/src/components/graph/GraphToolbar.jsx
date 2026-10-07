@@ -1,15 +1,27 @@
 import React from 'react';
-import { Crosshair, Maximize2, Minimize2, ZoomIn, ZoomOut } from 'lucide-react';
+import { Crosshair, LocateFixed, Maximize2, Minimize2, ZoomIn, ZoomOut } from 'lucide-react';
+import Tooltip from '../ui/Tooltip';
 
-export default function GraphToolbar({ onZoomIn, onZoomOut, onFit, isFullscreen, onToggleFullscreen }) {
+function ToolButton({ label, onClick, active, children }) {
   return (
-    <div className="gv2-zoom-controls" aria-label="Graph controls">
-      <button type="button" className="gv2-zoom-btn" onClick={onZoomIn} title="Zoom in" aria-label="Zoom in"><ZoomIn size={13} /></button>
-      <button type="button" className="gv2-zoom-btn" onClick={onZoomOut} title="Zoom out" aria-label="Zoom out"><ZoomOut size={13} /></button>
-      <button type="button" className="gv2-zoom-btn" onClick={onFit} title="Fit all" aria-label="Fit all"><Crosshair size={13} /></button>
-      <button type="button" className={`gv2-zoom-btn${isFullscreen ? ' is-active' : ''}`} onClick={onToggleFullscreen} title={isFullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen'} aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
-        {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+    <Tooltip label={label} side="right">
+      <button type="button" className={`rm-graph-btn${active ? ' rm-graph-btn-active' : ''}`} onClick={onClick} aria-label={label} aria-pressed={active}>
+        {children}
       </button>
+    </Tooltip>
+  );
+}
+
+export default function GraphToolbar({ onZoomIn, onZoomOut, onFit, onCenter, isFullscreen, onToggleFullscreen }) {
+  return (
+    <div className="rm-graph-toolbar" role="toolbar" aria-label="Graph controls">
+      <ToolButton label="Zoom in" onClick={onZoomIn}><ZoomIn size={15} /></ToolButton>
+      <ToolButton label="Zoom out" onClick={onZoomOut}><ZoomOut size={15} /></ToolButton>
+      <ToolButton label="Fit all" onClick={onFit}><Crosshair size={15} /></ToolButton>
+      <ToolButton label="Center" onClick={onCenter}><LocateFixed size={15} /></ToolButton>
+      <ToolButton label={isFullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen'} onClick={onToggleFullscreen} active={isFullscreen}>
+        {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+      </ToolButton>
     </div>
   );
 }

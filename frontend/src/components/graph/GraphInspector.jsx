@@ -1,20 +1,53 @@
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, ExternalLink } from 'lucide-react';
+import Badge from '../ui/Badge';
+import Button from '../ui/Button';
 
-export default function GraphInspector({ node, onClose }) {
-  if (!node) return null;
+function LinkList({ title, items }) {
+  if (!items?.length) return null;
   return (
-    <aside className="rm-graph-inspector" aria-label="Selected node details">
-      <button type="button" className="rm-graph-inspector-close" onClick={onClose} aria-label="Close inspector"><X size={15} /></button>
-      <span className="gv2-node-type">{node.type}</span>
-      <h3 className="gv2-node-title">{node.label}</h3>
-      {node.type === 'Paper' && (
-        <>
-          {node.year && <div className="gv2-node-meta">Published {node.year}</div>}
-          {node.venue && <div className="gv2-node-meta">{node.venue}</div>}
-          {node.citationCount != null && <div className="gv2-node-meta">{node.citationCount} citations</div>}
-          {node.url && <a className="gv2-node-link" href={node.url} target="_blank" rel="noopener noreferrer">Open paper ↗</a>}
-        </>
+    <section className="rm-inspector-section">
+      <h4>{title} <span>({items.length})</span></h4>
+      <ul>
+        {items.slice(0, 8).map(item => <li key={item.id} title={item.label}>{item.label}</li>)}
+        {items.length > 8 && <li className="rm-inspector-more">+{items.length - 8} more</li>}
+      </ul>
+    </section>
+  );
+}
+
+export default function GraphInspector({ node, level, onClose }) {
+  if (!node) return null;
+  const isPaper = node.type === 'Paper';
+  return (
+    <aside className="rm-inspector" aria-label="Selected node details">
+      <div className="rm-inspector-head">
+        <Badge tone={isPaper ? 'accent' : 'neutral'}>{node.type}</Badge>
+        <Button variant="ghost" size="sm" icon={<X size={15} />} onClick={onClose} aria-label="Close inspector" />
+      </div>
+      <h3 className="rm-inspector-title">{node.label}</h3>
+      {isPaper && (
+        <div className="rm-inspector-meta">
+          {node.year && <span>Published {node.year}</span>}
+          {node.venue && <span>{node.venue}</span>}
+          {node.citationCount != null && <span>{node.citationCount} citations</span>}
+        </div>
+      )}
+      {isPaper && node.url && (
+        <a className="rm-inspector-link" href={node.url} target="_blank" rel="noopener noreferrer">
+          <ExternalLink size={13} /> Open paper
+        </a>
+      )}
+      <LinkList title="Cites" items={node.cites} />
+      <LinkList title="Cited by" items={node.citedBy} />
+      {level && (
+        <section className={`rm-inspector-risk rm-risk-${level.key}`}>
+          <level.Icon size={16} className="rm-risk-icon" />
+          <div>
+            <div className="rm-risk-label">{level.label}</div>
+            <div className="rm-risk-sub">{level.sublabel}</div>
+          </div>
+        </section>
       )}
     </aside>
   );

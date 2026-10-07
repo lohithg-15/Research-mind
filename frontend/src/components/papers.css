@@ -1,0 +1,71 @@
+.rm-mono { font-family: var(--rm-font-mono); font-size: var(--rm-font-size-micro); }
+
+/* Toolbar */
+.rm-papers-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--rm-space-3); margin-bottom: var(--rm-space-4); flex-wrap: wrap; }
+.rm-papers-count { font-weight: 700; }
+.rm-papers-count span { color: var(--rm-text-muted); font-weight: 400; margin-left: var(--rm-space-2); }
+.rm-papers-controls { display: flex; align-items: center; gap: var(--rm-space-2); flex-wrap: wrap; }
+.rm-papers-search { position: relative; width: 260px; }
+.rm-papers-search svg { position: absolute; left: 10px; top: 13px; color: var(--rm-text-muted); pointer-events: none; }
+.rm-papers-search .rm-input { padding-left: 32px; }
+.rm-select { height: 40px; padding: 0 var(--rm-space-3); border: 1px solid var(--rm-border-strong); border-radius: var(--rm-radius-sm); background: var(--rm-bg); color: var(--rm-text); font-size: var(--rm-font-size-body); cursor: pointer; }
+.rm-select:focus-visible { box-shadow: var(--rm-focus-ring); outline: none; }
+
+/* Filter popover */
+.rm-popover-wrap { position: relative; }
+.rm-popover { position: absolute; right: 0; top: calc(100% + 8px); width: 280px; padding: var(--rm-space-4); background: var(--rm-bg); border: 1px solid var(--rm-border); border-radius: var(--rm-radius-md); box-shadow: var(--rm-shadow-pop); z-index: 60; display: grid; gap: var(--rm-space-4); }
+.rm-popover-head { display: flex; align-items: center; justify-content: space-between; font-weight: 700; }
+.rm-field-label { display: block; font-size: var(--rm-font-size-small); font-weight: 600; color: var(--rm-text-secondary); margin-bottom: 6px; }
+.rm-year-row { display: flex; align-items: center; gap: var(--rm-space-2); }
+.rm-popover-actions { display: flex; gap: var(--rm-space-2); }
+
+/* Paper cards */
+.rm-papers-list { display: grid; gap: var(--rm-space-3); }
+.rm-paper-card { padding: var(--rm-space-5); }
+.rm-paper-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--rm-space-3); }
+.rm-paper-title { border: 0; background: none; padding: 0; text-align: left; cursor: pointer; color: var(--rm-accent); font-size: var(--rm-font-size-h3); font-weight: 700; line-height: 1.35; }
+.rm-paper-title:hover { text-decoration: underline; color: var(--rm-accent-hover); }
+.rm-paper-year { color: var(--rm-text-muted); font-size: var(--rm-font-size-small); font-weight: 600; flex-shrink: 0; }
+.rm-paper-authors { margin: 6px 0 0; color: var(--rm-text-secondary); font-size: var(--rm-font-size-small); }
+.rm-paper-doi { margin: 4px 0 0; color: var(--rm-text-muted); }
+.rm-paper-abstract { margin: var(--rm-space-3) 0 0; color: var(--rm-text-secondary); font-size: var(--rm-font-size-small); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.rm-paper-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--rm-space-3); margin-top: var(--rm-space-4); flex-wrap: wrap; }
+.rm-paper-badges { display: flex; gap: var(--rm-space-2); flex-wrap: wrap; }
+
+/* Paper detail (drawer + page) */
+.rm-detail-title { font-size: var(--rm-font-size-h2); line-height: 1.3; margin: 0 0 var(--rm-space-3); }
+.rm-detail-badges { display: flex; gap: var(--rm-space-2); flex-wrap: wrap; margin-bottom: var(--rm-space-3); }
+.rm-detail-source { display: inline-flex; align-items: center; gap: 6px; color: var(--rm-accent); font-weight: 600; font-size: var(--rm-font-size-small); text-decoration: none; margin-bottom: var(--rm-space-4); }
+.rm-detail-source:hover { text-decoration: underline; }
+.rm-detail-meta { display: grid; gap: var(--rm-space-2); padding: var(--rm-space-4); background: var(--rm-bg-subtle); border-radius: var(--rm-radius-md); margin-bottom: var(--rm-space-5); }
+.rm-detail-meta-row { display: grid; grid-template-columns: 16px 76px 1fr; gap: var(--rm-space-2); align-items: baseline; font-size: var(--rm-font-size-small); }
+.rm-detail-meta-icon { color: var(--rm-text-muted); align-self: center; }
+.rm-detail-meta-label { color: var(--rm-text-muted); font-weight: 600; }
+.rm-detail-meta-value { color: var(--rm-text); min-width: 0; overflow-wrap: anywhere; }
+.rm-detail-section { margin-top: var(--rm-space-5); }
+.rm-detail-section-title { font-size: var(--rm-font-size-small); text-transform: uppercase; letter-spacing: .06em; color: var(--rm-text-muted); margin: 0 0 var(--rm-space-2); }
+.rm-detail-text { margin: 0; line-height: 1.7; color: var(--rm-text-secondary); max-width: 70ch; }
+
+.rm-paper-page { max-width: 860px; margin: 0 auto; padding: var(--rm-space-6); }
+.rm-paper-page-card { padding: var(--rm-space-8); margin-top: var(--rm-space-4); }
+
+/* Sources list */
+.rm-sources-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--rm-space-3); }
+.rm-sources-header h2 { margin: 0; font-size: var(--rm-font-size-h3); }
+.rm-source-list { display: grid; gap: var(--rm-space-2); }
+.rm-source-item { padding: var(--rm-space-3); border: 1px solid var(--rm-border); border-radius: var(--rm-radius-md); background: var(--rm-bg); }
+.rm-source-item-hl { border-color: var(--rm-accent); background: var(--rm-accent-soft); }
+.rm-source-row { display: flex; align-items: flex-start; gap: var(--rm-space-2); min-width: 0; }
+.rm-source-icon { flex-shrink: 0; margin-top: 3px; color: var(--rm-text-muted); }
+.rm-source-body { min-width: 0; }
+.rm-source-title { color: var(--rm-text); text-decoration: none; font-size: var(--rm-font-size-small); font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+a.rm-source-title:hover { color: var(--rm-accent); text-decoration: underline; }
+.rm-source-meta { display: flex; align-items: center; flex-wrap: wrap; gap: var(--rm-space-2); margin-top: 4px; color: var(--rm-text-muted); font-size: var(--rm-font-size-micro); }
+.rm-source-link { display: inline-flex; align-items: center; gap: 3px; color: var(--rm-accent); font-weight: 600; text-decoration: none; }
+
+@media (max-width: 700px) {
+  .rm-papers-search { width: 100%; }
+  .rm-papers-controls { width: 100%; }
+  .rm-paper-page { padding: var(--rm-space-4); }
+  .rm-paper-page-card { padding: var(--rm-space-5); }
+}

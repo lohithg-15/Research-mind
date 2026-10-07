@@ -94,7 +94,7 @@ export default function NewResearchPage() {
 
   return (
     <AppShell>
-      <main className="rm-newresearch-main">
+      <div className="rm-newresearch-main">
         <h1 className="rm-newresearch-heading">What are you researching?</h1>
 
         <div className="rm-newresearch-modes">
@@ -247,7 +247,7 @@ export default function NewResearchPage() {
             </div>
           </section>
         )}
-      </main>
+      </div>
     </AppShell>
   );
 }

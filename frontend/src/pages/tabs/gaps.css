@@ -1,0 +1,39 @@
+.rm-gaps-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--rm-space-3); margin-bottom: var(--rm-space-2); }
+.rm-gaps-head h2 { margin: 0; font-size: var(--rm-font-size-h2); }
+.rm-gaps-desc { color: var(--rm-text-secondary); margin: 0 0 var(--rm-space-5); max-width: 70ch; }
+.rm-gaps-list { display: grid; gap: var(--rm-space-3); }
+.rm-gap-card { padding: var(--rm-space-5); display: grid; gap: var(--rm-space-3); }
+.rm-gap-top { display: flex; align-items: center; justify-content: space-between; gap: var(--rm-space-3); }
+.rm-gap-index { color: var(--rm-text-muted); font-size: var(--rm-font-size-small); font-weight: 700; }
+.rm-gap-claim { margin: 0; font-size: var(--rm-font-size-h3); font-weight: 600; line-height: 1.5; }
+.rm-gap-conf { display: grid; gap: 4px; }
+.rm-gap-conf-label { display: flex; justify-content: space-between; font-size: var(--rm-font-size-micro); color: var(--rm-text-muted); font-weight: 600; }
+.rm-gap-bar { height: 6px; border-radius: var(--rm-radius-pill); background: var(--rm-bg-subtle); overflow: hidden; }
+.rm-gap-bar-fill { height: 100%; border-radius: inherit; background: var(--rm-accent); }
+.rm-gap-evidence { margin: 0; color: var(--rm-text-secondary); font-size: var(--rm-font-size-small); line-height: 1.6; }
+.rm-gap-chips { display: flex; flex-wrap: wrap; gap: var(--rm-space-2); }
+.rm-gap-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 4px 10px; border: 1px solid var(--rm-border); border-radius: var(--rm-radius-pill); background: var(--rm-bg-subtle); color: var(--rm-text-secondary); font-size: var(--rm-font-size-micro); cursor: pointer; }
+.rm-gap-chip:hover { border-color: var(--rm-accent); color: var(--rm-accent); }
+.rm-gap-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 280px; }
+.rm-gap-foot { display: flex; gap: var(--rm-space-2); }
+.rm-w-0 { width: 0%; }
+.rm-w-5 { width: 5%; }
+.rm-w-10 { width: 10%; }
+.rm-w-15 { width: 15%; }
+.rm-w-20 { width: 20%; }
+.rm-w-25 { width: 25%; }
+.rm-w-30 { width: 30%; }
+.rm-w-35 { width: 35%; }
+.rm-w-40 { width: 40%; }
+.rm-w-45 { width: 45%; }
+.rm-w-50 { width: 50%; }
+.rm-w-55 { width: 55%; }
+.rm-w-60 { width: 60%; }
+.rm-w-65 { width: 65%; }
+.rm-w-70 { width: 70%; }
+.rm-w-75 { width: 75%; }
+.rm-w-80 { width: 80%; }
+.rm-w-85 { width: 85%; }
+.rm-w-90 { width: 90%; }
+.rm-w-95 { width: 95%; }
+.rm-w-100 { width: 100%; }

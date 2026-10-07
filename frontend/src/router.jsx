@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ResearchProvider } from './context/ResearchContext';
+import { ToastProvider } from './components/ui/Toast';
 
 import LandingPage       from './pages/LandingPage';
 import LoginPage         from './pages/LoginPage';
@@ -22,6 +23,7 @@ export default function AppRouter() {
     <BrowserRouter>
       <AuthProvider>
         <ResearchProvider>
+          <ToastProvider>
           <Routes>
             <Route path="/"                               element={<LandingPage />} />
             <Route path="/login"                          element={<LoginPage />} />
@@ -42,6 +44,7 @@ export default function AppRouter() {
             />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          </ToastProvider>
         </ResearchProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -1,31 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Plus, Trash2, Search, Loader2, BookOpen,
-  Calendar, AlertCircle,
-} from 'lucide-react';
+import { Plus, Trash2, Search, BookOpen, AlertCircle, MoreHorizontal, FolderOpen } from 'lucide-react';
 import AppShell from '../components/shell/AppShell';
 import { useAuth } from '../context/AuthContext';
 import { useResearch } from '../context/ResearchContext';
+import Button from '../components/ui/Button';
+import Badge from '../components/ui/Badge';
+import { Input } from '../components/ui/Input';
+import Dropdown from '../components/ui/Dropdown';
+import Skeleton from '../components/ui/Skeleton';
+import EmptyState from '../components/ui/EmptyState';
+import { Modal } from '../components/ui/Modal';
+import './history.css';
 
 const API_BASE = 'http://localhost:8000';
-
-function groupByDate(sessions) {
-  const now       = new Date();
-  const today     = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-  const weekAgo   = new Date(today); weekAgo.setDate(today.getDate() - 7);
-
-  const groups = { Today: [], Yesterday: [], 'Last 7 days': [], Older: [] };
-  for (const s of sessions) {
-    const d = new Date(s.created_at);
-    if (d >= today)     groups.Today.push(s);
-    else if (d >= yesterday) groups.Yesterday.push(s);
-    else if (d >= weekAgo)   groups['Last 7 days'].push(s);
-    else                     groups.Older.push(s);
-  }
-  return groups;
-}
 
 export default function HistoryPage() {
   const { authHeaders } = useAuth();
@@ -33,7 +21,7 @@ export default function HistoryPage() {
   const navigate = useNavigate();
 
   const [sessions,   setSessions]   = useState([]);
-  const [loading,    setLoading]    = useState(false);
+  const [loading,    setLoading]    = useState(true);
   const [error,      setError]      = useState('');
   const [deletingId, setDeletingId] = useState(null);
   const [confirmId,  setConfirmId]  = useState(null); // pending delete confirmation
@@ -88,142 +76,84 @@ export default function HistoryPage() {
   const filtered = searchTerm.trim()
     ? sessions.filter(s =>
         (s.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (s.query || '').toLowerCase().includes(searchTerm.toLowerCase())
-      )
+        (s.query || '').toLowerCase().includes(searchTerm.toLowerCase()))
     : sessions;
 
-  const grouped = groupByDate(filtered);
+  const statusTone = status => (status === 'error' || status === 'failed' ? 'danger' : status === 'running' ? 'warn' : 'success');
+  const statusLabel = status => (status === 'error' || status === 'failed' ? 'Failed' : status === 'running' ? 'Running' : 'Complete');
 
   return (
     <AppShell>
-      <main className="rm-history-page">
-        <div className="history-page-header">
+      <div className="rm-history-page">
+        <div className="rm-history-head">
           <div>
-            <h1 className="history-page-title">Research History</h1>
-            <p className="history-page-subtitle">
-              {sessions.length} saved session{sessions.length !== 1 ? 's' : ''}
-            </p>
+            <h1>Research history</h1>
+            <p>{sessions.length} saved session{sessions.length !== 1 ? 's' : ''}</p>
           </div>
-          <button
-            className="rm-btn rm-btn-primary rm-btn-md"
-            onClick={() => navigate('/research/new')}
-            id="history-new-research-btn"
-          >
-            <Plus size={14} />
-            New Research
-          </button>
+          <Button icon={<Plus size={14} />} onClick={() => navigate('/research/new')}>New research</Button>
         </div>
 
-        {/* Search */}
-        <div className="rm-history-search-wrap">
-          <Search size={13} className="history-search-icon" />
-          <input
-            type="text"
-            className="rm-input"
-            placeholder="Search history…"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            aria-label="Search history"
+        <label className="rm-history-search">
+          <Search size={14} />
+          <Input placeholder="Search history…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} aria-label="Search history" />
+        </label>
+
+        {error && <div className="rm-history-error" role="alert"><AlertCircle size={14} />{error}</div>}
+
+        {loading ? (
+          <div className="rm-history-skeleton" aria-busy="true">
+            {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} height="48px" />)}
+          </div>
+        ) : sessions.length === 0 ? (
+          <EmptyState
+            icon={<BookOpen size={20} />}
+            title="No saved research yet"
+            description="Run a research query to save it here."
+            action={<Button icon={<Plus size={13} />} onClick={() => navigate('/research/new')}>Start research</Button>}
           />
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div className="error-inline" role="alert">
-            <AlertCircle size={14} />
-            {error}
-          </div>
-        )}
-
-        {/* Loading */}
-        {loading && (
-          <div className="panel-empty">
-            <Loader2 size={24} className="spin" />
-            <p className="panel-empty-title">Loading history…</p>
-          </div>
-        )}
-
-        {/* Empty */}
-        {!loading && sessions.length === 0 && (
-          <div className="rm-empty">
-            <BookOpen size={32} />
-            <p className="panel-empty-title">No saved research yet</p>
-            <p className="panel-empty-desc">Run a research query to save it here.</p>
-            <button className="rm-btn rm-btn-primary rm-btn-md" onClick={() => navigate('/research/new')}>
-              <Plus size={13} />
-              Start Research
-            </button>
-          </div>
-        )}
-
-        {/* Groups */}
-        {!loading && Object.entries(grouped).map(([label, items]) => {
-          if (!items.length) return null;
-          return (
-            <section key={label} className="history-group-section">
-              <div className="history-group-label">
-                <Calendar size={11} />
-                {label}
-              </div>
-              <div className="history-items-grid">
-                {items.map(s => (
-                  <div key={s.id} className="history-item-card">
-                    {/* Confirm delete overlay */}
-                    {confirmId === s.id && (
-                      <div className="history-item-confirm">
-                        <p>Delete this session?</p>
-                        <div className="history-item-confirm-actions">
-                          <button
-                            className="btn-danger btn-sm"
-                            onClick={() => handleDelete(s.id)}
-                            disabled={!!deletingId}
-                          >
-                            {deletingId === s.id ? <Loader2 size={12} className="spin" /> : <Trash2 size={12} />}
-                            Delete
-                          </button>
-                          <button
-                            className="btn-ghost btn-sm"
-                            onClick={() => setConfirmId(null)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    <button
-                      className="history-item-main"
-                      onClick={() => handleLoad(s.id)}
-                      id={`history-item-${s.id}`}
-                    >
-                      <div className="history-item-icon">
-                        <BookOpen size={16} />
-                      </div>
-                      <div className="history-item-text">
-                        <span className="history-item-title">{s.title || s.query}</span>
-                        <span className="history-item-date">
-                          {new Date(s.created_at).toLocaleDateString('en-US', {
-                            month: 'long', day: 'numeric', year: 'numeric',
-                          })}
-                        </span>
-                      </div>
-                    </button>
-
-                    <button
-                      className="history-item-delete-btn"
-                      onClick={() => setConfirmId(s.id)}
-                      aria-label="Delete session"
-                      title="Delete session"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
+        ) : filtered.length === 0 ? (
+          <EmptyState icon={<Search size={20} />} title="No matches" description="Try a different search term." />
+        ) : (
+          <div className="rm-history-table-wrap">
+            <table className="rm-history-table">
+              <thead>
+                <tr><th>Research</th><th>Status</th><th>Created</th><th className="rm-history-actions"><span className="rm-sr-only">Actions</span></th></tr>
+              </thead>
+              <tbody>
+                {filtered.map(s => (
+                  <tr key={s.id} className="rm-history-row">
+                    <td><button type="button" className="rm-history-open" title={s.title || s.query} onClick={() => handleLoad(s.id)}>{s.title || s.query}</button></td>
+                    <td><Badge tone={statusTone(s.status)}>{statusLabel(s.status)}</Badge></td>
+                    <td className="rm-history-date">
+                      {new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </td>
+                    <td className="rm-history-actions">
+                      <Dropdown
+                        trigger={<Button variant="ghost" size="sm" icon={<MoreHorizontal size={16} />} aria-label={`Actions for ${s.title || s.query}`} />}
+                        items={[
+                          { key: 'open', label: 'Open', icon: <FolderOpen size={14} />, onSelect: () => handleLoad(s.id) },
+                          { key: 'delete', label: 'Delete', icon: <Trash2 size={14} />, onSelect: () => setConfirmId(s.id) },
+                        ]}
+                      />
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </section>
-          );
-        })}
-      </main>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <Modal isOpen={!!confirmId} onClose={() => setConfirmId(null)}>
+        <div className="rm-confirm">
+          <h2>Delete this session?</h2>
+          <p>This permanently removes the saved research and its results.</p>
+          <div className="rm-confirm-actions">
+            <Button variant="ghost" onClick={() => setConfirmId(null)}>Cancel</Button>
+            <Button variant="danger" loading={!!deletingId} onClick={() => handleDelete(confirmId)}>Delete</Button>
+          </div>
+        </div>
+      </Modal>
     </AppShell>
   );
 }

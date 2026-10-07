@@ -185,6 +185,8 @@
   background: rgba(27, 27, 47, 0.3);
   z-index: 1000;
 }
+.rm-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: var(--rm-space-3); margin-bottom: var(--rm-space-4); }
+.rm-drawer-head h2 { margin: 0; font-size: var(--rm-font-size-h3); }
 .rm-drawer {
   position: fixed;
   top: 0;
@@ -200,6 +202,8 @@
 
 /* ─── Skeleton / Spinner ─── */
 .rm-skeleton {
+  width: var(--rm-sk-w, 100%);
+  height: var(--rm-sk-h, 16px);
   background: linear-gradient(90deg, var(--rm-bg-subtle) 25%, var(--rm-border) 37%, var(--rm-bg-subtle) 63%);
   background-size: 400% 100%;
   animation: rm-skeleton-shimmer 1.4s ease infinite;
@@ -325,7 +329,14 @@
 .rm-step-desc { font-size: var(--rm-font-size-micro); color: var(--rm-text-muted); margin-top: 1px; }
 
 /* ─── SplitPane ─── */
-.rm-split-pane { display: flex; width: 100%; height: 100%; }
+.rm-split-pane { display: flex; width: 100%; height: 100%; min-height: 0; }
+.rm-split-left { width: var(--rm-split-left, 420px); flex-shrink: 0; min-width: 0; }
+.rm-split-right { flex: 1; min-width: 0; }
+@media (max-width: 900px) {
+  .rm-split-pane { flex-direction: column; height: auto; }
+  .rm-split-left { width: 100%; }
+  .rm-split-pane-handle { display: none; }
+}
 .rm-split-pane-handle {
   width: 5px;
   cursor: col-resize;

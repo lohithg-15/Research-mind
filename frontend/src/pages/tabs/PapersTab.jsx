@@ -1,275 +1,184 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { SlidersHorizontal, X, ExternalLink, ChevronDown, ChevronUp, FileSearch } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { SlidersHorizontal, X, ExternalLink, Search, FileSearch } from 'lucide-react';
 import { useResearch } from '../../context/ResearchContext';
 import { getPaperLink } from '../../utils/paperLinks';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
+import Badge from '../../components/ui/Badge';
+import { Input } from '../../components/ui/Input';
+import EmptyState from '../../components/ui/EmptyState';
+import { Drawer } from '../../components/ui/Modal';
+import PaperDetailContent from '../../components/PaperDetailContent';
+import '../../components/papers.css';
 
 const SORT_OPTIONS = [
-  { value: 'year-desc',        label: 'Year (Newest)' },
-  { value: 'year-asc',         label: 'Year (Oldest)' },
-  { value: 'citations-desc',   label: 'Most Cited' },
-  { value: 'title-asc',        label: 'Title A–Z' },
+  { value: 'year-desc', label: 'Year (Newest)' },
+  { value: 'year-asc', label: 'Year (Oldest)' },
+  { value: 'citations-desc', label: 'Most Cited' },
+  { value: 'title-asc', label: 'Title A–Z' },
 ];
+const THIS_YEAR = new Date().getFullYear();
 
-function PaperCard({ paper, jobId }) {
-  const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
+function PaperCard({ paper, onOpen }) {
   const link = getPaperLink(paper);
-  const abstract  = paper.abstract || '';
-  const shortAbs  = abstract.length > 200 ? abstract.slice(0, 200) + '…' : abstract;
-  const authors   = Array.isArray(paper.authors)
+  const authors = Array.isArray(paper.authors)
     ? paper.authors.slice(0, 3).join(', ') + (paper.authors.length > 3 ? ' et al.' : '')
     : '';
+  const venue = paper.venue && paper.venue !== 'Unknown' ? paper.venue : '';
+  const meta = [authors, venue && (paper.citation_count > 0 ? `${venue} • ${paper.citation_count} citations` : venue)]
+    .filter(Boolean).join(' · ') || (paper.citation_count > 0 ? `${paper.citation_count} citations` : '');
 
   return (
-    <article className="paper-card">
-      <div className="paper-card-top">
-        <div className="paper-card-meta">
-          {paper.year && <span className="paper-card-year">{paper.year}</span>}
-          {paper.source && (
-            <span className={`paper-card-source ${paper.source === 'arxiv' ? 'arxiv' : 'semantic'}`}>
-              {paper.source === 'merged' ? 'arXiv + S2' : paper.source === 'arxiv' ? 'arXiv' : 'Semantic Scholar'}
-            </span>
-          )}
-          {paper.full_text_available && (
-            <span className="paper-card-pdf">Full PDF</span>
-          )}
-        </div>
-        <button type="button" className="paper-card-title rm-paper-title-button" onClick={() => navigate(`/research/${jobId}/paper/${encodeURIComponent(paper.id || paper.arxiv_id || paper.title)}`)}>
-          {paper.title || 'Untitled'}
-        </button>
-        {(authors || paper.venue) && (
-          <p className="paper-card-authors">
-            {authors}
-            {authors && paper.venue && paper.venue !== 'Unknown' ? ' · ' : ''}
-            {paper.venue && paper.venue !== 'Unknown' ? paper.venue : ''}
-            {paper.citation_count > 0 ? ` · ${paper.citation_count} citations` : ''}
-          </p>
-        )}
+    <Card hoverable className="rm-paper-card">
+      <div className="rm-paper-card-top">
+        <button type="button" className="rm-paper-title" onClick={() => onOpen(paper)}>{paper.title || 'Untitled'}</button>
+        {paper.year && <span className="rm-paper-year">{paper.year}</span>}
       </div>
-
-      {abstract && (
-        <div className="paper-card-abstract">
-          <p>{expanded ? abstract : shortAbs}</p>
-          {abstract.length > 200 && (
-            <button className="paper-card-expand" onClick={() => setExpanded(v => !v)}>
-              {expanded ? <><ChevronUp size={11}/> Show less</> : <><ChevronDown size={11}/> Read more</>}
-            </button>
-          )}
+      {meta && <p className="rm-paper-authors">{meta}</p>}
+      {paper.doi && <p className="rm-paper-doi rm-mono">{paper.doi}</p>}
+      {paper.abstract && <p className="rm-paper-abstract">{paper.abstract}</p>}
+      <div className="rm-paper-foot">
+        <div className="rm-paper-badges">
+          {(paper.source === 'arxiv' || paper.source === 'merged') && <Badge tone="accent">arXiv</Badge>}
+          {paper.source !== 'arxiv' && paper.source && <Badge tone="info">S2</Badge>}
+          {paper.full_text_available && <Badge tone="success">PDF</Badge>}
         </div>
-      )}
-
-      <div className="paper-card-actions">
-        <button
-          className="rm-btn rm-btn-secondary rm-btn-sm"
-          onClick={() => navigate(`/research/${jobId}/paper/${encodeURIComponent(paper.id || paper.arxiv_id || paper.title)}`)}
-          id={`view-paper-${paper.id}`}
-        >
-          <FileSearch size={12} />
-          View Paper
-        </button>
         {link && (
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rm-btn rm-btn-ghost rm-btn-sm"
-            title="Open source"
-          >
-            <ExternalLink size={12} />
-            Read Source
-          </a>
+          <Button as="a" variant="ghost" size="sm" href={link} target="_blank" rel="noopener noreferrer" icon={<ExternalLink size={12} />}>
+            View source
+          </Button>
         )}
       </div>
-    </article>
+    </Card>
   );
 }
 
 export default function PapersTab() {
-  const { jobId } = useParams();
+  useParams();
   const { papers } = useResearch();
 
-  const [sortKey,      setSortKey]      = useState('year-desc');
-  const [drawerOpen,   setDrawerOpen]   = useState(false);
-  const [filterYear,   setFilterYear]   = useState([1900, new Date().getFullYear()]);
+  const [sortKey, setSortKey] = useState('year-desc');
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filterYear, setFilterYear] = useState([1900, THIS_YEAR]);
   const [filterSource, setFilterSource] = useState('all');
-  const [filterFullPdf,setFilterFullPdf]= useState(false);
-  const [searchTerm,   setSearchTerm]   = useState('');
+  const [filterFullPdf, setFilterFullPdf] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activePaper, setActivePaper] = useState(null);
+  const popRef = useRef(null);
 
-  const filtered = useMemo(() => {
+  useEffect(() => {
+    if (!filtersOpen) return undefined;
+    const onDown = e => { if (popRef.current && !popRef.current.contains(e.target)) setFiltersOpen(false); };
+    const onKey = e => { if (e.key === 'Escape') setFiltersOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [filtersOpen]);
+
+  const sorted = useMemo(() => {
     let list = papers;
     if (searchTerm.trim()) {
       const q = searchTerm.toLowerCase();
       list = list.filter(p =>
-        (p.title || '').toLowerCase().includes(q) ||
-        (Array.isArray(p.authors) ? p.authors.join(' ') : '').toLowerCase().includes(q) ||
-        (p.abstract || '').toLowerCase().includes(q)
-      );
+        (p.title || '').toLowerCase().includes(q)
+        || (Array.isArray(p.authors) ? p.authors.join(' ') : '').toLowerCase().includes(q)
+        || (p.abstract || '').toLowerCase().includes(q));
     }
-    if (filterSource !== 'all') {
-      list = list.filter(p => p.source === filterSource || (filterSource === 'merged' && p.source === 'merged'));
-    }
-    if (filterFullPdf) {
-      list = list.filter(p => p.full_text_available);
-    }
-    list = list.filter(p => {
-      if (!p.year) return true;
-      return p.year >= filterYear[0] && p.year <= filterYear[1];
-    });
-    return list;
-  }, [papers, searchTerm, filterSource, filterFullPdf, filterYear]);
-
-  const sorted = useMemo(() => {
-    return [...filtered].sort((a, b) => {
+    if (filterSource !== 'all') list = list.filter(p => p.source === filterSource);
+    if (filterFullPdf) list = list.filter(p => p.full_text_available);
+    list = list.filter(p => !p.year || (p.year >= filterYear[0] && p.year <= filterYear[1]));
+    return [...list].sort((a, b) => {
       switch (sortKey) {
-        case 'year-asc':       return (a.year || 0) - (b.year || 0);
-        case 'year-desc':      return (b.year || 0) - (a.year || 0);
+        case 'year-asc': return (a.year || 0) - (b.year || 0);
+        case 'year-desc': return (b.year || 0) - (a.year || 0);
         case 'citations-desc': return (b.citation_count || 0) - (a.citation_count || 0);
-        case 'title-asc':      return (a.title || '').localeCompare(b.title || '');
+        case 'title-asc': return (a.title || '').localeCompare(b.title || '');
         default: return 0;
       }
     });
-  }, [filtered, sortKey]);
+  }, [papers, searchTerm, filterSource, filterFullPdf, filterYear, sortKey]);
+
+  const resetFilters = () => {
+    setFilterYear([1900, THIS_YEAR]); setFilterSource('all'); setFilterFullPdf(false); setSearchTerm('');
+  };
+  const activeFilterCount = (filterSource !== 'all') + filterFullPdf + (filterYear[0] !== 1900 || filterYear[1] !== THIS_YEAR);
 
   return (
-    <div className="tab-content fade-in rm-papers">
-      {/* Toolbar */}
-      <div className="papers-toolbar">
-        <div className="papers-toolbar-left">
-          <span className="papers-count">{sorted.length} paper{sorted.length !== 1 ? 's' : ''}</span>
-          {sorted.length !== papers.length && (
-            <span className="papers-filtered">({papers.length} total)</span>
-          )}
+    <div className="rm-tab-content">
+      <div className="rm-papers-toolbar">
+        <div className="rm-papers-count">
+          {sorted.length} paper{sorted.length !== 1 ? 's' : ''}
+          {sorted.length !== papers.length && <span>of {papers.length}</span>}
         </div>
-        <div className="papers-toolbar-right">
-          <input
-            type="text"
-            className="rm-input papers-search"
-            placeholder="Search papers…"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            aria-label="Search papers"
-          />
-          <select
-            className="rm-input filter-select sort-select"
-            value={sortKey}
-            onChange={e => setSortKey(e.target.value)}
-            aria-label="Sort papers"
-          >
-            {SORT_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
+        <div className="rm-papers-controls">
+          <label className="rm-papers-search">
+            <Search size={14} />
+            <Input placeholder="Search papers…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} aria-label="Search papers" />
+          </label>
+          <select className="rm-select" value={sortKey} onChange={e => setSortKey(e.target.value)} aria-label="Sort papers">
+            {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
-          <button
-            className={`rm-btn rm-btn-secondary rm-btn-sm ${drawerOpen ? 'active' : ''}`}
-            onClick={() => setDrawerOpen(v => !v)}
-            aria-expanded={drawerOpen}
-            aria-controls="filter-drawer"
-            id="filters-btn"
-          >
-            <SlidersHorizontal size={13} />
-            Filters
-          </button>
-        </div>
-      </div>
-
-      {/* Filter Drawer */}
-      {drawerOpen && (
-        <aside id="filter-drawer" className="filter-drawer" role="dialog" aria-label="Filters">
-          <div className="filter-drawer-header">
-            <span className="filter-drawer-title">Filters</span>
-            <button className="filter-drawer-close" onClick={() => setDrawerOpen(false)} aria-label="Close filters">
-              <X size={15} />
-            </button>
-          </div>
-          <div className="filter-drawer-body">
-            <div className="filter-group">
-              <label className="filter-label">Year Range</label>
-              <div className="filter-row">
-                <input
-                  type="number"
-                  className="filter-input"
-                  value={filterYear[0]}
-                  onChange={e => setFilterYear([+e.target.value, filterYear[1]])}
-                  min="1900"
-                  max={filterYear[1]}
-                  aria-label="Year from"
-                />
-                <span className="filter-sep">—</span>
-                <input
-                  type="number"
-                  className="filter-input"
-                  value={filterYear[1]}
-                  onChange={e => setFilterYear([filterYear[0], +e.target.value])}
-                  min={filterYear[0]}
-                  max={new Date().getFullYear()}
-                  aria-label="Year to"
-                />
+          <div className="rm-popover-wrap" ref={popRef}>
+            <Button variant="secondary" size="md" icon={<SlidersHorizontal size={14} />} onClick={() => setFiltersOpen(v => !v)} aria-expanded={filtersOpen} aria-haspopup="dialog">
+              Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
+            </Button>
+            {filtersOpen && (
+              <div className="rm-popover" role="dialog" aria-label="Filters">
+                <div className="rm-popover-head">
+                  <span>Filters</span>
+                  <Button variant="ghost" size="sm" icon={<X size={14} />} onClick={() => setFiltersOpen(false)} aria-label="Close filters" />
+                </div>
+                <div>
+                  <span className="rm-field-label">Year range</span>
+                  <div className="rm-year-row">
+                    <Input type="number" value={filterYear[0]} min="1900" max={filterYear[1]} onChange={e => setFilterYear([+e.target.value, filterYear[1]])} aria-label="Year from" />
+                    <span>–</span>
+                    <Input type="number" value={filterYear[1]} min={filterYear[0]} max={THIS_YEAR} onChange={e => setFilterYear([filterYear[0], +e.target.value])} aria-label="Year to" />
+                  </div>
+                </div>
+                <div>
+                  <label className="rm-field-label" htmlFor="rm-filter-source">Source</label>
+                  <select id="rm-filter-source" className="rm-select" value={filterSource} onChange={e => setFilterSource(e.target.value)}>
+                    <option value="all">All sources</option>
+                    <option value="arxiv">arXiv</option>
+                    <option value="semantic_scholar">Semantic Scholar</option>
+                  </select>
+                </div>
+                <label className="rm-check">
+                  <input type="checkbox" checked={filterFullPdf} onChange={e => setFilterFullPdf(e.target.checked)} />
+                  Full PDF available only
+                </label>
+                <div className="rm-popover-actions">
+                  <Button size="sm" onClick={() => setFiltersOpen(false)}>Apply</Button>
+                  <Button size="sm" variant="ghost" onClick={resetFilters}>Reset</Button>
+                </div>
               </div>
-            </div>
-
-            <div className="filter-group">
-              <label className="filter-label" htmlFor="filter-source">Source</label>
-              <select
-                id="filter-source"
-                className="filter-select"
-                value={filterSource}
-                onChange={e => setFilterSource(e.target.value)}
-              >
-                <option value="all">All sources</option>
-                <option value="arxiv">arXiv</option>
-                <option value="semantic_scholar">Semantic Scholar</option>
-              </select>
-            </div>
-
-            <div className="filter-group">
-              <label className="filter-label filter-checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={filterFullPdf}
-                  onChange={e => setFilterFullPdf(e.target.checked)}
-                />
-                Full PDF available only
-              </label>
-            </div>
-
-            <button
-              className="btn-primary"
-              onClick={() => setDrawerOpen(false)}
-              id="apply-filters-btn"
-            >
-              Apply Filters
-            </button>
-            <button
-              className="btn-ghost btn-sm"
-              onClick={() => {
-                setFilterYear([1900, new Date().getFullYear()]);
-                setFilterSource('all');
-                setFilterFullPdf(false);
-                setSearchTerm('');
-              }}
-            >
-              Reset
-            </button>
+            )}
           </div>
-        </aside>
-      )}
+        </div>
+      </div>
 
-      {/* Empty state */}
-      {sorted.length === 0 && (
-        <div className="panel-empty">
-          <FileSearch size={32} className="rm-muted-icon" />
-          <p className="panel-empty-title">No papers match these filters</p>
-          <p className="panel-empty-desc">Try adjusting or clearing the filters.</p>
+      {sorted.length === 0 ? (
+        <EmptyState
+          icon={<FileSearch size={20} />}
+          title="No papers match these filters"
+          description="Try adjusting or clearing the filters."
+          action={<Button variant="secondary" size="sm" onClick={resetFilters}>Clear filters</Button>}
+        />
+      ) : (
+        <div className="rm-papers-list">
+          {sorted.map((paper, idx) => <PaperCard key={paper.id || idx} paper={paper} onOpen={setActivePaper} />)}
         </div>
       )}
 
-      {/* Paper cards */}
-      <div className="papers-grid">
-        {sorted.map((paper, idx) => (
-          <PaperCard key={paper.id || idx} paper={paper} jobId={jobId} />
-        ))}
-      </div>
+      <Drawer isOpen={!!activePaper} onClose={() => setActivePaper(null)}>
+        <div className="rm-drawer-head">
+          <h2>Paper details</h2>
+          <Button variant="ghost" size="sm" icon={<X size={16} />} onClick={() => setActivePaper(null)} aria-label="Close details" />
+        </div>
+        {activePaper && <PaperDetailContent paper={activePaper} />}
+      </Drawer>
     </div>
   );
 }

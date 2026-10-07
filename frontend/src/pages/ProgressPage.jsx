@@ -9,6 +9,7 @@ import StepTimeline from '../components/ui/StepTimeline';
 import SplitPane from '../components/ui/SplitPane';
 import Skeleton from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
+import SourcesSidebar from '../components/SourcesSidebar';
 import './ProgressPage.css';
 
 const STAGES = [
@@ -33,7 +34,7 @@ export default function ProgressPage() {
   const navigate  = useNavigate();
   const {
     query, agentStatus, jobStatus, isDone, isRunning,
-    error, startedAt, restoreJob, clearResearch,
+    error, startedAt, restoreJob, clearResearch, papers,
   } = useResearch();
 
   const [elapsed, setElapsed] = useState(() => formatElapsed(startedAt));
@@ -69,7 +70,7 @@ export default function ProgressPage() {
 
   return (
     <AppShell>
-      <main className="rm-progress-main">
+      <div className="rm-progress-main">
         <SplitPane
           className="rm-progress-split"
           storageKey="rm_progress_split"
@@ -141,6 +142,8 @@ export default function ProgressPage() {
                     <Skeleton height="12px" width="40%" />
                   </div>
                 ))
+              ) : papers?.length ? (
+                <SourcesSidebar papers={papers} />
               ) : (
                 <EmptyState
                   icon={<FileSearch size={20} />}
@@ -151,7 +154,7 @@ export default function ProgressPage() {
             </div>
           }
         />
-      </main>
+      </div>
     </AppShell>
   );
 }

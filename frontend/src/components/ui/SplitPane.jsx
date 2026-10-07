@@ -1,5 +1,12 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import './ui.css';
+
+function readWidth(key, fallback) {
+  try {
+    const saved = Number(localStorage.getItem(key));
+    return saved > 0 ? saved : fallback;
+  } catch { return fallback; }
+}
 
 export default function SplitPane({
   left,
@@ -10,46 +17,58 @@ export default function SplitPane({
   defaultLeft = 420,
   className = '',
 }) {
-  const [leftWidth, setLeftWidth] = useState(() => {
-    const saved = Number(localStorage.getItem(storageKey));
-    return saved > 0 ? saved : defaultLeft;
-  });
-  const draggingRef = useRef(false);
+  const [leftWidth, setLeftWidth] = useState(() => readWidth(storageKey, defaultLeft));
+  const widthRef = useRef(leftWidth);
   const containerRef = useRef(null);
+  const leftRef = useRef(null);
 
-  const handlePointerMove = useCallback((e) => {
-    if (!draggingRef.current || !containerRef.current) return;
+  /* Apply width through a CSS custom property (no inline style in JSX). */
+  useLayoutEffect(() => {
+    widthRef.current = leftWidth;
+    leftRef.current?.style.setProperty('--rm-split-left', `${leftWidth}px`);
+  }, [leftWidth]);
+
+  const move = useCallback((e) => {
+    if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const next = Math.min(maxLeft, Math.max(minLeft, e.clientX - rect.left));
-    setLeftWidth(next);
+    setLeftWidth(Math.round(Math.min(maxLeft, Math.max(minLeft, e.clientX - rect.left))));
   }, [minLeft, maxLeft]);
 
-  const stopDragging = useCallback(() => {
-    draggingRef.current = false;
-    localStorage.setItem(storageKey, String(leftWidth));
-    document.removeEventListener('pointermove', handlePointerMove);
-    document.removeEventListener('pointerup', stopDragging);
-  }, [handlePointerMove, leftWidth, storageKey]);
+  const stopRef = useRef(null);
+  const stop = useCallback(() => {
+    document.removeEventListener('pointermove', move);
+    document.removeEventListener('pointerup', stopRef.current);
+    try { localStorage.setItem(storageKey, String(widthRef.current)); } catch { /* ignore */ }
+  }, [move, storageKey]);
+  useEffect(() => { stopRef.current = stop; }, [stop]);
 
-  const startDragging = useCallback(() => {
-    draggingRef.current = true;
-    document.addEventListener('pointermove', handlePointerMove);
-    document.addEventListener('pointerup', stopDragging);
-  }, [handlePointerMove, stopDragging]);
+  const start = useCallback((e) => {
+    e.preventDefault();
+    document.addEventListener('pointermove', move);
+    document.addEventListener('pointerup', stopRef.current);
+  }, [move]);
 
   useEffect(() => () => {
-    document.removeEventListener('pointermove', handlePointerMove);
-    document.removeEventListener('pointerup', stopDragging);
-  }, [handlePointerMove, stopDragging]);
+    document.removeEventListener('pointermove', move);
+    if (stopRef.current) document.removeEventListener('pointerup', stopRef.current);
+  }, [move]);
+
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') setLeftWidth(w => Math.max(minLeft, w - 24));
+    if (e.key === 'ArrowRight') setLeftWidth(w => Math.min(maxLeft, w + 24));
+  };
 
   return (
     <div className={`rm-split-pane ${className}`.trim()} ref={containerRef}>
-      <div className="rm-split-left" data-width={leftWidth}>{left}</div>
+      <div className="rm-split-left" ref={leftRef}>{left}</div>
       <div
         className="rm-split-pane-handle"
-        onPointerDown={startDragging}
+        onPointerDown={start}
+        onKeyDown={onKeyDown}
         role="separator"
         aria-orientation="vertical"
+        aria-label="Resize panels"
+        tabIndex={0}
       />
       <div className="rm-split-right">{right}</div>
     </div>

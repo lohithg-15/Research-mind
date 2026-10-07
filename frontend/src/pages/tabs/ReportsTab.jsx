@@ -6,9 +6,8 @@ import ReportExport from '../../components/ReportExport';
 export default function ReportsTab() {
   const { jobId } = useParams();
   const { results } = useResearch();
-
   return (
-    <div className="tab-content fade-in">
+    <div className="rm-tab-content">
       <ReportExport jobId={jobId} results={results} />
     </div>
   );

@@ -4,9 +4,8 @@ import ComparisonTable from '../../components/ComparisonTable';
 
 export default function ComparisonTab() {
   const { results } = useResearch();
-
   return (
-    <div className="tab-content fade-in rm-comparison">
+    <div className="rm-tab-content">
       <ComparisonTable data={results?.comparison_table} />
     </div>
   );

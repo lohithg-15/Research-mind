@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { Eye, Network, TrendingDown, X } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Eye, EyeOff, Network, TrendingDown, X } from 'lucide-react';
 import GraphCanvas from './graph/GraphCanvas';
-import GapCard, { getGapLevel } from './graph/GapCard';
+import GapCard from './graph/GapCard';
+import { getGapLevel } from './graph/gapLevel';
+import Pill from './ui/Pill';
+import Button from './ui/Button';
+import Badge from './ui/Badge';
+import EmptyState from './ui/EmptyState';
 import './graph/graph.css';
 
 export default function GraphViewer({ gapClaims, onHighlightPapers }) {
-  const [activeIdx, setActiveIdx] = useState(0);
+  const [params] = useSearchParams();
+  const gapParam = params.get('gap');
+  const initialIdx = Math.max(0, (gapClaims || []).findIndex((g, i) => String(g.gap_id ?? i) === gapParam));
+
+  const [activeIdx, setActiveIdx] = useState(initialIdx);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [showGraph, setShowGraph] = useState(false);
+  const [showGraph, setShowGraph] = useState(gapParam != null);
   const [showTip, setShowTip] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [visibility, setVisibility] = useState({ authors: true, topics: true, coauthor: true });
   const currentGap = gapClaims?.[activeIdx];
   const level = getGapLevel(currentGap?.citation_density);
 
-  useEffect(() => {
-    if (!showGraph) setIsFullscreen(false);
-  }, [showGraph]);
+  const toggleVisibility = useCallback((key, value) => setVisibility(v => ({ ...v, [key]: value })), []);
+
+  useEffect(() => { if (!showGraph) setIsFullscreen(false); }, [showGraph]);
 
   useEffect(() => {
     if (currentGap?.subgraph_snapshot && onHighlightPapers) {
@@ -32,19 +43,59 @@ export default function GraphViewer({ gapClaims, onHighlightPapers }) {
     return () => { document.body.style.overflow = previous; window.removeEventListener('keydown', close); };
   }, [isFullscreen]);
 
-  if (!gapClaims?.length) return <div className="panel-empty"><div className="panel-empty-icon"><Network size={22} /></div><p className="panel-empty-title">No gap evidence available</p><p className="panel-empty-desc">Run analysis on a topic with at least 15 papers to generate research gap insights.</p></div>;
+  if (!gapClaims?.length) {
+    return <EmptyState icon={<Network size={20} />} title="No gap evidence available" description="Run analysis on a topic with at least 15 papers to generate research gap insights." />;
+  }
 
   return (
-    <div className="fade-in gv2-root">
-      <div className="gv2-page-header"><div className="gv2-page-title-row"><TrendingDown size={16} className="gv2-page-icon" /><h2 className="gv2-page-title">Research Gap Analysis</h2><span className="gv2-page-count">{gapClaims.length} gaps detected</span></div><p className="gv2-page-subtitle">A <strong>research gap</strong> is a topic where existing papers do not build on each other — meaning no one has fully connected the ideas yet.</p></div>
-      <div className="gv2-tabs">{gapClaims.map((gap, index) => { const tabLevel = getGapLevel(gap.citation_density); return <button type="button" key={gap.gap_id || index} className={`gv2-tab ${activeIdx === index ? 'active' : ''}`} onClick={() => { setActiveIdx(index); setShowGraph(false); setSelectedNode(null); }}><tabLevel.Icon size={11} /><span className="gv2-tab-label">{gap.topic_label}</span><span className="gv2-tab-badge">{tabLevel.label}</span></button>; })}</div>
-      {currentGap && <div className="gv2-detail">
-        <GapCard gap={currentGap} level={level} />
-        <div className="gv2-graph-section">
-          <button type="button" className="gv2-graph-toggle" onClick={() => setShowGraph(value => !value)}><Eye size={13} />{showGraph ? 'Hide' : 'Show'} Citation Network Graph</button>
-          {showGraph && <div className={`gv2-canvas-wrap fade-in${isFullscreen ? ' gv2-canvas-wrap--fs' : ''}`}>{isFullscreen && <button type="button" className="gv2-fs-exit" onClick={() => setIsFullscreen(false)} title="Exit fullscreen (Esc)"><X size={16} />Exit fullscreen</button>}<GraphCanvas snapshot={currentGap.subgraph_snapshot} isFullscreen={isFullscreen} onToggleFullscreen={() => setIsFullscreen(value => !value)} selectedNode={selectedNode} onSelect={setSelectedNode} showTip={showTip} onDismissTip={() => setShowTip(false)} /><p className="gv2-canvas-caption">Each circle is a paper — the bigger it is, the more often it has been cited. Small grey dots are authors. Lines show citation relationships, and isolated clusters with few connections are where the research gap sits.</p></div>}
+    <div className="rm-tab-content rm-graphview">
+      <div className="rm-graphview-head">
+        <h2><TrendingDown size={18} /> Research gap analysis</h2>
+        <Badge tone="accent">{gapClaims.length} gaps detected</Badge>
+      </div>
+      <p className="rm-graphview-sub">A <strong>research gap</strong> is a topic where existing papers do not build on each other, so no one has fully connected the ideas yet.</p>
+
+      <div className="rm-graphview-pills" role="tablist" aria-label="Gaps">
+        {gapClaims.map((gap, index) => {
+          const tabLevel = getGapLevel(gap.citation_density);
+          return (
+            <Pill key={gap.gap_id || index} active={activeIdx === index} role="tab" onClick={() => { setActiveIdx(index); setShowGraph(false); setSelectedNode(null); }}>
+              <tabLevel.Icon size={12} /> {gap.topic_label}
+            </Pill>
+          );
+        })}
+      </div>
+
+      {currentGap && (
+        <div className="rm-graphview-body">
+          <div className="rm-graphview-main">
+            <Button variant="secondary" size="sm" icon={showGraph ? <EyeOff size={14} /> : <Eye size={14} />} onClick={() => setShowGraph(v => !v)} aria-expanded={showGraph}>
+              {showGraph ? 'Hide' : 'Show'} citation network graph
+            </Button>
+            {showGraph && (
+              <div className={`rm-graph-wrap${isFullscreen ? ' rm-graph-wrap-fs' : ''}`}>
+                {isFullscreen && (
+                  <Button className="rm-graph-exit" variant="secondary" size="sm" icon={<X size={14} />} onClick={() => setIsFullscreen(false)}>Exit fullscreen</Button>
+                )}
+                <GraphCanvas
+                  snapshot={currentGap.subgraph_snapshot}
+                  isFullscreen={isFullscreen}
+                  onToggleFullscreen={() => setIsFullscreen(v => !v)}
+                  selectedNode={selectedNode}
+                  onSelect={setSelectedNode}
+                  level={level}
+                  visibility={visibility}
+                  onToggleVisibility={toggleVisibility}
+                  showTip={showTip}
+                  onDismissTip={() => setShowTip(false)}
+                />
+              </div>
+            )}
+            {showGraph && <p className="rm-graph-caption">Each circle is a paper; the bigger it is, the more often it has been cited. Small grey dots are authors. Lines show citation relationships, and isolated clusters with few connections are where the research gap sits.</p>}
+          </div>
+          <GapCard gap={currentGap} level={level} />
         </div>
-      </div>}
+      )}
     </div>
   );
 }

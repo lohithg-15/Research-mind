@@ -1,9 +1,13 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Loader2, AlertCircle, RotateCcw, Download, Share2, Files, LayoutDashboard, Table2, GitFork, Network, MessageSquare, FileText } from 'lucide-react';
+import { AlertCircle, RotateCcw, Download, Share2, FileJson, Files, LayoutDashboard, Table2, GitFork, Network, MessageSquare, FileText } from 'lucide-react';
 import AppShell from '../components/shell/AppShell';
 import { useResearch } from '../context/ResearchContext';
 import Tabs from '../components/ui/Tabs';
+import Button from '../components/ui/Button';
+import Dropdown from '../components/ui/Dropdown';
+import Skeleton from '../components/ui/Skeleton';
+import { useToast } from '../components/ui/Toast';
 import './workspace.css';
 
 /* Lazy-load heavy tabs */
@@ -27,11 +31,13 @@ const TAB_COMPONENTS = {
 
 const VALID_TABS = Object.keys(TAB_COMPONENTS);
 
-function TabFallback() {
+function TabSkeleton() {
   return (
-    <div className="panel-empty">
-      <Loader2 size={28} className="spin rm-workspace-muted" />
-      <p className="panel-empty-title">Loading…</p>
+    <div className="rm-workspace-state" aria-busy="true" aria-label="Loading">
+      <Skeleton height="20px" width="40%" />
+      <Skeleton height="96px" />
+      <Skeleton height="96px" />
+      <Skeleton height="96px" />
     </div>
   );
 }
@@ -50,6 +56,7 @@ export default function WorkspacePage() {
   const { jobId, tab } = useParams();
   const navigate = useNavigate();
   const { isDone, isRunning, error, restoreJob, results } = useResearch();
+  const showToast = useToast();
 
   // Restore job from URL on mount (deep link / refresh)
   useEffect(() => {
@@ -71,54 +78,65 @@ export default function WorkspacePage() {
 
   const isLoading = !isDone && !error;
 
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('Link copied to clipboard', 'success');
+    } catch {
+      showToast('Could not copy link', 'danger');
+    }
+  };
+
+  const downloadJson = () => {
+    const blob = new Blob([JSON.stringify(results ?? {}, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `research-${jobId}.json`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportItems = [
+    { key: 'report', label: 'Open report export', icon: <Download size={14} />, onSelect: () => navigate(`/research/${jobId}/reports`) },
+    { key: 'json', label: 'Download JSON', icon: <FileJson size={14} />, onSelect: downloadJson },
+  ];
+
   return (
     <AppShell>
-      <main className="workspace-main rm-workspace">
+      <div className="rm-workspace">
         <header className="rm-workspace-header">
           <div>
             <p className="rm-eyebrow">Research workspace</p>
             <h1 className="rm-workspace-title">{results?.query || 'Untitled research'}</h1>
           </div>
           <div className="rm-workspace-actions">
-            <button type="button" className="rm-btn rm-btn-secondary rm-btn-sm"><Download size={14} /> Export</button>
-            <button type="button" className="rm-btn rm-btn-ghost rm-btn-sm"><Share2 size={14} /> Share</button>
+            <Dropdown
+              trigger={<Button variant="secondary" size="sm" icon={<Download size={14} />} disabled={!isDone}>Export</Button>}
+              items={exportItems}
+            />
+            <Button variant="ghost" size="sm" icon={<Share2 size={14} />} onClick={copyLink}>Share</Button>
           </div>
         </header>
         <Tabs tabs={WORKSPACE_TABS} activeKey={tab} onChange={key => navigate(`/research/${jobId}/${key}`)} className="rm-workspace-tabs" />
-        {/* Error state */}
+
         {error && (
-          <div className="workspace-error">
+          <div className="rm-workspace-error" role="alert">
             <AlertCircle size={20} />
             <div>
-              <p className="workspace-error-title">Error loading results</p>
-              <p className="workspace-error-msg">{error}</p>
+              <p className="rm-workspace-error-title">Error loading results</p>
+              <p>{error}</p>
             </div>
-            <button
-              className="btn-secondary"
-              onClick={() => restoreJob(jobId)}
-            >
-              <RotateCcw size={13} />
-              Retry
-            </button>
+            <Button variant="secondary" size="sm" icon={<RotateCcw size={13} />} onClick={() => restoreJob(jobId)}>Retry</Button>
           </div>
         )}
 
-        {/* Loading state (restoring from deep link) */}
-        {isLoading && !error && (
-          <div className="panel-empty workspace-loading">
-            <Loader2 size={32} className="spin rm-workspace-muted" />
-            <p className="panel-empty-title">Loading research…</p>
-            <p className="panel-empty-desc">Restoring your session</p>
-          </div>
-        )}
+        {isLoading && !error && <TabSkeleton />}
 
-        {/* Tab content */}
         {isDone && (
-          <Suspense fallback={<TabFallback />}>
+          <Suspense fallback={<TabSkeleton />}>
             <TabComponent />
           </Suspense>
         )}
-      </main>
+      </div>
     </AppShell>
   );
 }

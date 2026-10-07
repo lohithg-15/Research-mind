@@ -1,5 +1,6 @@
 export const GRAPH_THEME = {
   background: '#FBFAFB',
+  text: '#1B1B2F',
   paper: '#8C5A6E',
   author: '#D9D2D6',
   topic: '#7C8AA5',

@@ -80,3 +80,6 @@
   .rm-table-toolbar { align-items: stretch; flex-direction: column; }
   .rm-table-search { width: 100%; }
 }
+
+/* Title column shows the full paper title */
+.rm-table-scroll th:first-child, .rm-table-scroll td:first-child { min-width: 300px; max-width: 420px; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; line-height: 1.4; }

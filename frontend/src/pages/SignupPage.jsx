@@ -34,7 +34,7 @@ export default function SignupPage() {
     }
     try {
       await register(email.trim().toLowerCase(), password);
-      navigate('/', { replace: true });
+      navigate('/research/new', { replace: true });
     } catch (err) {
       setError(err.message || 'Registration failed.');
     }

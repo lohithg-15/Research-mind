@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, RotateCcw, Plus, XCircle, FileSearch } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, RotateCcw, Plus, XCircle, FileSearch } from 'lucide-react';
 import AppShell from '../components/shell/AppShell';
 import { useResearch } from '../context/ResearchContext';
 import Card from '../components/ui/Card';
@@ -85,7 +85,7 @@ export default function ProgressPage() {
                     ? <XCircle size={20} color="var(--rm-danger)" />
                     : isRunning
                     ? <Loader2 size={20} className="rm-spinner" color="var(--rm-accent)" />
-                    : <Loader2 size={20} color="var(--rm-success)" />
+                    : <CheckCircle2 size={20} color="var(--rm-success)" />
                   }
                   <h1 className="rm-progress-card-title">
                     {isError ? 'Research failed' : 'Working on your request'}

@@ -13,6 +13,14 @@ const FEATURES = [
   { Icon: GitFork,   title: 'Gap detection',     desc: 'Surfaces unexplored research opportunities.' },
 ];
 
+const MOCK_TABS = ['Papers', 'Overview', 'Comparison', 'Gaps', 'Graph', 'Assistant', 'Reports'];
+const MOCK_STATS = [['76', 'Papers'], ['12', 'Methods'], ['5', 'Research gaps'], ['9', 'Datasets']];
+const MOCK_PAPERS = [
+  ['Evaluating large language models trained on code', '2021 · 4,210 citations'],
+  ['Competition-level code generation with AlphaCode', '2022 · 1,380 citations'],
+  ['Code Llama: open foundation models for code', '2023 · 960 citations'],
+];
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -28,8 +36,8 @@ export default function LandingPage() {
           <Wordmark size={16} />
         </Link>
         <div className="rm-landing-header-actions">
-          <Link to="/login" className="rm-btn rm-btn-ghost rm-btn-sm">Sign in</Link>
-          <Button size="sm" onClick={handleStart}>Start for free</Button>
+          {!isAuthenticated && <Link to="/login" className="rm-btn rm-btn-ghost rm-btn-sm">Sign in</Link>}
+          <Button size="sm" onClick={handleStart}>{isAuthenticated ? 'New research' : 'Start for free'}</Button>
         </div>
       </header>
 
@@ -50,11 +58,13 @@ export default function LandingPage() {
           </p>
           <div className="rm-landing-cta-row">
             <Button size="lg" icon={<Sparkles size={15} />} onClick={handleStart}>
-              Start for free
+              {isAuthenticated ? 'New research' : 'Start for free'}
             </Button>
-            <Button size="lg" variant="secondary" as={Link} to="/login">
-              Sign in
-            </Button>
+            {!isAuthenticated && (
+              <Button size="lg" variant="secondary" as={Link} to="/login">
+                Sign in
+              </Button>
+            )}
           </div>
           <div className="rm-landing-proof-row">
             <span>Used for literature reviews in ML, bio & materials science</span>
@@ -62,8 +72,30 @@ export default function LandingPage() {
         </section>
 
         <section className="rm-landing-preview">
-          <div className="rm-landing-preview-frame" role="img" aria-label="Product preview">
-            <FileText size={40} />
+          <div className="rm-landing-preview-frame" role="img" aria-label="Preview of a ResearchMind workspace">
+            <div className="rm-mock" aria-hidden="true">
+              <div className="rm-mock-bar">
+                <span className="rm-mock-dot" /><span className="rm-mock-dot" /><span className="rm-mock-dot" />
+                <span className="rm-mock-url">Large language models for code generation</span>
+              </div>
+              <div className="rm-mock-tabs">
+                {MOCK_TABS.map((tab, i) => <span key={tab} className={i === 0 ? 'rm-mock-tab rm-mock-tab-active' : 'rm-mock-tab'}>{tab}</span>)}
+              </div>
+              <div className="rm-mock-stats">
+                {MOCK_STATS.map(([value, label]) => (
+                  <div key={label} className="rm-mock-stat"><strong>{value}</strong><span>{label}</span></div>
+                ))}
+              </div>
+              <div className="rm-mock-list">
+                {MOCK_PAPERS.map(([title, meta]) => (
+                  <div key={title} className="rm-mock-paper">
+                    <FileText size={16} />
+                    <div><strong>{title}</strong><span>{meta}</span></div>
+                    <em>arXiv</em>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 

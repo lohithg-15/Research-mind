@@ -12,7 +12,7 @@ export default function LoginPage() {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/research/new';
 
   const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');

@@ -64,3 +64,11 @@ button, input, textarea, select {
 .rm-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .rm-relative { position: relative; }
+
+/* Loading indicators stay animated (slower) even with reduced motion: a frozen
+   spinner reads as a hung page. */
+@media (prefers-reduced-motion: reduce) {
+  .rm-spinner { animation: rm-spin 1.6s linear infinite !important; }
+  .rm-skeleton { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+  .rm-step-dot-running { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+}

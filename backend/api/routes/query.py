@@ -88,6 +88,7 @@ def execute_pipeline(job_id: str, query: str, filters: Dict[str, Any]):
                     "summaries": summaries_list,
                     "sub_queries": state.get("sub_queries", []),
                     "report_draft": state.get("report_draft", {}),
+                    "graph_ref": state.get("graph_ref"),
                 }
                 save_session(
                     user_id=user_id,
@@ -223,7 +224,10 @@ def get_results(job_id: str):
         "embeddings_degraded": embeddings_degraded,
         "papers": papers_list,
         "comparison_table": state.get("comparison_table", []),
-        "gap_claims": [g.model_dump() for g in state.get("gap_claims", [])],
+        "gap_claims": [
+            g.model_dump() if hasattr(g, "model_dump") else g
+            for g in (state.get("gap_claims") or [])
+        ],
         "graph_ref": graph_ref,
         "summaries": summaries_list,
         "sub_queries": state.get("sub_queries", []),

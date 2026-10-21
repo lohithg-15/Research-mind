@@ -13,7 +13,8 @@
 .rm-graph-wrap { position: relative; border: 1px solid var(--rm-border); border-radius: var(--rm-radius-lg); overflow: hidden; background: var(--rm-graph-bg); }
 .rm-graph-wrap-fs { position: fixed; inset: 0; z-index: 900; border: 0; border-radius: 0; }
 .rm-graph-exit { position: absolute; top: var(--rm-space-4); left: 50%; transform: translateX(-50%); z-index: 30; }
-.rm-graph-stage { position: relative; width: 100%; height: 600px; background-color: var(--rm-graph-bg); background-image: radial-gradient(var(--rm-graph-dot) 1px, transparent 1px); background-size: 20px 20px; }
+.rm-graph-stage { position: relative; display: flex; width: 100%; height: 600px; background-color: var(--rm-graph-bg); }
+.rm-graph-plane { position: relative; flex: 1 1 auto; min-width: 0; height: 100%; background-image: radial-gradient(var(--rm-graph-dot) 1px, transparent 1px); background-size: 20px 20px; }
 .rm-graph-wrap-fs .rm-graph-stage { height: 100vh; }
 .rm-graph-canvas { position: absolute; inset: 0; }
 
@@ -42,7 +43,7 @@
 .rm-graph-tip button { border: 0; background: transparent; color: inherit; font-size: 16px; cursor: pointer; }
 
 /* ── Inspector ── */
-.rm-inspector { position: absolute; top: 0; right: 0; bottom: 0; width: 320px; max-width: 100%; padding: var(--rm-space-4); background: var(--rm-bg); border-left: 1px solid var(--rm-border); box-shadow: var(--rm-shadow-pop); overflow-y: auto; z-index: 20; }
+.rm-inspector { flex: 0 0 300px; width: 300px; height: 100%; padding: var(--rm-space-4); background: var(--rm-bg); border-left: 1px solid var(--rm-border); overflow-y: auto; }
 .rm-inspector-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--rm-space-3); }
 .rm-inspector-title { margin: 0 0 var(--rm-space-2); font-size: var(--rm-font-size-h3); line-height: 1.35; }
 .rm-inspector-meta { display: grid; gap: 2px; color: var(--rm-text-secondary); font-size: var(--rm-font-size-small); margin-bottom: var(--rm-space-3); }
@@ -94,5 +95,7 @@
   .rm-graph-search { left: var(--rm-space-4); top: auto; bottom: 72px; }
   .rm-graph-search-input { width: 140px; }
   .rm-graph-tip { display: none; }
-  .rm-inspector { top: auto; width: 100%; max-height: 55%; border-left: 0; border-top: 1px solid var(--rm-border); }
+  .rm-graph-stage-split { flex-direction: column; }
+  .rm-graph-stage-split .rm-graph-plane { flex: 1 1 55%; height: auto; }
+  .rm-inspector { flex: 0 0 45%; width: 100%; height: auto; border-left: 0; border-top: 1px solid var(--rm-border); }
 }

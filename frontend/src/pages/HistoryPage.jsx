@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Search, BookOpen, AlertCircle, MoreHorizontal, FolderOpen } from 'lucide-react';
 import AppShell from '../components/shell/AppShell';
@@ -27,32 +27,53 @@ export default function HistoryPage() {
   const [confirmId,  setConfirmId]  = useState(null); // pending delete confirmation
   const [searchTerm, setSearchTerm] = useState('');
 
+  const mountedRef = useRef(true);
+  const listSeq    = useRef(0);
+  const [openingId, setOpeningId] = useState(null);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
   const fetchSessions = useCallback(async () => {
+    const seq = ++listSeq.current;
     setLoading(true);
     setError('');
     try {
-      const res  = await fetch(`${API_BASE}/history`, { headers: authHeaders() });
+      const res = await fetch(`${API_BASE}/history`, { headers: authHeaders() });
+      if (res.status === 401) throw new Error('Your session expired. Please sign in again.');
       if (!res.ok) throw new Error('Failed to fetch history.');
       const data = await res.json();
-      setSessions(data);
+      if (!mountedRef.current || seq !== listSeq.current) return;
+      setSessions(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError(err.message || 'Could not load history.');
+      if (!mountedRef.current || seq !== listSeq.current) return;
+      setError(err.message === 'Failed to fetch'
+        ? 'Could not reach the backend. Is it running?'
+        : (err.message || 'Could not load history.'));
     } finally {
-      setLoading(false);
+      if (mountedRef.current && seq === listSeq.current) setLoading(false);
     }
   }, [authHeaders]);
 
   useEffect(() => { fetchSessions(); }, [fetchSessions]);
 
   const handleLoad = async (sessionId) => {
+    if (openingId) return; // ignore double clicks
+    setOpeningId(sessionId);
+    setError('');
     try {
-      const res  = await fetch(`${API_BASE}/history/${sessionId}`, { headers: authHeaders() });
-      if (!res.ok) throw new Error('Failed to load session.');
+      const res = await fetch(`${API_BASE}/history/${sessionId}`, { headers: authHeaders() });
+      if (!res.ok) throw new Error(res.status === 404 ? 'That session no longer exists.' : 'Failed to load session.');
       const data = await res.json();
+      if (!mountedRef.current) return;
       loadSession(data);
       navigate(`/research/${data.id}/papers`);
     } catch (err) {
-      setError(err.message || 'Could not load session.');
+      if (mountedRef.current) setError(err.message === 'Failed to fetch' ? 'Could not reach the backend. Is it running?' : (err.message || 'Could not load session.'));
+    } finally {
+      if (mountedRef.current) setOpeningId(null);
     }
   };
 
@@ -122,7 +143,7 @@ export default function HistoryPage() {
               <tbody>
                 {filtered.map(s => (
                   <tr key={s.id} className="rm-history-row">
-                    <td><button type="button" className="rm-history-open" title={s.title || s.query} onClick={() => handleLoad(s.id)}>{s.title || s.query}</button></td>
+                    <td><button type="button" className="rm-history-open" disabled={!!openingId} title={s.title || s.query} onClick={() => handleLoad(s.id)}>{s.title || s.query}</button></td>
                     <td><Badge tone={statusTone(s.status)}>{statusLabel(s.status)}</Badge></td>
                     <td className="rm-history-date">
                       {new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}

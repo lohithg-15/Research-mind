@@ -51,13 +51,18 @@ export function ResearchProvider({ children }) {
   const isDone    = !!(results && results.status === 'done');
 
   /* ─── Fetch final results ─── */
+  const fetchSeq = useRef(0);
   const fetchResults = useCallback(async (jid, q) => {
+    const seq = ++fetchSeq.current;
     try {
       const res  = await fetch(`${API_BASE}/results/${jid}`);
       if (!res.ok) throw new Error('Results fetch failed');
       const data = await res.json();
+      if (seq !== fetchSeq.current) return; // a newer request superseded this one
       setResults({ ...data, query: q });
+      setError(null);
     } catch {
+      if (seq !== fetchSeq.current) return;
       setError('Failed to load final results from backend.');
     }
   }, []);
@@ -67,11 +72,13 @@ export function ResearchProvider({ children }) {
 
   const startPolling = useCallback((jid, q) => {
     if (pollRef.current) clearInterval(pollRef.current);
+    let failures = 0;
     pollRef.current = setInterval(async () => {
       try {
         const res  = await fetch(`${API_BASE}/status/${jid}`);
         if (!res.ok) throw new Error('Status fetch failed');
         const data = await res.json();
+        failures = 0;
         setJobStatus(data.status);
         setAgentStatus(data.agent_status || {});
         setError(data.error || null);
@@ -82,6 +89,10 @@ export function ResearchProvider({ children }) {
         if (data.status === 'error') { clearInterval(pollRef.current); }
       } catch (err) {
         console.error('Polling error:', err);
+        if (++failures >= 5) {
+          clearInterval(pollRef.current);
+          setError('Lost connection to the backend while tracking this job.');
+        }
       }
     }, 2000);
   }, [fetchResults]);
@@ -145,6 +156,7 @@ export function ResearchProvider({ children }) {
   /* ─── Load a session from history (by full session object) ─── */
   const loadSession_ = useCallback((session) => {
     if (pollRef.current) clearInterval(pollRef.current);
+    fetchSeq.current++;
     setQuery(session.query || '');
     setResults(session.results ? { ...session.results, query: session.query } : null);
     setJobId(session.id);
@@ -167,12 +179,28 @@ export function ResearchProvider({ children }) {
 
   /* ─── Restore job from URL (deep link / refresh) ─── */
   const restoreJob = useCallback(async (jid) => {
-    // If we already have this job's results in context, skip fetch
+    // Already have this job's results (or it is running): nothing to do
     if (jobId === jid && (isDone || isRunning)) return;
+
+    // Switching to a different job: drop stale results so the old job never flashes
+    if (jobId !== jid) {
+      if (pollRef.current) clearInterval(pollRef.current);
+      fetchSeq.current++;
+      setResults(null);
+      setStartedAt(null);
+      setFinishedAt(null);
+    }
+    setError(null);
 
     try {
       const statusRes = await fetch(`${API_BASE}/status/${jid}`);
-      if (!statusRes.ok) return;
+      if (statusRes.status === 404) {
+        setJobId(jid);
+        setJobStatus('error');
+        setError('This research session could not be found. Open it again from History.');
+        return;
+      }
+      if (!statusRes.ok) throw new Error(`Status ${statusRes.status}`);
       const statusData = await statusRes.json();
 
       setJobId(jid);
@@ -183,18 +211,22 @@ export function ResearchProvider({ children }) {
       if (statusData.finished_at) setFinishedAt(statusData.finished_at);
 
       if (statusData.status === 'done') {
-        await fetchResults(jid, query);
+        await fetchResults(jid, jobId === jid ? query : '');
       } else if (statusData.status === 'pending' || statusData.status === 'running') {
-        startPolling(jid, query);
+        startPolling(jid, jobId === jid ? query : '');
+      } else if (statusData.error) {
+        setError(statusData.error);
       }
     } catch (err) {
       console.error('restoreJob error:', err);
+      setError('Could not reach the backend. Check that it is running and try again.');
     }
   }, [jobId, isDone, isRunning, fetchResults, startPolling, query]);
 
   /* ─── Clear / New Research ─── */
   const clearResearch = useCallback(() => {
     if (pollRef.current) clearInterval(pollRef.current);
+    fetchSeq.current++;
     clearSession();
     setQuery('');
     setKeywords('');

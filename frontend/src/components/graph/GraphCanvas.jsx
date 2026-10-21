@@ -82,6 +82,29 @@ export default function GraphCanvas({
     return () => { cy.destroy(); cyRef.current = null; focusRef.current = null; };
   }, [snapshot, onSelect]);
 
+  /* Clear highlight/fade when selection is cleared (e.g. inspector close button). */
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (cy && !selectedNode) { cy.elements().removeClass('highlighted faded'); cy.elements().unselect(); }
+  }, [selectedNode]);
+
+  /* The inspector docks beside the canvas, so resize + keep the node in view. */
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy) return undefined;
+    const frame = requestAnimationFrame(() => {
+      cy.resize();
+      if (selectedNode) {
+        const node = cy.getElementById(selectedNode.id);
+        if (node && !node.empty()) cy.animate({ center: { eles: node } }, { duration: 200 });
+      } else {
+        cy.fit(undefined, isFullscreen ? 70 : 40);
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!selectedNode]);
+
   /* Visibility toggles never rebuild the instance. */
   useEffect(() => {
     const cy = cyRef.current;
@@ -108,7 +131,8 @@ export default function GraphCanvas({
   const search = useCallback(term => (focusRef.current ? focusRef.current(term) : false), []);
 
   return (
-    <div className="rm-graph-stage">
+    <div className={`rm-graph-stage${selectedNode ? ' rm-graph-stage-split' : ''}`}>
+      <div className="rm-graph-plane">
       <div ref={containerRef} className="rm-graph-canvas" />
       <GraphSearch onSearch={search} />
       <GraphToolbar onZoomIn={() => zoom(1.25)} onZoomOut={() => zoom(0.8)} onFit={fit} onCenter={center} isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
@@ -119,6 +143,7 @@ export default function GraphCanvas({
           <button type="button" onClick={onDismissTip} aria-label="Dismiss tip">×</button>
         </div>
       )}
+      </div>
       <GraphInspector node={selectedNode} level={level} onClose={() => onSelect(null)} />
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Plus, Bell, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useResearch } from '../../context/ResearchContext';
@@ -11,6 +11,8 @@ export default function TopBar({ onToggleMobileSidebar }) {
   const { isAuthenticated, user, logout } = useAuth();
   const { clearResearch } = useResearch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const onNewResearchPage = location.pathname === '/research/new';
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
 
@@ -49,9 +51,11 @@ export default function TopBar({ onToggleMobileSidebar }) {
         <Wordmark size={16} />
       </Link>
 
-      <Button variant="secondary" size="sm" icon={<Plus size={14} />} onClick={handleNewResearch}>
-        New research
-      </Button>
+      {!onNewResearchPage && (
+        <Button variant="secondary" size="sm" icon={<Plus size={14} />} onClick={handleNewResearch}>
+          New research
+        </Button>
+      )}
 
       <div className="rm-topbar-spacer" />
 

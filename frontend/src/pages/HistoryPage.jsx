@@ -111,7 +111,6 @@ export default function HistoryPage() {
             <h1>Research history</h1>
             <p>{sessions.length} saved session{sessions.length !== 1 ? 's' : ''}</p>
           </div>
-          <Button icon={<Plus size={14} />} onClick={() => navigate('/research/new')}>New research</Button>
         </div>
 
         <label className="rm-history-search">

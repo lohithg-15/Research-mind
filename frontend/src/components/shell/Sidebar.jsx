@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
-  Plus, Search, Clock, FileText, X, ChevronsLeft, ChevronsRight,
+  Search, Clock, FileText, X, ChevronsLeft, ChevronsRight,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useResearch } from '../../context/ResearchContext';
 import Tooltip from '../ui/Tooltip';
 import './shell.css';
 
@@ -18,8 +17,6 @@ const NAV_LINKS = [
 
 export default function Sidebar({ expanded, onToggleExpanded, mobileOpen, onCloseMobile, onOpenCommandPalette }) {
   const { isAuthenticated, authHeaders, user } = useAuth();
-  const { clearResearch } = useResearch();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [recent, setRecent] = useState([]);
@@ -40,12 +37,6 @@ export default function Sidebar({ expanded, onToggleExpanded, mobileOpen, onClos
 
   useEffect(() => { fetchRecent(); }, [fetchRecent]);
 
-  function handleNewResearch() {
-    clearResearch();
-    navigate('/research/new');
-    onCloseMobile?.();
-  }
-
   function dismissTip() {
     setTipDismissed(true);
     try { localStorage.setItem(TIP_DISMISSED_KEY, '1'); } catch {}
@@ -65,11 +56,6 @@ export default function Sidebar({ expanded, onToggleExpanded, mobileOpen, onClos
       <aside className={sidebarClasses} aria-label="Sidebar">
         {!expanded ? (
           <>
-            <Tooltip label="New research" side="right">
-              <button className="rm-sidebar-rail-item" onClick={handleNewResearch} aria-label="New research">
-                <Plus size={18} />
-              </button>
-            </Tooltip>
             <Tooltip label="Search" side="right">
               <button className="rm-sidebar-rail-item" onClick={onOpenCommandPalette} aria-label="Search">
                 <Search size={18} />
@@ -95,10 +81,6 @@ export default function Sidebar({ expanded, onToggleExpanded, mobileOpen, onClos
         ) : (
           <>
             <div className="rm-sidebar-section">
-              <button className="rm-sidebar-new-btn" onClick={handleNewResearch}>
-                <Plus size={15} />
-                New research
-              </button>
               <button className="rm-sidebar-search-btn" onClick={onOpenCommandPalette}>
                 <Search size={14} />
                 Search

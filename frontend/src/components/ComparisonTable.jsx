@@ -6,7 +6,7 @@ import EmptyState from './ui/EmptyState';
 export default function ComparisonTable({ data = [] }) {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState({ field: 'year', direction: 'desc' });
-  const filtered = useMemo(() => data.filter(item => `${item.title} ${item.method} ${item.dataset} ${item.key_metric}`.toLowerCase().includes(query.toLowerCase())).sort((a, b) => {
+  const filtered = useMemo(() => data.filter(item => `${item.title} ${item.method} ${item.dataset} ${item.key_metric} ${item.limitation}`.toLowerCase().includes(query.toLowerCase())).sort((a, b) => {
     const left = a[sort.field] || ''; const right = b[sort.field] || '';
     return (left < right ? -1 : left > right ? 1 : 0) * (sort.direction === 'asc' ? 1 : -1);
   }), [data, query, sort]);

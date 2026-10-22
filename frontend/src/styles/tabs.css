@@ -40,7 +40,7 @@
 .rm-table-search svg { position: absolute; top: 13px; left: 10px; color: var(--rm-text-muted); pointer-events: none; }
 .rm-table-search .rm-input { padding-left: 32px; }
 .rm-table-scroll { overflow: auto; max-height: calc(100vh - 260px); border: 1px solid var(--rm-border); border-radius: var(--rm-radius-md); }
-.rm-table-scroll table { width: 100%; min-width: 760px; border-collapse: separate; border-spacing: 0; font-size: var(--rm-font-size-small); }
+.rm-table-scroll table { width: 100%; min-width: 1400px; border-collapse: separate; border-spacing: 0; font-size: var(--rm-font-size-small); }
 .rm-table-scroll th, .rm-table-scroll td { padding: var(--rm-space-3); border-bottom: 1px solid var(--rm-border); text-align: left; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: var(--rm-bg); }
 .rm-table-scroll th { position: sticky; top: 0; z-index: 2; background: var(--rm-bg-sidebar); cursor: pointer; user-select: none; font-weight: 700; }
 .rm-table-scroll th:hover { color: var(--rm-accent); }
@@ -82,4 +82,8 @@
 }
 
 /* Title column shows the full paper title */
-.rm-table-scroll th:first-child, .rm-table-scroll td:first-child { min-width: 300px; max-width: 420px; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; line-height: 1.4; }
+/* Full sentences in every column (not just Title) */
+.rm-table-scroll td { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; line-height: 1.4; vertical-align: top; min-width: 220px; max-width: 360px; }
+.rm-table-scroll th { white-space: nowrap; }
+.rm-table-scroll th:first-child, .rm-table-scroll td:first-child { min-width: 300px; max-width: 420px; }
+.rm-table-scroll th:nth-child(2), .rm-table-scroll td:nth-child(2) { min-width: 80px; max-width: 90px; }
